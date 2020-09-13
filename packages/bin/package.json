@@ -1,0 +1,47 @@
+{
+  "name": "@midwayjs/bin",
+  "version": "1.0.0",
+  "description": "Midway Command Tools",
+  "main": "index.js",
+  "bin": {
+    "midway-bin": "bin/midway-bin.js"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "build": "tsc --build",
+    "test": "../../node_modules/.bin/jest",
+    "cov": "../../node_modules/.bin/jest --coverage",
+    "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
+    "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov"
+  },
+  "keywords": [
+    "midway",
+    "bin"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@midwayjs/debugger": "^1.0.0",
+    "@midwayjs/command-core": "^1.0.0",
+    "@midwayjs/bin-plugin-build": "^1.0.0",
+    "source-map-support": "^0.5.19",
+    "enquirer": "^2.3.4"
+  },
+  "devDependencies": {
+    "typescript": "^4"
+  },
+  "engines": {
+    "node": ">= 8.0.0"
+  },
+  "files": [
+    "bin",
+    "lib",
+    "jest",
+    "dist",
+    "index.js"
+  ],
+  "author": "Harry Chen <czy88840616@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/midwayjs/midway.git"
+  }
+}
