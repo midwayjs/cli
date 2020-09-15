@@ -20,11 +20,16 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@midwayjs/debugger": "^1.0.0",
-    "@midwayjs/command-core": "^1.0.0",
     "@midwayjs/bin-plugin-build": "^1.0.0",
+    "@midwayjs/bin-plugin-dev": "^1.0.0",
+    "@midwayjs/bin-plugin-faas": "^1.0.0",
+    "@midwayjs/command-core": "^1.0.0",
+    "@midwayjs/debugger": "^1.0.5",
+    "enquirer": "^2.3.4",
+    "jest-environment-node": "^24.9.0",
+    "minimist": "^1.2.5",
     "source-map-support": "^0.5.19",
-    "enquirer": "^2.3.4"
+    "ts-node": "9.0.0"
   },
   "devDependencies": {
     "typescript": "^4"

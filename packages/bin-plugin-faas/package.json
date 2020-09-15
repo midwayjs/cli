@@ -1,12 +1,11 @@
 {
-  "name": "@midwayjs/bin-plugin-build",
+  "name": "@midwayjs/bin-plugin-faas",
   "version": "1.0.0",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/command-core": "^1.0.0",
-    "@midwayjs/mwcc": "^0.3.x",
-    "fs-extra": "^9"
+    "@midwayjs/serverless-spec-builder": "^1.2.12"
   },
   "devDependencies": {
     "typescript": "^4"
@@ -26,9 +25,6 @@
     "cov": "../../node_modules/.bin/jest --coverage",
     "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
     "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov"
-  },
-  "jest": {
-    "preset": "ts-jest"
   },
   "repository": {
     "type": "git",

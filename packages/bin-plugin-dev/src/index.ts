@@ -1,0 +1,179 @@
+import { BasePlugin } from '@midwayjs/command-core';
+import { fork, execSync } from 'child_process';
+import Spin from 'light-spinner';
+import * as chokidar from 'chokidar';
+import { networkInterfaces } from 'os';
+import { resolve, relative } from 'path';
+import { statSync } from 'fs';
+export class DevPlugin extends BasePlugin {
+  child;
+  started = false;
+  restarting = false;
+  commands = {
+    dev: {
+      lifecycleEvents: ['run'],
+      options: {
+        baseDir: {
+          usage: 'directory of application, default to `process.cwd()`',
+        },
+        port: {
+          usage: 'listening port, default to 7001',
+          shortcut: 'p',
+        },
+        framework: {
+          usage: 'specify framework that can be absolute path or npm package',
+        },
+        notWatch: {
+          usage: 'not watch file change',
+        },
+      },
+    },
+  };
+
+  hooks = {
+    'dev:run': this.run.bind(this),
+  };
+
+  async run() {
+    process.on('exit', this.handleClose.bind(this));
+    process.on('SIGINT', this.handleClose.bind(this));
+    this.setStore('dev:closeApp', this.handleClose.bind(this), true);
+    const options = this.getOptions();
+    await this.start();
+    if (!options.notWatch) {
+      this.startWatch();
+      return new Promise(() => {});
+    }
+  }
+
+  private getOptions() {
+    return {
+      port: 7001,
+      ...this.options,
+    };
+  }
+
+  private async start() {
+    return new Promise(resolve => {
+      const options = this.getOptions();
+      let spin;
+      // 非静默模式
+      if (!options.silent) {
+        spin = new Spin({
+          text: this.started ? 'restarting' : 'starting',
+        });
+        spin.start();
+      }
+      this.child = fork(
+        require.resolve('./child'),
+        [JSON.stringify(options, null, 2)],
+        {
+          cwd: this.core.cwd,
+          env: process.env,
+          silent: true,
+          execArgv: this.options.ts ? ['-r', 'ts-node/register'] : [],
+        }
+      );
+      const dataCache = [];
+      this.child.stdout.on('data', data => {
+        if (options.silent) {
+          return;
+        }
+        if (this.restarting) {
+          dataCache.push(data);
+        } else {
+          process.stdout.write(data);
+        }
+      });
+      this.child.on('message', msg => {
+        if (msg.type === 'started') {
+          if (spin) {
+            spin.stop();
+          }
+          this.restarting = false;
+          while (dataCache.length) {
+            process.stdout.write(dataCache.shift());
+          }
+          if (!this.started) {
+            this.started = true;
+            this.displayStartTips(options);
+          }
+          resolve();
+        }
+      });
+    });
+  }
+
+  private async handleClose() {
+    if (this.child) {
+      execSync('kill -9 ' + this.child.pid);
+      this.child.kill();
+      this.child = null;
+    }
+  }
+
+  private async restart() {
+    await this.handleClose();
+    await this.start();
+  }
+
+  private getIp() {
+    const interfaces = networkInterfaces(); // 在开发环境中获取局域网中的本机iP地址
+    for (const devName in interfaces) {
+      const iface = interfaces[devName];
+      for (const alias of iface) {
+        if (
+          alias.family === 'IPv4' &&
+          alias.address !== '127.0.0.1' &&
+          !alias.internal
+        ) {
+          return alias.address;
+        }
+      }
+    }
+  }
+
+  // watch file change
+  private startWatch() {
+    const sourceDir = resolve(this.core.cwd, 'src');
+    const watcher = chokidar.watch(sourceDir, {
+      ignored: path => {
+        if (path.includes('node_modules')) {
+          return true;
+        }
+        const stat = statSync(path);
+        if (stat.isFile() && !path.endsWith('.ts')) {
+          return true;
+        }
+      }, // ignore dotfiles
+      persistent: true,
+    });
+    watcher.on('change', path => {
+      if (this.restarting) {
+        return;
+      }
+      console.log(`[ Midway ] Auto reload: ${relative(sourceDir, path)}`);
+      this.restarting = true;
+      this.restart();
+    });
+  }
+
+  private displayStartTips(options) {
+    if (options.silent) {
+      return;
+    }
+    this.core.cli.log();
+    this.core.cli.log();
+    this.core.cli.log(
+      '[ Midway ] Start Server at http://127.0.0.1:' + options.port
+    );
+    const lanIp = this.getIp();
+    if (lanIp) {
+      this.core.cli.log(
+        `[ Midway ] Start on LAN http://${lanIp}:${options.port}`
+      );
+    }
+    this.core.cli.log();
+    this.core.cli.log();
+  }
+}

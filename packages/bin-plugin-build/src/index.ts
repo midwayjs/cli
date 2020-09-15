@@ -1,20 +1,11 @@
 import { BasePlugin } from '@midwayjs/command-core';
-import { resolve } from 'path';
+import { resolve, join, dirname } from 'path';
 import { existsSync, readFileSync, remove } from 'fs-extra';
-import {
-  CompilerHost,
-  Program,
-  resolveTsConfigFile,
-} from '@midwayjs/mwcc';
+import { CompilerHost, Program, resolveTsConfigFile } from '@midwayjs/mwcc';
 export class BuildPlugin extends BasePlugin {
-  command = {
+  commands = {
     build: {
-      lifecycleEvents: [
-        'clean',
-        'copyFile',
-        'compile',
-        'emit'
-      ],
+      lifecycleEvents: ['clean', 'copyFile', 'compile', 'emit'],
       options: {
         clean: {
           usage: 'clean build target dir',
@@ -22,29 +13,24 @@ export class BuildPlugin extends BasePlugin {
         },
         project: {
           usage: 'project file location',
-          shortcut: 'p'
+          shortcut: 'p',
         },
         srcDir: {
           usage: 'source code path',
         },
         entrypoint: {
-          description: 'bundle the source with the file given as entrypoint',
-          type: 'string',
-          default: '',
+          usage: 'bundle the source with the file given as entrypoint',
         },
         minify: {
-          type: 'boolean',
+          usage: '',
         },
         mode: {
-          description: 'bundle mode, "debug" or "release" (default)',
-          type: 'string',
-          default: 'release',
+          usage: 'bundle mode, "debug" or "release" (default)', // release
         },
         tsConfig: {
-          description: 'tsConfig json object data',
-          type: 'object',
+          usage: 'tsConfig json object data',
         },
-      }
+      },
     },
   };
 
@@ -62,14 +48,20 @@ export class BuildPlugin extends BasePlugin {
     if (!this.options.clean) {
       return;
     }
-    const outdir = this.getTsConfig('outDir');
+    const tsConfig = this.getTsConfig();
+    const projectFile = this.getProjectFile();
+    const outdir = this.getCompilerOptions(
+      tsConfig,
+      'outDir',
+      dirname(projectFile)
+    );
     await remove(outdir);
   }
 
   async compile() {
-
+    const { cwd } = this.core;
     const { config } = resolveTsConfigFile(
-      this.core.cwd,
+      cwd,
       undefined,
       undefined,
       this.getStore('mwccHintConfig', 'global'),
@@ -79,9 +71,8 @@ export class BuildPlugin extends BasePlugin {
         },
       }
     );
-    this.compilerHost = new CompilerHost(this.core.cwd, config);
+    this.compilerHost = new CompilerHost(cwd, config);
     this.program = new Program(this.compilerHost);
-    console.log(this.core);
   }
 
   async emit() {
@@ -92,29 +83,60 @@ export class BuildPlugin extends BasePlugin {
     return resolve(this.core.cwd, this.options.srcDir || 'src');
   }
 
+  private getCompilerOptions(tsConfig, optionKeyPath, projectDir) {
+    // if projectFile extended and without the option,
+    // get setting from its parent
+    if (tsConfig && tsConfig.extends) {
+      if (
+        !tsConfig.compilerOptions ||
+        (tsConfig.compilerOptions && !tsConfig.compilerOptions[optionKeyPath])
+      ) {
+        return this.getCompilerOptions(
+          require(join(projectDir, tsConfig.extends)),
+          optionKeyPath,
+          { projectDir }
+        );
+      }
+    }
+
+    if (tsConfig && tsConfig.compilerOptions) {
+      return tsConfig.compilerOptions[optionKeyPath];
+    }
+  }
+
+  private getProjectFile() {
+    const { cwd } = this.core;
+    const { project } = this.options;
+    return resolve(cwd, project || 'tsconfig.json');
+  }
+
   private getTsConfig() {
     if (this.tsConfig) {
       return this.tsConfig;
     }
     const { cwd } = this.core;
-    const { project, tsConfig } = this.options;
+    const { tsConfig } = this.options;
     let tsConfigResult;
     if (typeof tsConfig === 'string') {
       try {
         tsConfigResult = JSON.parse(tsConfig);
       } catch (e) {
-        console.log(`[midway-bin] tsConfig should be JSON string or Object: ${e.message}\n`);
+        console.log(
+          `[midway-bin] tsConfig should be JSON string or Object: ${e.message}\n`
+        );
         process.exit(1);
       }
     }
-    const projectFile = resolve(cwd, project || 'tsconfig.json');
+    const projectFile = this.getProjectFile();
     if (!tsConfigResult) {
       if (!existsSync(projectFile)) {
         console.log(`[midway-bin] tsconfig.json not found in ${cwd}\n`);
         process.exit(1);
       }
       try {
-        tsConfigResult = JSON.parse(readFileSync(projectFile, 'utf-8').toString());
+        tsConfigResult = JSON.parse(
+          readFileSync(projectFile, 'utf-8').toString()
+        );
       } catch {
         //
       }
