@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.1.0 (2020-09-16)
+
+
+### Features
+
+* new ([7ca760c](https://github.com/midwayjs/bin/commit/7ca760c059715220c738a46a78d09d288a767f6d))
+
+
+
+
+
 ## [1.2.11](https://github.com/midwayjs/midway-faas/compare/serverless-v1.2.10...serverless-v1.2.11) (2020-09-04)
 
 **Note:** Version bump only for package @midwayjs/fcli-command-core

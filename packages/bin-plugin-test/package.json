@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/bin-plugin-test",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/command-core": "^1.0.0",
+    "@midwayjs/command-core": "^1.1.0",
     "globby": "^11.0.1",
     "jest": "^26.4.2",
     "ts-node": "^9.0.0"
