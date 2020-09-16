@@ -17,6 +17,7 @@
   },
   "files": [
     "plugin.json",
+    "config",
     "dist",
     "src"
   ],

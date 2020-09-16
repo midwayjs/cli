@@ -17,10 +17,6 @@ export class TestPlugin extends BasePlugin {
           usage: 'watch',
           shortcut: 'w',
         },
-        reporter: {
-          usage: 'set mocha reporter',
-          shortcut: 'r',
-        },
         file: {
           usage: 'specify a test file',
           shortcut: 'f',
@@ -34,18 +30,22 @@ export class TestPlugin extends BasePlugin {
   };
 
   async run() {
+    const cwd = this.core.cwd;
+    process.env.MIDWAY_BIN_JEST_ROOT_DIR = cwd;
+    const isTs = this.options.ts || existsSync(join(cwd, 'tsconfig.json'));
     let testFiles = [];
     if (this.options.f) {
       testFiles = [this.options.f];
       this.core.cli.log(`Testing ${this.options.f}`);
     } else {
-      this.core.cli.log('Testing all *.test.js/ts...');
+      this.core.cli.log(`Testing all *.test.${isTs ? 'ts' : 'js'}...`);
     }
     // exec bin file
     const binFile = require.resolve('jest/bin/jest');
     const execArgv = process.execArgv || [];
-    const cwd = this.core.cwd;
-    const isTs = existsSync(join(cwd, 'tsconfig.json'));
+    if (isTs) {
+      execArgv.push('--require', require.resolve('ts-node/register'));
+    }
     const opt = {
       cwd,
       env: Object.assign(
@@ -69,9 +69,6 @@ export class TestPlugin extends BasePlugin {
 
   async formatTestArgs(isTs, testFiles) {
     const args = [];
-    if (isTs) {
-      args.push('--require', require.resolve('ts-node/register'));
-    }
 
     let pattern;
 
@@ -81,22 +78,40 @@ export class TestPlugin extends BasePlugin {
     if (!pattern.length && process.env.TESTS) {
       pattern = process.env.TESTS.split(',');
     }
-
     if (!pattern.length) {
-      pattern = [`test/**/*.test.${isTs ? 'ts' : 'js'}`];
-    }
-    pattern = pattern.concat(['!test/fixtures', '!test/node_modules']);
+      args.push(`/test/[^.]*\\.test\\.${isTs ? 'ts' : 'js'}$`);
+    } else {
+      const matchPattern = pattern.concat([
+        '!test/fixtures',
+        '!test/node_modules',
+      ]);
 
-    const files = globby.sync(pattern);
-    if (files.length === 0) {
-      console.log(`No test files found with ${pattern}`);
-      return;
+      let files = globby.sync(matchPattern);
+      files = files.filter(file => {
+        return file.endsWith(`.${isTs ? 'ts' : 'js'}`);
+      });
+      if (files.length === 0) {
+        console.log(`No test files found with ${pattern}`);
+        return;
+      }
+      args.push('--findRelatedTests', ...files);
     }
-    args.push('--findRelatedTests', ...files);
 
     if (this.options.cov) {
       args.push('--coverage');
     }
+
+    if (this.options.watch) {
+      args.push('--watch');
+    }
+
+    args.push(
+      `--config=${join(
+        __dirname,
+        `../config/${isTs ? 'jest.ts.js' : 'jest.js'}`
+      )}`
+    );
+
     return args;
   }
 }
