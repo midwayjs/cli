@@ -23,6 +23,7 @@
     "@midwayjs/bin-plugin-build": "^1.0.0",
     "@midwayjs/bin-plugin-dev": "^1.0.0",
     "@midwayjs/bin-plugin-faas": "^1.0.0",
+    "@midwayjs/bin-plugin-test": "^1.0.0",
     "@midwayjs/command-core": "^1.0.0",
     "@midwayjs/debugger": "^1.0.5",
     "enquirer": "^2.3.4",

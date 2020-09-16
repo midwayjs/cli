@@ -4,7 +4,10 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/command-core": "^1.0.0"
+    "@midwayjs/command-core": "^1.0.0",
+    "globby": "^11.0.1",
+    "jest": "^26.4.2",
+    "ts-node": "^9.0.0"
   },
   "devDependencies": {
     "typescript": "^4"

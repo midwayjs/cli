@@ -6,5 +6,7 @@ export const PluginList: Array<{
 }> = [
   { mod: '@midwayjs/bin-plugin-build', command: 'build' },
   { mod: '@midwayjs/bin-plugin-dev', command: 'dev' },
+  { mod: '@midwayjs/bin-plugin-test', command: 'test' },
+  { mod: '@midwayjs/bin-plugin-test', command: 'cov' },
   { mod: '@midwayjs/bin-plugin-faas' },
 ];
