@@ -21,12 +21,36 @@ export class TestPlugin extends BasePlugin {
           usage: 'specify a test file',
           shortcut: 'f',
         },
+        forceExit: {
+          usage: 'force exit',
+        },
+      },
+    },
+    cov: {
+      usage: 'Test a Serverless service with coverage',
+      lifecycleEvents: ['test'],
+      options: {
+        watch: {
+          usage: 'watch',
+          shortcut: 'w',
+        },
+        file: {
+          usage: 'specify a test file',
+          shortcut: 'f',
+        },
+        forceExit: {
+          usage: 'force exit',
+        },
       },
     },
   };
 
   hooks = {
     'test:test': this.run.bind(this),
+    'cov:test': async () => {
+      this.options.cov = true;
+      await this.run();
+    },
   };
 
   async run() {
@@ -99,6 +123,10 @@ export class TestPlugin extends BasePlugin {
 
     if (this.options.cov) {
       args.push('--coverage');
+    }
+
+    if (this.options.forceExit) {
+      args.push('--forceExit');
     }
 
     if (this.options.watch) {

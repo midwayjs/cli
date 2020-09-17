@@ -29,7 +29,11 @@ export class CLI extends BaseCLI {
           if (pluginJson.match) {
             // 匹配命令是否一致
             if (pluginJson.match.command) {
-              if (pluginJson.match.command !== command) {
+              if (Array.isArray(pluginJson.match.command)) {
+                if (pluginJson.match.command.indexOf(command) === -1) {
+                  return false;
+                }
+              } else if (pluginJson.match.command !== command) {
                 return false;
               }
             }

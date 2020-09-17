@@ -1,5 +1,5 @@
 {
   "match": {
-    "command": "test"
+    "command": ["test", "cov"]
   }
 }
