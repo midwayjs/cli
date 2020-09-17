@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.1](https://github.com/midwayjs/cli/compare/v1.0.0...v1.0.1) (2020-09-17)
+
+
+### Features
+
+* publish config ([970d678](https://github.com/midwayjs/cli/commit/970d678989024814b7c4437aad2a8c92d7a8c931))
+
+
+
+
+
 # 1.0.0 (2020-09-17)
 
 
