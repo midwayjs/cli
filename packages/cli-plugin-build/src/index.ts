@@ -55,7 +55,9 @@ export class BuildPlugin extends BasePlugin {
       'outDir',
       dirname(projectFile)
     );
-    await remove(outdir);
+    if (outdir) {
+      await remove(outdir);
+    }
   }
 
   async compile() {
@@ -142,5 +144,6 @@ export class BuildPlugin extends BasePlugin {
       }
     }
     this.tsConfig = tsConfigResult;
+    return this.tsConfig;
   }
 }
