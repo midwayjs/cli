@@ -27,6 +27,14 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
+
+
+**Note:** Version bump only for package @midwayjs/cli-plugin-faas
+
+
+
+
+
 # [1.0.0](https://github.com/midwayjs/bin/compare/v1.1.0...v1.0.0) (2020-09-17)
 
 **Note:** Version bump only for package @midwayjs/cli-plugin-faas
