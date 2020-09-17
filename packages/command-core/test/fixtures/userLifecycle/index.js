@@ -8,5 +8,5 @@ const { join } = require('path');
   if (existsSync(file)) {
     unlinkSync(file);
   }
-  writeFileSync(file, process.env.TEST_MIDWAY_CLI_CORE_TMPDATA || '');
+  writeFileSync(file, 'user');
 })();

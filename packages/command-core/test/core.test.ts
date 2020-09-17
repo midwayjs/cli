@@ -3,7 +3,7 @@ import TestPlugin from './plugins/test.invoke';
 import { PluginTest2 } from './plugins/test-not-provider.invoke';
 import * as assert from 'assert';
 import { join } from 'path';
-import { readFileSync } from 'fs';
+import { existsSync, readFileSync, remove } from 'fs-extra';
 
 describe('command-core', () => {
   it('stop lifecycle', async () => {
@@ -43,8 +43,10 @@ describe('command-core', () => {
   });
   it('user lifecycle', async () => {
     const cwd = join(__dirname, './fixtures/userLifecycle');
-    const tmpData = Date.now() + '';
-    process.env.TEST_MIDWAY_CLI_CORE_TMPDATA = tmpData;
+    const txt = join(cwd, 'test.txt');
+    if (existsSync(txt)) {
+      await remove(txt);
+    }
     const core = new CommandCore({
       provider: 'test',
       cwd,
@@ -55,7 +57,7 @@ describe('command-core', () => {
     core.addPlugin(TestPlugin);
     await core.ready();
     await core.invoke(['invoke']);
-    const testData = readFileSync(join(cwd, 'test.txt')).toString();
-    assert(testData === tmpData);
+    const testData = readFileSync(txt).toString();
+    assert(testData === 'user');
   });
 });
