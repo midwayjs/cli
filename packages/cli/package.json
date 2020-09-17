@@ -45,9 +45,13 @@
     "dist",
     "index.js"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {
     "type": "git",
     "url": "http://github.com/midwayjs/midway.git"
-  }
+  },
+  "gitHead": "58706de896b8e3b50605bb29f40ff29abe43924d"
 }
