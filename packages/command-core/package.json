@@ -9,6 +9,7 @@
   },
   "devDependencies": {
     "benchmark": "^2.1.4",
+    "fs-extra": "^9.0.1",
     "typescript": "^4"
   },
   "engines": {
@@ -28,7 +29,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:midwayjs/bin.git"
+    "url": "git@github.com:midwayjs/cli.git"
   },
   "license": "MIT",
   "gitHead": "5783f06ff0298f0e172f801cae053c3fc80813a9"
