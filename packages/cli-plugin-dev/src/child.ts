@@ -8,7 +8,7 @@ process.on('exit', async () => {
   try {
     app = await createApp(process.cwd(), options, options.framework);
   } catch (e) {
-    console.log('[Midway] start error');
+    console.log('[ Midway ] start error');
     console.log(e);
   }
   process.send({ type: 'started' });
