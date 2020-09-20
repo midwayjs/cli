@@ -11,6 +11,14 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
+
+
+**Note:** Version bump only for package midway-bin
+
+
+
+
+
 ## [1.0.3](https://github.com/midwayjs/bin/compare/v1.0.2...v1.0.3) (2020-09-20)
 
 
