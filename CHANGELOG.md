@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.3](https://github.com/midwayjs/bin/compare/v1.0.2...v1.0.3) (2020-09-20)
+
+
+### Bug Fixes
+
+* dev start output ([e7c330e](https://github.com/midwayjs/bin/commit/e7c330e1f3625acd0583ff08e34c672ab57f6b87))
+
+
+
+
+
 ## [1.0.2](https://github.com/midwayjs/bin/compare/v1.0.1...v1.0.2) (2020-09-17)
 
 
