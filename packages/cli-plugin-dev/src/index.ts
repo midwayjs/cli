@@ -1,17 +1,20 @@
 import { BasePlugin } from '@midwayjs/command-core';
-import { fork, execSync } from 'child_process';
+import { fork } from 'child_process';
 import Spin from 'light-spinner';
 import * as chokidar from 'chokidar';
 import { networkInterfaces } from 'os';
 import { resolve, relative } from 'path';
 import { statSync } from 'fs';
+import * as chalk from 'chalk';
+import * as detect from 'detect-port';
 export class DevPlugin extends BasePlugin {
-  child;
-  started = false;
-  restarting = false;
+  private child;
+  private started = false;
+  private restarting = false;
+  private port = 7001;
   commands = {
     dev: {
-      lifecycleEvents: ['run'],
+      lifecycleEvents: ['checkEnv', 'run'],
       options: {
         baseDir: {
           usage: 'directory of application, default to `process.cwd()`',
@@ -31,12 +34,25 @@ export class DevPlugin extends BasePlugin {
   };
 
   hooks = {
+    'dev:checkEnv': this.checkEnv.bind(this),
     'dev:run': this.run.bind(this),
   };
 
+  async checkEnv() {
+    console.log();
+    const defaultPort = this.options.port || 7001;
+    const port = await detect(defaultPort);
+    if (port !== defaultPort) {
+      this.log(`Server port ${defaultPort} is in use, now using port ${port}`);
+      this.port = port;
+    } else {
+      this.port = defaultPort;
+    }
+  }
+
   async run() {
-    process.on('exit', this.handleClose.bind(this));
-    process.on('SIGINT', this.handleClose.bind(this));
+    process.on('exit', this.handleClose.bind(this, true));
+    process.on('SIGINT', this.handleClose.bind(this, true));
     this.setStore('dev:closeApp', this.handleClose.bind(this), true);
     const options = this.getOptions();
     await this.start();
@@ -48,8 +64,8 @@ export class DevPlugin extends BasePlugin {
 
   private getOptions() {
     return {
-      port: 7001,
       ...this.options,
+      port: this.port,
     };
   }
 
@@ -85,6 +101,12 @@ export class DevPlugin extends BasePlugin {
           process.stdout.write(data);
         }
       });
+      this.child.stderr.on('data', data => {
+        if (options.silent) {
+          return;
+        }
+        console.error(chalk.hex('#ff0000')(data.toString()));
+      });
       this.child.on('message', msg => {
         if (msg.type === 'started') {
           if (spin) {
@@ -104,11 +126,13 @@ export class DevPlugin extends BasePlugin {
     });
   }
 
-  private async handleClose() {
+  private async handleClose(isExit?, signal?) {
     if (this.child) {
-      execSync('kill -9 ' + this.child.pid);
       this.child.kill();
       this.child = null;
+    }
+    if (isExit) {
+      process.exit(signal);
     }
   }
 
@@ -152,7 +176,7 @@ export class DevPlugin extends BasePlugin {
       if (this.restarting) {
         return;
       }
-      console.log(`[ Midway ] Auto reload: ${relative(sourceDir, path)}`);
+      this.log(`Auto reload: ${relative(sourceDir, path)}`);
       this.restarting = true;
       this.restart();
     });
@@ -162,18 +186,22 @@ export class DevPlugin extends BasePlugin {
     if (options.silent) {
       return;
     }
-    this.core.cli.log();
-    this.core.cli.log();
-    this.core.cli.log(
-      '[ Midway ] Start Server at http://127.0.0.1:' + options.port
+    this.log(
+      'Start Server at ',
+      chalk.hex('#9999ff').underline('http://127.0.0.1:' + options.port)
     );
     const lanIp = this.getIp();
     if (lanIp) {
-      this.core.cli.log(
-        `[ Midway ] Start on LAN http://${lanIp}:${options.port}`
+      this.log(
+        'Start on LAN',
+        chalk.hex('#9999ff').underline(`http://${lanIp}:${options.port}`)
       );
     }
     this.core.cli.log();
     this.core.cli.log();
+  }
+
+  private log(...args: any[]) {
+    console.log('[ Midway ]', ...args);
   }
 }

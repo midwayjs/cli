@@ -8,7 +8,7 @@ module.exports = async () => {
     try {
       const userJestModele = require(userJestConfigFile);
       if (typeof userJestModele === 'function') {
-        userJestConfig = userJestModele({});
+        userJestConfig = await userJestModele({});
       } else {
         userJestConfig = userJestModele;
       }
