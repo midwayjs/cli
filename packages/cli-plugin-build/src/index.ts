@@ -2,6 +2,7 @@ import { BasePlugin } from '@midwayjs/command-core';
 import { resolve, join, dirname } from 'path';
 import { existsSync, readFileSync, remove } from 'fs-extra';
 import { CompilerHost, Program, resolveTsConfigFile } from '@midwayjs/mwcc';
+import * as ts from 'typescript';
 export class BuildPlugin extends BasePlugin {
   commands = {
     build: {
@@ -78,7 +79,16 @@ export class BuildPlugin extends BasePlugin {
   }
 
   async emit() {
-    this.program.emit();
+    const { diagnostics } = await this.program.emit();
+    if (!diagnostics || !diagnostics.length) {
+      return;
+    }
+    const error = diagnostics.find(diagnostic => {
+      return diagnostic.category === ts.DiagnosticCategory.Error;
+    });
+    if (error) {
+      throw new Error(`TS Error: ${error.messageText}`);
+    }
   }
 
   private getTsCodeRoot(): string {
