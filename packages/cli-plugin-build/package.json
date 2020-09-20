@@ -1,14 +1,12 @@
 {
   "name": "@midwayjs/cli-plugin-build",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/command-core": "^1.0.3",
+    "@midwayjs/command-core": "^1.0.4",
     "@midwayjs/mwcc": "^0.3.x",
-    "fs-extra": "^9"
-  },
-  "devDependencies": {
+    "fs-extra": "^9",
     "typescript": "^4"
   },
   "engines": {
