@@ -4,7 +4,7 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/command-core": "^1.0.1",
+    "@midwayjs/command-core": "^1.0.3",
     "@midwayjs/debugger": "^1.0.6",
     "@midwayjs/mock": "^2.2.2",
     "chalk": "^4.1.0",
