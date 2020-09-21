@@ -7,7 +7,7 @@
     "@midwayjs/command-core": "^1.0.4",
     "@midwayjs/mwcc": "^0.3.x",
     "fs-extra": "^8.1.0",
-    "typescript": "^4"
+    "typescript": "^3.9.7"
   },
   "engines": {
     "node": ">= 10"

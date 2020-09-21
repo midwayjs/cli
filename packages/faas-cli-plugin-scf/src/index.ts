@@ -1,8 +1,4 @@
-import {
-  BasePlugin,
-  ICoreInstance,
-  CommandCore,
-} from '@midwayjs/command-core';
+import { BasePlugin, ICoreInstance, CommandCore } from '@midwayjs/command-core';
 import { join } from 'path';
 import * as Tencent from 'serverless-tencent-scf';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';

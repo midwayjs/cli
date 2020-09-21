@@ -10,7 +10,7 @@
   "devDependencies": {
     "benchmark": "^2.1.4",
     "fs-extra": "^8.1.0",
-    "typescript": "^4"
+    "typescript": "^3.9.7"
   },
   "engines": {
     "node": ">= 10"

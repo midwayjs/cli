@@ -4,11 +4,8 @@ import * as assert from 'assert';
 import { existsSync, remove } from 'fs-extra';
 
 describe('/test/index.test.ts', () => {
-  afterEach(() => {
+  afterEach(async () => {
     process.env.MIDWAY_TS_MODE = undefined;
-  });
-
-  afterAll(async () => {
     if (
       existsSync(
         join(__dirname, 'fixtures/ice-faas-ts-standard/.faas_debug_tmp')
