@@ -3,8 +3,7 @@ import {
   filterPluginByCommand,
   getPluginClass,
 } from '@midwayjs/command-core';
-import { getSpecFile, loadSpec } from './loadSpec';
-export * from './loadSpec';
+import { getSpecFile, loadSpec } from '@midwayjs/serverless-spec-builder';
 import { PluginList } from './plugins';
 export class FaaSPlugin extends BasePlugin {
   async asyncInit() {

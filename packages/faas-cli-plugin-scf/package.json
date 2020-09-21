@@ -11,8 +11,7 @@
   },
   "devDependencies": {
     "@midwayjs/fcli-plugin-package": "^1.2.14",
-    "fs-extra": "^8.1.0",
-    "@midwayjs/cli-plugin-faas": "^1.0.x"
+    "fs-extra": "^8.1.0"
   },
   "engines": {
     "node": ">= 10"

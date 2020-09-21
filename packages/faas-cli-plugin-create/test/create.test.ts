@@ -1,5 +1,5 @@
 import { CommandCore } from '@midwayjs/command-core';
-import { loadSpec } from '@midwayjs/cli-plugin-faas';
+import { loadSpec } from '@midwayjs/serverless-spec-builder';
 import { join } from 'path';
 import { remove, existsSync, readFileSync } from 'fs-extra';
 import { TestCreatePlugin } from './helper';

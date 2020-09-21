@@ -1,5 +1,5 @@
 import { CommandCore } from '@midwayjs/command-core';
-import { loadSpec } from '@midwayjs/cli-plugin-faas';
+import { loadSpec } from '@midwayjs/serverless-spec-builder';
 import { PackagePlugin } from '@midwayjs/fcli-plugin-package';
 import { AliyunFCPlugin } from '../src';
 import { join } from 'path';

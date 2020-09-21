@@ -1,5 +1,5 @@
 import { BasePlugin } from '@midwayjs/command-core';
-import { getSpecFile, writeToSpec } from '@midwayjs/cli-plugin-faas';
+import { getSpecFile, writeToSpec } from '@midwayjs/serverless-spec-builder';
 import { isAbsolute, join, relative, resolve } from 'path';
 import {
   copy,

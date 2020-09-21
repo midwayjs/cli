@@ -1,5 +1,5 @@
 import { CommandCore } from '@midwayjs/command-core';
-import { getSpecFile, loadSpec } from '@midwayjs/cli-plugin-faas';
+import { getSpecFile, loadSpec } from '@midwayjs/serverless-spec-builder';
 import { FaaSInvokePlugin } from './index';
 import { formatInvokeResult, optionsToInvokeParams } from './utils';
 import { InvokeOptions } from './interface';
