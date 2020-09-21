@@ -1,0 +1,43 @@
+{
+  "name": "@midwayjs/fcli-plugin-package",
+  "version": "1.2.14",
+  "main": "dist/index",
+  "typings": "dist/index.d.ts",
+  "dependencies": {
+    "@midwayjs/cli-plugin-faas": "^1.0.x",
+    "@midwayjs/faas-code-analysis": "^1.2.6",
+    "@midwayjs/command-core": "^1.0.x",
+    "@midwayjs/locate": "^1.0.3",
+    "@midwayjs/mwcc": "^0.3.x",
+    "archiver": "^3.1.1",
+    "fs-extra": "^8.1.0",
+    "globby": "^10.0.1",
+    "micromatch": "^4.0.2"
+  },
+  "devDependencies": {
+    "@midwayjs/faas": "^1.2.1",
+    "@midwayjs/serverless-spec-builder": "^1.2.12"
+  },
+  "engines": {
+    "node": ">= 10"
+  },
+  "files": [
+    "plugin.json",
+    "src",
+    "dist"
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "test": "../../node_modules/.bin/jest",
+    "build": "tsc --build",
+    "cov": "../../node_modules/.bin/jest --coverage",
+    "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
+    "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:midwayjs/midway-faas.git"
+  },
+  "license": "MIT",
+  "gitHead": "5783f06ff0298f0e172f801cae053c3fc80813a9"
+}

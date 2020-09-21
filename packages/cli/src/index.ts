@@ -1,12 +1,14 @@
-import { BaseCLI } from '@midwayjs/command-core';
+import {
+  BaseCLI,
+  filterPluginByCommand,
+  getPluginClass,
+} from '@midwayjs/command-core';
 import { execSync } from 'child_process';
 import { PluginList } from './plugins';
-import { existsSync } from 'fs';
-import { resolve } from 'path';
 const enquirer = require('enquirer');
 
 export class CLI extends BaseCLI {
-  loadDefaultPlugin() {
+  async loadDefaultPlugin() {
     const command = this.commands && this.commands[0];
     // // version not load plugin
     if (this.argv.v || this.argv.version) {
@@ -14,59 +16,20 @@ export class CLI extends BaseCLI {
     }
     let needLoad = PluginList;
     if (!this.argv.h && command) {
-      needLoad = PluginList.filter(plugin => {
-        if (!plugin || !plugin.mod) {
-          return false;
-        }
-        if (plugin.command) {
-          if (plugin.command !== command) {
-            return false;
-          }
-          return true;
-        }
-        try {
-          const pluginJson = require(plugin.mod + '/plugin.json');
-          if (pluginJson.match) {
-            // 匹配命令是否一致
-            if (pluginJson.match.command) {
-              if (Array.isArray(pluginJson.match.command)) {
-                if (pluginJson.match.command.indexOf(command) === -1) {
-                  return false;
-                }
-              } else if (pluginJson.match.command !== command) {
-                return false;
-              }
-            }
-            // 匹配文件是否存在
-            if (pluginJson.match.file) {
-              const filePath = resolve(this.cwd, pluginJson.match.file);
-              if (!existsSync(filePath)) {
-                return false;
-              }
-            }
-            return true;
-          }
-        } catch {
-          //
-        }
+      needLoad = filterPluginByCommand(PluginList, {
+        command,
+        cwd: this.core.cwd,
+        load: name => require(name),
       });
     }
     this.debug('Plugin load list', needLoad);
-    needLoad.forEach(pluginInfo => {
-      try {
-        const mod = require(pluginInfo.mod);
-        if (pluginInfo.name) {
-          if (mod[pluginInfo.name]) {
-            this.core.addPlugin(mod[pluginInfo.name]);
-          }
-        } else if (typeof mod === 'object') {
-          Object.keys(mod).forEach(key => {
-            this.core.addPlugin(mod[key]);
-          });
-        }
-      } catch {
-        //
-      }
+    const allPluginClass = await getPluginClass(needLoad, {
+      cwd: this.core.cwd,
+      load: name => require(name),
+      npm: this.argv.npm,
+    });
+    allPluginClass.forEach(pluginClass => {
+      this.core.addPlugin(pluginClass);
     });
   }
 

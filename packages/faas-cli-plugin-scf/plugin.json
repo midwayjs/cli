@@ -1,0 +1,7 @@
+{
+  "match": {
+    "file": "f.yml",
+    "command": ["package", "deploy"],
+    "provider": "tencent"
+  }
+}

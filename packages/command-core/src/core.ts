@@ -252,6 +252,7 @@ export class CommandCore implements ICommandCore {
         options: {},
         commands: commands || [],
       },
+      coreOptions: this.options,
       cwd: this.cwd,
       pluginManager: this,
       setProvider: this.setProvider.bind(this),

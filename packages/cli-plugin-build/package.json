@@ -6,7 +6,7 @@
   "dependencies": {
     "@midwayjs/command-core": "^1.0.4",
     "@midwayjs/mwcc": "^0.3.x",
-    "fs-extra": "^9",
+    "fs-extra": "^8.1.0",
     "typescript": "^4"
   },
   "engines": {
