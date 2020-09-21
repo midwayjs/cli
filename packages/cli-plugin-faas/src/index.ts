@@ -10,17 +10,19 @@ export class FaaSPlugin extends BasePlugin {
   async asyncInit() {
     const { cwd } = this.core;
     const specFileInfo = getSpecFile(cwd);
-    if (!this.core.service) {
+    if (!this.core.service?.provider?.name) {
       const spec = loadSpec(cwd, specFileInfo);
       // 挂载service
       this.core.service = spec;
     }
     if (!this.core.config) {
-      // 挂载faas config
-      this.core.config = {
-        servicePath: cwd,
-        specFile: specFileInfo.path,
-      };
+      this.core.config = {};
+    }
+    if (!this.core.config.servicePath) {
+      this.core.config.servicePath = cwd;
+    }
+    if (!this.core.config.specFile) {
+      this.core.config.specFile = specFileInfo.path;
     }
     // 加载faas的插件
     let needLoad = PluginList;

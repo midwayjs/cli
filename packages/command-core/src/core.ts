@@ -257,6 +257,7 @@ export class CommandCore implements ICommandCore {
       pluginManager: this,
       setProvider: this.setProvider.bind(this),
       service: serviceData,
+      addPlugin: this.addPlugin.bind(this),
     };
   }
 
