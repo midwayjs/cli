@@ -18,7 +18,6 @@
   "scripts": {
     "lint": "eslint .",
     "build": "tsc --build",
-    "cov": "../../node_modules/.bin/jest --coverage",
     "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
     "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov"
   },
