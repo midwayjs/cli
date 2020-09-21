@@ -6,7 +6,7 @@ import { existsSync, readFileSync, remove, mkdirpSync } from 'fs-extra';
 describe('/test/wrapper.test.ts', () => {
   const wrapperPath = resolve(__dirname, './fixtures/wrapper');
 
-  after(async () => {
+  afterEach(async () => {
     await remove(wrapperPath);
   });
 
