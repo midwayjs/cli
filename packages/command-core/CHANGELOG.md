@@ -3,6 +3,39 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.2.15 (2020-09-22)
+
+
+
+## 1.0.4 (2020-09-20)
+
+
+
+## 1.0.3 (2020-09-20)
+
+
+
+## 1.0.1 (2020-09-17)
+
+
+### Features
+
+* publish config ([970d678](https://github.com/midwayjs/cli/commit/970d678989024814b7c4437aad2a8c92d7a8c931))
+
+
+
+# 1.0.0 (2020-09-17)
+
+
+### Features
+
+* change name to cli ([d845637](https://github.com/midwayjs/cli/commit/d845637511c606d581f72800e70567a95e93040c))
+* new ([7ca760c](https://github.com/midwayjs/cli/commit/7ca760c059715220c738a46a78d09d288a767f6d))
+
+
+
+
+
 ## [1.0.4](https://github.com/midwayjs/cli/compare/v1.0.3...v1.0.4) (2020-09-20)
 
 **Note:** Version bump only for package @midwayjs/command-core

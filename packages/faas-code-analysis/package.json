@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/faas-code-analysis",
-  "version": "1.2.6",
+  "version": "1.2.15",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -8,7 +8,6 @@
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1"
   },
-  "devDependencies": {},
   "scripts": {
     "lint": "eslint .",
     "build": "tsc --build",

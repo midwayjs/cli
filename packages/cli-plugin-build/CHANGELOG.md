@@ -3,6 +3,48 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.2.15 (2020-09-22)
+
+
+
+## 1.0.4 (2020-09-20)
+
+
+### Features
+
+* midway-bin clean ([63ce124](https://github.com/midwayjs/cli/commit/63ce124e2618086e194f68c9f4eee7ec441b9162))
+
+
+
+## 1.0.3 (2020-09-20)
+
+
+
+## 1.0.1 (2020-09-17)
+
+
+### Bug Fixes
+
+* build tsconfig error ([a364d73](https://github.com/midwayjs/cli/commit/a364d73d4162bbec76512b968b6f370668225154))
+
+
+### Features
+
+* publish config ([970d678](https://github.com/midwayjs/cli/commit/970d678989024814b7c4437aad2a8c92d7a8c931))
+
+
+
+# 1.0.0 (2020-09-17)
+
+
+### Features
+
+* change name to cli ([d845637](https://github.com/midwayjs/cli/commit/d845637511c606d581f72800e70567a95e93040c))
+
+
+
+
+
 ## [1.0.4](https://github.com/midwayjs/cli/compare/v1.0.3...v1.0.4) (2020-09-20)
 
 
