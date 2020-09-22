@@ -19,8 +19,7 @@
       ]
     },
     "version": {
-      "conventionalCommits": true,
-      "createRelease": "github"
+      "conventionalCommits": true
     }
   },
   "npmClient": "npm",
