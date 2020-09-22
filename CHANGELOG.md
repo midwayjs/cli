@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.16](https://github.com/midwayjs/bin/compare/serverless-v1.2.15...serverless-v1.2.16) (2020-09-22)
+
+
+### Bug Fixes
+
+* faas deploy ([#4](https://github.com/midwayjs/bin/issues/4)) ([1623df9](https://github.com/midwayjs/bin/commit/1623df9154bf48ebee7131e24ce98402f8839ec4))
+
+
+
+
+
 ## 1.2.15 (2020-09-22)
 
 

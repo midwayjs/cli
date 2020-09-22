@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/faas-dev-pack",
-  "version": "1.2.15",
+  "version": "1.2.16",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {

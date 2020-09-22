@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.16](https://github.com/midwayjs/cli/compare/serverless-v1.2.15...serverless-v1.2.16) (2020-09-22)
+
+**Note:** Version bump only for package @midwayjs/cli-plugin-build
+
+
+
+
+
 ## 1.2.15 (2020-09-22)
 
 
