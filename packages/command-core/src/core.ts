@@ -51,6 +51,7 @@ export class CommandCore implements ICommandCore {
   public addPlugin(Plugin: any) {
     const provider =
       this.options.service?.provider?.name || this.options.provider;
+    this.debug('Current Provider', provider);
     const coreInstance: ICoreInstance = this.coreInstance;
     let pluginProvider = '';
     // 支持加载npm 或 本地插件（绝对地址）
@@ -88,6 +89,11 @@ export class CommandCore implements ICommandCore {
       } else if (Array.isArray(instance.provider)) {
         // provider is list
         if (instance.provider.indexOf(provider) === -1) {
+          this.debug(
+            'Code skip load plugin',
+            Plugin?.name,
+            '[provide not match]'
+          );
           return;
         }
       } else {
@@ -97,6 +103,7 @@ export class CommandCore implements ICommandCore {
 
     // 不支持的provider
     if (pluginProvider && pluginProvider !== provider) {
+      this.debug('Code skip load plugin', Plugin?.name, '[provide not match]');
       return;
     }
 

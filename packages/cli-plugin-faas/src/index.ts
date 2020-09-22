@@ -17,11 +17,12 @@ export class FaaSPlugin extends BasePlugin {
     if (!this.core.config) {
       this.core.config = {};
     }
+    this.core.coreOptions.provider = this.core.service?.provider?.name;
     if (!this.core.config.servicePath) {
       this.core.config.servicePath = cwd;
     }
     if (!this.core.config.specFile) {
-      this.core.config.specFile = specFileInfo.path;
+      this.core.config.specFile = specFileInfo;
     }
     // 加载faas的插件
     let needLoad = PluginList;

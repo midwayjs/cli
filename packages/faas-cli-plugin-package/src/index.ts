@@ -702,6 +702,19 @@ export class PackagePlugin extends BasePlugin {
         };
       }
 
+      // 拷贝ts dist
+      const tsConfig = resolve(this.servicePath, 'tsconfig.json');
+      const tsDist = resolve(this.servicePath, 'dist');
+      if (existsSync(tsConfig) && existsSync(tsDist)) {
+        if (!service.package) {
+          service.package = {};
+        }
+        if (!service.package.include) {
+          service.package.include = [];
+        }
+        service.package.include.push('dist');
+      }
+
       if (!service?.layers) {
         service.layers = {};
       }

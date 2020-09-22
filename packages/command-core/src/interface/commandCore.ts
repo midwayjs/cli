@@ -39,7 +39,6 @@ export interface ICoreInstance {
   classes: any;
   cli: ILog;
   config: any;
-  cwd: string;
   getProvider(providerName: string): IProviderInstance;
   invoke(commandsArray?: string[], allowEntryPoints?: boolean, options?: any);
   pluginManager: ICommandCore;
@@ -49,7 +48,8 @@ export interface ICoreInstance {
     options: any;
     commands: string[];
   };
-  coreOptions: IOptions;
+  cwd?: string;
+  coreOptions?: IOptions;
   setProvider(providerName: string, providerInstance: IProviderInstance);
   spawn(commandsArray: string[], options?: any);
   [otherProp: string]: any;
