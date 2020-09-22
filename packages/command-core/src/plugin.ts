@@ -4,7 +4,10 @@ import {
   IPluginCommands,
 } from './interface/plugin';
 import { ICoreInstance } from './interface/commandCore';
-
+import { resolve } from 'path';
+import { existsSync } from 'fs';
+import Spin from 'light-spinner';
+import { installNpm } from './npm';
 export class BasePlugin implements IPluginInstance {
   public core: ICoreInstance;
   public options: any;
@@ -39,3 +42,123 @@ export class BasePlugin implements IPluginInstance {
     this.core.service.globalDependencies[name] = version || '*';
   }
 }
+
+// 通过命令过滤插件
+export const filterPluginByCommand = (pluginList, options) => {
+  const { command, platform, cwd = process.cwd(), load } = options || {};
+  return pluginList.filter(plugin => {
+    if (!plugin || !plugin.mod) {
+      return false;
+    }
+    // 如果存在命令匹配
+    if (plugin.command) {
+      if (plugin.command !== command) {
+        return false;
+      }
+    }
+    // 平台不一致
+    if (plugin.platform && platform) {
+      if (plugin.platform !== platform) {
+        return false;
+      }
+    }
+    try {
+      const pluginJson = load(plugin.mod + '/plugin.json');
+      if (pluginJson.match) {
+        // 匹配命令是否一致
+        if (pluginJson.match.command) {
+          if (Array.isArray(pluginJson.match.command)) {
+            if (pluginJson.match.command.indexOf(command) === -1) {
+              return false;
+            }
+          } else if (pluginJson.match.command !== command) {
+            return false;
+          }
+        }
+        // 匹配文件是否存在
+        if (pluginJson.match.file) {
+          const filePath = resolve(cwd, pluginJson.match.file);
+          if (!existsSync(filePath)) {
+            return false;
+          }
+        }
+        return true;
+      }
+    } catch {
+      //
+    }
+    return true;
+  });
+};
+
+// 获取插件的class列表
+export const getPluginClass = async (pluginList, options) => {
+  const { cwd, npm, load } = options;
+  const classList = [];
+  for (const pluginInfo of pluginList) {
+    let mod;
+    try {
+      mod = load(pluginInfo.mod);
+    } catch {
+      const userModPath = resolve(cwd, 'node_modules', pluginInfo.mod);
+      // if plugin not exists, auto install
+      if (!existsSync(userModPath)) {
+        await autoInstallMod(pluginInfo.mod, {
+          cwd,
+          npm,
+        });
+      }
+      try {
+        mod = load(userModPath);
+      } catch (e) {
+        // no oth doing
+      }
+    }
+    if (!mod) {
+      continue;
+    }
+    if (pluginInfo.name) {
+      if (mod[pluginInfo.name]) {
+        classList.push(mod[pluginInfo.name]);
+      }
+    } else if (typeof mod === 'object') {
+      Object.keys(mod).forEach(key => {
+        classList.push(mod[key]);
+      });
+    }
+  }
+  return classList;
+};
+
+const autoInstallMod = async (
+  modName: string,
+  options: {
+    cwd: string;
+    npm: string;
+  }
+) => {
+  console.log(
+    `[ midway ] CLI plugin '${modName}' was not installed, and will be installed automatically`
+  );
+  if (!options.npm) {
+    console.log(
+      '[ midway ] You could use the `--npm` parameter to speed up the installation process'
+    );
+  }
+  const spin = new Spin({ text: 'installing' });
+  spin.start();
+  try {
+    await installNpm({
+      npmName: modName,
+      register: options.npm,
+      baseDir: options.cwd,
+      slience: true,
+    });
+  } catch (e) {
+    console.error(
+      `[ midway ] cli plugin '${modName}' install error: ${e?.message}`
+    );
+    console.log(`[ midway ] please manual install '${modName}'`);
+  }
+  spin.stop();
+};

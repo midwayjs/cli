@@ -3,5 +3,6 @@
   "ignorePatterns": ["node_modules", "dist", "fixtures"],
   "env": {
     "mocha": true
-  }
+  },
+  "plugins": ["jest"]
 }

@@ -49,6 +49,7 @@ export interface ICoreInstance {
     options: any;
     commands: string[];
   };
+  coreOptions: IOptions;
   setProvider(providerName: string, providerInstance: IProviderInstance);
   spawn(commandsArray: string[], options?: any);
   [otherProp: string]: any;

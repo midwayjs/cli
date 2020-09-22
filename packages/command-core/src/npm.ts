@@ -5,10 +5,7 @@ import * as assert from 'assert';
 const homeDir = require('os').homedir();
 const CommandCoreBaseDir = join(homeDir, '.CommandCore');
 const CommandCoreBasePkg = join(CommandCoreBaseDir, 'package.json');
-const CommandCoreBaseNodeModules = join(
-  CommandCoreBaseDir,
-  'node_modules'
-);
+const CommandCoreBaseNodeModules = join(CommandCoreBaseDir, 'node_modules');
 if (!existsSync(CommandCoreBaseDir)) {
   mkdirSync(CommandCoreBaseDir, '0777');
 }

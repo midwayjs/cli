@@ -5,7 +5,7 @@ module.exports = (options = {}) => {
     {
       preset: 'ts-jest',
       testPathIgnorePatterns: ['<rootDir>/test/fixtures'],
-      coveragePathIgnorePatterns: ['<rootDir>/test/'],
+      coveragePathIgnorePatterns: ['<rootDir>/test/', '/node_modules/'],
     },
     options
   );

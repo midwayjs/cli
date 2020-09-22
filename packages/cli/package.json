@@ -10,7 +10,6 @@
   "scripts": {
     "lint": "eslint .",
     "build": "tsc --build",
-    "cov": "../../node_modules/.bin/jest --coverage",
     "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
     "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov"
   },
@@ -26,15 +25,15 @@
     "@midwayjs/cli-plugin-faas": "^1.0.4",
     "@midwayjs/cli-plugin-test": "^1.0.4",
     "@midwayjs/command-core": "^1.0.4",
-    "@midwayjs/debugger": "^1.0.5",
+    "@midwayjs/debugger": "^1.0.x",
     "enquirer": "^2.3.4",
     "jest-environment-node": "^24.9.0",
     "minimist": "^1.2.5",
     "source-map-support": "^0.5.19",
-    "ts-node": "9.0.0"
+    "ts-node": "^9.0.0"
   },
   "devDependencies": {
-    "typescript": "^4"
+    "typescript": "^3.9.7"
   },
   "engines": {
     "node": ">= 8.0.0"

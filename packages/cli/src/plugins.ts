@@ -3,11 +3,12 @@ export const PluginList: Array<{
   mod: string;
   name?: string;
   command?: string;
+  platform?: string;
 }> = [
   { mod: '@midwayjs/cli-plugin-build', command: 'build' },
   { mod: '@midwayjs/cli-plugin-dev', command: 'dev' },
   { mod: '@midwayjs/cli-plugin-test', command: 'test' },
   { mod: '@midwayjs/cli-plugin-test', command: 'cov' },
   { mod: '@midwayjs/cli-plugin-clean', command: 'clean' },
-  { mod: '@midwayjs/cli-plugin-faas' },
+  { mod: '@midwayjs/cli-plugin-faas', name: 'FaaSPlugin' },
 ];
