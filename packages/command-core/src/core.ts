@@ -301,6 +301,7 @@ export class CommandCore implements ICommandCore {
           lifecycleEvents: [],
           rank: -1,
           options: {},
+          passingCommand: commandInstance.passingCommand,
           origin: [],
           commands: {},
         };
@@ -384,6 +385,7 @@ export class CommandCore implements ICommandCore {
     const commandPath: string[] = [];
     const parentCommandList: string[] = [];
     const usage = {};
+    // command 透传
     for (command of commandsArray) {
       if (commandPath.length) {
         parentCommandList.push(commandPath[commandPath.length - 1]);
@@ -395,6 +397,9 @@ export class CommandCore implements ICommandCore {
       cmdObj = cmdObj.commands[command];
       if (cmdObj && cmdObj.options) {
         this.commandOptions(cmdObj.options, usage);
+      }
+      if (cmdObj.passingCommand) {
+        break;
       }
     }
     if (!cmdObj) {
