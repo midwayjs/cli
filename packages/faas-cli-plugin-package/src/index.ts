@@ -103,6 +103,7 @@ export class PackagePlugin extends BasePlugin {
   hooks = {
     'package:cleanup': this.cleanup.bind(this),
     'package:installDevDep': this.installDevDep.bind(this),
+    'before:package:copyFile': this.deployType.bind(this),
     'package:copyFile': this.copyFile.bind(this),
     'package:compile': this.compile.bind(this),
     'package:installLayer': this.installLayer.bind(this),
@@ -679,7 +680,7 @@ export class PackagePlugin extends BasePlugin {
     return aggregationName;
   }
 
-  defaultBeforeGenerateSpec() {
+  deployType() {
     const service: any = this.core.service;
     if (service?.deployType) {
       this.core.cli.log(` - found deployType: ${service?.deployType}`);
@@ -736,7 +737,9 @@ export class PackagePlugin extends BasePlugin {
         service.layers['koaLayer'] = { path: 'npm:@midwayjs/koa-layer' };
       }
     }
+  }
 
+  defaultBeforeGenerateSpec() {
     writeToSpec(this.midwayBuildPath, this.core.service);
   }
 
