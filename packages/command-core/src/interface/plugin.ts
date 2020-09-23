@@ -18,6 +18,7 @@ export interface ICommandInstance {
   commands?: {
     [command: string]: ICommandInstance;
   };
+  [othKey: string]: any;
 }
 
 export interface IPluginCommands {

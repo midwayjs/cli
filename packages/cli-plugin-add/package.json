@@ -1,0 +1,40 @@
+{
+  "name": "@midwayjs/cli-plugin-add",
+  "version": "1.2.17",
+  "main": "dist/index",
+  "typings": "dist/index.d.ts",
+  "dependencies": {
+    "@midwayjs/command-core": "^1.2.17",
+    "chalk": "^4.1.0",
+    "enquirer": "^2.3.6",
+    "fs-extra": "^9.0.1",
+    "light-generator": "^1.6.1",
+    "light-spinner": "^1.0.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.0.3"
+  },
+  "engines": {
+    "node": ">= 10"
+  },
+  "files": [
+    "plugin.json",
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc --build",
+    "lint": "eslint .",
+    "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
+    "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:midwayjs/cli.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
+  "gitHead": "58706de896b8e3b50605bb29f40ff29abe43924d"
+}

@@ -11,4 +11,5 @@ export const PluginList: Array<{
   { mod: '@midwayjs/cli-plugin-test', command: 'cov' },
   { mod: '@midwayjs/cli-plugin-clean', command: 'clean' },
   { mod: '@midwayjs/cli-plugin-faas', name: 'FaaSPlugin' },
+  { mod: '@midwayjs/cli-plugin-add', name: 'AddPlugin' },
 ];
