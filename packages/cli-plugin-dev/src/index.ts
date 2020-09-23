@@ -72,12 +72,10 @@ export class DevPlugin extends BasePlugin {
   private async start() {
     return new Promise(resolve => {
       const options = this.getOptions();
-      let spin;
-      // 非静默模式
+      const spin = new Spin({
+        text: this.started ? 'restarting' : 'starting',
+      });
       if (!options.silent) {
-        spin = new Spin({
-          text: this.started ? 'restarting' : 'starting',
-        });
         spin.start();
       }
       this.child = fork(
@@ -109,18 +107,23 @@ export class DevPlugin extends BasePlugin {
       });
       this.child.on('message', msg => {
         if (msg.type === 'started') {
-          if (spin) {
-            spin.stop();
-          }
-          this.restarting = false;
+          spin.stop();
           while (dataCache.length) {
             process.stdout.write(dataCache.shift());
           }
-          if (!this.started) {
-            this.started = true;
-            this.displayStartTips(options);
+          this.restarting = false;
+          if (msg.startSuccess) {
+            if (!this.started) {
+              this.started = true;
+              this.displayStartTips(options);
+            }
           }
           resolve();
+        } else if (msg.type === 'error') {
+          spin.stop();
+          console.error(
+            chalk.hex('#ff0000')(`[ Midway ] ${msg.message || ''}`)
+          );
         }
       });
     });

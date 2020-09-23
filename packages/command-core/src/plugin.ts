@@ -57,7 +57,7 @@ export const filterPluginByCommand = (pluginList, options) => {
       }
     }
     // 平台不一致
-    if (plugin.platform && platform) {
+    if (plugin.platform) {
       if (plugin.platform !== platform) {
         return false;
       }
