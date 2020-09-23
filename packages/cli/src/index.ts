@@ -5,6 +5,7 @@ import {
 } from '@midwayjs/command-core';
 import { execSync } from 'child_process';
 import { PluginList } from './plugins';
+export * from './utils';
 const enquirer = require('enquirer');
 
 export class CLI extends BaseCLI {
@@ -90,7 +91,7 @@ export class CLI extends BaseCLI {
     try {
       // midway-faas version
       const cliVersion = require('../package.json').version;
-      log.log('@ali/faas-cli'.padEnd(20) + `v${cliVersion}`);
+      log.log('@midwayjs/cli'.padEnd(20) + `v${cliVersion}`);
     } catch {
       //
     }
