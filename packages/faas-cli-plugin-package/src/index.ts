@@ -1,5 +1,9 @@
 import { BasePlugin } from '@midwayjs/command-core';
-import { getSpecFile, writeToSpec } from '@midwayjs/serverless-spec-builder';
+import {
+  getSpecFile,
+  writeToSpec,
+  formatAggregation,
+} from '@midwayjs/serverless-spec-builder';
 import { isAbsolute, join, relative, resolve } from 'path';
 import {
   copy,
@@ -14,8 +18,7 @@ import {
   writeFileSync,
   writeJSON,
 } from 'fs-extra';
-import * as micromatch from 'micromatch';
-import { commonPrefix, formatLayers } from './utils';
+import { formatLayers } from './utils';
 import {
   analysisResultToSpec,
   copyFiles,
@@ -572,103 +575,111 @@ export class PackagePlugin extends BasePlugin {
 
     // use picomatch to match url
     this.setGlobalDependencies('picomatch');
-    const allAggregationPaths = [];
-    let allFuncNames = Object.keys(this.core.service.functions);
-    for (const aggregationName in this.core.service.aggregation) {
-      const aggregationConfig = this.core.service.aggregation[aggregationName];
-      const aggregationFuncName = this.getAggregationFunName(aggregationName);
-      this.core.service.functions[aggregationFuncName] = aggregationConfig;
-      this.core.service.functions[
-        aggregationFuncName
-      ].handler = `${aggregationFuncName}.handler`;
-      this.core.service.functions[aggregationFuncName]._isAggregation = true;
-      if (!this.core.service.functions[aggregationFuncName].events) {
-        this.core.service.functions[aggregationFuncName].events = [];
+    // const allAggregationPaths = [];
+    // let allFuncNames = Object.keys(this.core.service.functions);
+    // for (const aggregationName in this.core.service.aggregation) {
+    //   const aggregationConfig = this.core.service.aggregation[aggregationName];
+    //   const aggregationFuncName = this.getAggregationFunName(aggregationName);
+    //   this.core.service.functions[aggregationFuncName] = aggregationConfig;
+    //   this.core.service.functions[
+    //     aggregationFuncName
+    //   ].handler = `${aggregationFuncName}.handler`;
+    //   this.core.service.functions[aggregationFuncName]._isAggregation = true;
+    //   if (!this.core.service.functions[aggregationFuncName].events) {
+    //     this.core.service.functions[aggregationFuncName].events = [];
+    //   }
+    //   // 忽略原始方法，不再单独进行部署
+    //   const deployOrigin = aggregationConfig.deployOrigin;
+
+    //   const allAggred = [];
+    //   let handlers = [];
+
+    //   if (aggregationConfig.functions || aggregationConfig.functionsPattern) {
+    //     const matchedFuncName = [];
+    //     const notMatchedFuncName = [];
+    //     for (const functionName of allFuncNames) {
+    //       let isMatch = false;
+    //       if (aggregationConfig.functions) {
+    //         isMatch = aggregationConfig.functions.indexOf(functionName) !== -1;
+    //       } else if (aggregationConfig.functionsPattern) {
+    //         isMatch = micromatch.all(
+    //           functionName,
+    //           aggregationConfig.functionsPattern
+    //         );
+    //       }
+    //       if (isMatch) {
+    //         matchedFuncName.push(functionName);
+    //       } else {
+    //         notMatchedFuncName.push(functionName);
+    //       }
+    //     }
+    //     allFuncNames = notMatchedFuncName;
+
+    //     handlers = matchedFuncName
+    //       .map((functionName: string) => {
+    //         const functions = this.core.service.functions;
+    //         const func = functions[functionName];
+    //         if (!func || !func.events) {
+    //           return;
+    //         }
+    //         const httpEventIndex = func.events.findIndex(
+    //           (event: any) => !!event.http
+    //         );
+    //         if (httpEventIndex === -1) {
+    //           return;
+    //         }
+    //         const httpEvent = func.events[httpEventIndex];
+    //         if (!httpEvent || !httpEvent.http.path) {
+    //           return;
+    //         }
+    //         allAggred.push({
+    //           path: httpEvent.http.path,
+    //           method: httpEvent.http.method,
+    //         });
+    //         if (!deployOrigin) {
+    //           // 不把原有的函数进行部署
+    //           this.core.cli.log(
+    //             ` - using function '${aggregationName}' to deploy '${functionName}'`
+    //           );
+    //           delete this.core.service.functions[functionName];
+    //         }
+    //         return {
+    //           ...func,
+    //           path: httpEvent.http.path,
+    //         };
+    //       })
+    //       .filter((func: any) => !!func);
+    //   }
+
+    //   const allPaths = allAggred.map(aggre => aggre.path);
+    //   let currentPath = commonPrefix(allPaths);
+    //   currentPath =
+    //     currentPath && currentPath !== '/' ? `${currentPath}/*` : '/*';
+    //   this.core.cli.log(
+    //     ` - using path '${currentPath}' to deploy '${allPaths.join("', '")}'`
+    //   );
+    //   if (allAggregationPaths.indexOf(currentPath) !== -1) {
+    //     console.error(
+    //       `Cannot use the same prefix '${currentPath}' for aggregation deployment`
+    //     );
+    //     process.exit();
+    //   }
+    //   allAggregationPaths.push(currentPath);
+    //   this.core.service.functions[aggregationFuncName]._handlers = handlers;
+    //   this.core.service.functions[aggregationFuncName]._allAggred = allAggred;
+    //   this.core.service.functions[aggregationFuncName].events = [
+    //     { http: { method: 'any', path: currentPath } },
+    //   ];
+    // }
+
+    this.core.service.functions = formatAggregation(
+      this.core.service.functions,
+      this.core.service.aggregation,
+      {
+        cli: this.core.cli,
+        getAggregationFunName: this.getAggregationFunName.bind(this),
       }
-      // 忽略原始方法，不再单独进行部署
-      const deployOrigin = aggregationConfig.deployOrigin;
-
-      const allAggred = [];
-      let handlers = [];
-
-      if (aggregationConfig.functions || aggregationConfig.functionsPattern) {
-        const matchedFuncName = [];
-        const notMatchedFuncName = [];
-        for (const functionName of allFuncNames) {
-          let isMatch = false;
-          if (aggregationConfig.functions) {
-            isMatch = aggregationConfig.functions.indexOf(functionName) !== -1;
-          } else if (aggregationConfig.functionsPattern) {
-            isMatch = micromatch.all(
-              functionName,
-              aggregationConfig.functionsPattern
-            );
-          }
-          if (isMatch) {
-            matchedFuncName.push(functionName);
-          } else {
-            notMatchedFuncName.push(functionName);
-          }
-        }
-        allFuncNames = notMatchedFuncName;
-
-        handlers = matchedFuncName
-          .map((functionName: string) => {
-            const functions = this.core.service.functions;
-            const func = functions[functionName];
-            if (!func || !func.events) {
-              return;
-            }
-            const httpEventIndex = func.events.findIndex(
-              (event: any) => !!event.http
-            );
-            if (httpEventIndex === -1) {
-              return;
-            }
-            const httpEvent = func.events[httpEventIndex];
-            if (!httpEvent || !httpEvent.http.path) {
-              return;
-            }
-            allAggred.push({
-              path: httpEvent.http.path,
-              method: httpEvent.http.method,
-            });
-            if (!deployOrigin) {
-              // 不把原有的函数进行部署
-              this.core.cli.log(
-                ` - using function '${aggregationName}' to deploy '${functionName}'`
-              );
-              delete this.core.service.functions[functionName];
-            }
-            return {
-              ...func,
-              path: httpEvent.http.path,
-            };
-          })
-          .filter((func: any) => !!func);
-      }
-
-      const allPaths = allAggred.map(aggre => aggre.path);
-      let currentPath = commonPrefix(allPaths);
-      currentPath =
-        currentPath && currentPath !== '/' ? `${currentPath}/*` : '/*';
-      this.core.cli.log(
-        ` - using path '${currentPath}' to deploy '${allPaths.join("', '")}'`
-      );
-      if (allAggregationPaths.indexOf(currentPath) !== -1) {
-        console.error(
-          `Cannot use the same prefix '${currentPath}' for aggregation deployment`
-        );
-        process.exit();
-      }
-      allAggregationPaths.push(currentPath);
-      this.core.service.functions[aggregationFuncName]._handlers = handlers;
-      this.core.service.functions[aggregationFuncName]._allAggred = allAggred;
-      this.core.service.functions[aggregationFuncName].events = [
-        { http: { method: 'any', path: currentPath } },
-      ];
-    }
-
+    );
     const tmpSpecFile = resolve(tmpdir(), `aggre-${Date.now()}/f.yml`);
     await ensureFile(tmpSpecFile);
 
