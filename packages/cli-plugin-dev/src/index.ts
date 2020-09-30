@@ -69,7 +69,7 @@ export class DevPlugin extends BasePlugin {
     };
   }
 
-  private async start() {
+  private start() {
     return new Promise(resolve => {
       const options = this.getOptions();
       const spin = new Spin({
@@ -100,9 +100,6 @@ export class DevPlugin extends BasePlugin {
         }
       });
       this.child.stderr.on('data', data => {
-        if (options.silent) {
-          return;
-        }
         console.error(chalk.hex('#ff0000')(data.toString()));
       });
       this.child.on('message', msg => {

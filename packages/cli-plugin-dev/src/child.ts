@@ -11,7 +11,10 @@ process.on('exit', async () => {
     startSuccess = true;
   } catch (e) {
     console.log('');
-    process.send({ type: 'error', message: 'start error' });
+    process.send({
+      type: 'error',
+      message: 'start error: ' + (e?.message || ''),
+    });
     console.log(e);
   }
   process.send({ type: 'started', startSuccess });

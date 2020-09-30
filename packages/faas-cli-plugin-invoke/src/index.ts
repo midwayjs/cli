@@ -302,6 +302,7 @@ export class FaaSInvokePlugin extends BasePlugin {
       this.core.debug('Code Analysis Result', newSpec);
       this.core.service.functions = newSpec.functions;
       this.setStore('functions', this.core.service.functions);
+      ensureFileSync(this.analysisCodeInfoPath);
       writeFileSync(
         this.analysisCodeInfoPath,
         JSON.stringify(newSpec.functions, null, 2)

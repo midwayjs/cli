@@ -10,7 +10,7 @@
         "--no-package-lock"
       ],
       "nohoist": [
-        "egg"
+        "@midwayjs/decorator"
       ]
     },
     "publish": {
