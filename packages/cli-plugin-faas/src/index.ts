@@ -35,7 +35,7 @@ export class FaaSPlugin extends BasePlugin {
         platform: this.core.service?.provider?.name,
       });
     }
-    this.core.debug('FaaS Plugin load list', needLoad);
+    this.core.debug('FaaS Plugin load list', command, needLoad);
     const allPluginClass = await getPluginClass(needLoad, {
       cwd: this.core.cwd,
       load: name => require(name),

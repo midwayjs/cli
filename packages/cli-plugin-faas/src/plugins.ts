@@ -2,7 +2,7 @@
 export const PluginList: Array<{
   mod: string;
   name?: string;
-  command?: string;
+  command?: string | string[];
   platform?: string;
 }> = [
   { mod: '@midwayjs/fcli-plugin-create', name: 'CreatePlugin' },
@@ -14,15 +14,18 @@ export const PluginList: Array<{
     mod: '@midwayjs/fcli-plugin-fc',
     name: 'AliyunFCPlugin',
     platform: 'aliyun',
+    command: ['deploy', 'package'],
   },
   {
     mod: '@midwayjs/fcli-plugin-scf',
     name: 'TencentSCFPlugin',
     platform: 'tencent',
+    command: ['deploy', 'package'],
   },
   {
     mod: '@midwayjs/fcli-plugin-aws',
     name: 'AWSLambdaPlugin',
     platform: 'aws',
+    command: ['deploy', 'package'],
   },
 ];

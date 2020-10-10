@@ -88,7 +88,7 @@ export function writeWrapper(options: {
 
   if (functionMap?.functionList?.length) {
     const registerFunctionFile = join(distDir, 'registerFunction.js');
-    const sourceFile = resolve(__dirname, '../registerFunction.js');
+    const sourceFile = resolve(__dirname, '../registerFunction.js.tpl');
     if (!existsSync(registerFunctionFile) && existsSync(sourceFile)) {
       copyFileSync(sourceFile, registerFunctionFile);
     }
