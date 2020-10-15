@@ -1,20 +1,9 @@
 import { join } from 'path';
-import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import { existsSync, writeFileSync } from 'fs';
 import { exec, execSync } from 'child_process';
 import * as assert from 'assert';
-const homeDir = require('os').homedir();
-const CommandCoreBaseDir = join(homeDir, '.CommandCore');
-const CommandCoreBasePkg = join(CommandCoreBaseDir, 'package.json');
-const CommandCoreBaseNodeModules = join(CommandCoreBaseDir, 'node_modules');
-if (!existsSync(CommandCoreBaseDir)) {
-  mkdirSync(CommandCoreBaseDir, '0777');
-}
-if (!existsSync(CommandCoreBasePkg)) {
-  writeFileSync(CommandCoreBasePkg, '{}');
-}
-
 export const getCoreBaseDir = () => {
-  return CommandCoreBaseNodeModules;
+  return execSync('npm root').toString().replace(/\n$/, '');
 };
 
 async function getNpmPath(
@@ -22,24 +11,28 @@ async function getNpmPath(
   npmName: string,
   npmRegistry?: string
 ): Promise<string> {
-  const globalNpmPath = join(CommandCoreBaseNodeModules, npmName);
-  if (existsSync(globalNpmPath)) {
-    return globalNpmPath;
-  }
-  const currentNodeModules = execSync('npm root').toString().replace(/\n$/, '');
+  const currentNodeModules = getCoreBaseDir();
   const localNpmPath = join(currentNodeModules, npmName);
   if (existsSync(localNpmPath)) {
     return localNpmPath;
   }
 
+  let baseDir = join(currentNodeModules, '../');
+  if (!existsSync(baseDir)) {
+    baseDir = process.cwd();
+  }
+  const pkgJson = join(baseDir, 'package.json');
+  if (!existsSync(pkgJson)) {
+    writeFileSync(pkgJson, '{}');
+  }
   scope.coreInstance.cli.log(`Installing ${npmName}`);
   await installNpm({
-    baseDir: CommandCoreBaseDir,
+    baseDir,
     register: npmRegistry,
     npmName,
     mode: 'production',
   });
-  return globalNpmPath;
+  return join(baseDir, `node_modules/${npmName}`);
 }
 
 interface INpmInstallOptions {

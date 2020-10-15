@@ -1,5 +1,5 @@
 import {
-  BaseCLI,
+  CoreBaseCLI,
   filterPluginByCommand,
   getPluginClass,
 } from '@midwayjs/command-core';
@@ -8,7 +8,7 @@ import { PluginList } from './plugins';
 export * from './utils';
 const enquirer = require('enquirer');
 
-export class CLI extends BaseCLI {
+export class CLI extends CoreBaseCLI {
   async loadDefaultPlugin() {
     const command = this.commands && this.commands[0];
     // // version not load plugin

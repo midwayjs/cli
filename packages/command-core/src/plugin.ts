@@ -52,7 +52,11 @@ export const filterPluginByCommand = (pluginList, options) => {
     }
     // 如果存在命令匹配
     if (plugin.command) {
-      if (plugin.command !== command) {
+      if (Array.isArray(plugin.command)) {
+        if (plugin.command.indexOf(command) === -1) {
+          return false;
+        }
+      } else if (plugin.command !== command) {
         return false;
       }
     }

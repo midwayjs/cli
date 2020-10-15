@@ -1,0 +1,10 @@
+service:
+  name: ginkgo-test
+provider:
+  name: ginkgo
+  runtime: node10tb
+functions:
+  index:
+    handler: index.handler
+    events:
+      - hsf: true
