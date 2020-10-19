@@ -23,5 +23,5 @@
     }
   },
   "npmClient": "tnpm",
-  "version": "1.2.20-beta.5"
+  "version": "1.2.20"
 }
