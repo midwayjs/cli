@@ -33,7 +33,10 @@ export class FaaSPlugin extends BasePlugin {
       command,
       cwd: this.core.cwd,
       // 当没有 command 或者 仅执行 help 的时候，不加载平台私有插件
-      platform: !options?.h && command ? this.core.service?.provider?.name : 'unplatform',
+      platform:
+        !options?.h && command
+          ? this.core.service?.provider?.name
+          : 'unplatform',
     });
 
     this.core.debug('FaaS Plugin load list', command, needLoad);
