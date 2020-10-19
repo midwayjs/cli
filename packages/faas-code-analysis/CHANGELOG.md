@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.20-beta.4](https://github.com/midwayjs/midway-faas/compare/v1.0.4...v1.2.20-beta.4) (2020-10-19)
+
+
+### Bug Fixes
+
+* starter-in-runtime-extension ([#13](https://github.com/midwayjs/midway-faas/issues/13)) ([8dd40c1](https://github.com/midwayjs/midway-faas/commit/8dd40c1ba4f1bbefe16863c7057c8ccfc8436b56))
+
+
+
+
+
 ## [1.2.20-beta.3](https://github.com/midwayjs/midway-faas/compare/v1.2.20-beta.2...v1.2.20-beta.3) (2020-10-19)
 
 **Note:** Version bump only for package @midwayjs/faas-code-analysis

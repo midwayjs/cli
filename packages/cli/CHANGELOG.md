@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.20-beta.4](https://github.com/midwayjs/midway/compare/v1.0.4...v1.2.20-beta.4) (2020-10-19)
+
+
+### Bug Fixes
+
+* mw new ([#6](https://github.com/midwayjs/midway/issues/6)) ([6afd197](https://github.com/midwayjs/midway/commit/6afd197ef456f7f701660920312cdc5797a25465))
+* remove core global deps & faas deps command check ([#12](https://github.com/midwayjs/midway/issues/12)) ([543ca3c](https://github.com/midwayjs/midway/commit/543ca3cc7097967d858381a928ee7dce5f3b129a))
+* starter-in-runtime-extension ([#13](https://github.com/midwayjs/midway/issues/13)) ([8dd40c1](https://github.com/midwayjs/midway/commit/8dd40c1ba4f1bbefe16863c7057c8ccfc8436b56))
+
+
+
+
+
 ## [1.2.20-beta.3](https://github.com/midwayjs/midway/compare/v1.2.20-beta.2...v1.2.20-beta.3) (2020-10-19)
 
 **Note:** Version bump only for package @midwayjs/cli

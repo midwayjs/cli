@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.20-beta.4](https://github.com/midwayjs/bin/compare/v1.0.4...v1.2.20-beta.4) (2020-10-19)
+
+
+### Bug Fixes
+
+* faas deploy ([#4](https://github.com/midwayjs/bin/issues/4)) ([1623df9](https://github.com/midwayjs/bin/commit/1623df9154bf48ebee7131e24ce98402f8839ec4))
+* mw new ([#6](https://github.com/midwayjs/bin/issues/6)) ([6afd197](https://github.com/midwayjs/bin/commit/6afd197ef456f7f701660920312cdc5797a25465))
+* remove core global deps & faas deps command check ([#12](https://github.com/midwayjs/bin/issues/12)) ([543ca3c](https://github.com/midwayjs/bin/commit/543ca3cc7097967d858381a928ee7dce5f3b129a))
+* starter-in-runtime-extension ([#13](https://github.com/midwayjs/bin/issues/13)) ([8dd40c1](https://github.com/midwayjs/bin/commit/8dd40c1ba4f1bbefe16863c7057c8ccfc8436b56))
+* test deps ([#8](https://github.com/midwayjs/bin/issues/8)) ([60df64a](https://github.com/midwayjs/bin/commit/60df64a54953cf8ddc76596fcbbb5ae5fac976b8))
+
+
+
+
+
 ## [1.2.20-beta.3](https://github.com/midwayjs/bin/compare/v1.2.20-beta.2...v1.2.20-beta.3) (2020-10-19)
 
 **Note:** Version bump only for package midway-bin
