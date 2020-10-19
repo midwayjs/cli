@@ -6,6 +6,7 @@ import {
 import { execSync } from 'child_process';
 import { PluginList } from './plugins';
 export * from './utils';
+const FaaSPlugin = 'FaaSPlugin';
 const enquirer = require('enquirer');
 
 export class CLI extends CoreBaseCLI {
@@ -22,6 +23,16 @@ export class CLI extends CoreBaseCLI {
         cwd: this.core.cwd,
         load: name => require(name),
       });
+    }
+    if (this.argv.isFaaS) {
+      delete this.argv.isFaaS;
+      const isLoadFaaS = needLoad.find(mod => mod.name === FaaSPlugin);
+      if (!isLoadFaaS) {
+        const faasMod = PluginList.find(mod => mod.name === FaaSPlugin);
+        if (faasMod) {
+          needLoad.push(faasMod);
+        }
+      }
     }
     this.debug('Plugin load list', needLoad);
     const allPluginClass = await getPluginClass(needLoad, {
