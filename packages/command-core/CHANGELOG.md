@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.20-beta.3](https://github.com/midwayjs/cli/compare/v1.2.20-beta.2...v1.2.20-beta.3) (2020-10-19)
+
+**Note:** Version bump only for package @midwayjs/command-core
+
+
+
+
+
+## [1.2.20-beta.2](https://github.com/midwayjs/cli/compare/v1.2.20-beta.1...v1.2.20-beta.2) (2020-10-19)
+
+**Note:** Version bump only for package @midwayjs/command-core
+
+
+
+
+
+## [1.2.20-beta.1](https://github.com/midwayjs/cli/compare/v1.0.4...v1.2.20-beta.1) (2020-10-19)
+
+
+### Bug Fixes
+
+* faas deploy ([#4](https://github.com/midwayjs/cli/issues/4)) ([1623df9](https://github.com/midwayjs/cli/commit/1623df9154bf48ebee7131e24ce98402f8839ec4))
+* mw new ([#6](https://github.com/midwayjs/cli/issues/6)) ([6afd197](https://github.com/midwayjs/cli/commit/6afd197ef456f7f701660920312cdc5797a25465))
+* remove core global deps & faas deps command check ([#12](https://github.com/midwayjs/cli/issues/12)) ([543ca3c](https://github.com/midwayjs/cli/commit/543ca3cc7097967d858381a928ee7dce5f3b129a))
+
+
+
+
+
 ## [1.2.18](https://github.com/midwayjs/cli/compare/serverless-v1.2.17...serverless-v1.2.18) (2020-09-23)
 
 

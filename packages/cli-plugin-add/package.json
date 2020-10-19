@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/cli-plugin-add",
-  "version": "1.2.18",
+  "version": "1.2.20-beta.3",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/command-core": "^1.2.18",
+    "@midwayjs/command-core": "^1.2.20-beta.3",
     "chalk": "^4.1.0",
     "enquirer": "^2.3.6",
     "fs-extra": "^9.0.1",
@@ -12,7 +12,7 @@
     "light-spinner": "^1.0.1"
   },
   "devDependencies": {
-    "typescript": "^4.0.3"
+    "typescript": "^3.9.7"
   },
   "engines": {
     "node": ">= 10"

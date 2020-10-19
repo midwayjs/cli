@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.20-beta.3](https://github.com/midwayjs/cli/compare/v1.2.20-beta.2...v1.2.20-beta.3) (2020-10-19)
+
+**Note:** Version bump only for package @midwayjs/cli-plugin-test
+
+
+
+
+
+## [1.2.20-beta.2](https://github.com/midwayjs/cli/compare/v1.2.20-beta.1...v1.2.20-beta.2) (2020-10-19)
+
+**Note:** Version bump only for package @midwayjs/cli-plugin-test
+
+
+
+
+
+## [1.2.20-beta.1](https://github.com/midwayjs/cli/compare/v1.0.4...v1.2.20-beta.1) (2020-10-19)
+
+
+### Bug Fixes
+
+* test deps ([#8](https://github.com/midwayjs/cli/issues/8)) ([60df64a](https://github.com/midwayjs/cli/commit/60df64a54953cf8ddc76596fcbbb5ae5fac976b8))
+
+
+
+
+
 ## [1.2.19](https://github.com/midwayjs/cli/compare/serverless-v1.2.18...serverless-v1.2.19) (2020-09-24)
 
 
