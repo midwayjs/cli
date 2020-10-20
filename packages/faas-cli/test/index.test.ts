@@ -5,13 +5,11 @@ import * as assert from 'assert';
 
 describe('/test/create.test.ts', () => {
   const baseDir = join(__dirname, './tmp');
-  beforeEach(async () => {
+  it('f create', async () => {
     if (existsSync(baseDir)) {
       await remove(baseDir);
     }
     mkdirSync(baseDir);
-  });
-  it('f create', async () => {
     execSync(
       `cd ${baseDir};${join(
         __dirname,
@@ -29,5 +27,21 @@ describe('/test/create.test.ts', () => {
     );
     assert(/serverless-hello-world/.test(contents));
     await remove(baseDir);
+  });
+  it('f invoke', async () => {
+    const invokeBaseDir = join(__dirname, './fixtures/invoke');
+    const result = execSync(
+      `${join(
+        __dirname,
+        '../bin/cli.js'
+      )} invoke -f index --clean=true`, {
+        cwd: invokeBaseDir,
+        env: {
+          ...process.env,
+          MIDWAY_TS_MODE: 'false'
+        }
+      }
+    ).toString();
+    assert(/hello http world/.test(result));
   });
 });
