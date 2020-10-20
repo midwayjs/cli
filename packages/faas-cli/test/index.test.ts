@@ -11,7 +11,7 @@ describe('/test/create.test.ts', () => {
     }
     mkdirSync(baseDir);
   });
-  it('base create faas boilerplate', async () => {
+  it('f create', async () => {
     execSync(
       `cd ${baseDir};${join(
         __dirname,

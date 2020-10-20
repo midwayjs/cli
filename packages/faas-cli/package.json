@@ -21,6 +21,10 @@
     "bin",
     "package.json"
   ],
+  "scripts": {
+    "test": "../../node_modules/.bin/jest",
+    "cov": "../../node_modules/.bin/jest --coverage"
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:midwayjs/midway-faas.git"
