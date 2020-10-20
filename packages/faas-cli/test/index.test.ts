@@ -42,6 +42,14 @@ describe('/test/create.test.ts', () => {
     ).toString();
     assert(/hello http world/.test(result));
   });
+  it('f test', async () => {
+    const testBaseDir = join(__dirname, './fixtures/test');
+    const result = execSync(`${join(__dirname, '../bin/cli.js')} test`, {
+      cwd: testBaseDir,
+      env: process.env,
+    }).toString();
+    assert(/Testing all \*\.test\.ts/.test(result));
+  });
   it('f package', async () => {
     const packageBaseDir = join(__dirname, './fixtures/package');
     const result = join(packageBaseDir, 'xxx.zip');
