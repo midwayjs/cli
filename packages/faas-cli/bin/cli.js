@@ -3,5 +3,5 @@
 const { cli } = require('@midwayjs/cli/bin/cli');
 const minimist = require('minimist');
 const argv = minimist(process.argv.slice(2));
-argv.faas = true;
+argv.isFaaS = true;
 cli(argv);
