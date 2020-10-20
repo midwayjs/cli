@@ -27,7 +27,7 @@ const initializeMethod = async (initializeContext = {}) => {
   <% } %>
   layers.unshift(engine => {
     engine.addRuntimeExtension({
-      async afterRuntimeStart(runtime) {
+      async beforeFunctionStart(runtime) {
         starter = new <%=faasStarterName %>({ baseDir: __dirname, initializeContext, applicationAdapter: runtime, middleware: <%-JSON.stringify(middleware, null, 2)%> });
         <% loadDirectory.forEach(function(dirName){ %>
           starter.loader.loadDirectory({ baseDir: '<%=dirName%>'});<% }) %>
