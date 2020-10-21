@@ -173,7 +173,7 @@ export class DevPlugin extends BasePlugin {
         }
       }, // ignore dotfiles
       persistent: true,
-      ignoreInitial: true
+      ignoreInitial: true,
     });
     watcher.on('all', (event, path) => {
       if (this.restarting) {
