@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.22-beta.1](https://github.com/midwayjs/midway-faas/compare/v1.2.20...v1.2.22-beta.1) (2020-10-21)
+
+
+### Bug Fixes
+
+* package deployType egg ([db91305](https://github.com/midwayjs/midway-faas/commit/db913057b14c2d923517223d855747e8bbb2c65f))
+
+
+
+
+
 ## [1.2.21](https://github.com/midwayjs/midway-faas/compare/serverless-v1.2.19...serverless-v1.2.21) (2020-10-20)
 
 
