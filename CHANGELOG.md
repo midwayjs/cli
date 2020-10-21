@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.22](https://github.com/midwayjs/bin/compare/v1.2.22-beta.1...v1.2.22) (2020-10-21)
+
+**Note:** Version bump only for package midway-bin
+
+
+
+
+
+## [1.2.22-beta.1](https://github.com/midwayjs/bin/compare/v1.2.20...v1.2.22-beta.1) (2020-10-21)
+
+
+### Bug Fixes
+
+* entry afterRuntimeStart to  beforeFunctionStart ([#14](https://github.com/midwayjs/bin/issues/14)) ([fd2c048](https://github.com/midwayjs/bin/commit/fd2c0487c70ba2f84ef2e63405b29d2cd149ccca))
+* f package ([7897334](https://github.com/midwayjs/bin/commit/78973340319abb41d395f2105f0569c970a9cb38))
+* f package ([10f8b88](https://github.com/midwayjs/bin/commit/10f8b8817c4caf2b88579bc0e201035008cd2d6e))
+* fcli create ([9af8028](https://github.com/midwayjs/bin/commit/9af8028af33e49526e875789151406dcfd68ef44))
+* npm ([d52802e](https://github.com/midwayjs/bin/commit/d52802e13e833351031b3d93376fabd4d96fd238))
+* package deployType egg ([db91305](https://github.com/midwayjs/bin/commit/db913057b14c2d923517223d855747e8bbb2c65f))
+
+
+
+
+
 ## [1.2.21](https://github.com/midwayjs/bin/compare/serverless-v1.2.19...serverless-v1.2.21) (2020-10-20)
 
 

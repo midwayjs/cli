@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.22](https://github.com/midwayjs/cli/compare/v1.2.22-beta.1...v1.2.22) (2020-10-21)
+
+**Note:** Version bump only for package @midwayjs/cli-plugin-clean
+
+
+
+
+
+## [1.2.22-beta.1](https://github.com/midwayjs/cli/compare/v1.2.20...v1.2.22-beta.1) (2020-10-21)
+
+**Note:** Version bump only for package @midwayjs/cli-plugin-clean
+
+
+
+
+
 ## [1.2.21](https://github.com/midwayjs/cli/compare/serverless-v1.2.19...serverless-v1.2.21) (2020-10-20)
 
 

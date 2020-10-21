@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.22](https://github.com/midwayjs/midway-faas/compare/v1.2.22-beta.1...v1.2.22) (2020-10-21)
+
+**Note:** Version bump only for package @midwayjs/faas-cli
+
+
+
+
+
+## [1.2.22-beta.1](https://github.com/midwayjs/midway-faas/compare/v1.2.20...v1.2.22-beta.1) (2020-10-21)
+
+
+### Bug Fixes
+
+* f package ([7897334](https://github.com/midwayjs/midway-faas/commit/78973340319abb41d395f2105f0569c970a9cb38))
+* f package ([10f8b88](https://github.com/midwayjs/midway-faas/commit/10f8b8817c4caf2b88579bc0e201035008cd2d6e))
+* fcli create ([9af8028](https://github.com/midwayjs/midway-faas/commit/9af8028af33e49526e875789151406dcfd68ef44))
+
+
+
+
+
 ## [1.2.21](https://github.com/midwayjs/midway-faas/compare/serverless-v1.2.19...serverless-v1.2.21) (2020-10-20)
 
 

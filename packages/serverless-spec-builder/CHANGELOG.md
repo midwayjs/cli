@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.22](https://github.com/midwayjs/midway-faas/compare/v1.2.22-beta.1...v1.2.22) (2020-10-21)
+
+**Note:** Version bump only for package @midwayjs/serverless-spec-builder
+
+
+
+
+
+## [1.2.22-beta.1](https://github.com/midwayjs/midway-faas/compare/v1.2.20...v1.2.22-beta.1) (2020-10-21)
+
+
+### Bug Fixes
+
+* entry afterRuntimeStart to  beforeFunctionStart ([#14](https://github.com/midwayjs/midway-faas/issues/14)) ([fd2c048](https://github.com/midwayjs/midway-faas/commit/fd2c0487c70ba2f84ef2e63405b29d2cd149ccca))
+
+
+
+
+
 ## [1.2.21](https://github.com/midwayjs/midway-faas/compare/serverless-v1.2.19...serverless-v1.2.21) (2020-10-20)
 
 

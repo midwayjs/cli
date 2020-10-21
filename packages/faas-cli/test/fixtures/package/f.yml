@@ -1,0 +1,11 @@
+service: serverless-midway-test
+
+provider:
+  name: ''
+
+functions:
+  index:
+    handler: index.handler
+
+package:
+  artifact: 'code.zip'
