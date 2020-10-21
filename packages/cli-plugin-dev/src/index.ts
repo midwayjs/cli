@@ -4,7 +4,7 @@ import Spin from 'light-spinner';
 import * as chokidar from 'chokidar';
 import { networkInterfaces } from 'os';
 import { resolve, relative } from 'path';
-import { statSync } from 'fs';
+import { statSync, existsSync } from 'fs';
 import * as chalk from 'chalk';
 import * as detect from 'detect-port';
 export class DevPlugin extends BasePlugin {
@@ -165,20 +165,23 @@ export class DevPlugin extends BasePlugin {
         if (path.includes('node_modules')) {
           return true;
         }
-        const stat = statSync(path);
-        if (stat.isFile() && !path.endsWith('.ts')) {
-          return true;
+        if (existsSync(path)) {
+          const stat = statSync(path);
+          if (stat.isFile() && !path.endsWith('.ts')) {
+            return true;
+          }
         }
       }, // ignore dotfiles
       persistent: true,
     });
-    watcher.on('change', path => {
+    watcher.on('all', path => {
       if (this.restarting) {
         return;
       }
-      this.log(`Auto reload: ${relative(sourceDir, path)}`);
       this.restarting = true;
-      this.restart();
+      this.restart().then(() => {
+        this.log(`Auto reload. ${chalk.hex('#666666')(relative(sourceDir, path))}`);
+      });
     });
   }
 
