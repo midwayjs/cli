@@ -173,15 +173,16 @@ export class DevPlugin extends BasePlugin {
         }
       }, // ignore dotfiles
       persistent: true,
+      ignoreInitial: true
     });
-    watcher.on('all', path => {
+    watcher.on('all', (event, path) => {
       if (this.restarting) {
         return;
       }
       this.restarting = true;
       this.restart().then(() => {
         this.log(
-          `Auto reload. ${chalk.hex('#666666')(relative(sourceDir, path))}`
+          `Auto reload. ${chalk.hex('#666666')(`[${event}] ${relative(sourceDir, path)}`)}`
         );
       });
     });
