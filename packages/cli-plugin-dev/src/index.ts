@@ -182,7 +182,9 @@ export class DevPlugin extends BasePlugin {
       this.restarting = true;
       this.restart().then(() => {
         this.log(
-          `Auto reload. ${chalk.hex('#666666')(`[${event}] ${relative(sourceDir, path)}`)}`
+          `Auto reload. ${chalk.hex('#666666')(
+            `[${event}] ${relative(sourceDir, path)}`
+          )}`
         );
       });
     });
