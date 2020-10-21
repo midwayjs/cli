@@ -52,7 +52,7 @@ describe('/test/create.test.ts', () => {
   });
   it('f package', async () => {
     const packageBaseDir = join(__dirname, './fixtures/package');
-    const result = join(packageBaseDir, 'xxx.zip');
+    const result = join(packageBaseDir, 'code.zip');
     if (existsSync(result)) {
       await remove(result);
     }
