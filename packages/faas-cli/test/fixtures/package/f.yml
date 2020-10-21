@@ -8,4 +8,4 @@ functions:
     handler: index.handler
 
 package:
-  artifact: 'xxx.zip'
+  artifact: 'code.zip'
