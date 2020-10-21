@@ -103,7 +103,7 @@ export class PackagePlugin extends BasePlugin {
   hooks = {
     'package:cleanup': this.cleanup.bind(this),
     'package:installDevDep': this.installDevDep.bind(this),
-    'before:package:copyFile': this.deployType.bind(this),
+    'before:package:copyFile': this.deployTypeBeforeCopyFile.bind(this),
     'package:copyFile': this.copyFile.bind(this),
     'package:compile': this.compile.bind(this),
     'package:installLayer': this.installLayer.bind(this),
@@ -680,7 +680,25 @@ export class PackagePlugin extends BasePlugin {
     return aggregationName;
   }
 
-  deployType() {
+  deployTypeBeforeCopyFile() {
+    const service: any = this.core.service;
+    if (service?.deployType) {
+      // 拷贝ts dist
+      const tsConfig = resolve(this.servicePath, 'tsconfig.json');
+      const tsDist = resolve(this.servicePath, 'dist');
+      if (existsSync(tsConfig) && existsSync(tsDist)) {
+        if (!service.package) {
+          service.package = {};
+        }
+        if (!service.package.include) {
+          service.package.include = [];
+        }
+        service.package.include.push('dist');
+      }
+    }
+  }
+
+  defaultBeforeGenerateSpec() {
     const service: any = this.core.service;
     if (service?.deployType) {
       this.core.cli.log(` - found deployType: ${service?.deployType}`);
@@ -702,20 +720,6 @@ export class PackagePlugin extends BasePlugin {
           },
         };
       }
-
-      // 拷贝ts dist
-      const tsConfig = resolve(this.servicePath, 'tsconfig.json');
-      const tsDist = resolve(this.servicePath, 'dist');
-      if (existsSync(tsConfig) && existsSync(tsDist)) {
-        if (!service.package) {
-          service.package = {};
-        }
-        if (!service.package.include) {
-          service.package.include = [];
-        }
-        service.package.include.push('dist');
-      }
-
       if (!service?.layers) {
         service.layers = {};
       }
@@ -737,9 +741,6 @@ export class PackagePlugin extends BasePlugin {
         service.layers['koaLayer'] = { path: 'npm:@midwayjs/koa-layer' };
       }
     }
-  }
-
-  defaultBeforeGenerateSpec() {
     writeToSpec(this.midwayBuildPath, this.core.service);
   }
 
