@@ -14,11 +14,16 @@ export async function invokeFunction(options) {
   options.incremental = options.incremental ?? true;
   // 首次的时候执行清理
   if (!process.env.MIDWAT_FIRST_START_TMP_VAR) {
-    const distDir = join(options?.functionDir || process.cwd(), '.faas_debug_tmp');
+    const distDir = join(
+      options?.functionDir || process.cwd(),
+      '.faas_debug_tmp'
+    );
     if (existsSync(distDir)) {
       try {
         await remove(distDir);
-      } catch {}
+      } catch {
+        //
+      }
     }
     process.env.MIDWAT_FIRST_START_TMP_VAR = 'true';
   }
