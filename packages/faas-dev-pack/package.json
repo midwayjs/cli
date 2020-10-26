@@ -6,6 +6,7 @@
   "dependencies": {
     "@midwayjs/gateway-common-core": "^1.2.12",
     "@midwayjs/gateway-common-http": "^1.2.12",
+    "@midwayjs/command-core": "^1.2.22",
     "@midwayjs/serverless-invoke": "^1.2.12",
     "body-parser": "^1.19.0",
     "compose-middleware": "^5.0.1",

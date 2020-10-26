@@ -346,7 +346,10 @@ export class FaaSInvokePlugin extends BasePlugin {
       await remove(this.buildLockPath);
       setLock(this.buildLockPath, LOCK_TYPE.COMPLETE);
       this.core.debug('Typescript Build Error', e);
-      throw new Error('Typescript Build Error, Please Check Your FaaS Code!');
+      if (e.message) {
+        e.message = `Typescript Build Error, Please Check Your FaaS Code! ${e.message}`;
+      }
+      throw e;
     }
     setLock(this.buildLockPath, LOCK_TYPE.COMPLETE);
     // 针对多次调用清理缓存
