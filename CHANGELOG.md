@@ -3,6 +3,126 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.22](https://github.com/midwayjs/bin/compare/v1.2.22-beta.1...v1.2.22) (2020-10-21)
+
+**Note:** Version bump only for package midway-bin
+
+
+
+
+
+## [1.2.22-beta.1](https://github.com/midwayjs/bin/compare/v1.2.20...v1.2.22-beta.1) (2020-10-21)
+
+
+### Bug Fixes
+
+* entry afterRuntimeStart to  beforeFunctionStart ([#14](https://github.com/midwayjs/bin/issues/14)) ([fd2c048](https://github.com/midwayjs/bin/commit/fd2c0487c70ba2f84ef2e63405b29d2cd149ccca))
+* f package ([7897334](https://github.com/midwayjs/bin/commit/78973340319abb41d395f2105f0569c970a9cb38))
+* f package ([10f8b88](https://github.com/midwayjs/bin/commit/10f8b8817c4caf2b88579bc0e201035008cd2d6e))
+* fcli create ([9af8028](https://github.com/midwayjs/bin/commit/9af8028af33e49526e875789151406dcfd68ef44))
+* npm ([d52802e](https://github.com/midwayjs/bin/commit/d52802e13e833351031b3d93376fabd4d96fd238))
+* package deployType egg ([db91305](https://github.com/midwayjs/bin/commit/db913057b14c2d923517223d855747e8bbb2c65f))
+
+
+
+
+
+## [1.2.21](https://github.com/midwayjs/bin/compare/serverless-v1.2.19...serverless-v1.2.21) (2020-10-20)
+
+
+### Bug Fixes
+
+* entry afterRuntimeStart to  beforeFunctionStart ([#14](https://github.com/midwayjs/bin/issues/14)) ([fd2c048](https://github.com/midwayjs/bin/commit/fd2c0487c70ba2f84ef2e63405b29d2cd149ccca))
+* npm ([d52802e](https://github.com/midwayjs/bin/commit/d52802e13e833351031b3d93376fabd4d96fd238))
+
+
+
+## 1.2.20 (2020-10-19)
+
+
+
+## 1.2.20-beta.5 (2020-10-19)
+
+
+
+## 1.2.20-beta.4 (2020-10-19)
+
+
+### Bug Fixes
+
+* remove core global deps & faas deps command check ([#12](https://github.com/midwayjs/bin/issues/12)) ([543ca3c](https://github.com/midwayjs/bin/commit/543ca3cc7097967d858381a928ee7dce5f3b129a))
+* starter-in-runtime-extension ([#13](https://github.com/midwayjs/bin/issues/13)) ([8dd40c1](https://github.com/midwayjs/bin/commit/8dd40c1ba4f1bbefe16863c7057c8ccfc8436b56))
+
+
+
+
+
+## [1.2.20](https://github.com/midwayjs/bin/compare/v1.2.20-beta.5...v1.2.20) (2020-10-19)
+
+**Note:** Version bump only for package midway-bin
+
+
+
+
+
+## [1.2.20-beta.5](https://github.com/midwayjs/bin/compare/v1.2.20-beta.4...v1.2.20-beta.5) (2020-10-19)
+
+**Note:** Version bump only for package midway-bin
+
+
+
+
+
+## [1.2.20-beta.4](https://github.com/midwayjs/bin/compare/v1.0.4...v1.2.20-beta.4) (2020-10-19)
+
+
+### Bug Fixes
+
+* faas deploy ([#4](https://github.com/midwayjs/bin/issues/4)) ([1623df9](https://github.com/midwayjs/bin/commit/1623df9154bf48ebee7131e24ce98402f8839ec4))
+* mw new ([#6](https://github.com/midwayjs/bin/issues/6)) ([6afd197](https://github.com/midwayjs/bin/commit/6afd197ef456f7f701660920312cdc5797a25465))
+* remove core global deps & faas deps command check ([#12](https://github.com/midwayjs/bin/issues/12)) ([543ca3c](https://github.com/midwayjs/bin/commit/543ca3cc7097967d858381a928ee7dce5f3b129a))
+* starter-in-runtime-extension ([#13](https://github.com/midwayjs/bin/issues/13)) ([8dd40c1](https://github.com/midwayjs/bin/commit/8dd40c1ba4f1bbefe16863c7057c8ccfc8436b56))
+* test deps ([#8](https://github.com/midwayjs/bin/issues/8)) ([60df64a](https://github.com/midwayjs/bin/commit/60df64a54953cf8ddc76596fcbbb5ae5fac976b8))
+
+
+
+
+
+## [1.2.20-beta.3](https://github.com/midwayjs/bin/compare/v1.2.20-beta.2...v1.2.20-beta.3) (2020-10-19)
+
+**Note:** Version bump only for package midway-bin
+
+
+
+
+
+## [1.2.20-beta.2](https://github.com/midwayjs/bin/compare/v1.2.20-beta.1...v1.2.20-beta.2) (2020-10-19)
+
+
+### Bug Fixes
+
+* faas plugin load ([f234c81](https://github.com/midwayjs/bin/commit/f234c819327ab265a32526ced51d363cee31fad3))
+
+
+
+
+
+## [1.2.20-beta.1](https://github.com/midwayjs/bin/compare/v1.0.4...v1.2.20-beta.1) (2020-10-19)
+
+
+### Bug Fixes
+
+* faas deploy ([#4](https://github.com/midwayjs/bin/issues/4)) ([1623df9](https://github.com/midwayjs/bin/commit/1623df9154bf48ebee7131e24ce98402f8839ec4))
+* mw new ([#6](https://github.com/midwayjs/bin/issues/6)) ([6afd197](https://github.com/midwayjs/bin/commit/6afd197ef456f7f701660920312cdc5797a25465))
+* remove core global deps & faas deps command check ([#12](https://github.com/midwayjs/bin/issues/12)) ([543ca3c](https://github.com/midwayjs/bin/commit/543ca3cc7097967d858381a928ee7dce5f3b129a))
+* resume npm ([ed42d5f](https://github.com/midwayjs/bin/commit/ed42d5f01e6a2230eb16430817a5b6557375efaf))
+* starter-in-runtime-extension ([3e77f6a](https://github.com/midwayjs/bin/commit/3e77f6a9e4e9e2a793b23cfc786fef313401071e))
+* test deps ([#8](https://github.com/midwayjs/bin/issues/8)) ([60df64a](https://github.com/midwayjs/bin/commit/60df64a54953cf8ddc76596fcbbb5ae5fac976b8))
+
+
+
+
+
 ## [1.2.19](https://github.com/midwayjs/bin/compare/serverless-v1.2.18...serverless-v1.2.19) (2020-09-24)
 
 

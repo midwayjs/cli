@@ -28,14 +28,18 @@ export class FaaSPlugin extends BasePlugin {
     let needLoad = PluginList;
     const { options, commands } = this.core.coreOptions;
     const command = commands?.[0];
-    if (!options?.h && command) {
-      needLoad = filterPluginByCommand(PluginList, {
-        command,
-        cwd: this.core.cwd,
-        platform: this.core.service?.provider?.name,
-      });
-    }
-    this.core.debug('FaaS Plugin load list', needLoad);
+
+    needLoad = filterPluginByCommand(PluginList, {
+      command,
+      cwd: this.core.cwd,
+      // 当没有 command 或者 仅执行 help 的时候，不加载平台私有插件
+      platform:
+        !options?.h && command
+          ? this.core.service?.provider?.name
+          : 'unplatform',
+    });
+
+    this.core.debug('FaaS Plugin load list', command, needLoad);
     const allPluginClass = await getPluginClass(needLoad, {
       cwd: this.core.cwd,
       load: name => require(name),

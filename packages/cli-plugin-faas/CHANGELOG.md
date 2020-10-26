@@ -3,6 +3,106 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.22](https://github.com/midwayjs/cli/compare/v1.2.22-beta.1...v1.2.22) (2020-10-21)
+
+**Note:** Version bump only for package @midwayjs/cli-plugin-faas
+
+
+
+
+
+## [1.2.22-beta.1](https://github.com/midwayjs/cli/compare/v1.2.20...v1.2.22-beta.1) (2020-10-21)
+
+**Note:** Version bump only for package @midwayjs/cli-plugin-faas
+
+
+
+
+
+## [1.2.21](https://github.com/midwayjs/cli/compare/serverless-v1.2.19...serverless-v1.2.21) (2020-10-20)
+
+
+
+## 1.2.20 (2020-10-19)
+
+
+
+## 1.2.20-beta.5 (2020-10-19)
+
+
+
+## 1.2.20-beta.4 (2020-10-19)
+
+
+### Bug Fixes
+
+* remove core global deps & faas deps command check ([#12](https://github.com/midwayjs/cli/issues/12)) ([543ca3c](https://github.com/midwayjs/cli/commit/543ca3cc7097967d858381a928ee7dce5f3b129a))
+* starter-in-runtime-extension ([#13](https://github.com/midwayjs/cli/issues/13)) ([8dd40c1](https://github.com/midwayjs/cli/commit/8dd40c1ba4f1bbefe16863c7057c8ccfc8436b56))
+
+
+
+
+
+## [1.2.20](https://github.com/midwayjs/cli/compare/v1.2.20-beta.5...v1.2.20) (2020-10-19)
+
+**Note:** Version bump only for package @midwayjs/cli-plugin-faas
+
+
+
+
+
+## [1.2.20-beta.5](https://github.com/midwayjs/cli/compare/v1.2.20-beta.4...v1.2.20-beta.5) (2020-10-19)
+
+**Note:** Version bump only for package @midwayjs/cli-plugin-faas
+
+
+
+
+
+## [1.2.20-beta.4](https://github.com/midwayjs/cli/compare/v1.0.4...v1.2.20-beta.4) (2020-10-19)
+
+
+### Bug Fixes
+
+* faas deploy ([#4](https://github.com/midwayjs/cli/issues/4)) ([1623df9](https://github.com/midwayjs/cli/commit/1623df9154bf48ebee7131e24ce98402f8839ec4))
+* remove core global deps & faas deps command check ([#12](https://github.com/midwayjs/cli/issues/12)) ([543ca3c](https://github.com/midwayjs/cli/commit/543ca3cc7097967d858381a928ee7dce5f3b129a))
+* starter-in-runtime-extension ([#13](https://github.com/midwayjs/cli/issues/13)) ([8dd40c1](https://github.com/midwayjs/cli/commit/8dd40c1ba4f1bbefe16863c7057c8ccfc8436b56))
+
+
+
+
+
+## [1.2.20-beta.3](https://github.com/midwayjs/cli/compare/v1.2.20-beta.2...v1.2.20-beta.3) (2020-10-19)
+
+**Note:** Version bump only for package @midwayjs/cli-plugin-faas
+
+
+
+
+
+## [1.2.20-beta.2](https://github.com/midwayjs/cli/compare/v1.2.20-beta.1...v1.2.20-beta.2) (2020-10-19)
+
+
+### Bug Fixes
+
+* faas plugin load ([f234c81](https://github.com/midwayjs/cli/commit/f234c819327ab265a32526ced51d363cee31fad3))
+
+
+
+
+
+## [1.2.20-beta.1](https://github.com/midwayjs/cli/compare/v1.0.4...v1.2.20-beta.1) (2020-10-19)
+
+
+### Bug Fixes
+
+* faas deploy ([#4](https://github.com/midwayjs/cli/issues/4)) ([1623df9](https://github.com/midwayjs/cli/commit/1623df9154bf48ebee7131e24ce98402f8839ec4))
+* remove core global deps & faas deps command check ([#12](https://github.com/midwayjs/cli/issues/12)) ([543ca3c](https://github.com/midwayjs/cli/commit/543ca3cc7097967d858381a928ee7dce5f3b129a))
+
+
+
+
+
 ## [1.2.18](https://github.com/midwayjs/cli/compare/serverless-v1.2.17...serverless-v1.2.18) (2020-09-23)
 
 **Note:** Version bump only for package @midwayjs/cli-plugin-faas

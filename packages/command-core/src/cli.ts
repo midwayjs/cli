@@ -4,7 +4,7 @@ import { commandLineUsage } from './utils/commandLineUsage';
 import { CommandCore } from './core';
 import { PluginManager } from './pluginManager';
 
-export class BaseCLI {
+export class CoreBaseCLI {
   argv: any;
   providerName: string;
   core: any;
@@ -20,6 +20,10 @@ export class BaseCLI {
       this.argv = argv;
     }
     this.commands = [].concat(this.argv._);
+    this.initCore();
+  }
+
+  initCore() {
     this.core = new CommandCore({
       commands: this.commands,
       options: this.argv,

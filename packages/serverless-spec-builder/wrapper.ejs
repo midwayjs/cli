@@ -25,20 +25,27 @@ const initializeMethod = async (initializeContext = {}) => {
   inited = true;
   isInitialing = true;
   <% } %>
+  layers.unshift(engine => {
+    engine.addRuntimeExtension({
+      async beforeFunctionStart(runtime) {
+        starter = new <%=faasStarterName %>({ baseDir: __dirname, initializeContext, applicationAdapter: runtime, middleware: <%-JSON.stringify(middleware, null, 2)%> });
+        <% loadDirectory.forEach(function(dirName){ %>
+          starter.loader.loadDirectory({ baseDir: '<%=dirName%>'});<% }) %>
+        <% if (functionMap) { %>
+        registerFunctionToIocByConfig(<%-JSON.stringify(functionMap, null, 2)%>, {
+          baseDir: join(__dirname, 'dist'),
+          context: starter.loader.getApplicationContext()
+        });
+        <% } %>
+        await starter.start();
+      }
+    });
+  })
   runtime = await start({
     layers: layers,
     getHandler: getHandler
   });
-  starter = new <%=faasStarterName %>({ baseDir: __dirname, initializeContext, applicationAdapter: runtime, middleware: <%-JSON.stringify(middleware, null, 2)%> });
-  <% loadDirectory.forEach(function(dirName){ %>
-  starter.loader.loadDirectory({ baseDir: '<%=dirName%>'});<% }) %>
-  <% if (functionMap) { %>
-  registerFunctionToIocByConfig(<%-JSON.stringify(functionMap, null, 2)%>, {
-    baseDir: join(__dirname, 'dist'),
-    context: starter.loader.getApplicationContext()
-  });
-  <% } %>
-  await starter.start();
+  
   <% if (!advancePreventMultiInit) { %> inited = true; <% } %>
   <% if (advancePreventMultiInit) { %>
   isInitialing = false;
