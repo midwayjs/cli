@@ -7,3 +7,4 @@ export * from './interface/commandCore';
 export * from './npm';
 export * from './cli';
 export * from './utils/commandLineUsage';
+export * from './lock';

@@ -1,4 +1,5 @@
 import { invoke } from '@midwayjs/serverless-invoke';
+import { Lock } from '@midwayjs/command-core';
 import { existsSync, remove } from 'fs-extra';
 import { join } from 'path';
 export function resolveModule(gatewayName: string) {
@@ -10,22 +11,18 @@ export function resolveModule(gatewayName: string) {
   }
 }
 
+const deleteLock = new Lock('dev-pack-invoke-delete');
+
 export async function invokeFunction(options) {
   options.incremental = options.incremental ?? true;
-  // 首次的时候执行清理
-  if (!process.env.MIDWAT_FIRST_START_TMP_VAR) {
-    const distDir = join(
+  await deleteLock.wait(async () => {
+    const tmpDistDir = join(
       options?.functionDir || process.cwd(),
       '.faas_debug_tmp'
     );
-    if (existsSync(distDir)) {
-      try {
-        await remove(distDir);
-      } catch {
-        //
-      }
+    if (existsSync(tmpDistDir)) {
+      await remove(tmpDistDir);
     }
-    process.env.MIDWAT_FIRST_START_TMP_VAR = 'true';
-  }
+  });
   return invoke(options);
 }
