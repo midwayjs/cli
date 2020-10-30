@@ -2,7 +2,6 @@ export * from './interface/plugin';
 export * from './interface/provider';
 export * from './core';
 export * from './plugin';
-export * from './pluginManager';
 export * from './interface/commandCore';
 export * from './npm';
 export * from './cli';

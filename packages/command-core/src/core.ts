@@ -34,7 +34,7 @@ export class CommandCore implements ICommandCore {
   store = new Map();
 
   constructor(options: IOptions) {
-    this.options = options || { provider: '' };
+    this.options = options;
     if (!this.options.options) {
       this.options.options = {};
     }
@@ -49,6 +49,13 @@ export class CommandCore implements ICommandCore {
 
   // 添加插件
   public addPlugin(Plugin: any) {
+
+    if (typeof Plugin === 'object') {
+      return Object.keys(Plugin).forEach(key => {
+        this.addPlugin(Plugin[key]);
+      });
+    }
+
     const provider =
       this.options.service?.provider?.name || this.options.provider;
     this.debug('Current Provider', provider);
@@ -429,12 +436,6 @@ export class CommandCore implements ICommandCore {
       }
       this.debug('Core Local Plugin', localPath);
       const plugin = require(localPath);
-      if (typeof plugin === 'object') {
-        Object.keys(plugin).forEach(key => {
-          this.addPlugin(plugin[key]);
-        });
-        return;
-      }
       this.addPlugin(plugin);
     } catch (e) {
       this.error('localPlugin', { path: localPath, err: e });
@@ -485,7 +486,7 @@ export class CommandCore implements ICommandCore {
     for (const option in commandOptions) {
       const optionInfo = commandOptions[option];
       usage[option] = optionInfo;
-      if (optionInfo.shortcut) {
+      if (optionInfo?.shortcut) {
         if (this.options.options[optionInfo.shortcut]) {
           this.options.options[option] = this.options.options[
             optionInfo.shortcut

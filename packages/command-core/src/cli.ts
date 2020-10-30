@@ -2,7 +2,6 @@ import * as minimist from 'minimist';
 import { join } from 'path';
 import { commandLineUsage } from './utils/commandLineUsage';
 import { CommandCore } from './core';
-import { PluginManager } from './pluginManager';
 
 export class CoreBaseCLI {
   argv: any;
@@ -40,9 +39,7 @@ export class CoreBaseCLI {
     await this.loadPlatformPlugin();
   }
 
-  loadCorePlugin() {
-    this.core.addPlugin(PluginManager);
-  }
+  loadCorePlugin() {}
 
   // 加载默认插件
   loadDefaultPlugin() {}
@@ -72,7 +69,7 @@ export class CoreBaseCLI {
     if (commandsArray && commandsArray.length) {
       commandList = {
         header: commandsArray.join(' '),
-        optionList: Object.keys(usage || {}).map(name => {
+        optionList: Object.keys(usage).map(name => {
           const usageInfo = usage[name] || {};
           return {
             name,
@@ -84,26 +81,27 @@ export class CoreBaseCLI {
     } else {
       commandList = [];
       coreInstance.instances.forEach(plugin => {
-        if (plugin.commands) {
-          Object.keys(plugin.commands).forEach(command => {
-            const commandInfo = plugin.commands[command];
-            if (!commandInfo || !commandInfo.lifecycleEvents) {
-              return;
-            }
-            commandList.push({
-              header: command,
-              content: commandInfo.usage,
-              optionList: Object.keys(commandInfo.options || {}).map(name => {
-                const usageInfo = commandInfo.options[name] || {};
-                return {
-                  name,
-                  description: usageInfo.usage,
-                  alias: usageInfo.shortcut,
-                };
-              }),
-            });
-          });
+        if (!plugin.commands) {
+          return;
         }
+        Object.keys(plugin.commands).forEach(command => {
+          const commandInfo = plugin.commands[command];
+          if (!commandInfo || !commandInfo.lifecycleEvents) {
+            return;
+          }
+          commandList.push({
+            header: command,
+            content: commandInfo.usage,
+            optionList: Object.keys(commandInfo.options || {}).map(name => {
+              const usageInfo = commandInfo.options[name] || {};
+              return {
+                name,
+                description: usageInfo.usage,
+                alias: usageInfo.shortcut,
+              };
+            }),
+          });
+        });
       });
     }
     log.log(commandLineUsage(commandList));
