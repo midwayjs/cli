@@ -14,7 +14,7 @@ export const transform = (sourcefilePathOrJson: any, builderCls?) => {
   if (typeof sourcefilePathOrJson === 'string') {
     if (existsSync(sourcefilePathOrJson)) {
       const content = readFileSync(sourcefilePathOrJson, 'utf8');
-      const yamlContent = content.replace(pattern, (match, key, value) => {
+      const yamlContent = content.replace(pattern, (match, key) => {
         if (key.startsWith('env.')) {
           return process.env[key.replace('env.', '')] || match;
         }
