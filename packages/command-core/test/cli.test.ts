@@ -14,12 +14,14 @@ describe('command-core / cli.test.ts', () => {
     try {
       const cli = new TestCli(['', '', 'nocommand']);
       await cli.start();
-    } catch {}
+    } catch {
+      //
+    }
     assert(err.info.command === 'nocommand');
     assert(err.message === 'command nocommand not found');
   });
   it('cli help', async () => {
-    let logList = [];
+    const logList = [];
     class TestCli extends CoreBaseCLI {
       async loadPlatformPlugin() {
         this.core.addPlugin(NoCommand);
@@ -29,7 +31,7 @@ describe('command-core / cli.test.ts', () => {
         const log = super.loadLog();
         log.log = (...args) => {
           logList.push(...args);
-        }
+        };
         return log;
       }
     }
@@ -38,7 +40,7 @@ describe('command-core / cli.test.ts', () => {
     assert(logList.join('\n').indexOf('common command') !== -1);
   });
   it('cli argv', async () => {
-    let logList = [];
+    const logList = [];
     class TestCli extends CoreBaseCLI {
       async loadPlatformPlugin() {
         this.core.addPlugin(TestPlugin);
@@ -47,7 +49,7 @@ describe('command-core / cli.test.ts', () => {
         const log = super.loadLog();
         log.log = (...args) => {
           logList.push(...args);
-        }
+        };
         return log;
       }
     }
@@ -56,29 +58,32 @@ describe('command-core / cli.test.ts', () => {
     assert(logList.join('\n').indexOf('common command') !== -1);
   });
   it('cli load relative plugin', async () => {
-    let logList = [];
+    const logList = [];
     class TestCli extends CoreBaseCLI {
       loadLog() {
         const log = super.loadLog();
         log.log = (...args) => {
           logList.push(...args);
-        }
+        };
         return log;
       }
     }
     const cli = new TestCli({ _: ['noLifecycleEvents'], h: true });
-    cli.loadRelativePlugin(relative(process.cwd(), resolve(__dirname, './plugins')), 'no-provider.ts');
+    cli.loadRelativePlugin(
+      relative(process.cwd(), resolve(__dirname, './plugins')),
+      'no-provider.ts'
+    );
     await cli.start();
     assert(logList.join('\n').indexOf('NoLifecycleEvents') !== -1);
   });
   it('cli load relative plugin error', async () => {
-    let logList = [];
+    const logList = [];
     class TestCli extends CoreBaseCLI {
       loadLog() {
         const log = super.loadLog();
         log.log = (...args) => {
           logList.push(...args);
-        }
+        };
         return log;
       }
     }
@@ -88,18 +93,21 @@ describe('command-core / cli.test.ts', () => {
     assert(logList.join('\n').indexOf('NoLifecycleEvents') === -1);
   });
   it('cli verbose', async () => {
-    let logList = [];
+    const logList = [];
     class TestCli extends CoreBaseCLI {
       loadLog() {
         const log = super.loadLog();
         log.log = (...args) => {
           logList.push(...args);
-        }
+        };
         return log;
       }
     }
     const cli = new TestCli({ _: ['common'], h: true, V: true });
-    cli.loadRelativePlugin(relative(process.cwd(), resolve(__dirname, './plugins')), 'no-provider.ts');
+    cli.loadRelativePlugin(
+      relative(process.cwd(), resolve(__dirname, './plugins')),
+      'no-provider.ts'
+    );
     await cli.start();
     assert(logList.join('\n').indexOf('[Verbose]') !== -1);
   });
@@ -107,7 +115,7 @@ describe('command-core / cli.test.ts', () => {
   it('cli error', async () => {
     const originExit = process.exit;
     let exitCode;
-    process.exit = ((code) => {
+    process.exit = (code => {
       exitCode = code;
     }) as any;
     class TestCli extends CoreBaseCLI {
@@ -116,10 +124,11 @@ describe('command-core / cli.test.ts', () => {
       }
     }
     try {
-      const cli = new TestCli({ _: ['common']});
+      const cli = new TestCli({ _: ['common'] });
       await cli.start();
-    } catch { }
-    
+    } catch {
+      //
+    }
     process.exit = originExit;
     assert(exitCode === 1);
   });

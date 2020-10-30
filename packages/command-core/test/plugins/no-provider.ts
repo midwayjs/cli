@@ -11,7 +11,7 @@ class TestPlugin extends BasePlugin {
       lifecycleEvents: ['main'],
       options: {
         project: null,
-      }
+      },
     },
     noLifecycleEvents: {
       usage: 'noLifecycleEvents',

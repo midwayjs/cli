@@ -49,7 +49,6 @@ export class CommandCore implements ICommandCore {
 
   // 添加插件
   public addPlugin(Plugin: any) {
-
     if (typeof Plugin === 'object') {
       return Object.keys(Plugin).forEach(key => {
         this.addPlugin(Plugin[key]);
