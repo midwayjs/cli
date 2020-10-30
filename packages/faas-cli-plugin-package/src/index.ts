@@ -234,7 +234,17 @@ export class PackagePlugin extends BasePlugin {
       },
     });
     if (this.codeAnalyzeResult.integrationProject) {
+      let originPkgJson = {};
+      try {
+        const pkgJsonPath = join(this.servicePath, 'package.json');
+        if (existsSync(pkgJsonPath)) {
+          originPkgJson = JSON.parse(readFileSync(pkgJsonPath).toString());
+        }
+      } catch {
+        //
+      }
       await writeJSON(join(this.midwayBuildPath, 'package.json'), {
+        ...originPkgJson,
         name: this.codeAnalyzeResult.projectType,
         version: '1.0.0',
         dependencies: this.codeAnalyzeResult.usingDependenciesVersion.valid,
