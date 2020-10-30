@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.23-beta.2](https://github.com/midwayjs/bin/compare/v1.2.23-beta.1...v1.2.23-beta.2) (2020-10-30)
+
+
+### Bug Fixes
+
+* package json ([#18](https://github.com/midwayjs/bin/issues/18)) ([16996af](https://github.com/midwayjs/bin/commit/16996af0c0bb2e151f03a880c85f960e275a8bb7))
+
+
+
+
+
 ## [1.2.23-beta.1](https://github.com/midwayjs/bin/compare/v1.2.20...v1.2.23-beta.1) (2020-10-26)
 
 
