@@ -1,4 +1,4 @@
-import { CommandCore, PluginManager } from '../src';
+import { CommandCore } from '../src';
 import ErrorMap from '../src/errorMap';
 import InvokePlugin from './plugins/test.invoke';
 import LogPlugin from './plugins/test.lg';
@@ -126,18 +126,6 @@ describe('invoke', () => {
     await core.ready();
     await core.spawn('store', {});
     assert((core as any).coreInstance.store.get('StoreGet:get') === 123456);
-  });
-
-  it('pluginManager', async () => {
-    const core = new CommandCore({
-      provider: '',
-      options: {
-        l: true,
-      },
-    });
-    core.addPlugin(PluginManager);
-    await core.ready();
-    await core.spawn('plugin', {});
   });
 });
 
