@@ -10,7 +10,7 @@ describe('faas-code-analysis:/test/utils.test.ts', () => {
   });
 
   it('compareFileChange', async () => {
-    writeFileSync(join(base, 'a.txt'), Date.now());
+    writeFileSync(join(base, 'a.txt'), Date.now() + '');
     const fileChange = await compareFileChange(['*.txt'], ['*.data'], {
       cwd: base,
     });
@@ -27,7 +27,7 @@ describe('faas-code-analysis:/test/utils.test.ts', () => {
     assert(noTo.length === 1);
     assert(noTo[0] === 'a.txt');
 
-    writeFileSync(join(base, 'b.data'), Date.now());
+    writeFileSync(join(base, 'b.data'), Date.now() + '');
     const fileChange2 = await compareFileChange(['*.txt'], ['*.data'], {
       cwd: base,
     });
