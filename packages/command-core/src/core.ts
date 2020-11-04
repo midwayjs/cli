@@ -401,11 +401,14 @@ export class CommandCore implements ICommandCore {
         this.error('commandNotFound', { command, commandPath });
       }
       cmdObj = cmdObj.commands[command];
-      if (cmdObj && cmdObj.options) {
-        this.commandOptions(cmdObj.options, usage);
-      }
-      if (cmdObj.passingCommand) {
-        break;
+      if (cmdObj) {
+        if (cmdObj.options) {
+          this.commandOptions(cmdObj.options, usage);
+        }
+
+        if (cmdObj?.passingCommand) {
+          break;
+        }
       }
     }
     if (!cmdObj) {

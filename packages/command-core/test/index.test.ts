@@ -9,7 +9,7 @@ import { resolve } from 'path';
 
 import * as assert from 'assert';
 
-describe('load plugin', () => {
+describe('command-core:index.test.ts load plugin', () => {
   it('sigle plugin and lifecycleEvents', async () => {
     const core = new CommandCore({
       provider: 'test',
@@ -49,7 +49,7 @@ describe('load plugin', () => {
   });
 });
 
-describe('invoke', () => {
+describe('command-core:index.test.ts invoke', () => {
   it('invoke plugin call and hack log', async () => {
     const result: string[] = [];
     const core = new CommandCore({
@@ -129,7 +129,7 @@ describe('invoke', () => {
   });
 });
 
-describe('errorMap', () => {
+describe('command-core:index.test.ts errorMap', () => {
   it('error', () => {
     assert(ErrorMap('notMatch', 'notMatch').message === 'error');
     assert(

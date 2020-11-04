@@ -4,6 +4,7 @@ import { existsSync, remove } from 'fs-extra';
 export class CleanPlugin extends BasePlugin {
   commands = {
     clean: {
+      usage: 'clean local log and cache',
       lifecycleEvents: ['clean'],
     },
   };
