@@ -11,12 +11,12 @@ describe('faas-code-analysis:/test/utils.test.ts', () => {
 
   it('compareFileChange', async () => {
     writeFileSync(join(base, 'a.txt'), Date.now());
-    const fileChange = await compareFileChange(['*.txt'], ['*.js'], {
+    const fileChange = await compareFileChange(['*.txt'], ['*.data'], {
       cwd: base,
     });
     assert(fileChange[0] === 'a.txt');
 
-    const noFrom = await compareFileChange(['*.zip'], ['*.js'], {
+    const noFrom = await compareFileChange(['*.zip'], ['*.data'], {
       cwd: base,
     });
     assert(noFrom.length === 0);
@@ -28,7 +28,7 @@ describe('faas-code-analysis:/test/utils.test.ts', () => {
     assert(noTo[0] === 'a.txt');
 
     writeFileSync(join(base, 'b.data'), Date.now());
-    const fileChange2 = await compareFileChange(['*.txt'], ['*.js'], {
+    const fileChange2 = await compareFileChange(['*.txt'], ['*.data'], {
       cwd: base,
     });
     assert(fileChange2.length === 0);
