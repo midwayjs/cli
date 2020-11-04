@@ -12,6 +12,7 @@ export class DevPlugin extends BasePlugin {
   private started = false;
   private restarting = false;
   private port = 7001;
+  private watcher;
   commands = {
     dev: {
       lifecycleEvents: ['checkEnv', 'run'],
@@ -127,6 +128,9 @@ export class DevPlugin extends BasePlugin {
   }
 
   private async handleClose(isExit?, signal?) {
+    if (this.watcher?.close) {
+      // await this.watcher.close();
+    }
     if (this.child) {
       this.child.kill();
       this.child = null;
@@ -160,7 +164,7 @@ export class DevPlugin extends BasePlugin {
   // watch file change
   private startWatch() {
     const sourceDir = resolve(this.core.cwd, 'src');
-    const watcher = chokidar.watch(sourceDir, {
+    this.watcher = chokidar.watch(sourceDir, {
       ignored: path => {
         if (path.includes('node_modules')) {
           return true;
@@ -175,7 +179,7 @@ export class DevPlugin extends BasePlugin {
       persistent: true,
       ignoreInitial: true,
     });
-    watcher.on('all', (event, path) => {
+    this.watcher.on('all', (event, path) => {
       if (this.restarting) {
         return;
       }

@@ -31,3 +31,37 @@ export class Test {
     };
   }
 }
+
+@Provide()
+export class Test2 {
+  @Inject('context')
+  private ctx: any;
+
+  public main() {
+    console.log(this.ctx);
+  }
+}
+
+@Provide()
+@Func()
+export class Test3 {
+  public handler() {
+    console.log('123');
+  }
+}
+
+@Provide()
+@Func({})
+export class Test4 {
+  public handler() {
+    console.log('123');
+  }
+}
+
+@Provide()
+@Func({ event: 'Oth' })
+export class Test5 {
+  public handler() {
+    console.log('123');
+  }
+}

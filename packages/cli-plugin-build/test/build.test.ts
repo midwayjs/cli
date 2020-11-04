@@ -30,4 +30,12 @@ describe('test/build.test.ts', () => {
     await run(cwd, 'build');
     assert(existsSync(join(dist, 'index.js')));
   });
+  it('build clean', async () => {
+    const dist = join(cwd, 'dist');
+    if (existsSync(dist)) {
+      await remove(dist);
+    }
+    await run(cwd, 'build', { clean: true });
+    assert(existsSync(join(dist, 'index.js')));
+  });
 });

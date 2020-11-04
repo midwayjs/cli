@@ -43,7 +43,6 @@ export class BuildPlugin extends BasePlugin {
 
   private compilerHost: CompilerHost;
   private program: Program;
-  private tsConfig;
 
   async clean() {
     if (!this.options.clean) {
@@ -123,9 +122,6 @@ export class BuildPlugin extends BasePlugin {
   }
 
   private getTsConfig() {
-    if (this.tsConfig) {
-      return this.tsConfig;
-    }
     const { cwd } = this.core;
     const { tsConfig } = this.options;
     let tsConfigResult;
@@ -153,7 +149,6 @@ export class BuildPlugin extends BasePlugin {
         //
       }
     }
-    this.tsConfig = tsConfigResult;
-    return this.tsConfig;
+    return tsConfigResult;
   }
 }
