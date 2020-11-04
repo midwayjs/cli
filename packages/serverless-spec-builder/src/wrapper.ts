@@ -15,6 +15,7 @@ export function writeWrapper(options: {
   advancePreventMultiInit?: boolean;
   faasStarterName?: string; // default is FaaSStarter
   middleware?: string[]; // middleware
+  clearCache?: boolean; // clearContainerCache clearModule
 }) {
   const {
     service,
@@ -28,6 +29,7 @@ export function writeWrapper(options: {
     loadDirectory = [],
     faasStarterName,
     middleware,
+    clearCache,
   } = options;
   const files = {};
 
@@ -108,6 +110,7 @@ export function writeWrapper(options: {
       initializer: initializeName || 'initializer',
       handlers: files[file].handlers,
       functionMap,
+      clearCache,
       ...layers,
     });
     if (existsSync(fileName)) {

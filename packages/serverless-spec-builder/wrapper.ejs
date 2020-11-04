@@ -1,5 +1,6 @@
 const { <%=faasStarterName %> } = require('<%=faasModName %>');
 const { asyncWrapper, start } = require('<%=starter %>');
+<% if (clearCache) { %>
 try {
   const { clearContainerCache } = require('@midwayjs/core');
   clearContainerCache();
@@ -8,6 +9,7 @@ try {
   const { clearAllModule } = require('@midwayjs/decorator');
   clearAllModule();
 } catch (e) {}
+<% } %>
 <% if (functionMap) { %>
 const { registerFunctionToIocByConfig } = require('./registerFunction.js');
 const { join } = require('path');
