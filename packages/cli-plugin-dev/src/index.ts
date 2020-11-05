@@ -3,7 +3,7 @@ import { fork } from 'child_process';
 import Spin from 'light-spinner';
 import * as chokidar from 'chokidar';
 import { networkInterfaces } from 'os';
-import { resolve, relative } from 'path';
+import { resolve, relative, join } from 'path';
 import { statSync, existsSync } from 'fs';
 import * as chalk from 'chalk';
 import * as detect from 'detect-port';
@@ -12,7 +12,6 @@ export class DevPlugin extends BasePlugin {
   private started = false;
   private restarting = false;
   private port = 7001;
-  private watcher;
   commands = {
     dev: {
       lifecycleEvents: ['checkEnv', 'run'],
@@ -40,7 +39,6 @@ export class DevPlugin extends BasePlugin {
   };
 
   async checkEnv() {
-    console.log();
     const defaultPort = this.options.port || 7001;
     const port = await detect(defaultPort);
     if (port !== defaultPort) {
@@ -49,6 +47,10 @@ export class DevPlugin extends BasePlugin {
     } else {
       this.port = defaultPort;
     }
+    if (!this.options.framework && this.checkIsMidwayFaaS()) {
+      this.options.framework = 'faas';
+    }
+    this.setStore('dev:port', this.port, true);
   }
 
   async run() {
@@ -128,9 +130,6 @@ export class DevPlugin extends BasePlugin {
   }
 
   private async handleClose(isExit?, signal?) {
-    if (this.watcher?.close) {
-      // await this.watcher.close();
-    }
     if (this.child) {
       this.child.kill();
       this.child = null;
@@ -164,22 +163,28 @@ export class DevPlugin extends BasePlugin {
   // watch file change
   private startWatch() {
     const sourceDir = resolve(this.core.cwd, 'src');
-    this.watcher = chokidar.watch(sourceDir, {
+    const watcher = chokidar.watch(sourceDir, {
       ignored: path => {
         if (path.includes('node_modules')) {
           return true;
         }
         if (existsSync(path)) {
           const stat = statSync(path);
-          if (stat.isFile() && !path.endsWith('.ts')) {
-            return true;
+          if (stat.isFile()) {
+            if (!path.endsWith('.ts') && !path.endsWith('.yml')) {
+              return true;
+            }
           }
         }
       }, // ignore dotfiles
       persistent: true,
       ignoreInitial: true,
     });
-    this.watcher.on('all', (event, path) => {
+    const fyml = resolve(this.core.cwd, 'f.yml');
+    if (existsSync(fyml)) {
+      watcher.add(fyml);
+    }
+    watcher.on('all', (event, path) => {
       if (this.restarting) {
         return;
       }
@@ -215,5 +220,11 @@ export class DevPlugin extends BasePlugin {
 
   private log(...args: any[]) {
     console.log('[ Midway ]', ...args);
+  }
+
+  private checkIsMidwayFaaS() {
+    const cwd = this.core.cwd;
+    const midwayFaaS = join(cwd, 'node_modules/@midwayjs/faas');
+    return existsSync(midwayFaaS);
   }
 }
