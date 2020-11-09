@@ -23,7 +23,7 @@ export function writeWrapper(options: {
     starter,
     baseDir,
     cover,
-    faasModName,
+    faasModName = '@midwayjs/faas',
     initializeName,
     advancePreventMultiInit,
     loadDirectory = [],
@@ -31,6 +31,7 @@ export function writeWrapper(options: {
     middleware,
     clearCache,
   } = options;
+
   const files = {};
 
   // for function programing，function
@@ -81,10 +82,31 @@ export function writeWrapper(options: {
 
   const isCustomAppType = !!service?.deployType;
 
+  let faasPkgFile;
+  const cwd = process.cwd();
+  try {
+    faasPkgFile = require.resolve(faasModName + '/package.json', {
+      paths: [distDir, baseDir],
+    });
+  } catch {
+    //
+  }
+  process.chdir(cwd);
+
+  let isFaaS2 = false;
+  if (faasPkgFile && existsSync(faasPkgFile)) {
+    const { version } = JSON.parse(readFileSync(faasPkgFile).toString());
+    isFaaS2 = /^2\./.test(version);
+  }
+
   const tpl = readFileSync(
     resolve(
       __dirname,
-      isCustomAppType ? '../wrapper_app.ejs' : '../wrapper.ejs'
+      isCustomAppType
+        ? '../wrapper_app.ejs'
+        : isFaaS2
+        ? '../wrapper_bootstrap.ejs'
+        : '../wrapper.ejs'
     )
   ).toString();
 

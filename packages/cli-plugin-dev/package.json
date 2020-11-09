@@ -7,8 +7,6 @@
     "@koa/router": "^10.0.0",
     "@midwayjs/command-core": "^1.2.23-beta.2",
     "@midwayjs/debugger": "^1.0.x",
-    "@midwayjs/faas": "^2.3.0",
-    "@midwayjs/fcli-plugin-invoke": "^1.2.23-beta.2",
     "@midwayjs/mock": "^2.3.0",
     "chalk": "^4.1.0",
     "chokidar": "^3.4.2",

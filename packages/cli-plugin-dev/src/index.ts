@@ -3,7 +3,7 @@ import { fork } from 'child_process';
 import Spin from 'light-spinner';
 import * as chokidar from 'chokidar';
 import { networkInterfaces } from 'os';
-import { resolve, relative, join } from 'path';
+import { resolve, relative } from 'path';
 import { statSync, existsSync } from 'fs';
 import * as chalk from 'chalk';
 import * as detect from 'detect-port';
@@ -46,9 +46,6 @@ export class DevPlugin extends BasePlugin {
       this.port = port;
     } else {
       this.port = defaultPort;
-    }
-    if (!this.options.framework && this.checkIsMidwayFaaS()) {
-      this.options.framework = 'faas';
     }
     this.setStore('dev:port', this.port, true);
   }
@@ -220,11 +217,5 @@ export class DevPlugin extends BasePlugin {
 
   private log(...args: any[]) {
     console.log('[ Midway ]', ...args);
-  }
-
-  private checkIsMidwayFaaS() {
-    const cwd = this.core.cwd;
-    const midwayFaaS = join(cwd, 'node_modules/@midwayjs/faas');
-    return existsSync(midwayFaaS);
   }
 }

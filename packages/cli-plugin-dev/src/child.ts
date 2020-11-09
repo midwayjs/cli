@@ -1,5 +1,4 @@
 import { createApp, close } from '@midwayjs/mock';
-import { FaaSFramework } from './faas';
 const options = JSON.parse(process.argv[2]);
 let app;
 process.on('exit', async () => {
@@ -7,9 +6,6 @@ process.on('exit', async () => {
 });
 (async () => {
   let startSuccess = false;
-  if (options.framework === 'faas') {
-    options.framework = FaaSFramework;
-  }
   try {
     app = await createApp(process.cwd(), options, options.framework);
     startSuccess = true;

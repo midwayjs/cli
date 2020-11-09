@@ -5,7 +5,7 @@ import * as assert from 'assert';
 
 const cwd = join(__dirname, 'fixtures/faas');
 describe('test/faas.test.ts', () => {
-  it('dev', async () => {
+  it.skip('dev', async () => {
     const { close } = await run(cwd, {
       framework: 'faas',
     });

@@ -20,7 +20,8 @@
     "globby": "^10.0.1"
   },
   "devDependencies": {
-    "@midwayjs/faas": "^1.2.1"
+    "@midwayjs/decorator": "^2.3.23",
+    "@midwayjs/faas": "^2"
   },
   "engines": {
     "node": ">= 10"
