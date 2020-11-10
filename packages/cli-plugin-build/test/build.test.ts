@@ -19,9 +19,8 @@ const run = async (cwd: string, command: string, options = {}) => {
   await core.ready();
   await core.invoke();
 };
-
+const cwd = join(__dirname, 'fixtures/base');
 describe('test/build.test.ts', () => {
-  const cwd = join(__dirname, 'fixtures/base');
   it('build', async () => {
     const dist = join(cwd, 'dist');
     if (existsSync(dist)) {
@@ -37,5 +36,16 @@ describe('test/build.test.ts', () => {
     }
     await run(cwd, 'build', { clean: true });
     assert(existsSync(join(dist, 'index.js')));
+  });
+  it('copyfile', async () => {
+    const dist = join(cwd, 'dist');
+    if (existsSync(dist)) {
+      await remove(dist);
+    }
+    await run(cwd, 'build', { clean: true });
+    assert(existsSync(join(dist, 'index.js')));
+    assert(existsSync(join(dist, 'a.json')));
+    assert(existsSync(join(dist, 'b/b.txt')));
+    assert(existsSync(join(dist, 'c')));
   });
 });
