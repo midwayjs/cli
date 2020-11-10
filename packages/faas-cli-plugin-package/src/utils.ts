@@ -54,7 +54,6 @@ export function commonPrefix(arr: string[]): string {
   return result;
 }
 
-
 export const removeUselessFiles = async (target: string) => {
   const matchList = [
     '**/*.md',
@@ -88,7 +87,7 @@ export const removeUselessFiles = async (target: string) => {
   const nm = join(target, 'node_modules');
   const list = await globby(matchList, {
     cwd: nm,
-    deep: 10
+    deep: 10,
   });
   console.log('  - Useless files Count', list.length);
   let size = 0;
@@ -100,5 +99,7 @@ export const removeUselessFiles = async (target: string) => {
       await unlink(path);
     }
   }
-  console.log(`  - Remove Useless file ${Number(size/(2 << 19)).toFixed(2)} MB`);
-}
+  console.log(
+    `  - Remove Useless file ${Number(size / (2 << 19)).toFixed(2)} MB`
+  );
+};
