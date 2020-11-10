@@ -20,7 +20,7 @@ import {
 
 import * as globby from 'globby';
 import * as micromatch from 'micromatch';
-import { commonPrefix, formatLayers } from './utils';
+import { commonPrefix, formatLayers, removeUselessFiles } from './utils';
 import {
   analysisResultToSpec,
   copyFiles,
@@ -344,6 +344,10 @@ export class PackagePlugin extends BasePlugin {
       await copy(localDep[localDepName], target);
     }
     this.core.cli.log(' - Dependencies install complete');
+    if (this.core.service?.experimentalFeatures?.removeUselessFiles) {
+      this.core.cli.log(' - Experimental Feature RemoveUselessFiles');
+      await removeUselessFiles(this.midwayBuildPath);
+    }
   }
 
   public getTsCodeRoot(): string {
