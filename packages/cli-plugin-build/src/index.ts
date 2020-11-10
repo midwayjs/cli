@@ -56,7 +56,6 @@ export class BuildPlugin extends BasePlugin {
     }
   }
 
-
   private getOutDir(): string {
     const tsConfig = this.getTsConfig();
     const projectFile = this.getProjectFile();
