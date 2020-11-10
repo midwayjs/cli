@@ -24,7 +24,8 @@
     "aws",
     "wrapper.ejs",
     "registerFunction.js.tpl",
-    "wrapper_app.ejs"
+    "wrapper_app.ejs",
+    "wrapper_bootstrap.ejs"
   ],
   "scripts": {
     "build": "tsc --build",

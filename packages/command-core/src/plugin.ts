@@ -125,10 +125,8 @@ export const getPluginClass = async (pluginList, options) => {
       if (mod[pluginInfo.name]) {
         classList.push(mod[pluginInfo.name]);
       }
-    } else if (typeof mod === 'object') {
-      Object.keys(mod).forEach(key => {
-        classList.push(mod[key]);
-      });
+    } else {
+      classList.push(mod);
     }
   }
   return classList;

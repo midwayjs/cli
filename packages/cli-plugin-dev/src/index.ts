@@ -39,7 +39,6 @@ export class DevPlugin extends BasePlugin {
   };
 
   async checkEnv() {
-    console.log();
     const defaultPort = this.options.port || 7001;
     const port = await detect(defaultPort);
     if (port !== defaultPort) {
@@ -48,6 +47,7 @@ export class DevPlugin extends BasePlugin {
     } else {
       this.port = defaultPort;
     }
+    this.setStore('dev:port', this.port, true);
   }
 
   async run() {
@@ -167,14 +167,20 @@ export class DevPlugin extends BasePlugin {
         }
         if (existsSync(path)) {
           const stat = statSync(path);
-          if (stat.isFile() && !path.endsWith('.ts')) {
-            return true;
+          if (stat.isFile()) {
+            if (!path.endsWith('.ts') && !path.endsWith('.yml')) {
+              return true;
+            }
           }
         }
       }, // ignore dotfiles
       persistent: true,
       ignoreInitial: true,
     });
+    const fyml = resolve(this.core.cwd, 'f.yml');
+    if (existsSync(fyml)) {
+      watcher.add(fyml);
+    }
     watcher.on('all', (event, path) => {
       if (this.restarting) {
         return;

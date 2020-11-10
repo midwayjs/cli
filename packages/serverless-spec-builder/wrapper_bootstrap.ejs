@@ -1,4 +1,5 @@
-const { <%=faasStarterName %> } = require('<%=faasModName %>');
+const { BootstrapStarter } = require('@midwayjs/bootstrap');
+const { Framework } = require('<%=faasModName %>');
 const { asyncWrapper, start } = require('<%=starter %>');
 <% if (clearCache) { %>
 try {
@@ -38,16 +39,30 @@ const initializeMethod = async (initializeContext = {}) => {
   layers.unshift(engine => {
     engine.addRuntimeExtension({
       async beforeFunctionStart(runtime) {
-        starter = new <%=faasStarterName %>({ baseDir: __dirname, initializeContext, applicationAdapter: runtime, middleware: <%-JSON.stringify(middleware, null, 2)%> });
+        starter = new Framework();
+        starter.configure({
+          initializeContext,
+          applicationAdapter: runtime
+        });
+        const boot = new BootstrapStarter();
+        const baseDir = __dirname;
+        const loadDir = [baseDir];
         <% loadDirectory.forEach(function(dirName){ %>
-          starter.loader.loadDirectory({ baseDir: '<%=dirName%>'});<% }) %>
+          loadDir.push('<%=dirName%>');<% }) %>
+
+        boot.configure({
+          baseDir,
+          loadDir,
+        }).load(starter);
+
+        await boot.init();
         <% if (functionMap) { %>
         registerFunctionToIocByConfig(<%-JSON.stringify(functionMap, null, 2)%>, {
           baseDir: join(__dirname, 'dist'),
-          context: starter.loader.getApplicationContext()
+          context: starter.getApplicationContext()
         });
         <% } %>
-        await starter.start();
+        await boot.run();
       }
     });
   })

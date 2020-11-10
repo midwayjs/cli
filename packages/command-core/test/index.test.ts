@@ -1,4 +1,4 @@
-import { CommandCore, PluginManager } from '../src';
+import { CommandCore } from '../src';
 import ErrorMap from '../src/errorMap';
 import InvokePlugin from './plugins/test.invoke';
 import LogPlugin from './plugins/test.lg';
@@ -9,7 +9,7 @@ import { resolve } from 'path';
 
 import * as assert from 'assert';
 
-describe('load plugin', () => {
+describe('command-core:index.test.ts load plugin', () => {
   it('sigle plugin and lifecycleEvents', async () => {
     const core = new CommandCore({
       provider: 'test',
@@ -49,7 +49,7 @@ describe('load plugin', () => {
   });
 });
 
-describe('invoke', () => {
+describe('command-core:index.test.ts invoke', () => {
   it('invoke plugin call and hack log', async () => {
     const result: string[] = [];
     const core = new CommandCore({
@@ -127,21 +127,9 @@ describe('invoke', () => {
     await core.spawn('store', {});
     assert((core as any).coreInstance.store.get('StoreGet:get') === 123456);
   });
-
-  it('pluginManager', async () => {
-    const core = new CommandCore({
-      provider: '',
-      options: {
-        l: true,
-      },
-    });
-    core.addPlugin(PluginManager);
-    await core.ready();
-    await core.spawn('plugin', {});
-  });
 });
 
-describe('errorMap', () => {
+describe('command-core:index.test.ts errorMap', () => {
   it('error', () => {
     assert(ErrorMap('notMatch', 'notMatch').message === 'error');
     assert(

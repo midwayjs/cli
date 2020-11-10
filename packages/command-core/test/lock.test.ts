@@ -1,7 +1,7 @@
 import { Lock } from '../src';
 import * as assert from 'assert';
-describe('load plugin', () => {
-  it('sigle plugin and lifecycleEvents', async () => {
+describe('command-core:lock.test.ts', () => {
+  it('lock wait', async () => {
     const lock = new Lock('test');
 
     let isCheck = false;

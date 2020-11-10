@@ -30,7 +30,7 @@ async function getNpmPath(
     baseDir,
     register: npmRegistry,
     npmName,
-    mode: 'production',
+    mode: 'production --no-save',
   });
   return join(baseDir, `node_modules/${npmName}`);
 }
@@ -52,17 +52,23 @@ export async function installNpm(options: INpmInstallOptions) {
     slience,
     registerPath,
   } = options;
-  const cmd = `${baseDir ? `cd ${baseDir} && ` : ''}${register} i ${npmName}${
-    mode ? ` --${mode}` : ' --no-save'
-  }${registerPath ? ` --registry=${registerPath}` : ''}`;
+  const cmd = `${register} i ${npmName}${mode ? ` --${mode}` : ' --no-save'}${
+    registerPath ? ` --registry=${registerPath}` : ''
+  }`;
 
   return new Promise((resolved, rejected) => {
-    const execProcess = exec(cmd, (err, result) => {
-      if (err) {
-        return rejected(err);
+    const execProcess = exec(
+      cmd,
+      {
+        cwd: baseDir,
+      },
+      (err, result) => {
+        if (err) {
+          return rejected(err);
+        }
+        resolved(result.replace(/\n$/, '').replace(/^\s*|\s*$/, ''));
       }
-      resolved(result.replace(/\n$/, '').replace(/^\s*|\s*$/, ''));
-    });
+    );
     execProcess.stdout.on('data', data => {
       if (!slience) {
         console.log(data);
@@ -80,14 +86,8 @@ export async function loadNpm(
     const npmPath = await getNpmPath(scope, npmName, npmRegistry);
     assert(npmPath, 'empty npm path');
     const plugin = require(npmPath);
-    if (typeof plugin === 'object') {
-      Object.keys(plugin).forEach(key => {
-        scope.addPlugin(plugin[key]);
-      });
-      return;
-    }
     scope.addPlugin(plugin);
   } catch (e) {
-    scope.error('npmPlugin', { npmName, err: e });
+    // scope.error('npmPlugin', { npmName, err: e });
   }
 }

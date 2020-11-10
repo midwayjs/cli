@@ -64,10 +64,7 @@ const formatFuncInfo = (result, funcInfo, parentTarget?) => {
 
   const funName = handler.replace(/\.handler$/, '').replace(/\./g, '-');
 
-  const existsFuncData: IFunction = result.functions[funName] || {
-    handler: '',
-    events: [],
-  };
+  const existsFuncData: IFunction = result.functions[funName] || {};
   existsFuncData.handler = handler;
   const events = existsFuncData.events || [];
 

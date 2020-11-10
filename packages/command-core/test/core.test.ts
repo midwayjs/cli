@@ -2,7 +2,7 @@ import { CommandCore } from '../src';
 import TestPlugin from './plugins/test.invoke';
 import { PluginTest2 } from './plugins/test-not-provider.invoke';
 import * as assert from 'assert';
-import { join } from 'path';
+import { join, resolve } from 'path';
 import { existsSync, readFileSync, remove } from 'fs-extra';
 
 describe('command-core', () => {
@@ -59,5 +59,21 @@ describe('command-core', () => {
     await core.invoke(['invoke']);
     const testData = readFileSync(txt).toString();
     assert(testData === 'user');
+  });
+  it('local plugin', async () => {
+    const result = [];
+    const core = new CommandCore({
+      provider: 'test',
+      log: {
+        log: (msg: string) => {
+          result.push(msg);
+        },
+      },
+      stopLifecycle: 'invoke:one',
+    });
+    core.addPlugin('local::' + resolve(__dirname, './plugins/test.invoke.ts'));
+    await core.ready();
+    await core.invoke(['invoke']);
+    assert(result.length === 3);
   });
 });

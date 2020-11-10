@@ -1,7 +1,7 @@
 service: serverless-midway-test
 
 provider:
-  name: ''
+  name: 'aliyun'
 
 functions:
   index:
