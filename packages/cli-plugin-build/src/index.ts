@@ -60,11 +60,7 @@ export class BuildPlugin extends BasePlugin {
   private getOutDir(): string {
     const tsConfig = this.getTsConfig();
     const projectFile = this.getProjectFile();
-    return this.getCompilerOptions(
-      tsConfig,
-      'outDir',
-      dirname(projectFile)
-    );
+    return this.getCompilerOptions(tsConfig, 'outDir', dirname(projectFile));
   }
 
   async copyFile() {
