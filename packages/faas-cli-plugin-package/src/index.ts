@@ -14,8 +14,8 @@ import {
   statSync,
   writeFileSync,
   writeJSON,
-  lstat,
   readlink,
+  lstatSync,
 } from 'fs-extra';
 
 import * as globby from 'globby';
@@ -502,7 +502,7 @@ export class PackagePlugin extends BasePlugin {
     for (const fileName of fileList) {
       fileIndex++;
       const absPath = join(sourceDirection, fileName);
-      const stats = await lstat(absPath);
+      const stats = lstatSync(absPath);
       if (stats.isDirectory()) {
         zip.folder(fileName);
       } else if (stats.isSymbolicLink()) {
@@ -519,7 +519,7 @@ export class PackagePlugin extends BasePlugin {
             unixPermissions: stats.mode,
           });
         } catch (e) {
-          console.log('e', fileName);
+          console.log('e', e, fileName, readFileSync(absPath).length);
           errIndex++;
           zip.file(fileName, readFileSync(absPath), {
             binary: false,

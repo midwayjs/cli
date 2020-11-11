@@ -14,7 +14,7 @@ describe('/test/package-a[[.test.ts', () => {
     afterEach(async () => {
       await remove(join(baseDir, 'serverless.zip'));
       await remove(join(baseDir, 'package-lock.json'));
-      // await remove(join(baseDir, '.serverless'));
+      await remove(join(baseDir, '.serverless'));
       await remove(join(baseDir, 'node_modules'));
     });
     it('base package', async () => {
