@@ -9,7 +9,7 @@
     "@midwayjs/locate": "^1.0.3",
     "@midwayjs/mwcc": "^0.3.x",
     "@midwayjs/serverless-spec-builder": "^1.2.23-beta.3",
-    "archiver": "^3.1.1",
+    "jszip": "^3.2.2",
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1",
     "micromatch": "^4.0.2"
@@ -29,7 +29,7 @@
   "scripts": {
     "lint": "eslint .",
     "test": "../../node_modules/.bin/jest",
-    "cov": "../../node_modules/.bin/jest ./test/p*.test.ts --coverage",
+    "covs": "../../node_modules/.bin/jest ./test/p*.test.ts --coverage",
     "build": "tsc --build",
     "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
     "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov"

@@ -3,6 +3,7 @@ import { getSpecFile, writeToSpec } from '@midwayjs/serverless-spec-builder';
 import { isAbsolute, join, relative, resolve } from 'path';
 import {
   copy,
+  createReadStream,
   createWriteStream,
   ensureDir,
   ensureFile,
@@ -13,8 +14,11 @@ import {
   statSync,
   writeFileSync,
   writeJSON,
+  lstat,
+  readlink,
 } from 'fs-extra';
-import * as archiver from 'archiver';
+
+import * as globby from 'globby';
 import * as micromatch from 'micromatch';
 import { commonPrefix, formatLayers, removeUselessFiles } from './utils';
 import {
@@ -29,6 +33,7 @@ import {
   Analyzer,
 } from '@midwayjs/mwcc';
 import { exec } from 'child_process';
+import * as JSZip from 'jszip';
 import { AnalyzeResult, Locator } from '@midwayjs/locate';
 import { tmpdir } from 'os';
 
@@ -486,17 +491,59 @@ export class PackagePlugin extends BasePlugin {
   }
 
   private async makeZip(sourceDirection: string, targetFileName: string) {
-    return new Promise(resolve => {
-      const output = createWriteStream(targetFileName);
-      output.on('close', () => {
-        resolve(archive.pointer());
-      });
-      const archive = archiver('zip', {
-        zlib: { level: 9 },
-      });
-      archive.pipe(output);
-      archive.directory(sourceDirection, false);
-      archive.finalize();
+    const fileList = await globby(['**'], {
+      onlyFiles: false,
+      followSymbolicLinks: false,
+      cwd: sourceDirection,
+    });
+    let fileIndex = 0;
+    let errIndex = 0;
+    const zip = new JSZip();
+    for (const fileName of fileList) {
+      fileIndex++;
+      const absPath = join(sourceDirection, fileName);
+      const stats = await lstat(absPath);
+      if (stats.isDirectory()) {
+        zip.folder(fileName);
+      } else if (stats.isSymbolicLink()) {
+        zip.file(fileName, readlink(absPath), {
+          binary: false,
+          createFolders: true,
+          unixPermissions: stats.mode,
+        });
+      } else if (stats.isFile()) {
+        try {
+          zip.file(fileName, createReadStream(absPath), {
+            binary: true,
+            createFolders: true,
+            unixPermissions: stats.mode,
+          });
+        } catch (e) {
+          console.log('e', e);
+          errIndex++;
+          zip.file(fileName, readFileSync(absPath), {
+            binary: true,
+            createFolders: true,
+            unixPermissions: stats.mode,
+          });
+        }
+      } else {
+        console.log(
+          ` - file ${fileName} unsupported`,
+          stats.isBlockDevice(),
+          stats.isCharacterDevice(),
+          stats.isFIFO(),
+          stats.isSocket()
+        );
+      }
+    }
+    console.log('errIndex', errIndex, fileIndex);
+    await new Promise((res, rej) => {
+      zip
+        .generateNodeStream()
+        .pipe(createWriteStream(targetFileName))
+        .once('finish', res)
+        .once('error', rej);
     });
   }
 
