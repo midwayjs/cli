@@ -519,7 +519,7 @@ export class PackagePlugin extends BasePlugin {
             unixPermissions: stats.mode,
           });
         } catch (e) {
-          console.log('e', e);
+          console.log('e', fileName);
           errIndex++;
           zip.file(fileName, readFileSync(absPath), {
             binary: true,
