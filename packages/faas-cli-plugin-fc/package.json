@@ -12,7 +12,8 @@
   },
   "devDependencies": {
     "@midwayjs/fcli-plugin-package": "^1.2.23",
-    "fs-extra": "^8.1.0"
+    "fs-extra": "^8.1.0",
+    "jszip": "^3.5.0"
   },
   "engines": {
     "node": ">= 10"

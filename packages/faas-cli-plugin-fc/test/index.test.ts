@@ -3,8 +3,9 @@ import { loadSpec } from '@midwayjs/serverless-spec-builder';
 import { PackagePlugin } from '@midwayjs/fcli-plugin-package';
 import { AliyunFCPlugin } from '../src';
 import { join } from 'path';
-import { existsSync, remove } from 'fs-extra';
+import { existsSync, remove, readFile } from 'fs-extra';
 import * as assert from 'assert';
+import * as JSZip from 'jszip';
 
 describe('/test/index.test.ts', () => {
   it('use custom artifact directory', async () => {
@@ -31,6 +32,13 @@ describe('/test/index.test.ts', () => {
     assert(existsSync(join(buildPath, 'tsconfig.json')));
     assert(existsSync(join(buildPath, 'template.yml')));
     assert(existsSync(join(baseDir, 'serverless.zip')));
+
+    const zip = new JSZip();
+    const zipData = await readFile(join(baseDir, 'serverless.zip'));
+    const zipObj = await zip.loadAsync(zipData);
+    assert(zipObj.file('f.yml'));
+    assert(zipObj.file('dist/index.js'));
+    assert(zipObj.file('node_modules/@midwayjs/core/package.json'));
     // clean
     await remove(join(baseDir, 'serverless.zip'));
   });
