@@ -509,7 +509,7 @@ export class PackagePlugin extends BasePlugin {
         });
       } else if (stats.isFile()) {
         zip.file(fileName, createReadStream(absPath), {
-          binary: false,
+          binary: true,
           createFolders: true,
           unixPermissions: stats.mode,
         });
@@ -517,7 +517,7 @@ export class PackagePlugin extends BasePlugin {
     }
     await new Promise((res, rej) => {
       zip
-        .generateNodeStream()
+        .generateNodeStream({ platform: 'UNIX' })
         .pipe(createWriteStream(targetFileName))
         .once('finish', res)
         .once('error', rej);
