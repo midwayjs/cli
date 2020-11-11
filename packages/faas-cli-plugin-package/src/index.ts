@@ -519,7 +519,7 @@ export class PackagePlugin extends BasePlugin {
             unixPermissions: stats.mode,
           });
         } catch {
-          errIndex ++;
+          errIndex++;
           zip.file(fileName, readFileSync(absPath), {
             binary: true,
             createFolders: true,
