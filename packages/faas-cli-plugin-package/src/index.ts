@@ -15,10 +15,7 @@ import {
   readlink,
   lstat,
 } from 'fs-extra';
-import {
-  createReadStream,
-  createWriteStream,
-} from 'fs';
+import { createReadStream, createWriteStream } from 'fs';
 
 import * as globby from 'globby';
 import * as micromatch from 'micromatch';
