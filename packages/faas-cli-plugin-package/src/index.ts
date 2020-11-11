@@ -508,15 +508,11 @@ export class PackagePlugin extends BasePlugin {
           unixPermissions: stats.mode,
         });
       } else if (stats.isFile()) {
-        try {
-          zip.file(fileName, createReadStream(absPath), {
-            binary: false,
-            createFolders: true,
-            unixPermissions: stats.mode,
-          });
-        } catch {
-          console.log(' - zip error', fileName);
-        }
+        zip.file(fileName, createReadStream(absPath), {
+          binary: false,
+          createFolders: true,
+          unixPermissions: stats.mode,
+        });
       }
     }
     await new Promise((res, rej) => {
