@@ -508,12 +508,20 @@ export class PackagePlugin extends BasePlugin {
           createFolders: true,
           unixPermissions: stats.mode,
         });
-      } else {
+      } else if (stats.isFile()) {
         zip.file(fileName, createReadStream(absPath), {
           binary: true,
           createFolders: true,
           unixPermissions: stats.mode,
         });
+      } else {
+        console.log(
+          ` - file ${fileName} unsupported`,
+          stats.isBlockDevice(),
+          stats.isCharacterDevice(),
+          stats.isFIFO(),
+          stats.isSocket()
+        );
       }
     }
     await new Promise((res, rej) => {
