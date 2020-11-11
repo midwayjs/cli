@@ -496,8 +496,10 @@ export class PackagePlugin extends BasePlugin {
       followSymbolicLinks: false,
       cwd: sourceDirection,
     });
+    let fileIndex = 0;
     const zip = new JSZip();
     for (const fileName of fileList) {
+      fileIndex++;
       const absPath = join(sourceDirection, fileName);
       const stats = await lstat(absPath);
       if (stats.isDirectory()) {
@@ -516,7 +518,15 @@ export class PackagePlugin extends BasePlugin {
             unixPermissions: stats.mode,
           });
         } catch (e) {
-          console.log('error', fileName);
+          console.log('error', fileName, fileIndex);
+          console.log('exists', existsSync(fileName));
+          console.log(
+            ` - file ${fileName} unsupported`,
+            stats.isBlockDevice(),
+            stats.isCharacterDevice(),
+            stats.isFIFO(),
+            stats.isSocket()
+          );
           throw e;
         }
       } else {
