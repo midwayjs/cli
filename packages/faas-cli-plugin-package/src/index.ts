@@ -509,11 +509,16 @@ export class PackagePlugin extends BasePlugin {
           unixPermissions: stats.mode,
         });
       } else if (stats.isFile()) {
-        zip.file(fileName, createReadStream(absPath), {
-          binary: true,
-          createFolders: true,
-          unixPermissions: stats.mode,
-        });
+        try {
+          zip.file(fileName, createReadStream(absPath), {
+            binary: true,
+            createFolders: true,
+            unixPermissions: stats.mode,
+          });
+        } catch (e) {
+          console.log('error', fileName);
+          throw e;
+        }
       } else {
         console.log(
           ` - file ${fileName} unsupported`,
