@@ -514,7 +514,7 @@ export class PackagePlugin extends BasePlugin {
       } else if (stats.isFile()) {
         try {
           zip.file(fileName, createReadStream(absPath), {
-            binary: true,
+            binary: false,
             createFolders: true,
             unixPermissions: stats.mode,
           });
@@ -522,7 +522,7 @@ export class PackagePlugin extends BasePlugin {
           console.log('e', fileName);
           errIndex++;
           zip.file(fileName, readFileSync(absPath), {
-            binary: true,
+            binary: false,
             createFolders: true,
             unixPermissions: stats.mode,
           });
