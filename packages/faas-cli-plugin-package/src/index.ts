@@ -497,6 +497,7 @@ export class PackagePlugin extends BasePlugin {
       cwd: sourceDirection,
     });
     let fileIndex = 0;
+    let errIndex = 0;
     const zip = new JSZip();
     for (const fileName of fileList) {
       fileIndex++;
@@ -517,17 +518,13 @@ export class PackagePlugin extends BasePlugin {
             createFolders: true,
             unixPermissions: stats.mode,
           });
-        } catch (e) {
-          console.log('error', fileName, fileIndex);
-          console.log('exists', existsSync(fileName));
-          console.log(
-            ` - file ${fileName} unsupported`,
-            stats.isBlockDevice(),
-            stats.isCharacterDevice(),
-            stats.isFIFO(),
-            stats.isSocket()
-          );
-          throw e;
+        } catch {
+          errIndex ++;
+          zip.file(fileName, readFileSync(absPath), {
+            binary: true,
+            createFolders: true,
+            unixPermissions: stats.mode,
+          });
         }
       } else {
         console.log(
@@ -539,6 +536,7 @@ export class PackagePlugin extends BasePlugin {
         );
       }
     }
+    console.log('errIndex', errIndex, fileIndex);
     await new Promise((res, rej) => {
       zip
         .generateNodeStream({ platform: 'UNIX' })
