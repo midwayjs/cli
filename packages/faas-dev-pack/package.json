@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/faas-dev-pack",
-  "version": "1.2.23-beta.3",
+  "version": "1.2.23",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/command-core": "^1.2.23-beta.3",
+    "@midwayjs/command-core": "^1.2.23",
     "@midwayjs/gateway-common-core": "^1.2.12",
     "@midwayjs/gateway-common-http": "^1.2.12",
     "@midwayjs/serverless-invoke": "^1.2.12",

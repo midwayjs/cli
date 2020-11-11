@@ -158,8 +158,16 @@ export class SCFServerlessSpecBuilder extends SpecBuilder {
 }
 
 function convertMethods(method: string | string[]): SCFHTTPMethod {
+  if (!method) {
+    method = 'any';
+  }
   if (Array.isArray(method)) {
+    // 腾讯云只支持单个方法类型
     method = method[0];
+  }
+
+  if (method.toUpperCase() === 'ALL') {
+    method = 'any';
   }
 
   return method.toUpperCase() as SCFHTTPMethod;

@@ -3,8 +3,6 @@ import { getSpecFile, writeToSpec } from '@midwayjs/serverless-spec-builder';
 import { isAbsolute, join, relative, resolve } from 'path';
 import {
   copy,
-  createReadStream,
-  createWriteStream,
   ensureDir,
   ensureFile,
   existsSync,
@@ -17,6 +15,10 @@ import {
   readlink,
   lstat,
 } from 'fs-extra';
+import {
+  createReadStream,
+  createWriteStream,
+} from 'fs';
 
 import * as globby from 'globby';
 import * as micromatch from 'micromatch';
@@ -509,11 +511,15 @@ export class PackagePlugin extends BasePlugin {
           unixPermissions: stats.mode,
         });
       } else if (stats.isFile()) {
-        zip.file(fileName, createReadStream(absPath), {
-          binary: false,
-          createFolders: true,
-          unixPermissions: stats.mode,
-        });
+        try {
+          zip.file(fileName, createReadStream(absPath), {
+            binary: false,
+            createFolders: true,
+            unixPermissions: stats.mode,
+          });
+        } catch {
+          console.log(' - zip error', fileName);
+        }
       }
     }
     await new Promise((res, rej) => {
