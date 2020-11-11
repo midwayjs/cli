@@ -166,7 +166,7 @@ function convertMethods(method: string | string[]): SCFHTTPMethod {
     method = method[0];
   }
 
-  if (method.toUpperCase()=== 'ALL')  {
+  if (method.toUpperCase() === 'ALL') {
     method = 'any';
   }
 
