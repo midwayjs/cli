@@ -15,7 +15,7 @@ import {
   writeFileSync,
   writeJSON,
   readlink,
-  lstatSync,
+  lstat,
 } from 'fs-extra';
 
 import * as globby from 'globby';
@@ -496,13 +496,10 @@ export class PackagePlugin extends BasePlugin {
       followSymbolicLinks: false,
       cwd: sourceDirection,
     });
-    let fileIndex = 0;
-    let errIndex = 0;
     const zip = new JSZip();
     for (const fileName of fileList) {
-      fileIndex++;
       const absPath = join(sourceDirection, fileName);
-      const stats = lstatSync(absPath);
+      const stats = await lstat(absPath);
       if (stats.isDirectory()) {
         zip.folder(fileName);
       } else if (stats.isSymbolicLink()) {
@@ -512,32 +509,13 @@ export class PackagePlugin extends BasePlugin {
           unixPermissions: stats.mode,
         });
       } else if (stats.isFile()) {
-        try {
-          zip.file(fileName, createReadStream(absPath), {
-            binary: false,
-            createFolders: true,
-            unixPermissions: stats.mode,
-          });
-        } catch (e) {
-          console.log('e', e, fileName, readFileSync(absPath).length);
-          errIndex++;
-          zip.file(fileName, readFileSync(absPath), {
-            binary: false,
-            createFolders: true,
-            unixPermissions: stats.mode,
-          });
-        }
-      } else {
-        console.log(
-          ` - file ${fileName} unsupported`,
-          stats.isBlockDevice(),
-          stats.isCharacterDevice(),
-          stats.isFIFO(),
-          stats.isSocket()
-        );
+        zip.file(fileName, createReadStream(absPath), {
+          binary: false,
+          createFolders: true,
+          unixPermissions: stats.mode,
+        });
       }
     }
-    console.log('errIndex', errIndex, fileIndex);
     await new Promise((res, rej) => {
       zip
         .generateNodeStream()
