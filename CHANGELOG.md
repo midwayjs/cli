@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.23](https://github.com/midwayjs/bin/compare/v1.2.23-beta.3...v1.2.23) (2020-11-11)
+
+
+### Bug Fixes
+
+* egg migrate ([#21](https://github.com/midwayjs/bin/issues/21)) ([9f94dea](https://github.com/midwayjs/bin/commit/9f94deac3e1b89dc49a46f101e85d5219a19c384))
+
+
+
+
+
 ## [1.2.23-beta.3](https://github.com/midwayjs/bin/compare/v1.2.23-beta.2...v1.2.23-beta.3) (2020-11-10)
 
 **Note:** Version bump only for package midway-bin
