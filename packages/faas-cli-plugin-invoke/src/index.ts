@@ -438,6 +438,7 @@ export class FaaSInvokePlugin extends BasePlugin {
           functions: this.core.service.functions,
         },
         distDir: this.buildDir,
+        preloadModules: this.getPreloadModules(),
         starter: getPlatformPath(starterName),
         loadDirectory: isTsMode
           ? [getPlatformPath(resolve(this.defaultTmpFaaSOut, 'src'))]
@@ -469,6 +470,10 @@ export class FaaSInvokePlugin extends BasePlugin {
       faasStarterName: 'FaaSStarter',
       advancePreventMultiInit: false,
     };
+  }
+
+  getPreloadModules() {
+    return [];
   }
 
   getStarterName() {

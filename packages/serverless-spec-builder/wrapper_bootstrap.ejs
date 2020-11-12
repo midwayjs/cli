@@ -33,6 +33,7 @@ const initializeMethod = async (initializeContext = {}) => {
         starter = new Framework();
         starter.configure({
           initializeContext,
+          preloadModules: <%-JSON.stringify(preloadModules, null, 2)%>,
           applicationAdapter: runtime
         });
         const boot = new BootstrapStarter();
