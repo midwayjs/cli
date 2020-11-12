@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.24-beta.1](https://github.com/midwayjs/midway-faas/compare/v1.2.24...v1.2.24-beta.1) (2020-11-12)
+
+
+### Bug Fixes
+
+* midway2 bootstrap ([#22](https://github.com/midwayjs/midway-faas/issues/22)) ([5673fc6](https://github.com/midwayjs/midway-faas/commit/5673fc6de1f384f88bd2376e51358d1570f06d43))
+
+
+
+
+
 ## [1.2.24](https://github.com/midwayjs/midway-faas/compare/v1.2.23...v1.2.24) (2020-11-12)
 
 
