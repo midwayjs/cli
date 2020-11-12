@@ -1,3 +1,6 @@
+import { join } from 'path';
+import * as globby from 'globby';
+import { unlink, existsSync, stat } from 'fs-extra';
 interface Ilayer {
   [extName: string]: {
     path: string;
@@ -50,3 +53,53 @@ export function commonPrefix(arr: string[]): string {
   }
   return result;
 }
+
+export const removeUselessFiles = async (target: string) => {
+  const matchList = [
+    '**/*.md',
+    '**/*.markdown',
+    '**/LICENSE',
+    '**/license',
+    '**/LICENSE.txt',
+    '**/MIT-LICENSE.txt',
+    '**/LICENSE-MIT.txt',
+    '**/*.d.ts',
+    '**/*.ts.map',
+    '**/*.js.map',
+    '**/*.test.js',
+    '**/*.test.ts',
+    '**/travis.yml',
+    '**/.travis.yml',
+    '**/src/**/*.ts',
+    '**/test/',
+    '**/tests/',
+    '**/coverage/',
+    '**/.github/',
+    '**/.coveralls.yml',
+    '**/.npmignore',
+    '**/AUTHORS',
+    '**/HISTORY',
+    '**/Makefile',
+    '**/.jshintrc',
+    '**/.eslintrc',
+    '**/.eslintrc.json',
+  ];
+  const nm = join(target, 'node_modules');
+  const list = await globby(matchList, {
+    cwd: nm,
+    deep: 10,
+  });
+  console.log('  - Useless files Count', list.length);
+  let size = 0;
+  for (const file of list) {
+    const path = join(nm, file);
+    if (existsSync(path)) {
+      const stats = await stat(path);
+      size += stats.size;
+      await unlink(path);
+    }
+  }
+  console.log(
+    `  - Remove Useless file ${Number(size / (2 << 19)).toFixed(2)} MB`
+  );
+};

@@ -4,3 +4,6 @@ provider:
   name: aliyun
   runtime: nodejs8
   credentials: ./.aliyun_credentials # path must be absolute
+
+experimentalFeatures:
+  removeUselessFiles: true

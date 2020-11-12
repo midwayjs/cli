@@ -2,6 +2,7 @@ import { BasePlugin } from '@midwayjs/command-core';
 import { resolve, join, dirname } from 'path';
 import { existsSync, readFileSync, remove } from 'fs-extra';
 import { CompilerHost, Program, resolveTsConfigFile } from '@midwayjs/mwcc';
+import { copyFiles } from '@midwayjs/faas-code-analysis';
 import * as ts from 'typescript';
 export class BuildPlugin extends BasePlugin {
   commands = {
@@ -37,6 +38,7 @@ export class BuildPlugin extends BasePlugin {
 
   hooks = {
     'build:clean': this.clean.bind(this),
+    'build:copyFile': this.copyFile.bind(this),
     'build:compile': this.compile.bind(this),
     'build:emit': this.emit.bind(this),
   };
@@ -48,16 +50,29 @@ export class BuildPlugin extends BasePlugin {
     if (!this.options.clean) {
       return;
     }
-    const tsConfig = this.getTsConfig();
-    const projectFile = this.getProjectFile();
-    const outdir = this.getCompilerOptions(
-      tsConfig,
-      'outDir',
-      dirname(projectFile)
-    );
+    const outdir = this.getOutDir();
     if (outdir) {
       await remove(outdir);
     }
+  }
+
+  private getOutDir(): string {
+    const tsConfig = this.getTsConfig();
+    const projectFile = this.getProjectFile();
+    return this.getCompilerOptions(tsConfig, 'outDir', dirname(projectFile));
+  }
+
+  async copyFile() {
+    const targetDir = this.getOutDir();
+    await copyFiles({
+      sourceDir: join(this.core.cwd, 'src'),
+      targetDir: join(this.core.cwd, targetDir),
+      defaultInclude: ['**/*'],
+      exclude: ['**/*.ts', '**/*.js'],
+      log: path => {
+        this.core.cli.log(`   - Copy ${path}`);
+      },
+    });
   }
 
   async compile() {
