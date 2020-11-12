@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.24](https://github.com/midwayjs/cli/compare/v1.2.23...v1.2.24) (2020-11-12)
+
+
+### Bug Fixes
+
+* support copy static file ([#20](https://github.com/midwayjs/cli/issues/20)) ([39021c4](https://github.com/midwayjs/cli/commit/39021c4b82f962d970a0fc5b9a96b8ae8d66dba1))
+
+
+
+
+
 ## [1.2.23](https://github.com/midwayjs/cli/compare/v1.2.23-beta.3...v1.2.23) (2020-11-11)
 
 **Note:** Version bump only for package @midwayjs/cli-plugin-build
