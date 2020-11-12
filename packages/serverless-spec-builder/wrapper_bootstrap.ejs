@@ -1,16 +1,7 @@
 const { BootstrapStarter } = require('@midwayjs/bootstrap');
 const { Framework } = require('<%=faasModName %>');
 const { asyncWrapper, start } = require('<%=starter %>');
-<% if (clearCache) { %>
-try {
-  const { clearContainerCache } = require('@midwayjs/core');
-  clearContainerCache();
-} catch (e) {}
-try {
-  const { clearAllModule } = require('@midwayjs/decorator');
-  clearAllModule();
-} catch (e) {}
-<% } %>
+
 <% if (functionMap) { %>
 const { registerFunctionToIocByConfig } = require('./registerFunction.js');
 const { join } = require('path');
@@ -46,13 +37,9 @@ const initializeMethod = async (initializeContext = {}) => {
         });
         const boot = new BootstrapStarter();
         const baseDir = __dirname;
-        const loadDir = [baseDir];
-        <% loadDirectory.forEach(function(dirName){ %>
-          loadDir.push('<%=dirName%>');<% }) %>
 
         boot.configure({
           baseDir,
-          loadDir,
         }).load(starter);
 
         await boot.init();

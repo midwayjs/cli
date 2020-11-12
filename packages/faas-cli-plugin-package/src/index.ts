@@ -302,6 +302,8 @@ export class PackagePlugin extends BasePlugin {
       this.core.cli.log(' - Production dependencies install skip: using ncc');
       return;
     }
+    this.setGlobalDependencies('picomatch');
+    this.setGlobalDependencies('@midwayjs/bootstrap');
     // globalDependencies
     // pkg.json dependencies
     // pkg.json localDependencies
@@ -609,7 +611,6 @@ export class PackagePlugin extends BasePlugin {
     this.core.cli.log('Aggregation Deploy');
 
     // use picomatch to match url
-    this.setGlobalDependencies('picomatch');
     const allAggregationPaths = [];
     let allFuncNames = Object.keys(this.core.service.functions);
     for (const aggregationName in this.core.service.aggregation) {
