@@ -16,6 +16,7 @@ export function writeWrapper(options: {
   faasStarterName?: string; // default is FaaSStarter
   middleware?: string[]; // middleware
   clearCache?: boolean; // clearContainerCache clearModule
+  preloadModules?: string[]; // pre load module
 }) {
   const {
     service,
@@ -27,6 +28,7 @@ export function writeWrapper(options: {
     initializeName,
     advancePreventMultiInit,
     loadDirectory = [],
+    preloadModules = [],
     faasStarterName,
     middleware,
     clearCache,
@@ -132,6 +134,7 @@ export function writeWrapper(options: {
       initializer: initializeName || 'initializer',
       handlers: files[file].handlers,
       functionMap,
+      preloadModules,
       clearCache,
       ...layers,
     });
