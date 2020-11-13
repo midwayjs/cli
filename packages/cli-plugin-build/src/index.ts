@@ -58,15 +58,18 @@ export class BuildPlugin extends BasePlugin {
 
   private getOutDir(): string {
     const tsConfig = this.getTsConfig();
+    this.core.debug('TSConfig', tsConfig);
     const projectFile = this.getProjectFile();
+    this.core.debug('ProjectFile', projectFile);
     return this.getCompilerOptions(tsConfig, 'outDir', dirname(projectFile));
   }
 
   async copyFile() {
     const targetDir = this.getOutDir();
+    this.core.debug('CopyFile TargetDir', targetDir);
     await copyFiles({
       sourceDir: join(this.core.cwd, 'src'),
-      targetDir: join(this.core.cwd, targetDir),
+      targetDir: join(this.core.cwd, targetDir || 'dist'),
       defaultInclude: ['**/*'],
       exclude: ['**/*.ts', '**/*.js'],
       log: path => {
@@ -138,6 +141,7 @@ export class BuildPlugin extends BasePlugin {
 
   private getTsConfig() {
     const { cwd } = this.core;
+    this.core.debug('CWD', cwd);
     const { tsConfig } = this.options;
     let tsConfigResult;
     if (typeof tsConfig === 'string') {
@@ -160,8 +164,8 @@ export class BuildPlugin extends BasePlugin {
         tsConfigResult = JSON.parse(
           readFileSync(projectFile, 'utf-8').toString()
         );
-      } catch {
-        //
+      } catch (e) {
+        this.core.debug('Read TsConfig Error', e);
       }
     }
     return tsConfigResult;
