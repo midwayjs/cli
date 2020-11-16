@@ -157,7 +157,7 @@ export class BuildPlugin extends BasePlugin {
     const projectFile = this.getProjectFile();
     if (!tsConfigResult) {
       if (!existsSync(projectFile)) {
-        console.log(`[midway-bin] tsconfig.json not found in ${cwd}\n`);
+        console.log(`[ Midway ] tsconfig.json not found in ${cwd}\n`);
         process.exit(1);
       }
       try {
@@ -165,7 +165,8 @@ export class BuildPlugin extends BasePlugin {
           readFileSync(projectFile, 'utf-8').toString()
         );
       } catch (e) {
-        this.core.debug('Read TsConfig Error', e);
+        console.log('[ Midway ] Read TsConfig Error');
+        throw e;
       }
     }
     return tsConfigResult;
