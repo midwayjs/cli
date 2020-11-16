@@ -48,4 +48,73 @@ describe('test/build.test.ts', () => {
     assert(existsSync(join(dist, 'b/b.txt')));
     assert(existsSync(join(dist, 'c')));
   });
+
+  it('error ts', async () => {
+    const errorcwd = join(__dirname, 'fixtures/error-ts');
+    const dist = join(errorcwd, 'dist');
+    if (existsSync(dist)) {
+      await remove(dist);
+    }
+    try {
+      await run(errorcwd, 'build');
+    } catch (e) {
+      assert(/stringx/.test(e.message));
+    }
+  });
+  it('error no ts config', async () => {
+    const errorcwd = join(__dirname, 'fixtures/error-no-tsconfig');
+    const dist = join(errorcwd, 'dist');
+    if (existsSync(dist)) {
+      await remove(dist);
+    }
+    try {
+      await run(errorcwd, 'build');
+    } catch (e) {
+      assert(/tsconfig\.json not found/.test(e.message));
+    }
+  });
+  it('error ts config options', async () => {
+    const errorcwd = join(__dirname, 'fixtures/error-no-tsconfig');
+    const dist = join(errorcwd, 'dist');
+    if (existsSync(dist)) {
+      await remove(dist);
+    }
+    try {
+      await run(errorcwd, 'build', {
+        tsConfig: 'xxx',
+      });
+    } catch (e) {
+      assert(/Unexpected token x/.test(e.message));
+    }
+  });
+  it('ts config options', async () => {
+    const errorcwd = join(__dirname, 'fixtures/error-no-tsconfig');
+    const dist = join(errorcwd, 'dist');
+    if (existsSync(dist)) {
+      await remove(dist);
+    }
+    await run(errorcwd, 'build', {
+      tsConfig: JSON.stringify({
+        compileOnSave: true,
+        compilerOptions: {
+          rootDir: 'src',
+          outDir: 'dist',
+        },
+        include: ['./src/**/*.ts'],
+      }),
+    });
+    assert(existsSync(join(dist, 'index.js')));
+  });
+  it('error ts config file', async () => {
+    const errorcwd = join(__dirname, 'fixtures/error-tsconfig');
+    const dist = join(errorcwd, 'dist');
+    if (existsSync(dist)) {
+      await remove(dist);
+    }
+    try {
+      await run(errorcwd, 'build');
+    } catch (e) {
+      assert(/Unexpected token \//.test(e.message));
+    }
+  });
 });
