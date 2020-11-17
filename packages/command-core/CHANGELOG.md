@@ -3,6 +3,47 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.26](https://github.com/midwayjs/cli/compare/serverless-v1.2.21...serverless-v1.2.26) (2020-11-17)
+
+
+### Bug Fixes
+
+* build copy file path ([#23](https://github.com/midwayjs/cli/issues/23)) ([ff94951](https://github.com/midwayjs/cli/commit/ff9495147571bb495fc2edd21ee09e7dbb323333))
+
+
+
+## 1.2.25 (2020-11-12)
+
+
+
+## 1.2.25-beta.1 (2020-11-12)
+
+
+
+## 1.2.23 (2020-11-11)
+
+
+
+## 1.2.23-beta.3 (2020-11-10)
+
+
+
+## 1.2.23-beta.2 (2020-10-30)
+
+
+
+## 1.2.23-beta.1 (2020-10-26)
+
+
+### Bug Fixes
+
+* dev pack start auto remove cache ([#17](https://github.com/midwayjs/cli/issues/17)) ([c2c090b](https://github.com/midwayjs/cli/commit/c2c090b4f6419ea6fe3cdde448e9ab07b795dfd2))
+* fcli create ([#15](https://github.com/midwayjs/cli/issues/15)) ([eb8a673](https://github.com/midwayjs/cli/commit/eb8a67315cfecc8131d9947bf0e79fa71ec57e46))
+
+
+
+
+
 ## [1.2.25](https://github.com/midwayjs/cli/compare/v1.2.25-beta.1...v1.2.25) (2020-11-12)
 
 **Note:** Version bump only for package @midwayjs/command-core
