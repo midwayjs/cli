@@ -2,7 +2,7 @@ import { existsSync, remove } from 'fs-extra';
 import { join } from 'path';
 import { type } from 'os';
 import { InvokeOptions } from './interface';
-export const exportMidwayFaaS = (() => {
+export const getExportMidwayFaaS = () => {
   const midwayModuleName = process.env.MidwayModuleName || '@midwayjs/faas';
   const faasPath = join(process.cwd(), './node_modules/', midwayModuleName);
   if (existsSync(faasPath)) {
@@ -14,8 +14,9 @@ export const exportMidwayFaaS = (() => {
       return { FaaSStarter: class DefaulltMidwayFaasStarter {} };
     }
   }
-})();
+};
 
+export const exportMidwayFaaS = getExportMidwayFaaS();
 export const FaaSStarterClass = exportMidwayFaaS.FaaSStarter;
 
 // 清理某个目标目录

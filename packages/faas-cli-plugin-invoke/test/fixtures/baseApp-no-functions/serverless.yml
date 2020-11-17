@@ -1,0 +1,4 @@
+service: serverless-midway-test
+
+provider:
+  name: aliyun

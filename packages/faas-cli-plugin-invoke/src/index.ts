@@ -18,7 +18,6 @@ import * as FCTrigger from '@midwayjs/serverless-fc-trigger';
 import * as SCFTrigger from '@midwayjs/serverless-scf-trigger';
 import { resolve, relative, join } from 'path';
 import {
-  FaaSStarterClass,
   checkIsTsMode,
   cleanTarget,
   getLock,
@@ -202,7 +201,7 @@ export class FaaSInvokePlugin extends BasePlugin {
     }
     this.skipTsBuild = false;
     // 是否使用ts模式进行运行
-    const isTsMode = checkIsTsMode();
+    const isTsMode = this.checkIsTsMode();
     if (!isTsMode) {
       process.env.MIDWAY_TS_MODE = 'false';
     }
@@ -329,7 +328,7 @@ export class FaaSInvokePlugin extends BasePlugin {
   }
 
   async emit() {
-    const isTsMode = checkIsTsMode();
+    const isTsMode = this.checkIsTsMode();
     if (isTsMode || this.skipTsBuild) {
       return;
     }
@@ -367,7 +366,7 @@ export class FaaSInvokePlugin extends BasePlugin {
   }
 
   private async copyStaticFile() {
-    const isTsMode = checkIsTsMode();
+    const isTsMode = this.checkIsTsMode();
     if (isTsMode || this.skipTsBuild || !this.analyzedTsCodeRoot) {
       return;
     }
@@ -384,6 +383,7 @@ export class FaaSInvokePlugin extends BasePlugin {
     // 这里是必须的，用以其他插件动态修改 functions，比如 hooks
     this.setStore('functions', this.core.service.functions);
     // 将函数信息放入代码分析结果缓存中，便于下次跳过ts编译时使用
+    ensureFileSync(this.analysisCodeInfoPath);
     writeFileSync(
       this.analysisCodeInfoPath,
       JSON.stringify(this.core.service.functions, null, 2)
@@ -409,7 +409,7 @@ export class FaaSInvokePlugin extends BasePlugin {
   async entry() {
     const { name, fileName, userEntry } = this.checkUserEntry();
     if (!userEntry) {
-      const isTsMode = checkIsTsMode();
+      const isTsMode = this.checkIsTsMode();
       const starterName = this.getStarterName();
       if (!starterName) {
         return;
@@ -524,7 +524,9 @@ export class FaaSInvokePlugin extends BasePlugin {
       };
     }
     if (!invoke) {
-      invoke = await this.getUserFaaSHandlerFunction();
+      throw new Error(
+        `Current provider '${this.core.service?.provider?.name}' not support`
+      );
     }
     this.invokeFun = invoke;
   }
@@ -639,23 +641,6 @@ export class FaaSInvokePlugin extends BasePlugin {
       return [new EventClass(...args)];
     }
     return args;
-  }
-
-  async getUserFaaSHandlerFunction() {
-    const handler =
-      this.options.handler || this.getFunctionInfo().handler || '';
-    const starter = await this.getStarter();
-    return starter.handleInvokeWrapper(handler);
-  }
-
-  async getStarter() {
-    const { functionName } = this.options;
-    const starter = new FaaSStarterClass({
-      baseDir: this.buildDir,
-      functionName,
-    });
-    await starter.start();
-    return starter;
   }
 
   checkIsTsMode() {
