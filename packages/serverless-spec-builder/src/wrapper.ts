@@ -87,7 +87,8 @@ export function writeWrapper(options: {
   let faasPkgFile;
   const cwd = process.cwd();
   try {
-    faasPkgFile = require.resolve('@midwayjs/faas/package.json', {
+    const modName: any = '@midwayjs/faas';
+    faasPkgFile = require.resolve(modName + '/package.json', {
       paths: [distDir, baseDir],
     });
   } catch {
