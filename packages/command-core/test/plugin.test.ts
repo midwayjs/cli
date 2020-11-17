@@ -1,5 +1,12 @@
-import { CommandCore, BasePlugin, filterPluginByCommand } from '../src';
+import {
+  CommandCore,
+  BasePlugin,
+  filterPluginByCommand,
+  getPluginClass,
+} from '../src';
 import * as assert from 'assert';
+import { join } from 'path';
+import { ensureFileSync, existsSync, remove } from 'fs-extra';
 describe('command-core:plugin.test.ts', () => {
   it('base plugin', async () => {
     class TestPlugin extends BasePlugin {
@@ -150,5 +157,54 @@ describe('command-core:plugin.test.ts', () => {
     assert(!result.find(plugin => plugin.mod === 'plugin5'));
     assert(!result.find(plugin => plugin.mod === 'plugin6'));
     assert(!result.find(plugin => plugin.mod === 'plugin10'));
+  });
+
+  it('getPluginClass', async () => {
+    let i = 0;
+    const cwd = join(__dirname, './fixtures/plugin-test');
+    const nm = join(cwd, 'node_modules');
+    if (existsSync(nm)) {
+      await remove(nm);
+    }
+    const existsFile = join(nm, 'exists/index.js');
+    if (!existsSync(existsFile)) {
+      ensureFileSync(existsFile);
+    }
+    const list = await getPluginClass(
+      [
+        { mod: 'plugin1', name: 'test' },
+        { mod: 'plugin1', name: 'test2' },
+        { mod: 'plugin2' },
+        { mod: 'debug' },
+        { mod: 'not-npm-module' },
+        { mod: 'exists' },
+        { mod: 'not exists' },
+      ],
+      {
+        cwd,
+        load: name => {
+          if (name === 'plugin1') {
+            return {
+              test: {},
+            };
+          } else if (name === 'plugin2') {
+            return {};
+          } else if (name === 'debug') {
+            if (i === 0) {
+              i++;
+              throw new Error('xxx');
+            } else {
+              return {};
+            }
+          } else if (name === 'exists') {
+            throw new Error('xxx');
+          } else if (name === 'not-npm-module') {
+            throw new Error('xxx');
+          }
+          return;
+        },
+      }
+    );
+    assert(list.length);
   });
 });

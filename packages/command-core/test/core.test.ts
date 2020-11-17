@@ -60,6 +60,30 @@ describe('command-core', () => {
     const testData = readFileSync(txt).toString();
     assert(testData === 'user');
   });
+  it('user lifecycle error', async () => {
+    const cwd = join(__dirname, './fixtures/userLifecycle-error');
+    const txt = join(cwd, 'test.txt');
+    if (existsSync(txt)) {
+      await remove(txt);
+    }
+    const result = [];
+    const core = new CommandCore({
+      provider: 'test',
+      cwd,
+      log: {
+        log: (...msg) => {
+          result.push(...msg);
+        },
+      },
+      options: {
+        verbose: true,
+      },
+    });
+    core.addPlugin(TestPlugin);
+    await core.ready();
+    await core.invoke(['invoke']);
+    assert(result.join('|').indexOf('User Lifecycle Hook Error') !== -1);
+  });
   it('local plugin', async () => {
     const result = [];
     const core = new CommandCore({
