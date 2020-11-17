@@ -82,5 +82,19 @@ export const findNpm = () => {
       }
     }
   }
-  return npmList[npmList.length - 1];
+
+  let isCn = false;
+  const npmInfo: any = npmList[npmList.length - 1] || {};
+
+  // language is zh_CN
+  if (process.env.LANG === 'zh_CN.UTF-8') {
+    isCn = true;
+  }
+
+  if (isCn) {
+    npmInfo.cmd = `${
+      npmInfo.cmd || 'npm'
+    } --registry=https://registry.npm.taobao.org`;
+  }
+  return npmInfo;
 };

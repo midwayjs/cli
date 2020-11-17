@@ -188,7 +188,6 @@ export class CommandCore implements ICommandCore {
           await hook();
         } catch (e) {
           this.debug('Core Lifecycle Hook Error');
-          console.log(e);
           throw e;
         }
       }
