@@ -27,7 +27,13 @@ describe('/test/index.test.ts', () => {
   it('should use origin http trigger', async () => {
     const originTsMode = process.env.MIDWAY_TS_MODE;
     process.env.MIDWAY_TS_MODE = 'true';
-    const result: any = await invoke({
+    let result: any = await invoke({
+      functionDir: join(__dirname, 'fixtures/baseApp'),
+      functionName: 'http',
+      data: [{ name: 'params' }],
+      clean: false,
+    });
+    result = await invoke({
       functionDir: join(__dirname, 'fixtures/baseApp'),
       functionName: 'http',
       data: [{ name: 'params' }],

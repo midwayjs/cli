@@ -31,7 +31,7 @@ export function writeWrapper(options: {
     preloadModules = [],
     faasStarterName,
     middleware,
-    clearCache,
+    clearCache = true,
   } = options;
 
   const files = {};
@@ -87,7 +87,8 @@ export function writeWrapper(options: {
   let faasPkgFile;
   const cwd = process.cwd();
   try {
-    faasPkgFile = require.resolve(faasModName + '/package.json', {
+    const modName: any = '@midwayjs/faas';
+    faasPkgFile = require.resolve(modName + '/package.json', {
       paths: [distDir, baseDir],
     });
   } catch {

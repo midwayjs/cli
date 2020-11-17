@@ -54,7 +54,7 @@ const versionToNumber = version => {
 };
 
 export const findNpm = () => {
-  const npmList = [{ cmd: 'cnpm' }, { cmd: 'npm' }];
+  const npmList = [{ cmd: 'cnpm' }];
   const currentPlatform = platform();
   for (const npmInfo of npmList) {
     const { cmd } = npmInfo;
@@ -84,7 +84,7 @@ export const findNpm = () => {
   }
 
   let isCn = false;
-  const npmInfo: any = npmList[npmList.length - 1] || {};
+  const npmInfo: any = { cmd: 'npm' };
 
   // language is zh_CN
   if (process.env.LANG === 'zh_CN.UTF-8') {
