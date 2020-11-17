@@ -497,8 +497,8 @@ export class FaaSInvokePlugin extends BasePlugin {
         handler = handlerMod[this.entryInfo.handlerName];
         initHandler = handlerMod.initializer;
       } catch (e) {
-        console.log('Get Invoke Handler Error', e);
-        // this.invokeError(e);
+        e.message = `Get Invoke Handler Error: ${e.message}`;
+        throw e;
       }
     }
     if (handler) {
@@ -524,9 +524,7 @@ export class FaaSInvokePlugin extends BasePlugin {
       };
     }
     if (!invoke) {
-      throw new Error(
-        `Current provider '${this.core.service?.provider?.name}' not support`
-      );
+      throw new Error('Not Found Invoke Function');
     }
     this.invokeFun = invoke;
   }
