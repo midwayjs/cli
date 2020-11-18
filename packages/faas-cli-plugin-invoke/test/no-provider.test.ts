@@ -18,7 +18,7 @@ describe('/test/no-provider.test.ts', () => {
         clean: false,
       });
     } catch (e) {
-      assert(/Current provider 'unknow' not support/.test(e.message));
+      assert(/Not Found Invoke Function/.test(e.message));
     }
     if (existsSync(buildDir)) {
       await remove(buildDir);
