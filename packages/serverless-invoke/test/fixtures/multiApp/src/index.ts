@@ -21,4 +21,9 @@ export class HelloHttpService {
   async a() {
     return 'abc';
   }
+
+  @func('a.c')
+  async c() {
+    return '123';
+  }
 }

@@ -355,6 +355,7 @@ export class FaaSInvokePlugin extends BasePlugin {
     Object.keys(require.cache).forEach(path => {
       if (path.indexOf(this.buildDir) !== -1) {
         this.core.debug('Clear Cache', path);
+        process.env.CLEAR_CACHE = 'true';
         delete require.cache[path];
       }
     });
