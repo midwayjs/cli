@@ -1,13 +1,16 @@
 import { CommandCore } from '../src';
 import TestPlugin from './plugins/test.invoke';
+import ErrorPlugin from './plugins/hook-error';
+import PassingPlugin from './plugins/command-passing';
 import { PluginTest2 } from './plugins/test-not-provider.invoke';
 import * as assert from 'assert';
-import { join, resolve } from 'path';
+import { join } from 'path';
 import { existsSync, readFileSync, remove } from 'fs-extra';
 
 describe('command-core', () => {
   it('stop lifecycle', async () => {
     const result: string[] = [];
+    let cmd;
     const core = new CommandCore({
       provider: 'test',
       log: {
@@ -15,13 +18,17 @@ describe('command-core', () => {
           result.push(msg);
         },
       },
+      point: c => {
+        cmd = c;
+      },
       stopLifecycle: 'invoke:one',
     });
     core.addPlugin(TestPlugin);
     core.addPlugin(PluginTest2);
     await core.ready();
-    await core.invoke(['invoke']);
+    await core.invoke('invoke');
     assert(result && result.length === 3);
+    assert(cmd === 'invoke');
   });
   it('stop lifecycle and resume', async () => {
     const result: string[] = [];
@@ -32,13 +39,15 @@ describe('command-core', () => {
           result.push(msg);
         },
       },
+      service: {
+        plugins: [TestPlugin],
+      },
       stopLifecycle: 'invoke:one',
     });
-    core.addPlugin(TestPlugin);
     await core.ready();
-    await core.invoke(['invoke']);
+    await core.spawn(['invoke']);
     assert(result.length === 3);
-    await core.resume();
+    await core.resume({});
     assert((result as any).length === 6);
   });
   it('user lifecycle', async () => {
@@ -60,6 +69,36 @@ describe('command-core', () => {
     const testData = readFileSync(txt).toString();
     assert(testData === 'user');
   });
+  it('hook error', async () => {
+    const core = new CommandCore({});
+    core.addPlugin(ErrorPlugin);
+    await core.ready();
+    try {
+      await core.invoke(['common']);
+      assert(false);
+    } catch (e) {
+      assert(e.message.indexOf('hook123') !== -1);
+    }
+  });
+  it('hook child command error', async () => {
+    const core = new CommandCore({});
+    core.addPlugin(ErrorPlugin);
+    await core.ready();
+    try {
+      await core.invoke(['common', 'aaa']);
+      assert(false);
+    } catch (e) {
+      assert(e.message.indexOf('hookaerror') !== -1);
+    }
+  });
+  it('passing command', async () => {
+    const core = new CommandCore({
+      commands: ['a', 'b'],
+    });
+    core.addPlugin(PassingPlugin);
+    await core.ready();
+    await core.invoke();
+  });
   it('user lifecycle error', async () => {
     const cwd = join(__dirname, './fixtures/userLifecycle-error');
     const txt = join(cwd, 'test.txt');
@@ -80,6 +119,7 @@ describe('command-core', () => {
       },
     });
     core.addPlugin(TestPlugin);
+    core.addPlugin(123);
     await core.ready();
     await core.invoke(['invoke']);
     assert(result.join('|').indexOf('User Lifecycle Hook Error') !== -1);
@@ -87,17 +127,36 @@ describe('command-core', () => {
   it('local plugin', async () => {
     const result = [];
     const core = new CommandCore({
+      config: {
+        servicePath: __dirname,
+      },
       provider: 'test',
       log: {
-        log: (msg: string) => {
-          result.push(msg);
+        log: args => {
+          result.push(args);
         },
       },
-      stopLifecycle: 'invoke:one',
     });
-    core.addPlugin('local::' + resolve(__dirname, './plugins/test.invoke.ts'));
+    core.addPlugin('local::./plugins/test.invoke.ts');
     await core.ready();
     await core.invoke(['invoke']);
-    assert(result.length === 3);
+    assert(result.length === 6);
+  });
+  it('local plugin error', async () => {
+    const core = new CommandCore({
+      config: {
+        servicePath: __dirname,
+      },
+      log: {
+        log: () => {},
+      },
+      provider: 'test',
+    });
+    try {
+      core.addPlugin('local::./plugins/test.invokexx.ts');
+      assert(false);
+    } catch (e) {
+      assert(e.message.indexOf('load local plugi') !== -1);
+    }
   });
 });

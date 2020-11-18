@@ -44,6 +44,7 @@ describe('command-core:index.test.ts load plugin', () => {
     core.addPlugin(LogPlugin);
     core.addPlugin(OnePlugin);
     await core.ready();
+    await core.invoke('common');
     const allCommands = core.getCommands();
     assert(!allCommands.invoke && !allCommands.log && allCommands.common);
   });

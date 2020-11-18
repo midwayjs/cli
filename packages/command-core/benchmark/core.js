@@ -59,18 +59,6 @@ const CorefuncTest = async () => {
   await core.ready();
   await core.invoke();
 };
-
-const CorefuncTestInvoke = async () => {
-  const core = new CommandCore({
-    provider: 'test',
-    options: {
-      h: true,
-    },
-  });
-  core.addPlugin(Plugin);
-  await core.ready();
-  await core.invoke('invoke');
-};
 const contenders = {
   'pure core': Corefunc,
   'core help': CorefuncTest,
