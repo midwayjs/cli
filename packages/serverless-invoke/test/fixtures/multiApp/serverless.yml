@@ -1,9 +1,7 @@
 service: serverless-midway-test
 
 provider:
-  name: fc
-  runtime: nodejs8
-  credentials: ./.aliyun_credentials # path must be absolute
+  name: aliyun
 
 functions:
   http:
@@ -13,6 +11,11 @@ functions:
           method: get
   a:
     handler: a.b
+    events:
+      - http:
+          method: get
+  c:
+    handler: a.c
     events:
       - http:
           method: get
