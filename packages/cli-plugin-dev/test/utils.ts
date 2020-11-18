@@ -8,7 +8,7 @@ export const wait = (time?) => {
 export const run = async (cwd: string, options = {}) => {
   const core = new CommandCore({
     commands: ['dev'],
-    options: {},
+    options,
     log: {
       log: console.log,
     },

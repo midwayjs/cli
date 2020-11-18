@@ -34,4 +34,33 @@ describe('test/index.test.ts', () => {
     await wait();
     await close();
   });
+  it('dev multi', async () => {
+    const dist = join(cwd, 'dist');
+    if (existsSync(dist)) {
+      await remove(dist);
+    }
+    if (existsSync(api)) {
+      await remove(api);
+    }
+    await copy(api1, api);
+    const { close, port } = await run(cwd);
+    const { close: close2, port: port2 } = await run(cwd, { silent: true });
+    const response = await fetch(`http://127.0.0.1:${port}/?name=midway`);
+    const body = await response.text();
+    assert(body === 'hello world,midway');
+    const response2 = await fetch(`http://127.0.0.1:${port2}/?name=midway`);
+    const body2 = await response2.text();
+    assert(body2 === 'hello world,midway');
+    await close();
+    await close2();
+  });
+  it('dev error', async () => {
+    const cwd = join(__dirname, 'fixtures/error-app');
+    const dist = join(cwd, 'dist');
+    if (existsSync(dist)) {
+      await remove(dist);
+    }
+    const { close } = await run(cwd, { port: 12336 });
+    await close();
+  });
 });
