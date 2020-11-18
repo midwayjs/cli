@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.28](https://github.com/midwayjs/midway-faas/compare/serverless-v1.2.27...serverless-v1.2.28) (2020-11-18)
+
+
+### Bug Fixes
+
+* invoke error ([#25](https://github.com/midwayjs/midway-faas/issues/25)) ([1a994b2](https://github.com/midwayjs/midway-faas/commit/1a994b2f0c6339786e856f7d4526b120cba627cf))
+
+
+
+
+
 ## [1.2.27](https://github.com/midwayjs/midway-faas/compare/serverless-v1.2.26...serverless-v1.2.27) (2020-11-17)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-invoke
