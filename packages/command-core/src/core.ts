@@ -132,7 +132,7 @@ export class CommandCore implements ICommandCore {
     allowEntryPoints 为是否可以调用 entryPoints
     */
   public async invoke(
-    commandsArray?: string[],
+    commandsArray?: string | string[],
     allowEntryPoints?: boolean,
     options?: any
   ) {
@@ -197,9 +197,6 @@ export class CommandCore implements ICommandCore {
   // resume stop licycle execute
   public async resume(options?) {
     if (options) {
-      if (!this.options.options) {
-        this.options.options = {};
-      }
       Object.assign(this.options.options, options);
     }
     await this.execLiftcycle(this.stopLifecycles);
@@ -413,7 +410,7 @@ export class CommandCore implements ICommandCore {
     if (!cmdObj) {
       this.error('commandNotFound', { command, commandPath });
     }
-    if (cmdObj.type === 'entrypoint' && !allowEntryPoints) {
+    if (cmdObj?.type === 'entrypoint' && !allowEntryPoints) {
       this.error('commandIsEntrypoint', { command, commandPath });
     }
 
@@ -426,7 +423,7 @@ export class CommandCore implements ICommandCore {
   }
 
   // 加载本地插件
-  private async loadLocalPlugin(localPath) {
+  private loadLocalPlugin(localPath) {
     try {
       if (
         this.options.config &&

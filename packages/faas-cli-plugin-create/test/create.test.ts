@@ -114,4 +114,33 @@ describe('/test/create.test.ts', () => {
     assert(/serverless-hello-world/.test(contents));
     await remove(baseDir);
   });
+  it('base create error tmp', async () => {
+    if (existsSync(baseDir)) {
+      await remove(baseDir);
+    }
+    const tmpPath = 'my_serverless' + Date.now();
+    const core = new CommandCore({
+      config: {
+        servicePath: baseDir,
+      },
+      commands: ['create'],
+      service: loadSpec(baseDir),
+      provider: 'aliyun',
+      options: {
+        path: 'my_serverless',
+        'template-path': tmpPath,
+      },
+      log: console,
+    });
+    core.addPlugin(TestCreatePlugin);
+    await core.ready();
+    try {
+      await core.invoke(['create']);
+      assert(false);
+    } catch (e) {
+      assert(e.message.indexOf(tmpPath) !== -1);
+      assert(e.message.indexOf('no such file or directory') !== -1);
+    }
+    await remove(baseDir);
+  });
 });
