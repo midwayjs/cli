@@ -2,6 +2,7 @@ import * as minimist from 'minimist';
 import { join } from 'path';
 import { commandLineUsage } from './utils/commandLineUsage';
 import { CommandCore } from './core';
+import { existsSync, readFileSync } from 'fs';
 
 export class CoreBaseCLI {
   argv: any;
@@ -42,7 +43,31 @@ export class CoreBaseCLI {
   loadCorePlugin() {}
 
   // 加载默认插件
-  loadDefaultPlugin() {}
+  loadDefaultPlugin() {
+    const { cwd } = this.core;
+    const packageJsonFile = join(cwd, 'package.json');
+    if (!existsSync(packageJsonFile)) {
+      this.core.debug('no user package.json', packageJsonFile);
+      return;
+    }
+    const packageJson = JSON.parse(readFileSync(packageJsonFile).toString());
+    const deps = packageJson?.mw?.plugins || [];
+    const processCwd = process.cwd();
+    process.chdir(cwd);
+    deps.forEach(dep => {
+      if(!/(?:^|\/)mw-cli-plugin-/.test(dep)) {
+        return;
+      }
+      try {
+        const mod = require(dep);
+        this.core.debug('auto load mw plugin', dep);
+        this.core.addPlugin(mod);
+      } catch (e) {
+        this.core.debug('auto load mw plugin error', e);
+      }
+    });
+    process.chdir(processCwd);
+  }
 
   // 加载平台方插件
   loadPlatformPlugin() {}
