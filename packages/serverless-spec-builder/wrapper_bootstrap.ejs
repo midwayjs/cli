@@ -56,7 +56,8 @@ const initializeMethod = async (initializeContext = {}) => {
   })
   runtime = await start({
     layers: layers,
-    getHandler: getHandler
+    getHandler: getHandler,
+    initContext: initializeContext,
   });
   
   <% if (!advancePreventMultiInit) { %> inited = true; <% } %>
