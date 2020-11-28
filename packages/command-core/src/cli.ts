@@ -44,7 +44,7 @@ export class CoreBaseCLI {
 
   // 加载默认插件
   loadDefaultPlugin() {
-    const { cwd } = this.core;
+    const { cwd } = this;
     const packageJsonFile = join(cwd, 'package.json');
     if (!existsSync(packageJsonFile)) {
       this.core.debug('no user package.json', packageJsonFile);
@@ -52,21 +52,23 @@ export class CoreBaseCLI {
     }
     const packageJson = JSON.parse(readFileSync(packageJsonFile).toString());
     const deps = packageJson?.mw?.plugins || [];
-    const processCwd = process.cwd();
-    process.chdir(cwd);
+    this.core.debug('mw plugin', deps);
+    const currentNodeModules = join(cwd, 'node_modules');
     deps.forEach(dep => {
-      if(!/(?:^|\/)mw-cli-plugin-/.test(dep)) {
-        return;
+      const npmPath = join(currentNodeModules, dep);
+      if (!existsSync(npmPath)) {
+        throw new Error(
+          `Auto load mw plugin error: '${dep}' not install in '${currentNodeModules}'`
+        );
       }
       try {
-        const mod = require(dep);
-        this.core.debug('auto load mw plugin', dep);
+        const mod = require(npmPath);
         this.core.addPlugin(mod);
       } catch (e) {
-        this.core.debug('auto load mw plugin error', e);
+        e.message = `Auto load mw plugin error: ${e.message}`;
+        throw e;
       }
     });
-    process.chdir(processCwd);
   }
 
   // 加载平台方插件

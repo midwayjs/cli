@@ -16,7 +16,6 @@ async function getNpmPath(
   if (existsSync(localNpmPath)) {
     return localNpmPath;
   }
-
   let baseDir = join(currentNodeModules, '../');
   if (!existsSync(baseDir)) {
     baseDir = process.cwd();
