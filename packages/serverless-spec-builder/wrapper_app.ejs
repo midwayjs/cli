@@ -16,7 +16,8 @@ const initializeMethod = async (initializeContext = {}) => {
   return lock.sureOnce(async () => {
     runtime = await start({
       layers: layers,
-      isAppMode: true
+      isAppMode: true,
+      initContext: initializeContext,
     });
   }, 'APP_START_LOCK_KEY');
 };
