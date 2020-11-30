@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.30](https://github.com/midwayjs/cli/compare/v1.2.30-beta...v1.2.30) (2020-11-30)
+
+**Note:** Version bump only for package @midwayjs/fcli-plugin-deploy
+
+
+
+
+
 ## [1.2.29](https://github.com/midwayjs/cli/compare/serverless-v1.2.28...serverless-v1.2.29) (2020-11-18)
 
 
