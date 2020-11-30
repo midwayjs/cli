@@ -19,7 +19,7 @@ import { createReadStream, createWriteStream } from 'fs';
 
 import * as globby from 'globby';
 import * as micromatch from 'micromatch';
-import { commonPrefix, formatLayers, removeUselessFiles } from './utils';
+import { commonPrefix, formatLayers, uselessFilesMatch } from './utils';
 import {
   analysisResultToSpec,
   copyFiles,
@@ -345,10 +345,6 @@ export class PackagePlugin extends BasePlugin {
       await copy(localDep[localDepName], target);
     }
     this.core.cli.log(' - Dependencies install complete');
-    if (this.core.service?.experimentalFeatures?.removeUselessFiles) {
-      this.core.cli.log(' - Experimental Feature RemoveUselessFiles');
-      await removeUselessFiles(this.midwayBuildPath);
-    }
   }
 
   public getTsCodeRoot(): string {
@@ -492,10 +488,16 @@ export class PackagePlugin extends BasePlugin {
   }
 
   private async makeZip(sourceDirection: string, targetFileName: string) {
+    let ignore = [];
+    if (this.core.service?.experimentalFeatures?.removeUselessFiles) {
+      this.core.cli.log(' - Experimental Feature RemoveUselessFiles');
+      ignore = uselessFilesMatch;
+    }
     const fileList = await globby(['**'], {
       onlyFiles: false,
       followSymbolicLinks: false,
       cwd: sourceDirection,
+      ignore,
     });
     const zip = new JSZip();
     for (const fileName of fileList) {
