@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/command-core",
-  "version": "1.2.29",
+  "version": "1.2.30-beta",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
