@@ -60,7 +60,7 @@ describe('command-core / cli.test.ts', () => {
     writeFileSync(
       pkjJson,
       JSON.stringify({
-        mw: {
+        'midway-cli': {
           plugins: [pluginName],
         },
       })

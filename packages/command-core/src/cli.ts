@@ -51,7 +51,7 @@ export class CoreBaseCLI {
       return;
     }
     const packageJson = JSON.parse(readFileSync(packageJsonFile).toString());
-    const deps = packageJson?.mw?.plugins || [];
+    const deps = packageJson?.['midway-cli']?.plugins || [];
     this.core.debug('mw plugin', deps);
     const currentNodeModules = join(cwd, 'node_modules');
     deps.forEach(dep => {
