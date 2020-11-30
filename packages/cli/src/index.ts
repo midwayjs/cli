@@ -5,6 +5,7 @@ import {
 } from '@midwayjs/command-core';
 import { execSync } from 'child_process';
 import { PluginList } from './plugins';
+
 export * from './utils';
 const FaaSPlugin = 'FaaSPlugin';
 const enquirer = require('enquirer');

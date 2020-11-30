@@ -2,6 +2,7 @@ import * as minimist from 'minimist';
 import { join } from 'path';
 import { commandLineUsage } from './utils/commandLineUsage';
 import { CommandCore } from './core';
+import { existsSync, readFileSync } from 'fs';
 
 export class CoreBaseCLI {
   argv: any;
@@ -42,7 +43,33 @@ export class CoreBaseCLI {
   loadCorePlugin() {}
 
   // 加载默认插件
-  loadDefaultPlugin() {}
+  loadDefaultPlugin() {
+    const { cwd } = this;
+    const packageJsonFile = join(cwd, 'package.json');
+    if (!existsSync(packageJsonFile)) {
+      this.core.debug('no user package.json', packageJsonFile);
+      return;
+    }
+    const packageJson = JSON.parse(readFileSync(packageJsonFile).toString());
+    const deps = packageJson?.['midway-cli']?.plugins || [];
+    this.core.debug('mw plugin', deps);
+    const currentNodeModules = join(cwd, 'node_modules');
+    deps.forEach(dep => {
+      const npmPath = join(currentNodeModules, dep);
+      if (!existsSync(npmPath)) {
+        throw new Error(
+          `Auto load mw plugin error: '${dep}' not install in '${currentNodeModules}'`
+        );
+      }
+      try {
+        const mod = require(npmPath);
+        this.core.addPlugin(mod);
+      } catch (e) {
+        e.message = `Auto load mw plugin error: ${e.message}`;
+        throw e;
+      }
+    });
+  }
 
   // 加载平台方插件
   loadPlatformPlugin() {}
