@@ -3,6 +3,8 @@ module.exports = async () => {
   const config = await tsConfig();
   return {
     ...config,
-    preset: 'ts-jest',
+    transform: {
+      '^.+\\.tsx?$': require.resolve('ts-jest'),
+    },
   };
 };
