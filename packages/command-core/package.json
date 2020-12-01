@@ -10,6 +10,7 @@
   "devDependencies": {
     "benchmark": "^2.1.4",
     "fs-extra": "^8.1.0",
+    "cross-env": "^7.0.2",
     "typescript": "^3.9.7"
   },
   "engines": {
@@ -23,7 +24,8 @@
     "lint": "eslint .",
     "build": "tsc --build",
     "test": "../../node_modules/.bin/jest",
-    "cov": "../../node_modules/.bin/jest --coverage",
+    "cov": "cross-env ../../node_modules/.bin/jest --coverage",
+    "cov-win": "npm run cov",
     "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
     "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov"
   },
