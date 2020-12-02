@@ -162,7 +162,7 @@ export class BuildPlugin extends BasePlugin {
           readFileSync(projectFile, 'utf-8').toString()
         );
       } catch (e) {
-        console.log('[ Midway ] Read TsConfig Error');
+        console.log('[ Midway ] Read TsConfig Error', e.message);
         throw e;
       }
     }
