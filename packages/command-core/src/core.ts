@@ -477,10 +477,6 @@ export class CommandCore implements ICommandCore {
   }
 
   private commandOptions(commandOptions, usage): any {
-    if (!commandOptions) {
-      return;
-    }
-
     for (const option in commandOptions) {
       const optionInfo = commandOptions[option];
       usage[option] = optionInfo;
@@ -537,9 +533,6 @@ export class CommandCore implements ICommandCore {
     const { type, path, line } = this.getStackTrace();
     let stack = '';
     if (type) {
-      if (typeof verbose === 'string' && type !== verbose) {
-        return;
-      }
       stack = `(${type}:${path}:${line})`;
     }
     const diffTime = Number((now - this.preDebugTime) / 1000).toFixed(2);
