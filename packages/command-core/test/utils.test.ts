@@ -24,7 +24,7 @@ describe('/test/utils.test.ts', () => {
     try {
       await forkNode(acmd);
       assert(false);
-    } catch(e) {
+    } catch (e) {
       assert(/exit with code 1/.test(e.message));
     }
   });
