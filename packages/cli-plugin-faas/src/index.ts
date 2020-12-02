@@ -48,5 +48,18 @@ export class FaaSPlugin extends BasePlugin {
     allPluginClass.forEach(pluginClass => {
       this.core.addPlugin(pluginClass);
     });
+    if (!this.core.service.plugins) {
+      return;
+    }
+    this.core.debug('FaaS Plugin load Spec Plugin', this.core.service.plugins);
+    for (const plugin of this.core.service.plugins) {
+      if (/^npm:/.test(plugin) || /^local:/.test(plugin)) {
+        this.core.addPlugin(plugin);
+      } else if (/^\./.test(plugin)) {
+        this.core.addPlugin(
+          `local:${this.core.coreOptions.provider || ''}:${plugin}`
+        );
+      }
+    }
   }
 }

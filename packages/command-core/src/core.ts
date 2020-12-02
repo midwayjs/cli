@@ -218,9 +218,9 @@ export class CommandCore implements ICommandCore {
   }
 
   public async ready() {
+    await this.asyncInit();
     await this.loadNpmPlugins();
     await this.loadUserLifecycleExtends();
-    await this.asyncInit();
   }
 
   autoLoadPlugins() {
