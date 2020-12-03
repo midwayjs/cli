@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/command-core",
-  "version": "1.2.30",
+  "version": "1.2.31",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -9,8 +9,8 @@
   },
   "devDependencies": {
     "benchmark": "^2.1.4",
-    "fs-extra": "^8.1.0",
     "cross-env": "^7.0.2",
+    "fs-extra": "^8.1.0",
     "typescript": "^3.9.7"
   },
   "engines": {
