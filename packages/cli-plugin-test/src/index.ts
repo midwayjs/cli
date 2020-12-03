@@ -1,5 +1,4 @@
-import { BasePlugin } from '@midwayjs/command-core';
-import { forkNode } from './utils';
+import { BasePlugin, forkNode } from '@midwayjs/command-core';
 import { existsSync } from 'fs';
 import * as globby from 'globby';
 import { join } from 'path';
