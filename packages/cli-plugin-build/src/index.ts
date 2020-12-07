@@ -91,6 +91,7 @@ export class BuildPlugin extends BasePlugin {
         },
       }
     );
+    this.core.debug('Compile TSConfig', config);
     this.compilerHost = new CompilerHost(cwd, config);
     this.program = new Program(this.compilerHost);
   }
