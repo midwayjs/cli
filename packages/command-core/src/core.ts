@@ -177,7 +177,9 @@ export class CommandCore implements ICommandCore {
         try {
           await this.execCommand(userCmd);
         } catch (e) {
+          spin.stop();
           this.debug('User Lifecycle Hook Error', userCmd, e);
+          throw e;
         }
         spin.stop();
       }

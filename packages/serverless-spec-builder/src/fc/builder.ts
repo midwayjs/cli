@@ -182,34 +182,31 @@ export class FCSpecBuilder extends SpecBuilder {
     }
 
     if (httpEventRouters) {
-      if (
-        this.originData['custom'] &&
-        this.originData['custom']['customDomain']
-      ) {
-        const domainInfo: {
-          domainName: string;
-          stage?: string;
-        } = this.originData['custom']['customDomain'];
-        template.Resources[domainInfo.domainName] = {
-          Type: 'Aliyun::Serverless::CustomDomain',
-          Properties: {
-            Protocol: 'HTTP',
-            RouteConfig: {
-              routes: httpEventRouters,
+      const customDomain = this.originData?.['custom']?.['customDomain'];
+      if (customDomain) {
+        const { domainName } = customDomain;
+        if (domainName.toLowerCase() === 'auto') {
+          template.Resources['midway_auto_domain'] = {
+            Type: 'Aliyun::Serverless::CustomDomain',
+            Properties: {
+              DomainName: 'Auto',
+              Protocol: 'HTTP',
+              RouteConfig: {
+                routes: httpEventRouters,
+              },
             },
-          },
-        } as FCCustomDomainSpec;
-      } else {
-        template.Resources['midway_auto_domain'] = {
-          Type: 'Aliyun::Serverless::CustomDomain',
-          Properties: {
-            DomainName: 'Auto',
-            Protocol: 'HTTP',
-            RouteConfig: {
-              routes: httpEventRouters,
+          } as FCCustomDomainSpec;
+        } else {
+          template.Resources[domainName] = {
+            Type: 'Aliyun::Serverless::CustomDomain',
+            Properties: {
+              Protocol: 'HTTP',
+              RouteConfig: {
+                routes: httpEventRouters,
+              },
             },
-          },
-        } as FCCustomDomainSpec;
+          } as FCCustomDomainSpec;
+        }
       }
     }
 
