@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.32](https://github.com/midwayjs/cli/compare/v1.2.32-beta...v1.2.32) (2020-12-08)
+
+**Note:** Version bump only for package @midwayjs/cli-plugin-clean
+
+
+
+
+
 ## [1.2.31](https://github.com/midwayjs/cli/compare/v1.2.30...v1.2.31) (2020-12-03)
 
 **Note:** Version bump only for package @midwayjs/cli-plugin-clean
