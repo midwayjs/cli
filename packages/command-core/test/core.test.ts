@@ -121,7 +121,11 @@ describe('command-core', () => {
     core.addPlugin(TestPlugin);
     core.addPlugin(123);
     await core.ready();
-    await core.invoke(['invoke']);
+    try {
+      await core.invoke(['invoke']);
+    } catch {
+      //
+    }
     assert(result.join('|').indexOf('User Lifecycle Hook Error') !== -1);
   });
   it('local plugin', async () => {
