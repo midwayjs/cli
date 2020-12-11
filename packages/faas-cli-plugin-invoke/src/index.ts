@@ -40,6 +40,7 @@ import {
 export * from './invoke';
 export * from './interface';
 export * from './utils';
+export * from './new';
 
 export class FaaSInvokePlugin extends BasePlugin {
   baseDir: string;

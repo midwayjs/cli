@@ -33,7 +33,7 @@
   ],
   "scripts": {
     "lint": "eslint .",
-    "test": "../../node_modules/.bin/jest",
+    "test": "../../node_modules/.bin/jest test/new.test.ts",
     "build": "tsc --build",
     "cov": "../../node_modules/.bin/jest --coverage",
     "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
