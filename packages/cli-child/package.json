@@ -1,0 +1,35 @@
+{
+  "name": "@midwayjs/cli-child",
+  "version": "1.2.32",
+  "main": "dist/index",
+  "typings": "dist/index.d.ts",
+  "dependencies": {
+    
+  },
+  "devDependencies": {
+    "typescript": "^3.9.7"
+  },
+  "engines": {
+    "node": ">= 10"
+  },
+  "files": [
+    "plugin.json",
+    "src",
+    "resource",
+    "dist"
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "test": "../../node_modules/.bin/jest",
+    "build": "tsc --build",
+    "cov": "../../node_modules/.bin/jest --coverage",
+    "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
+    "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:midwayjs/cli.git"
+  },
+  "license": "MIT",
+  "gitHead": "5783f06ff0298f0e172f801cae053c3fc80813a9"
+}
