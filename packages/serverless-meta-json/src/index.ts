@@ -63,7 +63,8 @@ export const generator = async (options: IOptions) => {
       const { name, archivePath } = info;
       const funcInfo = yamlData.functions[name];
       const handler = funcInfo.handler;
-      const initialize = handler.split('.')[0] + '.' + (initializeAddon || 'initializer')
+      const initialize =
+        handler.split('.')[0] + '.' + (initializeAddon || 'initializer');
       const trigger = funcInfo.events || [];
       const setGateway = (pathInfo: IPathInfo) => {
         if (!gateway) {
@@ -161,7 +162,7 @@ export const simpleGenerator = async (
   yamlData: any,
   extra?: any,
   baseDir?: string,
-  initializeAddon?: string,
+  initializeAddon?: string
 ) => {
   if (!baseDir) {
     baseDir = findBaseDir(archivesPath);

@@ -17,9 +17,8 @@ export class CheckPlugin extends BasePlugin {
     'check:print': this.print.bind(this),
   };
 
-  
   async initial() {
-    this.checkInstance = new Check(this.core.cwd,  this.options.srcDir || 'src');
+    this.checkInstance = new Check(this.core.cwd, this.options.srcDir || 'src');
   }
 
   async analysis() {
