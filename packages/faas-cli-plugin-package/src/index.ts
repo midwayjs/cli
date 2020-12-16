@@ -291,6 +291,7 @@ export class PackagePlugin extends BasePlugin {
     if (npmList && npmList.length) {
       await this.npmInstall({
         npmList,
+        production: true,
       });
     }
     this.core.cli.log(' - Layers install complete');
