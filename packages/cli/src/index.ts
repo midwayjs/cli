@@ -17,6 +17,7 @@ export class CLI extends CoreBaseCLI {
     if (this.argv.v || this.argv.version) {
       return;
     }
+    await super.loadDefaultPlugin();
     let needLoad = PluginList;
     if (!this.argv.h && command) {
       needLoad = filterPluginByCommand(PluginList, {
