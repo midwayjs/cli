@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.33](https://github.com/midwayjs/cli/compare/v1.2.32...v1.2.33) (2020-12-17)
+
+
+### Features
+
+* jest match pattern support full name with dot ([#34](https://github.com/midwayjs/cli/issues/34)) ([04b50a9](https://github.com/midwayjs/cli/commit/04b50a97e6e1b952ccccfaca9b10a75a7897ec0f))
+
+
+
+
+
 ## [1.2.32](https://github.com/midwayjs/cli/compare/v1.2.32-beta...v1.2.32) (2020-12-08)
 
 **Note:** Version bump only for package @midwayjs/cli-plugin-test
