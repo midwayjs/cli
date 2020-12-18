@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/cli",
-  "version": "1.2.32",
+  "version": "1.2.33",
   "description": "Midway Command Tools",
   "main": "index.js",
   "bin": {
@@ -21,10 +21,10 @@
   "dependencies": {
     "@midwayjs/cli-plugin-add": "^1.2.32",
     "@midwayjs/cli-plugin-build": "^1.2.32",
-    "@midwayjs/cli-plugin-clean": "^1.2.32",
+    "@midwayjs/cli-plugin-clean": "^1.2.33",
     "@midwayjs/cli-plugin-dev": "^1.2.32",
-    "@midwayjs/cli-plugin-faas": "^1.2.32",
-    "@midwayjs/cli-plugin-test": "^1.2.32",
+    "@midwayjs/cli-plugin-faas": "^1.2.33",
+    "@midwayjs/cli-plugin-test": "^1.2.33",
     "@midwayjs/command-core": "^1.2.32",
     "@midwayjs/debugger": "^1.0.x",
     "enquirer": "^2.3.4",
