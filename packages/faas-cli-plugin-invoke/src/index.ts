@@ -352,9 +352,11 @@ export class FaaSInvokePlugin extends BasePlugin {
     setLock(this.buildLockPath, LOCK_TYPE.COMPLETE);
     // 针对多次调用清理缓存
     Object.keys(require.cache).forEach(path => {
-      this.core.debug('Clear Cache', path);
-      process.env.CLEAR_CACHE = 'true';
-      delete require.cache[path];
+      if (path.indexOf(this.buildDir) !== -1) {
+        this.core.debug('Clear Cache', path);
+        process.env.CLEAR_CACHE = 'true';
+        delete require.cache[path];
+      }
     });
     ensureFileSync(this.buildLockPath);
     writeFileSync(
