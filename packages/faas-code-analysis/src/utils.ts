@@ -180,6 +180,7 @@ const docopy = async (
             if (log) {
               log(`Error!!! From '${source}' to '${target}'`, e);
             }
+            resolve(void 0);
           });
       });
     })
