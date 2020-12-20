@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.34](https://github.com/midwayjs/cli/compare/v1.2.34-beta.2...v1.2.34) (2020-12-20)
+
+**Note:** Version bump only for package @midwayjs/command-core
+
+
+
+
+
 ## [1.2.32](https://github.com/midwayjs/cli/compare/v1.2.32-beta...v1.2.32) (2020-12-08)
 
 **Note:** Version bump only for package @midwayjs/command-core

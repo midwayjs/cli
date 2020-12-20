@@ -337,6 +337,11 @@ export class PackagePlugin extends BasePlugin {
         pkgJson.dependencies[depName] = depVersion;
       }
     }
+    pkgJson.resolutions = Object.assign(
+      {},
+      pkgJson.resolutions,
+      this.core.service.globalResolutions
+    );
     writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, null, 2));
     await this.npmInstall({
       production: true,

@@ -13,7 +13,6 @@ import {
   Analyzer,
 } from '@midwayjs/mwcc';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
-import { createRuntime } from '@midwayjs/runtime-mock';
 import * as FCTrigger from '@midwayjs/serverless-fc-trigger';
 import * as SCFTrigger from '@midwayjs/serverless-scf-trigger';
 import { resolve, relative, join } from 'path';
@@ -489,45 +488,50 @@ export class FaaSInvokePlugin extends BasePlugin {
 
   async getInvoke() {
     let handler;
-    let initHandler;
-    let runtime;
-    let invoke;
+    // let initHandler;
     if (this.entryInfo) {
       try {
         const handlerMod = require(this.entryInfo.fileName);
         handler = handlerMod[this.entryInfo.handlerName];
-        initHandler = handlerMod.initializer;
+        // initHandler = handlerMod.initializer;
       } catch (e) {
         e.message = `Get Invoke Handler Error: ${e.message}`;
         throw e;
       }
     }
-    if (handler) {
-      this.core.debug('Have Handler');
-      const runtimeOpts: any = {
-        handler,
-      };
-      if (initHandler) {
-        runtimeOpts.initHandler = initHandler;
-      }
-      runtime = createRuntime(runtimeOpts);
-    }
-
-    if (runtime) {
-      this.core.debug('Have Runtime');
-      invoke = async (...args) => {
-        const trigger = await this.getTriggerInfo(args);
-        await runtime.start();
-        this.core.debug('Invoke', trigger);
-        const result = await runtime.invoke(...trigger);
-        await runtime.close();
-        return result;
-      };
-    }
-    if (!invoke) {
+    if (!handler) {
       throw new Error('Not Found Invoke Function');
     }
-    this.invokeFun = invoke;
+
+    this.invokeFun = async (...args) => {
+      this.core.debug('- Invoke Origin Args', args);
+      const trigger = await this.getTriggerInfo(args);
+      let newArgs = trigger;
+      let callBackTrigger;
+      if (newArgs?.[0] && typeof newArgs[0].toArgs === 'function') {
+        this.core.debug('- Invoke Args Functions');
+        callBackTrigger = trigger[0];
+        newArgs = await trigger[0].toArgs();
+      }
+      this.core.debug('- Invoke New Args', newArgs);
+      const result = await new Promise((resolve, reject) => {
+        if (callBackTrigger?.useCallback) {
+          // 这个地方 callback 得调用 resolve
+          const cb = callBackTrigger.createCallback((err, result) => {
+            if (err) {
+              return reject(err);
+            }
+            return resolve(result);
+          });
+          newArgs.push(cb);
+        }
+        Promise.resolve(handler.apply(this, newArgs)).then(resolve, reject);
+      });
+      if (callBackTrigger?.close) {
+        await callBackTrigger.close();
+      }
+      return result;
+    };
   }
 
   async getTriggerInfo(args) {

@@ -21,8 +21,12 @@ export const FaaSStarterClass = exportMidwayFaaS.FaaSStarter;
 
 // 清理某个目标目录
 export const cleanTarget = async (p: string) => {
-  if (existsSync(p)) {
-    await remove(p);
+  try {
+    if (existsSync(p)) {
+      await remove(p);
+    }
+  } catch {
+    // 多进程清理的时候可能会出现重复删除的问题
   }
 };
 
@@ -80,7 +84,7 @@ export const waitForLock = async (lockKey, count?) => {
   count = count || 0;
   return new Promise(resolve => {
     if (count > 100) {
-      return resolve();
+      return resolve(void 0);
     }
     const { lockType, lockData } = getLock(lockKey);
     if (lockType === LOCK_TYPE.WAITING) {

@@ -19,6 +19,7 @@ describe('command-core:plugin.test.ts', () => {
       hooks = {
         'before:test:a': async () => {
           this.setGlobalDependencies('@midwayjs/faas');
+          this.setGlobalResolutions('@midwayjs/cli', '1.0.0');
         },
         'test:a': async () => {
           this.setStore('a', 123);
@@ -38,6 +39,7 @@ describe('command-core:plugin.test.ts', () => {
             this.getStore('globala', 'global'),
           ];
           this.core.cli.log(data);
+          this.core.cli.log(this.core.service.globalResolutions);
         },
       };
     }
@@ -59,6 +61,7 @@ describe('command-core:plugin.test.ts', () => {
     assert(result[1][1] === undefined);
     assert(result[1][2] === undefined);
     assert(result[1][3] === 456);
+    assert(result[2]['@midwayjs/cli'] === '1.0.0');
   });
   it('filterPluginByCommand', async () => {
     const result = filterPluginByCommand(

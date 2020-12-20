@@ -173,7 +173,16 @@ const docopy = async (
       if (log) {
         log(path);
       }
-      return copy(source, target);
+      return new Promise(resolve => {
+        copy(source, target)
+          .then(resolve)
+          .catch(e => {
+            if (log) {
+              log(`Error!!! From '${source}' to '${target}'`, e);
+            }
+            resolve(void 0);
+          });
+      });
     })
   );
 };
