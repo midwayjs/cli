@@ -319,7 +319,8 @@ export class PackagePlugin extends BasePlugin {
       {},
       this.core.service.globalDependencies,
       pkgJson.dependencies,
-      pkgJson.localDependencies
+      pkgJson.localDependencies,
+      this.core.service.coverDependencies,
     );
     pkgJson.dependencies = {};
     const localDep = {};
