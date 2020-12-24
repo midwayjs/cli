@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.35](https://github.com/midwayjs/cli/compare/v1.2.33...v1.2.35) (2020-12-24)
+
+
+### Bug Fixes
+
+* copy file error catch ([8d2097c](https://github.com/midwayjs/cli/commit/8d2097c538f22ed6050c85d1c250436e0c2c71c1))
+
+
+
+
+
 ## [1.2.34](https://github.com/midwayjs/cli/compare/v1.2.34-beta.2...v1.2.34) (2020-12-20)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-fc
