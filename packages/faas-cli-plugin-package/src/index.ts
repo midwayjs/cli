@@ -341,7 +341,7 @@ export class PackagePlugin extends BasePlugin {
     pkgJson.resolutions = Object.assign(
       {},
       pkgJson.resolutions,
-      this.core.service.globalResolutions
+      this.core.service.resolutions
     );
     writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, null, 2));
     await this.npmInstall({
