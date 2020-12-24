@@ -41,13 +41,6 @@ export class BasePlugin implements IPluginInstance {
     }
     this.core.service.globalDependencies[name] = version || '*';
   }
-
-  setGlobalResolutions(name: string, version: string) {
-    if (!this.core.service.globalResolutions) {
-      this.core.service.globalResolutions = {};
-    }
-    this.core.service.globalResolutions[name] = version;
-  }
 }
 
 // 通过命令过滤插件
