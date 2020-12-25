@@ -30,7 +30,7 @@ export class BuildPlugin extends BasePlugin {
           usage: 'bundle mode, "debug" or "release" (default)', // release
         },
         tsConfig: {
-          usage: 'tsConfig json object data',
+          usage: 'tsConfig json file path',
         },
       },
     },
@@ -83,7 +83,7 @@ export class BuildPlugin extends BasePlugin {
     const { config } = resolveTsConfigFile(
       cwd,
       undefined,
-      undefined,
+      this.options.tsConfig,
       this.getStore('mwccHintConfig', 'global'),
       {
         compilerOptions: {

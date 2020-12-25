@@ -16,7 +16,7 @@ import {
   lstat,
 } from 'fs-extra';
 import { createReadStream, createWriteStream } from 'fs';
-
+import * as ts from 'typescript';
 import * as globby from 'globby';
 import * as micromatch from 'micromatch';
 import { commonPrefix, formatLayers, uselessFilesMatch } from './utils';
@@ -99,6 +99,9 @@ export class PackagePlugin extends BasePlugin {
         resolve: {
           usage: 'Resolve layer versions and lock them in final archive',
           shortcut: 'r',
+        },
+        tsConfig: {
+          usage: 'tsConfig json file path',
         },
       },
     },
@@ -375,7 +378,7 @@ export class PackagePlugin extends BasePlugin {
     const { config } = resolveTsConfigFile(
       this.servicePath,
       join(this.midwayBuildPath, 'dist'),
-      undefined,
+      this.options.tsConfig,
       this.getStore('mwccHintConfig', 'global'),
       {
         compilerOptions: {
@@ -410,7 +413,42 @@ export class PackagePlugin extends BasePlugin {
       return;
     }
     this.core.cli.log(' - Using tradition build mode');
-    await this.program.emit();
+
+    const { diagnostics } = await this.program.emit();
+    if (!diagnostics || !diagnostics.length) {
+      return;
+    }
+    const errorNecessary = [];
+    const errorUnnecessary = [];
+    diagnostics.forEach(diagnostic => {
+      if (diagnostic.category !== ts.DiagnosticCategory.Error) {
+        return;
+      }
+      if (diagnostic.reportsUnnecessary) {
+        errorUnnecessary.push(diagnostic);
+      } else {
+        errorNecessary.push(diagnostic);
+      }
+    });
+
+    if (errorNecessary.length) {
+      console.log('');
+      errorNecessary.forEach(error => {
+        const errorPath = `(${relative(this.core.cwd, error.file.fileName)})`;
+        console.error(`TS Error: ${error.messageText}${errorPath}`);
+      });
+      throw new Error(
+        `Error: ${errorNecessary.length} ts error that must be fixed!`
+      );
+    }
+
+    if (errorUnnecessary.length) {
+      errorUnnecessary.forEach(error => {
+        const errorPath = `(${relative(this.core.cwd, error.file.fileName)})`;
+        console.warn(`TS Error: ${error.messageText}${errorPath}`);
+      });
+    }
+
     this.core.cli.log(' - Build project complete');
   }
 
