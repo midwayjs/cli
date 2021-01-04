@@ -7,7 +7,7 @@
     "@midwayjs/command-core": "^1.2.35",
     "@midwayjs/faas-code-analysis": "^1.2.35",
     "@midwayjs/locate": "^1.0.3",
-    "@midwayjs/mwcc": "^0.4.x",
+    "@midwayjs/mwcc": "^0.5.x",
     "@midwayjs/serverless-spec-builder": "^1.2.35",
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1",

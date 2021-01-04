@@ -65,7 +65,7 @@ export interface ICommands {
     type: string;
     lifecycleEvents: string[];
     rank: number;
-    options: {};
+    options: any;
     origin: ICommandInstance[];
     commands: ICommands;
   };
