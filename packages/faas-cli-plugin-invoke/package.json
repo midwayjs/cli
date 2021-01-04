@@ -8,7 +8,7 @@
     "@midwayjs/debugger": "^1.0.x",
     "@midwayjs/faas-code-analysis": "^1.2.35",
     "@midwayjs/locate": "^1.0.3",
-    "@midwayjs/mwcc": "latest",
+    "@midwayjs/mwcc": "^0.4.x",
     "@midwayjs/serverless-fc-starter": "^1.2.9",
     "@midwayjs/serverless-fc-trigger": "^1.2.9",
     "@midwayjs/serverless-scf-starter": "^1.2.9",
