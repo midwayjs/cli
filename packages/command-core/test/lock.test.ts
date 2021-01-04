@@ -10,7 +10,7 @@ describe('command-core:lock.test.ts', () => {
     await Promise.all(
       [1, 2, 3, 4].map(async num => {
         await lock.wait(async () => {
-          await new Promise(resolve => {
+          await new Promise<void>(resolve => {
             setTimeout(() => {
               isCheck = true;
               execTimes++;

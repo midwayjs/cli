@@ -70,7 +70,7 @@ export class DevPlugin extends BasePlugin {
   }
 
   private start() {
-    return new Promise(resolve => {
+    return new Promise<void>(resolve => {
       const options = this.getOptions();
       const spin = new Spin({
         text: this.started ? 'restarting' : 'starting',

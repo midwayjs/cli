@@ -33,7 +33,7 @@ export class Lock {
   }
 
   waitLock() {
-    return new Promise(resolve => {
+    return new Promise<void>(resolve => {
       if (statusMap[this.type] === LockStatus.Success) {
         resolve();
       } else {

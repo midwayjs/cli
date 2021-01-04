@@ -574,7 +574,7 @@ export class CommandCore implements ICommandCore {
   }
 
   async execCommand(command: string) {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       exec(
         command,
         {
