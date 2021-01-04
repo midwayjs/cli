@@ -1,3 +1,7 @@
+import { join } from 'path';
+import * as globby from 'globby';
+import { unlink, existsSync, stat } from 'fs-extra';
+
 interface Ilayer {
   [extName: string]: {
     path: string;
@@ -79,4 +83,27 @@ export const uselessFilesMatch = [
   '**/.jshintrc',
   '**/.eslintrc',
   '**/.eslintrc.json',
+  '**/@types/',
+  '**/.mwcc-cache/',
 ];
+
+export const removeUselessFiles = async (target: string) => {
+  const nm = join(target, 'node_modules');
+  const list = await globby(uselessFilesMatch, {
+    cwd: nm,
+    deep: 10,
+  });
+  console.log('  - Useless files Count', list.length);
+  let size = 0;
+  for (const file of list) {
+    const path = join(nm, file);
+    if (existsSync(path)) {
+      const stats = await stat(path);
+      size += stats.size;
+      await unlink(path);
+    }
+  }
+  console.log(
+    `  - Remove Useless file ${Number(size / (2 << 19)).toFixed(2)} MB`
+  );
+};

@@ -19,7 +19,12 @@ import { createReadStream, createWriteStream } from 'fs';
 import * as ts from 'typescript';
 import * as globby from 'globby';
 import * as micromatch from 'micromatch';
-import { commonPrefix, formatLayers, uselessFilesMatch } from './utils';
+import {
+  commonPrefix,
+  formatLayers,
+  uselessFilesMatch,
+  removeUselessFiles,
+} from './utils';
 import {
   analysisResultToSpec,
   copyFiles,
@@ -434,8 +439,11 @@ export class PackagePlugin extends BasePlugin {
     if (errorNecessary.length) {
       console.log('');
       errorNecessary.forEach(error => {
-        const errorPath = `(${relative(this.core.cwd, error.file.fileName)})`;
-        console.error(`TS Error: ${error.messageText}${errorPath}`);
+        const code = error.file.text.slice(0, error.start).split('\n');
+        const errorPath = `(${relative(this.core.cwd, error.file.fileName)}:${
+          code.length
+        }:${code[code.length - 1].length})`;
+        this.outputTsErrorMessage(error, errorPath);
       });
       throw new Error(
         `Error: ${errorNecessary.length} ts error that must be fixed!`
@@ -445,11 +453,36 @@ export class PackagePlugin extends BasePlugin {
     if (errorUnnecessary.length) {
       errorUnnecessary.forEach(error => {
         const errorPath = `(${relative(this.core.cwd, error.file.fileName)})`;
-        console.warn(`TS Error: ${error.messageText}${errorPath}`);
+        this.outputTsErrorMessage(error, errorPath);
       });
     }
 
     this.core.cli.log(' - Build project complete');
+  }
+
+  private outputTsErrorMessage(error, errorPath, prefixIndex = 0) {
+    if (!error || !error.messageText) {
+      return;
+    }
+    if (typeof error.messageText === 'object') {
+      return this.outputTsErrorMessage(
+        error.messageText,
+        errorPath,
+        prefixIndex
+      );
+    }
+
+    if (!prefixIndex) {
+      console.error(`TS Error: ${error.messageText}${errorPath}`);
+    } else {
+      const prefix = ''.padEnd(prefixIndex * 2, ' ');
+      console.error(`${prefix}${error.messageText}`);
+    }
+    if (Array.isArray(error.next) && error.next.length) {
+      error.next.forEach(err => {
+        this.outputTsErrorMessage(err, errorPath, prefixIndex + 1);
+      });
+    }
   }
 
   private copyStaticFile() {
@@ -500,6 +533,10 @@ export class PackagePlugin extends BasePlugin {
     // 跳过打包
     if (this.options.skipZip) {
       this.core.cli.log(' - Zip artifact skip');
+      if (this.core.service?.experimentalFeatures?.removeUselessFiles) {
+        this.core.cli.log(' - Experimental Feature RemoveUselessFiles');
+        await removeUselessFiles(this.midwayBuildPath);
+      }
       return;
     }
     // 构建打包
