@@ -89,7 +89,7 @@ export interface FCFunctionSpec {
     MemorySize?: number;
     Timeout?: number;
     InitializationTimeout?: number;
-    EnvironmentVariables?: object;
+    EnvironmentVariables?: Record<string, unknown>;
     InstanceConcurrency?: number;
   };
   Events?: {
