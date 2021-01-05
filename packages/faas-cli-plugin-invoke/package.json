@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@midwayjs/decorator": "^2.3.23",
-    "@midwayjs/faas": "^2"
+    "@midwayjs/faas": "*"
   },
   "engines": {
     "node": ">= 10"

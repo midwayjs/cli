@@ -15,7 +15,7 @@
     "micromatch": "^4.0.2"
   },
   "devDependencies": {
-    "@midwayjs/faas": "^1.2.1",
+    "@midwayjs/faas": "^2.6.6",
     "typescript": "^4.1.0"
   },
   "engines": {
