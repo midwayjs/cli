@@ -15,8 +15,8 @@
     "light-spinner": "^1.0.1"
   },
   "devDependencies": {
-    "@midwayjs/core": "^2.3.0",
-    "@midwayjs/web": "^2.3.0",
+    "@midwayjs/core": "^2.6.6",
+    "@midwayjs/web": "^2.6.6",
     "fs-extra": "^8.1.0",
     "node-fetch": "^2.6.1",
     "typescript": "^4.1.0"
