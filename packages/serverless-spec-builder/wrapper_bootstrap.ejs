@@ -1,7 +1,23 @@
 const { BootstrapStarter } = require('@midwayjs/bootstrap');
 const { Framework } = require('<%=faasModName %>');
 const { asyncWrapper, start } = require('<%=starter %>');
-
+<% if (clearCache) { %>
+if (process.env.CLEAR_CACHE === 'true') {
+  process.env.CLEAR_CACHE = 'false';
+  try {
+    const { clearContainerCache } = require('@midwayjs/core');
+    clearContainerCache();
+  } catch (e) {}
+  try {
+    const { clearAllModule } = require('@midwayjs/decorator');
+    clearAllModule();
+  } catch (e) {}
+  try {
+    const { clearAllLoggers } = require('@midwayjs/logger');
+    clearAllLoggers();
+  } catch (e) {}
+}
+<% } %>
 <% if (functionMap) { %>
 const { registerFunctionToIocByConfig } = require('./registerFunction.js');
 const { join } = require('path');
