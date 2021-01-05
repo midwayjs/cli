@@ -594,8 +594,7 @@ export class FaaSInvokePlugin extends BasePlugin {
       }
       const errorLog = this.core.cli.error || this.core.cli.log;
       if (e?.message) {
-        errorLog(`[Error Message] ${e.message}`);
-        errorLog(`[Error Stack] ${e.stack}`);
+        errorLog(`[Error Message] ${e.message}.\n${e.stack}`);
       } else {
         errorLog(e);
       }
