@@ -445,9 +445,9 @@ export class PackagePlugin extends BasePlugin {
         }:${code[code.length - 1].length})`;
         this.outputTsErrorMessage(error, errorPath);
       });
-      throw new Error(
-        `Error: ${errorNecessary.length} ts error that must be fixed!`
-      );
+      // throw new Error(
+      //   `Error: ${errorNecessary.length} ts error that must be fixed!`
+      // );
     }
 
     if (errorUnnecessary.length) {
