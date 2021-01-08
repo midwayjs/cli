@@ -5,7 +5,7 @@ import { resolve, join } from 'path';
 import { remove } from 'fs-extra';
 import * as assert from 'assert';
 
-describe('/test/ts-error.test.ts', () => {
+describe.skip('/test/ts-error.test.ts', () => {
   const baseDir = resolve(__dirname, './fixtures/ts-error');
 
   afterEach(async () => {
