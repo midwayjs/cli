@@ -18,7 +18,7 @@ class OnePlugin extends BasePlugin {
   v = 1;
 
   async asyncInit() {
-    return new Promise(resolve => {
+    return new Promise<void>(resolve => {
       setTimeout(() => {
         this.v = 2;
         resolve();

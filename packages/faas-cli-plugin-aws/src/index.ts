@@ -70,7 +70,7 @@ export class AWSLambdaPlugin extends BasePlugin {
           if (err) {
             return reject(err);
           }
-          resolve();
+          resolve(void 0);
         });
       });
     } catch (err) {
@@ -354,7 +354,7 @@ export class AWSLambdaPlugin extends BasePlugin {
       };
       return new Promise((resolve, reject) =>
         service.updateFunctionCode(params, err =>
-          err ? reject(err) : resolve()
+          err ? reject(err) : resolve(void 0)
         )
       );
     });

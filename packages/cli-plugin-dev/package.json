@@ -1,11 +1,11 @@
 {
   "name": "@midwayjs/cli-plugin-dev",
-  "version": "1.2.35",
+  "version": "1.2.36",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@koa/router": "^10.0.0",
-    "@midwayjs/command-core": "^1.2.35",
+    "@midwayjs/command-core": "^1.2.36",
     "@midwayjs/debugger": "^1.0.x",
     "@midwayjs/mock": "^2.3.0",
     "chalk": "^4.1.0",
@@ -15,11 +15,11 @@
     "light-spinner": "^1.0.1"
   },
   "devDependencies": {
-    "@midwayjs/core": "^2.3.0",
-    "@midwayjs/web": "^2.3.0",
+    "@midwayjs/core": "^2.6.6",
+    "@midwayjs/web": "^2.6.6",
     "fs-extra": "^8.1.0",
     "node-fetch": "^2.6.1",
-    "typescript": "^3.9.7"
+    "typescript": "^4.1.0"
   },
   "engines": {
     "node": ">= 10"

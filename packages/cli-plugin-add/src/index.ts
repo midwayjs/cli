@@ -107,7 +107,7 @@ export class AddPlugin extends BasePlugin {
       const installDirectory = baseDir;
       const pkgJson: string = join(installDirectory, 'package.json');
       if (!existsSync(pkgJson)) {
-        return resolve();
+        return resolve(void 0);
       }
       const pkg = readJSONSync(pkgJson);
       const allDeps = Object.keys(

@@ -6,7 +6,7 @@ import { CategorySelect } from './categorySelect';
 const { Input, Form } = require('enquirer');
 
 async function sleep(timeout) {
-  return new Promise(resolve => {
+  return new Promise<void>(resolve => {
     setTimeout(() => {
       resolve();
     }, timeout);

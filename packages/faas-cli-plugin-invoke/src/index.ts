@@ -100,6 +100,9 @@ export class FaaSInvokePlugin extends BasePlugin {
           usage: 'start a invoke server use this port, default is 3000',
           shortcut: 'p',
         },
+        tsConfig: {
+          usage: 'tsConfig json file path',
+        },
       },
     },
   };
@@ -276,7 +279,7 @@ export class FaaSInvokePlugin extends BasePlugin {
     const { config } = resolveTsConfigFile(
       this.baseDir,
       dest,
-      undefined,
+      this.options.tsConfig,
       this.getStore('mwccHintConfig', 'global'),
       {
         include: this.fileChanges,
@@ -591,8 +594,7 @@ export class FaaSInvokePlugin extends BasePlugin {
       }
       const errorLog = this.core.cli.error || this.core.cli.log;
       if (e?.message) {
-        errorLog(`[Error Message] ${e.message}`);
-        errorLog(`[Error Stack] ${e.stack}`);
+        errorLog(`[Error Message] ${e.message}.\n${e.stack}`);
       } else {
         errorLog(e);
       }
