@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.37](https://github.com/midwayjs/bin/compare/v1.2.35...v1.2.37) (2021-01-08)
+
+
+### Bug Fixes
+
+* support package diagnostics & tsConfig config ([#38](https://github.com/midwayjs/bin/issues/38)) ([c499d14](https://github.com/midwayjs/bin/commit/c499d145f9cabf427877ec8ea65aea8ead42b9cd))
+
+
+
+
+
 ## [1.2.35](https://github.com/midwayjs/bin/compare/v1.2.33...v1.2.35) (2020-12-24)
 
 

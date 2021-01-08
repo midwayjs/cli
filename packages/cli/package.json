@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/cli",
-  "version": "1.2.36",
+  "version": "1.2.37",
   "description": "Midway Command Tools",
   "main": "index.js",
   "bin": {
@@ -19,13 +19,13 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@midwayjs/cli-plugin-add": "^1.2.36",
-    "@midwayjs/cli-plugin-build": "^1.2.36",
-    "@midwayjs/cli-plugin-clean": "^1.2.36",
-    "@midwayjs/cli-plugin-dev": "^1.2.36",
-    "@midwayjs/cli-plugin-faas": "^1.2.36",
-    "@midwayjs/cli-plugin-test": "^1.2.36",
-    "@midwayjs/command-core": "^1.2.36",
+    "@midwayjs/cli-plugin-add": "^1.2.37",
+    "@midwayjs/cli-plugin-build": "^1.2.37",
+    "@midwayjs/cli-plugin-clean": "^1.2.37",
+    "@midwayjs/cli-plugin-dev": "^1.2.37",
+    "@midwayjs/cli-plugin-faas": "^1.2.37",
+    "@midwayjs/cli-plugin-test": "^1.2.37",
+    "@midwayjs/command-core": "^1.2.37",
     "@midwayjs/debugger": "^1.0.x",
     "enquirer": "^2.3.4",
     "jest-environment-node": "^24.9.0",
