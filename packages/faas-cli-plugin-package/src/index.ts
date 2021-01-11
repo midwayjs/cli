@@ -435,24 +435,26 @@ export class PackagePlugin extends BasePlugin {
         errorNecessary.push(diagnostic);
       }
     });
-
+    const cwd = this.core.cwd || this.servicePath || process.cwd();
     if (errorNecessary.length) {
       console.log('');
       errorNecessary.forEach(error => {
         const code = error.file.text.slice(0, error.start).split('\n');
-        const errorPath = `(${relative(this.core.cwd, error.file.fileName)}:${
+        const errorPath = `(${relative(cwd, error.file.fileName)}:${
           code.length
         }:${code[code.length - 1].length})`;
         this.outputTsErrorMessage(error, errorPath);
       });
-      throw new Error(
-        `Error: ${errorNecessary.length} ts error that must be fixed!`
-      );
+      if (!this.core.service?.experimentalFeatures?.ignoreTsError) {
+        throw new Error(
+          `Error: ${errorNecessary.length} ts error that must be fixed!`
+        );
+      }
     }
 
     if (errorUnnecessary.length) {
       errorUnnecessary.forEach(error => {
-        const errorPath = `(${relative(this.core.cwd, error.file.fileName)})`;
+        const errorPath = `(${relative(cwd, error.file.fileName)})`;
         this.outputTsErrorMessage(error, errorPath);
       });
     }
@@ -473,7 +475,7 @@ export class PackagePlugin extends BasePlugin {
     }
 
     if (!prefixIndex) {
-      console.error(`TS Error: ${error.messageText}${errorPath}`);
+      console.error(`\n[TS Error] ${error.messageText}${errorPath}`);
     } else {
       const prefix = ''.padEnd(prefixIndex * 2, ' ');
       console.error(`${prefix}${error.messageText}`);
