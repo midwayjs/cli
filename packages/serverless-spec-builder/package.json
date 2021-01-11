@@ -23,7 +23,7 @@
     "scf",
     "aws",
     "wrapper.ejs",
-    "registerFunction.js.tpl",
+    "hooks_runtime.ejs",
     "wrapper_app.ejs",
     "wrapper_bootstrap.ejs"
   ],
