@@ -3,6 +3,60 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.38](https://github.com/midwayjs/cli/compare/serverless-v1.2.29...serverless-v1.2.38) (2021-01-11)
+
+
+### Bug Fixes
+
+* ts error output ([#40](https://github.com/midwayjs/cli/issues/40)) ([4b68f4b](https://github.com/midwayjs/cli/commit/4b68f4b5592817a4680b4dbcc0ac6135ffbc3199))
+
+
+
+## 1.2.37 (2021-01-08)
+
+
+### Bug Fixes
+
+* support package diagnostics & tsConfig config ([#38](https://github.com/midwayjs/cli/issues/38)) ([c499d14](https://github.com/midwayjs/cli/commit/c499d145f9cabf427877ec8ea65aea8ead42b9cd))
+
+
+
+## 1.2.35 (2020-12-24)
+
+
+### Bug Fixes
+
+* copy file error catch ([8d2097c](https://github.com/midwayjs/cli/commit/8d2097c538f22ed6050c85d1c250436e0c2c71c1))
+* cover deps ([#37](https://github.com/midwayjs/cli/issues/37)) ([5d28b8b](https://github.com/midwayjs/cli/commit/5d28b8b79265de521159d6ea543a7adb6d9890e2))
+
+
+
+## 1.2.33 (2020-12-17)
+
+
+
+## 1.2.32 (2020-12-08)
+
+
+
+## 1.2.32-beta (2020-12-08)
+
+
+
+## 1.2.31 (2020-12-03)
+
+
+
+## 1.2.30 (2020-11-30)
+
+
+
+## 1.2.30-beta (2020-11-30)
+
+
+
+
+
 ## [1.2.37](https://github.com/midwayjs/cli/compare/v1.2.35...v1.2.37) (2021-01-08)
 
 

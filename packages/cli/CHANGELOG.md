@@ -3,6 +3,59 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.38](https://github.com/midwayjs/midway/compare/serverless-v1.2.29...serverless-v1.2.38) (2021-01-11)
+
+
+
+## 1.2.37 (2021-01-08)
+
+
+### Bug Fixes
+
+* support package diagnostics & tsConfig config ([#38](https://github.com/midwayjs/midway/issues/38)) ([c499d14](https://github.com/midwayjs/midway/commit/c499d145f9cabf427877ec8ea65aea8ead42b9cd))
+
+
+
+## 1.2.35 (2020-12-24)
+
+
+### Bug Fixes
+
+* copy file error catch ([8d2097c](https://github.com/midwayjs/midway/commit/8d2097c538f22ed6050c85d1c250436e0c2c71c1))
+
+
+
+## 1.2.33 (2020-12-17)
+
+
+
+## 1.2.32 (2020-12-08)
+
+
+
+## 1.2.32-beta (2020-12-08)
+
+
+### Bug Fixes
+
+* error output ([#32](https://github.com/midwayjs/midway/issues/32)) ([06d0d90](https://github.com/midwayjs/midway/commit/06d0d9092e19d68a22a93d3c8bc47402cc6f8ece))
+
+
+
+## 1.2.31 (2020-12-03)
+
+
+
+## 1.2.30 (2020-11-30)
+
+
+
+## 1.2.30-beta (2020-11-30)
+
+
+
+
+
 ## [1.2.37](https://github.com/midwayjs/midway/compare/v1.2.35...v1.2.37) (2021-01-08)
 
 
