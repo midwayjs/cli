@@ -438,14 +438,19 @@ export class PackagePlugin extends BasePlugin {
     const cwd = this.core.cwd || this.servicePath || process.cwd();
     if (errorNecessary.length) {
       console.log('');
+      let necessaryCount = 0;
       errorNecessary.forEach(error => {
+        if (this.ignoreTsError(error)) {
+          return;
+        }
+        necessaryCount ++;
         const code = error.file.text.slice(0, error.start).split('\n');
         const errorPath = `(${relative(cwd, error.file.fileName)}:${
           code.length
         }:${code[code.length - 1].length})`;
         this.outputTsErrorMessage(error, errorPath);
       });
-      if (!this.core.service?.experimentalFeatures?.ignoreTsError) {
+      if (necessaryCount && !this.core.service?.experimentalFeatures?.ignoreTsError) {
         throw new Error(
           `Error: ${errorNecessary.length} ts error that must be fixed!`
         );
@@ -454,12 +459,22 @@ export class PackagePlugin extends BasePlugin {
 
     if (errorUnnecessary.length) {
       errorUnnecessary.forEach(error => {
+        if (this.ignoreTsError(error)) {
+          return;
+        }
         const errorPath = `(${relative(cwd, error.file.fileName)})`;
         this.outputTsErrorMessage(error, errorPath);
       });
     }
 
     this.core.cli.log(' - Build project complete');
+  }
+
+  private ignoreTsError(error) {
+    if (!error) {
+      return true;
+    }
+    return false;
   }
 
   private outputTsErrorMessage(error, errorPath, prefixIndex = 0) {
