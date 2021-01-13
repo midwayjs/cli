@@ -736,21 +736,19 @@ export class PackagePlugin extends BasePlugin {
           }
         }
         allFuncNames = notMatchedFuncName;
-
-        handlers = matchedFuncName
-          .map((functionName: string) => {
-            const functions = this.core.service.functions;
-            const func = functions[functionName];
-            if (!func || !func.events) {
-              return;
-            }
-            const httpEventIndex = func.events.findIndex(
-              (event: any) => !!event.http
-            );
-            if (httpEventIndex === -1) {
-              return;
-            }
-            const httpEvent = func.events[httpEventIndex];
+        matchedFuncName.forEach((functionName: string) => {
+          const functions = this.core.service.functions;
+          const func = functions[functionName];
+          if (!func || !func.events) {
+            return;
+          }
+          const httpEventIndex = func.events.findIndex(
+            (event: any) => !!event.http
+          );
+          if (httpEventIndex === -1) {
+            return;
+          }
+          func.events.forEach(httpEvent => {
             if (!httpEvent || !httpEvent.http.path) {
               return;
             }
@@ -765,14 +763,15 @@ export class PackagePlugin extends BasePlugin {
               );
               delete this.core.service.functions[functionName];
             }
-            return {
+            handlers.push({
               ...func,
+              events: httpEvent,
               path: httpEvent.http.path,
-            };
-          })
-          .filter((func: any) => !!func);
+            });
+          });
+        });
       }
-
+      handlers = handlers.filter((func: any) => !!func);
       const allPaths = allAggred.map(aggre => aggre.path);
       let currentPath = commonPrefix(allPaths);
       currentPath =

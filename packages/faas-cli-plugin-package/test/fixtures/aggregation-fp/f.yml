@@ -58,6 +58,15 @@ functions:
       - http:
           method: get
           path: /normal/2
+  multiplyPath:
+    handler: multiplyPath.handler
+    events:
+      - http:
+          method: get
+          path: /multiply/1
+      - http:
+          method: get
+          path: /multiply/2
 
 custom:
   customDomain:
