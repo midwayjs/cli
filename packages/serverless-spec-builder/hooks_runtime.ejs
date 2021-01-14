@@ -9,6 +9,7 @@ const { join } = require('path');
 const { existsSync } = require('fs');
 <%if (runtime === 'async_hooks') { %>
 const { als } = require('@midwayjs/hooks/lib/api/async_hooks/als');
+process.env.HOOKS_RUNTIME = 'async_hooks';
 <% } %>
 
 const registerFunctionToIoc = (container, functionName, func, argsPath) => {
@@ -55,10 +56,6 @@ const registerFunctionToIocByConfig = (config, options) => {
   if (!config || !config.functionList) {
     return;
   }
-
-  <%if (runtime === 'async_hooks') { %>
-  process.env.HOOKS_RUNTIME = 'async_hooks';
-  <% } %>
 
   const { baseDir = process.cwd() } = options || {};
 
