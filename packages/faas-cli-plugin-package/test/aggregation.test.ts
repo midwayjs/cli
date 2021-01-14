@@ -55,6 +55,8 @@ describe('/test/package.test.ts', () => {
       const allCode = readFileSync(resolve(buildDir, 'all.js')).toString();
       assert(/registerFunctionToIocByConfig/.test(allCode));
       assert(/"functionName": "fp"/.test(allCode));
+      assert(/"router": "\/multiply\/1"/.test(allCode));
+      assert(/"router": "\/multiply\/2"/.test(allCode));
     });
   });
 });
