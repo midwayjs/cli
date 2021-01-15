@@ -42,11 +42,11 @@ export async function parseInvokeOptionsByOriginUrl(
     verbose: options.verbose,
   });
   const invokeHTTPData: Partial<{
-    headers: object;
+    headers: any;
     body: string;
     method: string;
     path: string;
-    query: object;
+    query: any;
     base64Encoded: boolean;
   }> = {};
   // 获取路由

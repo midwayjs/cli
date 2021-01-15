@@ -32,7 +32,7 @@ export class KoaGateway implements KoaGatewayAdapter {
     } else {
       try {
         const result: {
-          headers: object;
+          headers: any;
           statusCode: number;
           body: string;
           isBase64Encoded: boolean;
@@ -99,7 +99,7 @@ export class ExpressGateway implements ExpressGatewayAdapter {
       })
         .then(
           (result: {
-            headers: object;
+            headers: any;
             statusCode: number;
             body: string;
             isBase64Encoded: boolean;

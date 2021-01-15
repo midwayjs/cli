@@ -11,7 +11,7 @@ import { invoke } from '@midwayjs/serverless-invoke';
 export interface GatewaySuitOptions extends Partial<DevPackOptions> {
   functionDir?: string;
   gatewayDir?: string;
-  invokeCallback?: () => {};
+  invokeCallback?: any;
 }
 
 export const createKoaSuit = (options: GatewaySuitOptions = {}) => {

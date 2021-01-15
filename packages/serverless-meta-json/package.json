@@ -4,20 +4,19 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "devDependencies": {
-    "@midwayjs/faas": "^1.2.1",
-    "@midwayjs/cli": "^1.2.38"
+    "@midwayjs/faas": "^1.2.1"
   },
   "files": [
     "dist",
     "src"
   ],
   "scripts": {
-    "build": "midway-bin build -c",
-    "test": "midway-bin test --ts --full-trace",
-    "debug": "midway-bin test --ts --full-trace --inspect-brk=9229",
-    "cov": "midway-bin cov --ts",
-    "clean": "midway-bin clean",
-    "autod": "midway-bin autod"
+    "lint": "eslint .",
+    "build": "tsc --build",
+    "test": "../../node_modules/.bin/jest",
+    "cov": "../../node_modules/.bin/jest --coverage",
+    "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
+    "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov"
   },
   "repository": {
     "type": "git",
