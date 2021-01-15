@@ -111,7 +111,7 @@ describe('command-core / cli.test.ts', () => {
     await ensureDir(nm);
     writeFileSync(
       resolve(nm, 'index.js'),
-      `throw new Error('plugin error 123');`
+      "throw new Error('plugin error 123');"
     );
     cli.cwd = baseDir;
     try {
