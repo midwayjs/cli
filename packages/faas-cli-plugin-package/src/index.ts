@@ -22,9 +22,11 @@ import * as micromatch from 'micromatch';
 import {
   commonPrefix,
   formatLayers,
-  uselessFilesMatch,
-  removeUselessFiles,
 } from './utils';
+import {
+  removeUselessFiles,
+  uselessFilesMatch,
+} from '@midwayjs/mininm';
 import {
   analysisResultToSpec,
   copyFiles,
