@@ -327,9 +327,21 @@ export class PackagePlugin extends BasePlugin {
       {},
       this.core.service.globalDependencies,
       pkgJson.dependencies,
-      pkgJson.localDependencies,
-      this.core.service.coverDependencies
+      pkgJson.localDependencies
     );
+    if (this.core.service.coverDependencies) {
+      Object.keys(this.core.service.coverDependencies).forEach(depName => {
+        if (!allDependencies[depName]) {
+          return;
+        }
+        const coverDepValue = this.core.service.coverDependencies[depName];
+        if (coverDepValue === false) {
+          delete allDependencies[depName];
+        } else {
+          allDependencies[depName] = coverDepValue;
+        }
+      });
+    }
     pkgJson.dependencies = {};
     const localDep = {};
     for (const depName in allDependencies) {
