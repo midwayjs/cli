@@ -83,7 +83,7 @@ export class BuildPlugin extends BasePlugin {
     const { config } = resolveTsConfigFile(
       cwd,
       undefined,
-      this.options.tsConfig,
+      this.options.project,
       this.getStore('mwccHintConfig', 'global'),
       {
         compilerOptions: {
