@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.39](https://github.com/midwayjs/cli/compare/serverless-v1.2.38...serverless-v1.2.39) (2021-01-20)
+
+
+### Bug Fixes
+
+* cover deps ([#44](https://github.com/midwayjs/cli/issues/44)) ([82574e1](https://github.com/midwayjs/cli/commit/82574e1b88090344c5fdd818dc9f06421c22ffbe))
+
+
+
+
+
 ## [1.2.38](https://github.com/midwayjs/cli/compare/serverless-v1.2.29...serverless-v1.2.38) (2021-01-11)
 
 
