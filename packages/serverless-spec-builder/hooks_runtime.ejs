@@ -7,6 +7,10 @@ const {
 } = require('@midwayjs/decorator');
 const { join } = require('path');
 const { existsSync } = require('fs');
+<%if (runtime === 'async_hooks') { %>
+const { als } = require('@midwayjs/hooks/lib/api/async_hooks/als');
+process.env.HOOKS_RUNTIME = 'async_hooks';
+<% } %>
 
 const registerFunctionToIoc = (container, functionName, func, argsPath) => {
   class FunctionContainer {
@@ -21,7 +25,11 @@ const registerFunctionToIoc = (container, functionName, func, argsPath) => {
         args = JSON.parse(args);
       }
 
+      <% if (runtime === 'async_hooks') { %>
+      return await als.run(bindCtx, () => func(...args));
+      <% } else { %>
       return func.bind(bindCtx)(...args);
+      <% } %>
     }
   }
 
@@ -70,25 +78,19 @@ const registerFunctionToIocByConfig = (config, options) => {
     }
 
     try {
-      const modExports = require(functionPath);
-      if (!modExports) {
+      const mod = require(functionPath);
+      if (!mod) {
         return;
       }
-      let fun;
-      if (functionName) {
-        fun = modExports[functionName];
-      } else {
-        fun = modExports.default || modExports;
-      }
-
-      if (typeof fun !== 'function') {
+      const func = functionName ? mod[functionName] : mod.default || mod;
+      if (typeof func !== 'function') {
         return;
       }
 
       registerFunctionToIoc(
         options.context,
         functionHandler || `${functionName || '$default'}.handler`,
-        fun,
+        func,
         argsPath
       );
     } catch (error) {

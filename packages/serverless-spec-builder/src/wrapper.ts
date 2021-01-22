@@ -1,5 +1,5 @@
 import { join, resolve } from 'path';
-import { writeFileSync, existsSync, readFileSync, copyFileSync } from 'fs';
+import { writeFileSync, existsSync, readFileSync } from 'fs';
 import { render } from 'ejs';
 import { getLayers } from './utils';
 // 写入口
@@ -114,10 +114,18 @@ export function writeWrapper(options: {
   ).toString();
 
   if (functionMap?.functionList?.length) {
-    const registerFunctionFile = join(distDir, 'registerFunction.js');
-    const sourceFile = resolve(__dirname, '../registerFunction.js.tpl');
-    if (!existsSync(registerFunctionFile) && existsSync(sourceFile)) {
-      copyFileSync(sourceFile, registerFunctionFile);
+    const target = join(distDir, 'registerFunction.js');
+    const source = readFileSync(
+      join(__dirname, '../hooks_runtime.ejs'),
+      'utf-8'
+    );
+
+    const runtime = render(source, {
+      runtime: service?.hooks?.runtime ?? 'compiler',
+    });
+
+    if (!existsSync(target)) {
+      writeFileSync(target, runtime, { encoding: 'utf-8' });
     }
   }
 

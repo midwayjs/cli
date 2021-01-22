@@ -436,10 +436,7 @@ export class FaaSInvokePlugin extends BasePlugin {
         initializeName,
         faasStarterName,
         advancePreventMultiInit,
-        service: {
-          layers: this.core.service.layers,
-          functions: this.core.service.functions,
-        },
+        service: this.core.service,
         distDir: this.buildDir,
         preloadModules: this.getPreloadModules(),
         starter: getPlatformPath(starterName),

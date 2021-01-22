@@ -35,11 +35,16 @@ export class CommandCore implements ICommandCore {
 
   constructor(options: IOptions) {
     this.options = options;
+    this.cwd = this.options.cwd || process.cwd();
     if (!this.options.options) {
       this.options.options = {};
     }
-    this.cwd = this.options.cwd || process.cwd();
-
+    if (!this.options.config) {
+      this.options.config = {};
+    }
+    if (!this.options.config.servicePath) {
+      this.options.config.servicePath = this.cwd;
+    }
     this.loadNpm = loadNpm.bind(null, this);
     this.coreInstance = this.getCoreInstance();
     if (!this.options.disableAutoLoad) {
