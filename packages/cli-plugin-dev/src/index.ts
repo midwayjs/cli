@@ -26,6 +26,10 @@ export class DevPlugin extends BasePlugin {
         framework: {
           usage: 'specify framework that can be absolute path or npm package',
         },
+        entryFile: {
+          usage: 'specify entry file, like bootstrap.js',
+          shortcut: 'f',
+        },
         notWatch: {
           usage: 'not watch file change',
         },
@@ -197,7 +201,7 @@ export class DevPlugin extends BasePlugin {
   }
 
   private displayStartTips(options) {
-    if (options.silent) {
+    if (options.silent || options.entryFile) {
       return;
     }
     this.log(
