@@ -28,7 +28,7 @@ export class DevPlugin extends BasePlugin {
         },
         entryFile: {
           usage: 'specify entry file, like bootstrap.js',
-          shortcut: 'f'
+          shortcut: 'f',
         },
         notWatch: {
           usage: 'not watch file change',
