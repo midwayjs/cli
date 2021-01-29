@@ -761,7 +761,7 @@ export class PackagePlugin extends BasePlugin {
             return;
           }
           func.events.forEach(httpEvent => {
-            if (!httpEvent || !httpEvent.http.path) {
+            if (!httpEvent?.http?.path) {
               return;
             }
             allAggred.push({
