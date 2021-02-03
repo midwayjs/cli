@@ -22,6 +22,6 @@
       "conventionalCommits": true
     }
   },
-  "npmClient": "npm",
-  "version": "1.2.39"
+  "npmClient": "tnpm",
+  "version": "1.2.39-beta.5"
 }
