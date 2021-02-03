@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/serverless-invoke",
-  "version": "1.2.39-beta.5",
+  "version": "1.2.40",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/fcli-plugin-invoke": "^1.2.39-beta.5"
+    "@midwayjs/fcli-plugin-invoke": "^1.2.40"
   },
   "devDependencies": {
     "@midwayjs/faas": "^2.6.6",
