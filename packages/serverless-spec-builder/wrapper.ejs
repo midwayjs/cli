@@ -81,7 +81,7 @@ const getHandler = (hanlderName) => {
         let ctxPath = ctx && ctx.path || '';
         if (ctxPath) {
           handler = allHandlers.find(handler => {
-            return picomatch.isMatch(ctxPath, handler.router)
+            return picomatch.isMatch(ctxPath, handler.router, { dot: true });
           });
         }
 
