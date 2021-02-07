@@ -97,7 +97,7 @@ export async function parseInvokeOptionsByOriginUrl(
     });
 
   const functionItem = urlMatchList.find(item => {
-    if (isMatch(currentUrl, item.router)) {
+    if (isMatch(currentUrl, item.router, { dot: true })) {
       if (item.method.length && item.method.indexOf(currentMethod) === -1) {
         return false;
       }
