@@ -1,23 +1,23 @@
 {
   "name": "@midwayjs/faas-dev-framework",
-  "version": "1.2.40",
+  "version": "1.2.40-beta.2",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/bootstrap": "^2.7.0",
     "@midwayjs/core": "^2.7.0",
-    "@midwayjs/gateway-common-http": "^1.2.40",
+    "@midwayjs/gateway-common-http": "^1.2.40-beta.2",
     "@midwayjs/serverless-fc-starter": "^2.7.0",
     "@midwayjs/serverless-fc-trigger": "^2.7.0",
     "@midwayjs/serverless-scf-starter": "^2.7.0",
     "@midwayjs/serverless-scf-trigger": "^2.7.0",
-    "@midwayjs/serverless-spec-builder": "^1.2.40",
+    "@midwayjs/serverless-spec-builder": "^1.2.40-beta.2",
     "body-parser": "^1.19.0",
     "express": "^4.17.1"
   },
   "devDependencies": {
-    "@midwayjs/faas": "^2.7.5",
     "@midwayjs/decorator": "^2.7.5",
+    "@midwayjs/faas": "^2.7.5",
     "@midwayjs/faas-middleware-upload": "^0.0.5",
     "@midwayjs/mock": "^2.7.5",
     "supertest": "^6.1.3",
