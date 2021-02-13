@@ -19,9 +19,7 @@ export class HelloHttpService {
   @Func('http.upload', { middleware: ['fmw:upload'] })
   upload() {
     const { files, fields } = this.ctx;
-    console.log('files, fields', files, fields);
     return {
-      x: 1,
       files,
       fields
     }

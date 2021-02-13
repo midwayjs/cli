@@ -18,9 +18,8 @@ export function useExpressDevPack(options: DevPackOptions) {
       if (!gatewayName) {
         return next();
       }
-      const createExpressGateway = resolveModule(
-        gatewayName
-      ).createExpressGateway;
+      const createExpressGateway = resolveModule(gatewayName)
+        .createExpressGateway;
       options.originGatewayName = gatewayName;
       const gateway = createExpressGateway(options);
       gateway.transform(req, res, next, invokeFunction);
@@ -40,9 +39,7 @@ export function useKoaDevPack(options: DevPackOptions) {
       if (!gatewayName) {
         await next();
       } else {
-        const createKoaGateway = resolveModule(gatewayName)
-          .createKoaGateway;
-
+        const createKoaGateway = resolveModule(gatewayName).createKoaGateway;
         options.originGatewayName = gatewayName;
         const gateway = createKoaGateway(options);
         await gateway.transform(ctx, next, invokeFunction);

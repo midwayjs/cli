@@ -66,8 +66,16 @@ export class DevPlugin extends BasePlugin {
     }
   }
 
-  private getOptions() {
+  protected getOptions() {
+    let framework;
+    const cwd = this.core.cwd;
+    const fyml = resolve(cwd, 'f.yml');
+    if (existsSync(fyml)) {
+      framework = require.resolve('@midwayjs/faas-dev-framework');
+    }
+
     return {
+      framework,
       ...this.options,
       port: this.port,
     };
@@ -215,8 +223,8 @@ export class DevPlugin extends BasePlugin {
         chalk.hex('#9999ff').underline(`http://${lanIp}:${options.port}`)
       );
     }
-    this.core.cli.log();
-    this.core.cli.log();
+    this.core.cli.log('');
+    this.core.cli.log('');
   }
 
   private log(...args: any[]) {

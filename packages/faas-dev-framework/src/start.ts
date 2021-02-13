@@ -1,5 +1,5 @@
 const { BootstrapStarter } = require('@midwayjs/bootstrap');
-export const start = async (options) => {
+export const start = async options => {
   const {
     baseDir,
     framework,
@@ -17,15 +17,17 @@ export const start = async (options) => {
         starterInstance.configure({
           initializeContext,
           preloadModules,
-          applicationAdapter: runtime
+          applicationAdapter: runtime,
         });
         const boot = new BootstrapStarter();
-        boot.configure({
-          baseDir,
-        }).load(starterInstance);
+        boot
+          .configure({
+            baseDir,
+          })
+          .load(starterInstance);
         await boot.init();
         await boot.run();
-      }
+      },
     });
   });
   const runtime = await start({
@@ -37,9 +39,9 @@ export const start = async (options) => {
   return {
     decoratorFunctionMap,
     invoke: async (handlerName: string, trigger: any[]) => {
-      return runtime.asyncEvent(async (ctx) => {
+      return runtime.asyncEvent(async ctx => {
         return starterInstance.handleInvokeWrapper(handlerName)(ctx);
       })(...trigger);
-    }
-  }
-}
+    },
+  };
+};

@@ -1,7 +1,4 @@
-import {
-  DevPackOptions,
-  InvokeCallback,
-} from './interface';
+import { DevPackOptions, InvokeCallback } from './interface';
 import { Context } from 'koa';
 import { NextFunction, Request, Response } from 'express';
 import { parseInvokeOptionsByOriginUrl } from './common';
@@ -135,8 +132,6 @@ export const createKoaGateway = (options: DevPackOptions) => {
   return new KoaGateway(options);
 };
 
-export const createExpressGateway = (
-  options: DevPackOptions
-) => {
+export const createExpressGateway = (options: DevPackOptions) => {
   return new ExpressGateway(options);
 };

@@ -9,6 +9,7 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import { getSpecFile, loadSpec } from '@midwayjs/serverless-spec-builder';
 import { createExpressGateway } from '@midwayjs/gateway-common-http';
+import { findNpmModule, output404 } from './utils';
 
 export class Framework extends BaseFramework<any, any, any> {
   private server: Server;
@@ -62,12 +63,18 @@ export class Framework extends BaseFramework<any, any, any> {
     this.getFaaSSpec();
     this.app = express();
     const { appDir, baseDir } = options;
-    const { Framework } = require('@midwayjs/faas');
+
+    const faasModule = '@midwayjs/faas';
+    const faasModulePath = findNpmModule(appDir, faasModule);
+    if (!faasModulePath) {
+      throw new Error(`Module '${faasModule}' not found`);
+    }
+    const { Framework } = require(faasModulePath);
     const starterName = this.getStarterName();
     if (!starterName) {
-      // Todo: throw no start error
+      throw new Error('Starter not found');
     }
-    const { http: HttpTrigger} = this.getTriggerMap();
+    const triggerMap = this.getTriggerMap();
     const { decoratorFunctionMap, invoke } = await start({
       appDir,
       baseDir,
@@ -82,8 +89,8 @@ export class Framework extends BaseFramework<any, any, any> {
     Object.assign(this.spec.functions, decoratorFunctionMap);
 
     this.app.invoke = invoke;
-    this.app.use(bodyParser.urlencoded({ extended: false }))
-    this.app.use(bodyParser.json())
+    this.app.use(bodyParser.urlencoded({ extended: false }));
+    this.app.use(bodyParser.json());
     this.app.use((req, res, next) => {
       const gateway = createExpressGateway({
         functionDir: this.appDir,
@@ -91,9 +98,8 @@ export class Framework extends BaseFramework<any, any, any> {
       gateway.transform(req, res, next, async () => {
         return {
           functionList: this.spec.functions,
-          invoke: async (args) => {
-            console.log('args', args.data)
-            const trigger = [new HttpTrigger(...args.data)];
+          invoke: async args => {
+            const trigger = [new triggerMap.http(...args.data)];
             let newArgs = trigger;
             let callBackTrigger;
             if (newArgs?.[0] && typeof newArgs[0].toArgs === 'function') {
@@ -111,15 +117,23 @@ export class Framework extends BaseFramework<any, any, any> {
                 });
                 newArgs.push(cb);
               }
-              Promise.resolve(invoke(args.functionHandler, newArgs)).then(resolve, reject);
+              Promise.resolve(invoke(args.functionHandler, newArgs)).then(
+                resolve,
+                reject
+              );
             });
             if (callBackTrigger?.close) {
               await callBackTrigger.close();
             }
             return result;
-          }
+          },
         };
       });
+    });
+
+    this.app.use((req, res, next) => {
+      res.statusCode = 404;
+      res.send(output404(req.path, this.spec.functions));
     });
   }
 
@@ -131,6 +145,7 @@ export class Framework extends BaseFramework<any, any, any> {
 
   public async run() {
     if (this.configurationOptions.port) {
+      this.server = require('http').createServer(this.app);
       await new Promise<void>(resolve => {
         this.server.listen(this.configurationOptions.port, () => {
           resolve();

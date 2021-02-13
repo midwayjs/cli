@@ -1,6 +1,7 @@
 import { DevPackOptions, InvokeOptions } from './interface';
 import { isMatch } from 'picomatch';
 import * as qs from 'querystring';
+const getRawBody = require('raw-body');
 const ignoreWildcardFunctionsWhiteList = [];
 
 export async function parseInvokeOptionsByOriginUrl(
@@ -129,6 +130,11 @@ export async function parseInvokeOptionsByOriginUrl(
       const contentType = invokeHTTPData.headers['content-type'] || '';
       if (contentType.startsWith('application/x-www-form-urlencoded')) {
         invokeHTTPData.body = qs.stringify(req.body);
+      } else if (contentType.startsWith('multipart/form-data')) {
+        if (req.pipe) {
+          req.body = await getRawBody(req);
+        }
+        invokeHTTPData.body = req.body;
       } else if (
         contentType.startsWith('application/json') ||
         typeof req.body !== 'string'

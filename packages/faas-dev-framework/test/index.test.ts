@@ -11,52 +11,49 @@ describe('test/index.test.ts', () => {
   });
   afterAll(async () => {
     await close(app);
-  })
-  it('http get', async (done) => {
+  });
+  it('http get', async done => {
     request(app)
       .get('/hello?name=test&age=123')
       .expect(200)
       .then(response => {
-        assert(response.body.path === '/hello')
-        assert(response.body.method === 'GET')
-        assert(response.body.headers)
-        assert(response.body.query.name === 'test')
-        assert(response.body.query.age === '123')
+        assert(response.body.path === '/hello');
+        assert(response.body.method === 'GET');
+        assert(response.body.headers);
+        assert(response.body.query.name === 'test');
+        assert(response.body.query.age === '123');
         done();
       })
       .catch(err => done(err));
   });
-  it('http post', async (done) => {
+  it('http post', async done => {
     await request(app)
       .post('/hello')
       .type('form')
-      .send({id: '1'})
+      .send({ id: '1' })
       .expect(200)
       .then(response => {
-        assert(response.body.path === '/hello')
-        assert(response.body.method === 'POST')
-        assert(/x-www-form-urlencoded/.test(response.body.headers['content-type']))
-        assert(response.body.body.id === '1')
+        assert(response.body.path === '/hello');
+        assert(response.body.method === 'POST');
+        assert(
+          /x-www-form-urlencoded/.test(response.body.headers['content-type'])
+        );
+        assert(response.body.body.id === '1');
         done();
       })
       .catch(err => done(err));
   });
-  it.only('http post upload', async (done) => {
-    const imagePath = join(
-      __dirname,
-      'fixtures/faas',
-      '1.jpg'
-    );
+  it('http post upload', async done => {
+    const imagePath = join(__dirname, 'fixtures/faas', '1.jpg');
     await request(app)
       .post('/upload')
       .field('name', 'form')
       .attach('file', imagePath)
       .expect(200)
       .then(async response => {
-        console.log('response', response.body);
-        await new Promise(resolve => {
-          setTimeout(resolve, 5000);
-        })
+        assert(response.body.files.length === 1);
+        assert(response.body.files[0].filename === '1.jpg');
+        assert(response.body.fields.name === 'form');
         done();
       })
       .catch(err => done(err));
