@@ -1,9 +1,5 @@
 import { resolveModule, invokeFunction } from './common';
-import {
-  DevPackOptions,
-  CreateExpressGateway,
-  CreateKoaGateway,
-} from '@midwayjs/gateway-common-core';
+import { DevPackOptions } from '@midwayjs/gateway-common-http';
 import { NextFunction, Request, Response } from 'express';
 import { Context } from 'koa';
 import * as koaBodyParser from 'koa-bodyparser';
@@ -22,7 +18,7 @@ export function useExpressDevPack(options: DevPackOptions) {
       if (!gatewayName) {
         return next();
       }
-      const createExpressGateway: CreateExpressGateway = resolveModule(
+      const createExpressGateway = resolveModule(
         gatewayName
       ).createExpressGateway;
       options.originGatewayName = gatewayName;
@@ -44,7 +40,7 @@ export function useKoaDevPack(options: DevPackOptions) {
       if (!gatewayName) {
         await next();
       } else {
-        const createKoaGateway: CreateKoaGateway = resolveModule(gatewayName)
+        const createKoaGateway = resolveModule(gatewayName)
           .createKoaGateway;
 
         options.originGatewayName = gatewayName;

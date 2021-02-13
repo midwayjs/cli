@@ -1,17 +1,16 @@
 import {
-  CreateExpressGateway,
-  CreateKoaGateway,
   DevPackOptions,
-  ExpressGatewayAdapter,
   InvokeCallback,
-  KoaGatewayAdapter,
-} from '@midwayjs/gateway-common-core';
+} from './interface';
 import { Context } from 'koa';
 import { NextFunction, Request, Response } from 'express';
 import { parseInvokeOptionsByOriginUrl } from './common';
 import { getHeaderValue } from './utils';
 
-export class KoaGateway implements KoaGatewayAdapter {
+export { parseInvokeOptionsByOriginUrl } from './common';
+export * from './interface';
+
+export class KoaGateway {
   options: DevPackOptions;
 
   constructor(options: DevPackOptions) {
@@ -39,6 +38,7 @@ export class KoaGateway implements KoaGatewayAdapter {
         } = await invokeFun({
           functionDir: invokeOptions.functionDir,
           functionName: invokeOptions.functionName,
+          functionHandler: invokeOptions.functionHandler,
           data: invokeOptions.data,
           sourceDir: invokeOptions.sourceDir,
           incremental: true,
@@ -69,7 +69,7 @@ export class KoaGateway implements KoaGatewayAdapter {
   }
 }
 
-export class ExpressGateway implements ExpressGatewayAdapter {
+export class ExpressGateway {
   options: DevPackOptions;
 
   constructor(options: DevPackOptions) {
@@ -92,6 +92,7 @@ export class ExpressGateway implements ExpressGatewayAdapter {
       invokeFun({
         functionDir: invokeOptions.functionDir,
         functionName: invokeOptions.functionName,
+        functionHandler: invokeOptions.functionHandler,
         data: invokeOptions.data,
         sourceDir: invokeOptions.sourceDir,
         incremental: true,
@@ -130,11 +131,11 @@ export class ExpressGateway implements ExpressGatewayAdapter {
   }
 }
 
-export const createKoaGateway: CreateKoaGateway = (options: DevPackOptions) => {
+export const createKoaGateway = (options: DevPackOptions) => {
   return new KoaGateway(options);
 };
 
-export const createExpressGateway: CreateExpressGateway = (
+export const createExpressGateway = (
   options: DevPackOptions
 ) => {
   return new ExpressGateway(options);

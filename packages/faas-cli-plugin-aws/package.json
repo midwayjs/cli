@@ -5,7 +5,7 @@
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/command-core": "^1.2.40",
-    "@midwayjs/serverless-fc-starter": "^1.2.9",
+    "@midwayjs/serverless-fc-starter": "^2.7.0",
     "@midwayjs/serverless-spec-builder": "^1.2.40",
     "aws-sdk": "^2.712.0",
     "chalk": "^4.1.0",
