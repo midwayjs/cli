@@ -61,6 +61,7 @@ export class Framework extends BaseFramework<any, any, any> {
   }
 
   async initialize(options: Partial<IMidwayBootstrapOptions>) {
+    process.env.MIDWAY_SERVER_ENV = 'local';
     this.bootstrapOptions = options;
     this.getFaaSSpec();
     this.app = express();
@@ -110,7 +111,7 @@ export class Framework extends BaseFramework<any, any, any> {
       const FaaSStarterName = this.getFaasStarterName();
       const startResult = await start1({
         appDir,
-        baseDir,
+        baseDir: appDir,
         faasModule: faasModule[FaaSStarterName],
         starter: require(starterName),
         initializeContext: undefined,

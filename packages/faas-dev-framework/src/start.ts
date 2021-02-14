@@ -69,7 +69,7 @@ export const start1 = async options => {
           applicationAdapter: runtime,
           preloadModules,
         });
-        await starter.start();
+        await starterInstance.start();
       },
     });
   });
