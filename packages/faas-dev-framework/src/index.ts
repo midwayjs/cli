@@ -4,7 +4,9 @@ import {
   MidwayFrameworkType,
 } from '@midwayjs/core';
 import { Server } from 'net';
-import { start } from './start';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+import { start1, start2 } from './start';
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import { getSpecFile, loadSpec } from '@midwayjs/serverless-spec-builder';
@@ -69,19 +71,40 @@ export class Framework extends BaseFramework<any, any, any> {
     if (!faasModulePath) {
       throw new Error(`Module '${faasModule}' not found`);
     }
-    const { Framework } = require(faasModulePath);
     const starterName = this.getStarterName();
     if (!starterName) {
       throw new Error('Starter not found');
     }
+
+    const { version } = JSON.parse(readFileSync(join(faasModulePath, 'pacakge.json')).toString());
+    const versionList = version.split('.');
     const triggerMap = this.getTriggerMap();
-    const { decoratorFunctionMap, invoke } = await start({
-      appDir,
-      baseDir,
-      framework: Framework,
-      starter: require(starterName),
-      initializeContext: undefined,
-    });
+    let decoratorFunctionMap;
+    let invoke;
+    if (versionList[0] === '2') {
+      const { Framework } = require(faasModulePath);
+      const startResult = await start2({
+        appDir,
+        baseDir,
+        framework: Framework,
+        starter: require(starterName),
+        initializeContext: undefined,
+      });
+      decoratorFunctionMap = startResult.decoratorFunctionMap;
+      invoke = startResult.invoke;
+    } else if (versionList[0] === '1') {
+      const startResult = await start1({
+        baseDir,
+        starter: require(starterName),
+        initializeContext: undefined,
+      });
+      decoratorFunctionMap = startResult.decoratorFunctionMap;
+      invoke = startResult.invoke;
+    }
+
+    if (!invoke) {
+      throw new Error('This Project not support');
+    }
 
     if (!this.spec.functions) {
       this.spec.functions = {};

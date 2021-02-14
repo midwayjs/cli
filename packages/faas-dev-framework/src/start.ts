@@ -1,5 +1,5 @@
 const { BootstrapStarter } = require('@midwayjs/bootstrap');
-export const start = async options => {
+export const start2 = async options => {
   const {
     baseDir,
     framework,
@@ -27,6 +27,46 @@ export const start = async options => {
           .load(starterInstance);
         await boot.init();
         await boot.run();
+      },
+    });
+  });
+  const runtime = await start({
+    layers: layers,
+    initContext: initializeContext,
+  });
+  // ast 分析装饰器上面的函数表
+  const decoratorFunctionMap = {};
+  return {
+    decoratorFunctionMap,
+    invoke: async (handlerName: string, trigger: any[]) => {
+      return runtime.asyncEvent(async ctx => {
+        return starterInstance.handleInvokeWrapper(handlerName)(ctx);
+      })(...trigger);
+    },
+  };
+};
+
+
+export const start1 = async options => {
+  const {
+    baseDir,
+    starter,
+    layers = [],
+    initializeContext,
+    preloadModules,
+  } = options;
+  const { start } = starter;
+  let starterInstance;
+  layers.unshift(engine => {
+    engine.addRuntimeExtension({
+      async beforeFunctionStart(runtime) {
+        starterInstance = new start({
+          baseDir,
+          initializeContext,
+          applicationAdapter: runtime,
+          preloadModules,
+        });
+        await starter.start();
       },
     });
   });

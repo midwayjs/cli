@@ -69,9 +69,14 @@ export class DevPlugin extends BasePlugin {
   protected getOptions() {
     let framework;
     const cwd = this.core.cwd;
-    const fyml = resolve(cwd, 'f.yml');
-    if (existsSync(fyml)) {
+    if (existsSync(resolve(cwd, 'f.yml'))) {
       framework = require.resolve('@midwayjs/faas-dev-framework');
+    }
+
+    if (this.options.ts === undefined) {
+      if (existsSync(resolve(cwd, 'tsconfig.json'))) {
+        this.options.ts = true;
+      }
     }
 
     return {
@@ -95,9 +100,12 @@ export class DevPlugin extends BasePlugin {
         [JSON.stringify(options, null, 2)],
         {
           cwd: this.core.cwd,
-          env: process.env,
+          env: {
+            TS_NODE_TRANSPILE_ONLY: 'true',
+            ...process.env,
+          },
           silent: true,
-          execArgv: this.options.ts ? ['-r', 'ts-node/register'] : [],
+          execArgv: options.ts ? ['-r', 'ts-node/register'] : [],
         }
       );
       const dataCache = [];
