@@ -33,6 +33,9 @@ export class DevPlugin extends BasePlugin {
         notWatch: {
           usage: 'not watch file change',
         },
+        fast: {
+          usage: 'fast mode',
+        },
       },
     },
   };
@@ -101,7 +104,7 @@ export class DevPlugin extends BasePlugin {
         {
           cwd: this.core.cwd,
           env: {
-            TS_NODE_TRANSPILE_ONLY: 'true',
+            TS_NODE_TRANSPILE_ONLY: options.fast ? 'true' : undefined,
             ...process.env,
           },
           silent: true,
