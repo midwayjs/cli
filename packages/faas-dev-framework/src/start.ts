@@ -1,6 +1,8 @@
 const { BootstrapStarter } = require('@midwayjs/bootstrap');
+import { analysisDecorator } from './utils';
 export const start2 = async options => {
   const {
+    appDir,
     baseDir,
     framework,
     starter,
@@ -35,7 +37,7 @@ export const start2 = async options => {
     initContext: initializeContext,
   });
   // ast 分析装饰器上面的函数表
-  const decoratorFunctionMap = {};
+  const decoratorFunctionMap = await analysisDecorator(appDir);
   return {
     decoratorFunctionMap,
     invoke: async (handlerName: string, trigger: any[]) => {
@@ -46,11 +48,12 @@ export const start2 = async options => {
   };
 };
 
-
 export const start1 = async options => {
   const {
+    appDir,
     baseDir,
     starter,
+    faasModule,
     layers = [],
     initializeContext,
     preloadModules,
@@ -60,7 +63,7 @@ export const start1 = async options => {
   layers.unshift(engine => {
     engine.addRuntimeExtension({
       async beforeFunctionStart(runtime) {
-        starterInstance = new start({
+        starterInstance = new faasModule({
           baseDir,
           initializeContext,
           applicationAdapter: runtime,
@@ -75,7 +78,7 @@ export const start1 = async options => {
     initContext: initializeContext,
   });
   // ast 分析装饰器上面的函数表
-  const decoratorFunctionMap = {};
+  const decoratorFunctionMap = await analysisDecorator(appDir);
   return {
     decoratorFunctionMap,
     invoke: async (handlerName: string, trigger: any[]) => {

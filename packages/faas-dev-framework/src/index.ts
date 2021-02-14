@@ -76,13 +76,26 @@ export class Framework extends BaseFramework<any, any, any> {
       throw new Error('Starter not found');
     }
 
-    const { version } = JSON.parse(readFileSync(join(faasModulePath, 'pacakge.json')).toString());
+    const { version } = JSON.parse(
+      readFileSync(join(faasModulePath, 'package.json')).toString()
+    );
+
+    const usageFaaSModule = this.getFaaSModule();
+
+    let usageFaasModulePath = faasModulePath;
+    if (usageFaaSModule !== faasModule) {
+      usageFaasModulePath = findNpmModule(appDir, usageFaaSModule);
+      if (!usageFaasModulePath) {
+        throw new Error(`Module '${usageFaasModulePath}' not found`);
+      }
+    }
+
     const versionList = version.split('.');
     const triggerMap = this.getTriggerMap();
     let decoratorFunctionMap;
     let invoke;
     if (versionList[0] === '2') {
-      const { Framework } = require(faasModulePath);
+      const { Framework } = require(usageFaasModulePath);
       const startResult = await start2({
         appDir,
         baseDir,
@@ -93,8 +106,12 @@ export class Framework extends BaseFramework<any, any, any> {
       decoratorFunctionMap = startResult.decoratorFunctionMap;
       invoke = startResult.invoke;
     } else if (versionList[0] === '1') {
+      const faasModule = require(usageFaasModulePath);
+      const FaaSStarterName = this.getFaasStarterName();
       const startResult = await start1({
+        appDir,
         baseDir,
+        faasModule: faasModule[FaaSStarterName],
         starter: require(starterName),
         initializeContext: undefined,
       });
@@ -158,6 +175,14 @@ export class Framework extends BaseFramework<any, any, any> {
       res.statusCode = 404;
       res.send(output404(req.path, this.spec.functions));
     });
+  }
+
+  protected getFaaSModule() {
+    return '@midwayjs/faas';
+  }
+
+  protected getFaasStarterName() {
+    return 'FaaSStarter';
   }
 
   private getFaaSSpec() {

@@ -49,3 +49,7 @@ export const output404 = (path, functionsMap) => {
     <div style="border-top: 1px solid #eee;padding: 24px;font-size: 12px;color: #ccc;line-height: 36px;">© Midwayjs</div>
   `;
 };
+
+export const analysisDecorator = async cwd => {
+  return {};
+};
