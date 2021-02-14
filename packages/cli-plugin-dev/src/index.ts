@@ -98,19 +98,20 @@ export class DevPlugin extends BasePlugin {
       if (!options.silent) {
         spin.start();
       }
-      this.child = fork(
-        require.resolve('./child'),
-        [JSON.stringify(options, null, 2)],
-        {
-          cwd: this.core.cwd,
-          env: {
-            TS_NODE_TRANSPILE_ONLY: options.fast ? 'true' : undefined,
-            ...process.env,
-          },
-          silent: true,
-          execArgv: options.ts ? ['-r', 'ts-node/register'] : [],
-        }
-      );
+      this.child = fork(require.resolve('./child'), [JSON.stringify(options)], {
+        cwd: this.core.cwd,
+        env: {
+          ...(options.fast
+            ? {
+                TS_NODE_FILES: 'true',
+                TS_NODE_TRANSPILE_ONLY: 'true',
+              }
+            : {}),
+          ...process.env,
+        },
+        silent: true,
+        execArgv: options.ts ? ['-r', 'ts-node/register'] : [],
+      });
       const dataCache = [];
       this.child.stdout.on('data', data => {
         if (options.silent) {
