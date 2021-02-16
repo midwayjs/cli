@@ -3,15 +3,11 @@ import { join } from 'path';
 import * as assert from 'assert';
 import { createApp, close } from '@midwayjs/mock';
 const request = require('supertest');
-const cwd = join(__dirname, 'fixtures/integration');
+const cwd = join(__dirname, 'fixtures/integration-v2');
 describe('test/index.test.ts', () => {
   let app;
   beforeAll(async () => {
-    process.env.DEV_MIDWAY_FAAS_VERSION = '1';
-    process.env.DEV_MIDWAY_FAAS_MODULE = '@midwayjs/test-faas-version-1';
     app = await createApp(cwd, {}, join(__dirname, '../src'));
-    process.env.DEV_MIDWAY_FAAS_VERSION = '';
-    process.env.DEV_MIDWAY_FAAS_MODULE = '';
   });
   afterAll(async () => {
     await close(app);

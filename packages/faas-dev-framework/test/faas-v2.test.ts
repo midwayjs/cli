@@ -3,8 +3,8 @@ import { join } from 'path';
 import * as assert from 'assert';
 import { createApp, close } from '@midwayjs/mock';
 const request = require('supertest');
-const cwd = join(__dirname, 'fixtures/faas');
-describe('test/index.test.ts', () => {
+const cwd = join(__dirname, 'fixtures/faas-v2');
+describe('test/faas-v2.test.ts', () => {
   let app;
   beforeAll(async () => {
     app = await createApp(cwd, {}, join(__dirname, '../src'));
@@ -44,7 +44,7 @@ describe('test/index.test.ts', () => {
       .catch(err => done(err));
   });
   it('http post upload', async done => {
-    const imagePath = join(__dirname, 'fixtures/faas', '1.jpg');
+    const imagePath = join(cwd, '1.jpg');
     await request(app)
       .post('/upload')
       .field('name', 'form')

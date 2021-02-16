@@ -1,12 +1,17 @@
-import { provide, func, inject } from '@midwayjs/test-faas-version-1';
+import { provide, func, inject, config } from '@midwayjs/faas';
+import * as assert from 'assert';
 
 @provide()
 export class HelloHttpService {
   @inject()
   ctx;
 
+  @config()
+  testConfig;
+
   @func('http.handler', { event: 'http', path: '/hello'})
-  handler() {
+  async handler() {
+    assert(this.testConfig.name === 'test');
     return {
       method: this.ctx.method,
       path: this.ctx.path,
