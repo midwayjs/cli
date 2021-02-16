@@ -107,7 +107,6 @@ export class Framework extends BaseFramework<any, any, any> {
       startResult = await start2({
         appDir,
         baseDir: midwayLocatorResult.tsCodeRoot || baseDir,
-        projectType: midwayLocatorResult.projectType,
         tsCoodRoot: midwayLocatorResult.tsCodeRoot,
         framework: Framework,
         starter: require(starterName),
@@ -119,7 +118,6 @@ export class Framework extends BaseFramework<any, any, any> {
       startResult = await start1({
         appDir,
         baseDir: appDir,
-        projectType: midwayLocatorResult.projectType,
         tsCoodRoot: midwayLocatorResult.tsCodeRoot,
         faasModule: faasModule[FaaSStarterName],
         starter: require(starterName),
