@@ -33,7 +33,7 @@
   "scripts": {
     "build": "tsc --build",
     "lint": "eslint .",
-    "test": "../../node_modules/.bin/jest ./test/faas.test.ts  --detectOpenHandles --forceExit --runInBand",
+    "test": "../../node_modules/.bin/jest --detectOpenHandles --forceExit --runInBand",
     "cov": "../../node_modules/.bin/jest --coverage --runInBand --forceExit",
     "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
     "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov"
