@@ -12,6 +12,7 @@ import * as bodyParser from 'body-parser';
 import { getSpecFile, loadSpec } from '@midwayjs/serverless-spec-builder';
 import { createExpressGateway } from '@midwayjs/gateway-common-http';
 import { findNpmModule, output404 } from './utils';
+import { Locator } from '@midwayjs/locate';
 
 export class Framework extends BaseFramework<any, any, any> {
   private server: Server;
@@ -77,10 +78,6 @@ export class Framework extends BaseFramework<any, any, any> {
       throw new Error('Starter not found');
     }
 
-    const { version } = JSON.parse(
-      readFileSync(join(faasModulePath, 'package.json')).toString()
-    );
-
     const usageFaaSModule = this.getFaaSModule();
 
     let usageFaasModulePath = faasModulePath;
@@ -91,43 +88,52 @@ export class Framework extends BaseFramework<any, any, any> {
       }
     }
 
-    const versionList = version.split('.');
+    // 分析项目结构
+    const locator = new Locator(appDir);
+    const midwayLocatorResult = await locator.run({});
     const triggerMap = this.getTriggerMap();
-    let decoratorFunctionMap;
-    let invoke;
-    if (versionList[0] === '2') {
+
+    // 获取midwayjs/faas 的版本，不同版本使用不同的启动方式
+    let version = process.env.DEV_MIDWAY_FAAS_VERSION;
+    if (!version) {
+      const pkgJson = JSON.parse(
+        readFileSync(join(faasModulePath, 'package.json')).toString()
+      );
+      version = pkgJson.version;
+    }
+    let startResult;
+    if (version[0] === '2') {
       const { Framework } = require(usageFaasModulePath);
-      const startResult = await start2({
+      startResult = await start2({
         appDir,
-        baseDir,
+        baseDir: midwayLocatorResult.tsCodeRoot || baseDir,
+        tsCoodRoot: midwayLocatorResult.tsCodeRoot,
         framework: Framework,
         starter: require(starterName),
         initializeContext: undefined,
       });
-      decoratorFunctionMap = startResult.decoratorFunctionMap;
-      invoke = startResult.invoke;
-    } else if (versionList[0] === '1') {
+    } else if (version[0] === '1') {
       const faasModule = require(usageFaasModulePath);
       const FaaSStarterName = this.getFaasStarterName();
-      const startResult = await start1({
+      startResult = await start1({
         appDir,
         baseDir: appDir,
+        tsCoodRoot: midwayLocatorResult.tsCodeRoot,
         faasModule: faasModule[FaaSStarterName],
         starter: require(starterName),
         initializeContext: undefined,
       });
-      decoratorFunctionMap = startResult.decoratorFunctionMap;
-      invoke = startResult.invoke;
     }
 
-    if (!invoke) {
+    if (!startResult) {
       throw new Error('This Project not support');
     }
 
+    const invoke = startResult.invoke;
+
     if (!this.spec.functions) {
-      this.spec.functions = {};
+      this.spec.functions = await startResult.getFunctionsFromDecorator();
     }
-    Object.assign(this.spec.functions, decoratorFunctionMap);
 
     this.app.invoke = invoke;
     this.app.use(bodyParser.urlencoded({ extended: false }));
@@ -172,14 +178,14 @@ export class Framework extends BaseFramework<any, any, any> {
       });
     });
 
-    this.app.use((req, res, next) => {
+    this.app.use((req, res) => {
       res.statusCode = 404;
       res.send(output404(req.path, this.spec.functions));
     });
   }
 
   protected getFaaSModule() {
-    return '@midwayjs/faas';
+    return process.env.DEV_MIDWAY_FAAS_MODULE || '@midwayjs/faas';
   }
 
   protected getFaasStarterName() {

@@ -4,6 +4,7 @@ export const start2 = async options => {
   const {
     appDir,
     baseDir,
+    tsCoodRoot,
     framework,
     starter,
     layers = [],
@@ -36,10 +37,11 @@ export const start2 = async options => {
     layers: layers,
     initContext: initializeContext,
   });
-  // ast 分析装饰器上面的函数表
-  const decoratorFunctionMap = await analysisDecorator(appDir);
   return {
-    decoratorFunctionMap,
+    // ast 分析装饰器上面的函数表
+    getFunctionsFromDecorator: async () => {
+      return analysisDecorator(appDir, tsCoodRoot || baseDir);
+    },
     invoke: async (handlerName: string, trigger: any[]) => {
       return runtime.asyncEvent(async ctx => {
         return starterInstance.handleInvokeWrapper(handlerName)(ctx);
@@ -52,6 +54,7 @@ export const start1 = async options => {
   const {
     appDir,
     baseDir,
+    tsCoodRoot,
     starter,
     faasModule,
     layers = [],
@@ -69,7 +72,9 @@ export const start1 = async options => {
           applicationAdapter: runtime,
           preloadModules,
         });
-        await starterInstance.start();
+        await starterInstance.start({
+          baseDir: tsCoodRoot
+        });
       },
     });
   });
@@ -77,10 +82,11 @@ export const start1 = async options => {
     layers: layers,
     initContext: initializeContext,
   });
-  // ast 分析装饰器上面的函数表
-  const decoratorFunctionMap = await analysisDecorator(appDir);
   return {
-    decoratorFunctionMap,
+    // ast 分析装饰器上面的函数表
+    getFunctionsFromDecorator: async () => {
+      return analysisDecorator(appDir, tsCoodRoot || baseDir);
+    },
     invoke: async (handlerName: string, trigger: any[]) => {
       return runtime.asyncEvent(async ctx => {
         return starterInstance.handleInvokeWrapper(handlerName)(ctx);

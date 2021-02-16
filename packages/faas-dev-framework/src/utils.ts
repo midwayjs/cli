@@ -1,5 +1,12 @@
 import { join } from 'path';
 import { existsSync } from 'fs';
+import {
+  CompilerHost,
+  Program,
+  resolveTsConfigFile,
+  Analyzer,
+} from '@midwayjs/mwcc';
+import { analysisResultToSpec } from '@midwayjs/faas-code-analysis';
 export const findNpmModule = (cwd, modName) => {
   const modPath = join(cwd, 'node_modules', modName);
   if (existsSync(modPath)) {
@@ -50,6 +57,28 @@ export const output404 = (path, functionsMap) => {
   `;
 };
 
-export const analysisDecorator = async cwd => {
-  return {};
+// 分析装饰器上面的函数信息
+export const analysisDecorator = async (cwd, tsCoodRoot) => {
+  const { config } = resolveTsConfigFile(
+    cwd,
+    undefined,
+    undefined,
+    undefined,
+    {
+      compilerOptions: {
+        rootDir: tsCoodRoot,
+        skipLibCheck: true,
+        skipDefaultLibCheck: true,
+      },
+    }
+  );
+  const compilerHost = new CompilerHost(cwd, config);
+  const program = new Program(compilerHost);
+  const analyzeInstance = new Analyzer({
+    program,
+    decoratorLowerCase: true,
+  });
+  const analyzeResult = analyzeInstance.analyze();
+  const spec = analysisResultToSpec(analyzeResult);
+  return spec?.functions || {};
 };
