@@ -4,7 +4,7 @@ import Spin from 'light-spinner';
 import * as chokidar from 'chokidar';
 import { networkInterfaces } from 'os';
 import { resolve, relative } from 'path';
-import { statSync, existsSync } from 'fs';
+import { statSync, existsSync, readFileSync, writeFileSync } from 'fs';
 import * as chalk from 'chalk';
 import * as detect from 'detect-port';
 export class DevPlugin extends BasePlugin {
@@ -55,6 +55,17 @@ export class DevPlugin extends BasePlugin {
       this.port = defaultPort;
     }
     this.setStore('dev:port', this.port, true);
+    const cwd = this.core.cwd;
+    if (this.options.ts === undefined) {
+      if (existsSync(resolve(cwd, 'tsconfig.json'))) {
+        this.options.ts = true;
+      }
+    }
+
+    // ts 模式需要校验tsconfig中的ts-node配置是否有module: commonjs
+    if (this.options.ts) {
+      this.checkTsConfigTsNodeModule();
+    }
   }
 
   async run() {
@@ -74,12 +85,6 @@ export class DevPlugin extends BasePlugin {
     const cwd = this.core.cwd;
     if (existsSync(resolve(cwd, 'f.yml'))) {
       framework = require.resolve('@midwayjs/faas-dev-framework');
-    }
-
-    if (this.options.ts === undefined) {
-      if (existsSync(resolve(cwd, 'tsconfig.json'))) {
-        this.options.ts = true;
-      }
     }
 
     return {
@@ -241,5 +246,26 @@ export class DevPlugin extends BasePlugin {
 
   private log(...args: any[]) {
     console.log('[ Midway ]', ...args);
+  }
+
+  // 检测tsconfig中module的配置
+  private checkTsConfigTsNodeModule() {
+    const cwd = this.core.cwd;
+    const tsconfig = resolve(cwd, 'tsconfig.json');
+    if (!existsSync(tsconfig)) {
+      return;
+    }
+    const tsconfigJson = JSON.parse(readFileSync(tsconfig).toString());
+    if (tsconfigJson?.compilerOptions?.module?.toLowerCase() === 'commonjs') {
+      return;
+    }
+    if (!tsconfigJson['ts-node']) {
+      tsconfigJson['ts-node'] = {};
+    }
+    if (!tsconfigJson['ts-node'].compilerOptions) {
+      tsconfigJson['ts-node'].compilerOptions = {};
+    }
+    tsconfigJson['ts-node'].compilerOptions.module = 'commonjs';
+    writeFileSync(tsconfig, JSON.stringify(tsconfigJson, null, 2));
   }
 }
