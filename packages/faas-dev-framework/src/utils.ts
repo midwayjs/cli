@@ -59,19 +59,13 @@ export const output404 = (path, functionsMap) => {
 
 // 分析装饰器上面的函数信息
 export const analysisDecorator = async (cwd, tsCoodRoot) => {
-  const { config } = resolveTsConfigFile(
-    cwd,
-    undefined,
-    undefined,
-    undefined,
-    {
-      compilerOptions: {
-        rootDir: tsCoodRoot,
-        skipLibCheck: true,
-        skipDefaultLibCheck: true,
-      },
-    }
-  );
+  const { config } = resolveTsConfigFile(cwd, undefined, undefined, undefined, {
+    compilerOptions: {
+      rootDir: tsCoodRoot,
+      skipLibCheck: true,
+      skipDefaultLibCheck: true,
+    },
+  });
   const compilerHost = new CompilerHost(cwd, config);
   const program = new Program(compilerHost);
   const analyzeInstance = new Analyzer({

@@ -73,7 +73,7 @@ export const start1 = async options => {
           preloadModules,
         });
         await starterInstance.start({
-          baseDir: tsCoodRoot
+          baseDir: tsCoodRoot,
         });
       },
     });
