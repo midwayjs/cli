@@ -1,11 +1,11 @@
 {
   "name": "@midwayjs/fcli-command-core",
-  "version": "1.2.41-beta.7",
+  "version": "1.2.41",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/command-core": "^1.2.41-beta.7",
-    "@midwayjs/serverless-spec-builder": "^1.2.41-beta.7"
+    "@midwayjs/command-core": "^1.2.41",
+    "@midwayjs/serverless-spec-builder": "^1.2.41"
   },
   "devDependencies": {
     "typescript": "^4.1.0"
