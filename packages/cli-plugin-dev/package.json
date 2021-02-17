@@ -1,12 +1,13 @@
 {
   "name": "@midwayjs/cli-plugin-dev",
-  "version": "1.2.40",
+  "version": "1.2.41-beta.7",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@koa/router": "^10.0.0",
-    "@midwayjs/command-core": "^1.2.40",
+    "@midwayjs/command-core": "^1.2.41-beta.7",
     "@midwayjs/debugger": "^1.0.x",
+    "@midwayjs/faas-dev-framework": "^1.2.41-beta.7",
     "@midwayjs/mock": "^2.3.0",
     "chalk": "^4.1.0",
     "chokidar": "^3.4.2",
@@ -32,7 +33,7 @@
   "scripts": {
     "build": "tsc --build",
     "lint": "eslint .",
-    "test": "../../node_modules/.bin/jest  --detectOpenHandles --forceExit --runInBand",
+    "test": "../../node_modules/.bin/jest --detectOpenHandles --forceExit --runInBand",
     "cov": "../../node_modules/.bin/jest --coverage --runInBand --forceExit",
     "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
     "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov"

@@ -1,10 +1,13 @@
-import { provide, func } from '@midwayjs/faas';
+import { provide, func, inject } from '@midwayjs/faas';
 
 @provide()
 @func('http.handler')
 export class HelloHttpService {
 
+  @inject()
+  ctx;
+
   handler() {
-    return 'hello http worl';
+    return 'hello world,' + this.ctx.query.name;
   }
 }

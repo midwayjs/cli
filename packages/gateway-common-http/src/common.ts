@@ -1,6 +1,7 @@
-import { DevPackOptions, InvokeOptions } from '@midwayjs/gateway-common-core';
+import { DevPackOptions, InvokeOptions } from './interface';
 import { isMatch } from 'picomatch';
 import * as qs from 'querystring';
+const getRawBody = require('raw-body');
 const ignoreWildcardFunctionsWhiteList = [];
 
 export async function parseInvokeOptionsByOriginUrl(
@@ -62,6 +63,7 @@ export async function parseInvokeOptionsByOriginUrl(
       if (eventItem) {
         urlMatchList.push({
           functionName,
+          functionHandler: functionItem.handler,
           originRouter: eventItem.path || '/*',
           router: eventItem.path?.replace(/\/\*$/, '/**') || '/**',
           method: (eventItem.method ? [].concat(eventItem.method) : []).map(
@@ -82,6 +84,7 @@ export async function parseInvokeOptionsByOriginUrl(
     .map(item => {
       return {
         functionName: item.functionName,
+        functionHandler: item.functionHandler,
         router: item.router,
         pureRouter: item.router.replace(/\**$/, ''),
         originRouter: item.originRouter,
@@ -119,6 +122,7 @@ export async function parseInvokeOptionsByOriginUrl(
   if (functionItem?.functionName) {
     // 匹配到了函数
     invokeOptions.functionName = functionItem.functionName;
+    invokeOptions.functionHandler = functionItem.functionHandler;
     // 构造参数
     invokeHTTPData.headers = req.headers;
 
@@ -126,6 +130,11 @@ export async function parseInvokeOptionsByOriginUrl(
       const contentType = invokeHTTPData.headers['content-type'] || '';
       if (contentType.startsWith('application/x-www-form-urlencoded')) {
         invokeHTTPData.body = qs.stringify(req.body);
+      } else if (contentType.startsWith('multipart/form-data')) {
+        if (req.pipe) {
+          req.body = await getRawBody(req);
+        }
+        invokeHTTPData.body = req.body;
       } else if (
         contentType.startsWith('application/json') ||
         typeof req.body !== 'string'
