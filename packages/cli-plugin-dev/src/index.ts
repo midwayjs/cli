@@ -12,6 +12,7 @@ export class DevPlugin extends BasePlugin {
   private started = false;
   private restarting = false;
   private port = 7001;
+  private processMessageMap = {};
   commands = {
     dev: {
       lifecycleEvents: ['checkEnv', 'run'],
@@ -66,6 +67,8 @@ export class DevPlugin extends BasePlugin {
     if (this.options.ts) {
       this.checkTsConfigTsNodeModule();
     }
+
+    this.setStore('dev:getDataFromDev', this.getDataFromDev.bind(this), true);
   }
 
   async run() {
@@ -105,17 +108,9 @@ export class DevPlugin extends BasePlugin {
       }
       this.child = fork(require.resolve('./child'), [JSON.stringify(options)], {
         cwd: this.core.cwd,
-        env: {
-          ...(options.fast
-            ? {
-                TS_NODE_FILES: 'true',
-                TS_NODE_TRANSPILE_ONLY: 'true',
-              }
-            : {}),
-          ...process.env,
-        },
+        env: process.env,
         silent: true,
-        execArgv: options.ts ? ['-r', 'ts-node/register'] : [],
+        execArgv: options.ts ? ['-r', options.fast ? 'esbuild-register' : 'ts-node/register'] : [],
       });
       const dataCache = [];
       this.child.stdout.on('data', data => {
@@ -150,6 +145,11 @@ export class DevPlugin extends BasePlugin {
           console.error(
             chalk.hex('#ff0000')(`[ Midway ] ${msg.message || ''}`)
           );
+        } else if (msg.id) {
+          if (this.processMessageMap[msg.id]) {
+            this.processMessageMap[msg.id](msg.data);
+            delete this.processMessageMap[msg.id];
+          }
         }
       });
     });
@@ -267,5 +267,23 @@ export class DevPlugin extends BasePlugin {
     }
     tsconfigJson['ts-node'].compilerOptions.module = 'commonjs';
     writeFileSync(tsconfig, JSON.stringify(tsconfigJson, null, 2));
+  }
+
+  private async getDataFromDev(type: string, data?: any) {
+    if (!this.started) {
+      throw new Error('not started')
+    }
+    if (!this.child) {
+      throw new Error('child not started')
+    }
+    return new Promise((resolve, reject) => {
+      const id = Date.now() + ':' + Math.random();
+      setTimeout(() => {
+        delete this.processMessageMap[id];
+        reject(new Error('timeout'));
+      }, 2000);
+      this.processMessageMap[id] = resolve;
+      this.child.send({ type, data, id });
+    });
   }
 }

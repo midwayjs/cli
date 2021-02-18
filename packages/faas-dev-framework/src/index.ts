@@ -135,6 +135,8 @@ export class Framework extends BaseFramework<any, any, any> {
       this.spec.functions = await startResult.getFunctionsFromDecorator();
     }
 
+    this.listenMessage();
+
     this.app.invoke = invoke;
     this.app.use(bodyParser.urlencoded({ extended: false }));
     this.app.use(bodyParser.json());
@@ -207,5 +209,21 @@ export class Framework extends BaseFramework<any, any, any> {
         });
       });
     }
+  }
+
+  private listenMessage() {
+    process.on('message', async msg => {
+      if (!msg || !msg.type) {
+        return;
+      }
+      const type = msg.type;
+      let data;
+      switch(type) {
+        case 'functions':
+          data = this.spec.functions;
+          break;
+      }
+      process.send({ type: 'dev:' + type, data, id: msg.id });
+    });
   }
 }

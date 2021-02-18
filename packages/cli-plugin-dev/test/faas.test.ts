@@ -6,7 +6,7 @@ const fetch = require('node-fetch');
 const cwd = join(__dirname, 'fixtures/faas');
 describe('test/faas.test.ts', () => {
   it('dev', async () => {
-    const { close, port } = await run(cwd, { silent: true });
+    const { close, port } = await run(cwd, { silent: true, fast: true });
     const response = await fetch(`http://127.0.0.1:${port}/hello?name=midway`);
     const body = await response.text();
     await close();
