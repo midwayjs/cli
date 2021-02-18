@@ -135,8 +135,6 @@ export class Framework extends BaseFramework<any, any, any> {
       this.spec.functions = await startResult.getFunctionsFromDecorator();
     }
 
-    this.listenMessage();
-
     this.app.invoke = invoke;
     this.app.use(bodyParser.urlencoded({ extended: false }));
     this.app.use(bodyParser.json());
@@ -184,6 +182,8 @@ export class Framework extends BaseFramework<any, any, any> {
       res.statusCode = 404;
       res.send(output404(req.path, this.spec.functions));
     });
+
+    this.listenMessage();
   }
 
   protected getFaaSModule() {
@@ -218,7 +218,7 @@ export class Framework extends BaseFramework<any, any, any> {
       }
       const type = msg.type;
       let data;
-      switch(type) {
+      switch (type) {
         case 'functions':
           data = this.spec.functions;
           break;

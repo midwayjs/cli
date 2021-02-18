@@ -1,4 +1,10 @@
-import { resolveModule, invokeFunction } from './common';
+import {
+  resolveModule,
+  invokeFunction,
+  startDev,
+  invokeByDev,
+  closeDev,
+} from './common';
 import { DevPackOptions } from '@midwayjs/gateway-common-http';
 import { NextFunction, Request, Response } from 'express';
 import { Context } from 'koa';
@@ -9,41 +15,69 @@ import { compose as expressCompose } from 'compose-middleware';
 
 export function useExpressDevPack(options: DevPackOptions) {
   options.functionDir = options.functionDir || process.cwd();
-
+  let invokeFun = invokeFunction;
+  if (options.dev) {
+    invokeFun = async () => {
+      return invokeByDev(options.dev);
+    };
+  }
   return expressCompose([
     expressBodyParser.urlencoded({ extended: false }),
     expressBodyParser.json(),
     async (req: Request, res: Response, next: NextFunction) => {
       const gatewayName = 'http';
-      if (!gatewayName) {
-        return next();
-      }
       const createExpressGateway = resolveModule(gatewayName)
         .createExpressGateway;
       options.originGatewayName = gatewayName;
       const gateway = createExpressGateway(options);
-      gateway.transform(req, res, next, invokeFunction);
+      gateway.transform(req, res, next, invokeFun);
     },
   ]);
 }
 
 export function useKoaDevPack(options: DevPackOptions) {
   options.functionDir = options.functionDir || process.cwd();
-
+  let invokeFun = invokeFunction;
+  if (options.dev) {
+    invokeFun = async () => {
+      return invokeByDev(options.dev);
+    };
+  }
   return compose([
     koaBodyParser({
       enableTypes: ['form', 'json'],
     }),
     async (ctx: Context, next: () => Promise<any>) => {
       const gatewayName = 'http';
-      if (!gatewayName) {
-        await next();
-      } else {
-        const createKoaGateway = resolveModule(gatewayName).createKoaGateway;
-        options.originGatewayName = gatewayName;
-        const gateway = createKoaGateway(options);
-        await gateway.transform(ctx, next, invokeFunction);
-      }
+      const createKoaGateway = resolveModule(gatewayName).createKoaGateway;
+      options.originGatewayName = gatewayName;
+      const gateway = createKoaGateway(options);
+      await gateway.transform(ctx, next, invokeFun);
     },
   ]);
 }
+
+export function getKoaDevPack(cwd, options?) {
+  return wrapDevPack(useKoaDevPack, cwd, options);
+}
+
+export function getExpressDevPack(cwd, options?) {
+  return wrapDevPack(useExpressDevPack, cwd, options);
+}
+
+const wrapDevPack = (devPack, cwd, options): any => {
+  cwd = cwd || process.cwd();
+  let devCore;
+  startDev(cwd, options || {}).then(core => {
+    devCore = core;
+  });
+  return {
+    close: async () => {
+      return closeDev(devCore);
+    },
+    devPack: options => {
+      options.dev = devCore;
+      return devPack(options);
+    },
+  };
+};

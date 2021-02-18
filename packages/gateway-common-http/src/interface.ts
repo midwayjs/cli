@@ -6,6 +6,7 @@ export interface DevPackOptions {
   ignoreWildcardFunctions?: string[]; // 忽略通配的函数名
   originGatewayName?: string; // 配置在 yml 里的 apiGatway 的 type
   verbose?: boolean; // 展示更多信息
+  dev?: any; // 是否启用dev模式
 }
 
 export interface InvokeOptions {

@@ -13,6 +13,7 @@ export class DevPlugin extends BasePlugin {
   private restarting = false;
   private port = 7001;
   private processMessageMap = {};
+  private spin;
   commands = {
     dev: {
       lifecycleEvents: ['checkEnv', 'run'],
@@ -47,10 +48,15 @@ export class DevPlugin extends BasePlugin {
   };
 
   async checkEnv() {
+    this.setStore('dev:getData', this.getData.bind(this), true);
     const defaultPort = this.options.port || 7001;
     const port = await detect(defaultPort);
     if (port !== defaultPort) {
-      this.log(`Server port ${defaultPort} is in use, now using port ${port}`);
+      if (!this.options.silent) {
+        this.log(
+          `Server port ${defaultPort} is in use, now using port ${port}`
+        );
+      }
       this.port = port;
     } else {
       this.port = defaultPort;
@@ -67,8 +73,6 @@ export class DevPlugin extends BasePlugin {
     if (this.options.ts) {
       this.checkTsConfigTsNodeModule();
     }
-
-    this.setStore('dev:getDataFromDev', this.getDataFromDev.bind(this), true);
   }
 
   async run() {
@@ -100,23 +104,22 @@ export class DevPlugin extends BasePlugin {
   private start() {
     return new Promise<void>(resolve => {
       const options = this.getOptions();
-      const spin = new Spin({
-        text: this.started ? 'restarting' : 'starting',
+      this.spin = new Spin({
+        text: this.started ? 'Midway Restarting' : 'Midway Starting',
       });
       if (!options.silent) {
-        spin.start();
+        this.spin.start();
       }
       this.child = fork(require.resolve('./child'), [JSON.stringify(options)], {
         cwd: this.core.cwd,
         env: process.env,
         silent: true,
-        execArgv: options.ts ? ['-r', options.fast ? 'esbuild-register' : 'ts-node/register'] : [],
+        execArgv: options.ts
+          ? ['-r', options.fast ? 'esbuild-register' : 'ts-node/register']
+          : [],
       });
       const dataCache = [];
       this.child.stdout.on('data', data => {
-        if (options.silent) {
-          return;
-        }
         if (this.restarting) {
           dataCache.push(data);
         } else {
@@ -128,7 +131,7 @@ export class DevPlugin extends BasePlugin {
       });
       this.child.on('message', msg => {
         if (msg.type === 'started') {
-          spin.stop();
+          this.spin.stop();
           while (dataCache.length) {
             process.stdout.write(dataCache.shift());
           }
@@ -141,7 +144,7 @@ export class DevPlugin extends BasePlugin {
           }
           resolve();
         } else if (msg.type === 'error') {
-          spin.stop();
+          this.spin.stop();
           console.error(
             chalk.hex('#ff0000')(`[ Midway ] ${msg.message || ''}`)
           );
@@ -156,6 +159,9 @@ export class DevPlugin extends BasePlugin {
   }
 
   private async handleClose(isExit?, signal?) {
+    if (this.spin) {
+      this.spin.stop();
+    }
     if (this.child) {
       this.child.kill();
       this.child = null;
@@ -226,7 +232,7 @@ export class DevPlugin extends BasePlugin {
   }
 
   private displayStartTips(options) {
-    if (options.silent || options.entryFile) {
+    if (options.silent || options.entryFile || options.notStartLog) {
       return;
     }
     this.log(
@@ -269,12 +275,12 @@ export class DevPlugin extends BasePlugin {
     writeFileSync(tsconfig, JSON.stringify(tsconfigJson, null, 2));
   }
 
-  private async getDataFromDev(type: string, data?: any) {
+  private async getData(type: string, data?: any) {
     if (!this.started) {
-      throw new Error('not started')
+      throw new Error('not started');
     }
     if (!this.child) {
-      throw new Error('child not started')
+      throw new Error('child not started');
     }
     return new Promise((resolve, reject) => {
       const id = Date.now() + ':' + Math.random();

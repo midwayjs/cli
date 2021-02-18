@@ -9,6 +9,6 @@ export class IndexService implements FunctionHandler {
   @Func('index.handler')
   async handler() {
     this.ctx.type = 'text';
-    return new Buffer('hello world', 'utf-8');
+    return Buffer.from('hello world', 'utf-8');
   }
 }

@@ -4,6 +4,7 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
+    "@midwayjs/cli-plugin-dev": "^1.2.42-beta.1",
     "@midwayjs/command-core": "^1.2.42-beta.1",
     "@midwayjs/gateway-common-core": "^1.2.42-beta.1",
     "@midwayjs/gateway-common-http": "^1.2.42-beta.1",
@@ -12,7 +13,8 @@
     "compose-middleware": "^5.0.1",
     "fs-extra": "^8.1.0",
     "koa-bodyparser": "^4.2.1",
-    "koa-compose": "^4.1.0"
+    "koa-compose": "^4.1.0",
+    "node-fetch": "^2.6.1"
   },
   "devDependencies": {
     "@midwayjs/faas": "^2.6.6",
@@ -30,7 +32,7 @@
   "scripts": {
     "lint": "eslint .",
     "build": "tsc --build",
-    "test": "../../node_modules/.bin/jest",
+    "test": "../../node_modules/.bin/jest --detectOpenHandles",
     "cov": "../../node_modules/.bin/jest --coverage",
     "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
     "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov"
