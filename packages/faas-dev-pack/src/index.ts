@@ -65,19 +65,21 @@ export function getExpressDevPack(cwd, options?) {
   return wrapDevPack(useExpressDevPack, cwd, options);
 }
 
-const wrapDevPack = (devPack, cwd, options): any => {
+const wrapDevPack = (devPack, cwd, options: any = {}): any => {
   cwd = cwd || process.cwd();
   let devCore;
+  options.slient = options.slient ?? true;
   startDev(cwd, options || {}).then(core => {
     devCore = core;
   });
-  return {
-    close: async () => {
-      return closeDev(devCore);
-    },
-    devPack: options => {
-      options.dev = devCore;
-      return devPack(options);
-    },
+  const wrapedDevPack = options => {
+    options.dev = () => {
+      return devCore;
+    };
+    return devPack(options);
   };
+  wrapedDevPack.close = async () => {
+    return closeDev(devCore);
+  };
+  return wrapedDevPack;
 };

@@ -63,9 +63,9 @@ const waitDev = async callback => {
   });
 };
 
-export async function invokeByDev(devCore) {
-  await waitDev(() => {
-    return devCore;
+export async function invokeByDev(getDevCore) {
+  const devCore = await waitDev(() => {
+    return getDevCore();
   });
   const port = await waitDev(() => {
     return devCore.store.get('global:dev:port');
@@ -96,10 +96,11 @@ export async function invokeByDev(devCore) {
         }`,
         params
       );
+      const body = await result.text();
       return {
         headers: result.headers.raw(),
         statusCode: result.status,
-        body: result.body,
+        body,
       };
     },
   };

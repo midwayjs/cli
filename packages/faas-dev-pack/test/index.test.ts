@@ -117,9 +117,8 @@ describe('/test/index.test.ts', () => {
     it('test buffer result koa in http trigger', async done => {
       const app = new koa();
       const cwd = join(__dirname, './fixtures/base-fn-http');
-      const { devPack, close } = getKoaDevPack(cwd, {
+      const devPack = getKoaDevPack(cwd, {
         notWatch: true,
-        slient: true,
       });
       app.use(
         devPack({
@@ -131,7 +130,7 @@ describe('/test/index.test.ts', () => {
         .expect('Content-type', 'text/plain; charset=utf-8')
         .expect(/hello world/)
         .expect(200, () => {
-          close();
+          devPack.close();
           done();
         });
     });
@@ -139,9 +138,8 @@ describe('/test/index.test.ts', () => {
     it('test buffer result koa in apigw trigger', done => {
       const app = new koa();
       const cwd = join(__dirname, './fixtures/base-fn-apigw');
-      const { devPack, close } = getKoaDevPack(cwd, {
+      const devPack = getKoaDevPack(cwd, {
         notWatch: true,
-        slient: true,
       });
       app.use(
         devPack({
@@ -153,7 +151,7 @@ describe('/test/index.test.ts', () => {
         .expect('Content-type', 'text/plain; charset=utf-8')
         .expect(/hello world/)
         .expect(200, () => {
-          close();
+          devPack.close();
           done();
         });
     });
@@ -161,9 +159,8 @@ describe('/test/index.test.ts', () => {
     it('test buffer result express in http trigger', done => {
       const app = express();
       const cwd = join(__dirname, './fixtures/base-fn-http');
-      const { devPack, close } = getExpressDevPack(cwd, {
+      const devPack = getExpressDevPack(cwd, {
         notWatch: true,
-        slient: true,
       });
       app.use(
         devPack({
@@ -175,7 +172,7 @@ describe('/test/index.test.ts', () => {
         .expect('Content-type', 'text/plain; charset=utf-8')
         .expect(/hello world/)
         .expect(200, () => {
-          close();
+          devPack.close();
           done();
         });
     });
@@ -183,9 +180,8 @@ describe('/test/index.test.ts', () => {
     it('test buffer result express in apigw trigger', done => {
       const app = express();
       const cwd = join(__dirname, './fixtures/base-fn-apigw');
-      const { devPack, close } = getExpressDevPack(cwd, {
+      const devPack = getExpressDevPack(cwd, {
         notWatch: true,
-        slient: true,
       });
       app.use(
         devPack({
@@ -197,7 +193,7 @@ describe('/test/index.test.ts', () => {
         .expect('Content-type', 'text/plain; charset=utf-8')
         .expect(/hello world/)
         .expect(200, () => {
-          close();
+          devPack.close();
           done();
         });
     });
