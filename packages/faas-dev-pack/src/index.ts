@@ -68,7 +68,6 @@ export function getExpressDevPack(cwd, options?) {
 const wrapDevPack = (devPack, cwd, options: any = {}): any => {
   cwd = cwd || process.cwd();
   let devCore;
-  options.slient = options.slient ?? true;
   startDev(cwd, options || {}).then(core => {
     devCore = core;
   });

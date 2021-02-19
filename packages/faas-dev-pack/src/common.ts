@@ -33,6 +33,8 @@ export async function invokeFunction(options) {
 export async function startDev(cwd, options) {
   options.notStartLog = true;
   options.ts = true;
+  options.slient = options.slient ?? true;
+  options.fast = options.fast ?? true;
   const core = new CommandCore({
     commands: ['dev'],
     options: options,
