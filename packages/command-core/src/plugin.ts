@@ -119,7 +119,7 @@ export const getPluginClass = async (pluginList, options) => {
       }
       const pkg = JSON.parse(readFileSync(newPkgPath).toString());
       if (pkg.main) {
-        userModPath = resolve(userModPath, pkg.main)
+        userModPath = resolve(userModPath, pkg.main);
       }
       try {
         mod = load(userModPath);
