@@ -115,7 +115,7 @@ export const getPluginClass = async (pluginList, options) => {
       // 避免失败的require cache
       const newPkgPath = resolve(userModPath, 'package.json');
       if (!existsSync(newPkgPath)) {
-        throw new Error(`${pluginInfo.mod} not found`);
+        continue;
       }
       const pkg = JSON.parse(readFileSync(newPkgPath).toString());
       if (pkg.main) {
