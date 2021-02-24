@@ -293,9 +293,18 @@ export class PackagePlugin extends BasePlugin {
       }
     }
     const layerTypeList = formatLayers(this.core.service.layers, ...funcLayers);
-    const npmList = Object.keys(layerTypeList.npm).map(
-      (name: string) => layerTypeList.npm[name]
-    );
+    const npmList = Object.keys(layerTypeList.npm)
+      .map((name: string) => {
+        // ignore cover deps
+        if (
+          this.core.service.coverDependencies &&
+          this.core.service.coverDependencies[name] === false
+        ) {
+          return false;
+        }
+        return layerTypeList.npm[name];
+      })
+      .filter(v => !!v);
     if (npmList && npmList.length) {
       await this.npmInstall({
         npmList,
