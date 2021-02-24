@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/faas-cli",
-  "version": "1.2.41",
+  "version": "1.2.42",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/cli": "^1.2.41",
+    "@midwayjs/cli": "^1.2.42",
     "minimist": "^1.2.5"
   },
   "bin": {
