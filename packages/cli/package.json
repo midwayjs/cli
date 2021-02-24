@@ -35,7 +35,6 @@
   "files": [
     "bin",
     "lib",
-    "jest",
     "dist",
     "index.js"
   ],
