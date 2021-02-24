@@ -7,7 +7,6 @@ import { execSync } from 'child_process';
 import { PluginList } from './plugins';
 
 export * from './utils';
-const FaaSPlugin = 'FaaSPlugin';
 const enquirer = require('enquirer');
 
 export class CLI extends CoreBaseCLI {
@@ -29,19 +28,14 @@ export class CLI extends CoreBaseCLI {
     }
     if (this.argv.isFaaS) {
       delete this.argv.isFaaS;
-      const isLoadFaaS = needLoad.find(mod => mod.name === FaaSPlugin);
-      if (!isLoadFaaS) {
-        const faasMod = PluginList.find(mod => mod.name === FaaSPlugin);
-        if (faasMod) {
-          needLoad.push(faasMod);
-        }
-      }
+      needLoad.push({ mod: '@midwayjs/cli-plugin-faas', name: 'FaaSPlugin' });
     }
     this.debug('Plugin load list', needLoad);
     const allPluginClass = await getPluginClass(needLoad, {
       cwd: this.core.cwd,
-      load: name => require(name),
+      load: name => req(name),
       npm: this.argv.npm,
+      notAutoInstall: this.argv.h,
     });
     allPluginClass.forEach(pluginClass => {
       this.core.addPlugin(pluginClass);

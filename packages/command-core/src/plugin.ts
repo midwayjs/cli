@@ -97,13 +97,16 @@ export const filterPluginByCommand = (pluginList, options) => {
 
 // 获取插件的class列表
 export const getPluginClass = async (pluginList, options) => {
-  const { cwd, npm, load } = options;
+  const { cwd, npm, load, notAutoInstall } = options;
   const classList = [];
   for (const pluginInfo of pluginList) {
     let mod;
     try {
       mod = load(pluginInfo.mod);
     } catch {
+      if (notAutoInstall) {
+        continue;
+      }
       let userModPath = resolve(cwd, 'node_modules', pluginInfo.mod);
       // if plugin not exists, auto install
       if (!existsSync(userModPath)) {
