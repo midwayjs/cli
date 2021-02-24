@@ -83,8 +83,12 @@ export class DevPlugin extends BasePlugin {
   protected getOptions() {
     let framework;
     const cwd = this.core.cwd;
-    if (existsSync(resolve(cwd, 'f.yml'))) {
-      framework = require.resolve('@midwayjs/faas-dev-framework');
+    const yamlPath = resolve(cwd, 'f.yml');
+    if (!this.options.framework && existsSync(yamlPath)) {
+      const ymlData = readFileSync(yamlPath).toString();
+      if (!/deployType/.test(ymlData)) {
+        framework = require.resolve('@midwayjs/faas-dev-framework');
+      }
     }
 
     return {
