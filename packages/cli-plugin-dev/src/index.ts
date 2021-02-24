@@ -49,19 +49,22 @@ export class DevPlugin extends BasePlugin {
 
   async checkEnv() {
     this.setStore('dev:getData', this.getData.bind(this), true);
-    const defaultPort = this.options.port || 7001;
-    const port = await detect(defaultPort);
-    if (port !== defaultPort) {
-      if (!this.options.silent) {
-        this.log(
-          `Server port ${defaultPort} is in use, now using port ${port}`
-        );
+    // 仅当不指定entry file的时候才处理端口
+    if (!this.options.entryFile) {
+      const defaultPort = this.options.port || 7001;
+      const port = await detect(defaultPort);
+      if (port !== defaultPort) {
+        if (!this.options.silent) {
+          this.log(
+            `Server port ${defaultPort} is in use, now using port ${port}`
+          );
+        }
+        this.port = port;
+      } else {
+        this.port = defaultPort;
       }
-      this.port = port;
-    } else {
-      this.port = defaultPort;
+      this.setStore('dev:port', this.port, true);
     }
-    this.setStore('dev:port', this.port, true);
     const cwd = this.core.cwd;
     if (this.options.ts === undefined) {
       if (existsSync(resolve(cwd, 'tsconfig.json'))) {

@@ -19,11 +19,12 @@ export class CLI extends CoreBaseCLI {
     }
     await super.loadDefaultPlugin();
     let needLoad = PluginList;
+    const req = this.argv.require || require;
     if (!this.argv.h && command) {
       needLoad = filterPluginByCommand(PluginList, {
         command,
         cwd: this.core.cwd,
-        load: name => require(name),
+        load: name => req(name),
       });
     }
     if (this.argv.isFaaS) {
