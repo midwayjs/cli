@@ -6,7 +6,7 @@ import { installNpm } from '@midwayjs/command-core';
 export const postinstall = async (baseDir: string) => {
   const pkgJson = getPkgJson(baseDir);
   const scripts = pkgJson.scripts;
-  const matchReg = /\smidway-bin\s+([a-z]+?)(?:\s|$)/i;
+  const matchReg = /\smidway-bin\s+([a-z]+?)(?:\s|$)/i
   const modMap = {};
   Object.keys(scripts).forEach(script => {
     const cmd = scripts[script];
@@ -26,7 +26,7 @@ export const postinstall = async (baseDir: string) => {
   });
   const allMods = Object.keys(modMap);
   const npm = process.env.NPM_CLIENT || findNpm().cmd;
-  for (const name of allMods) {
+  for(const name of allMods) {
     console.log('[midway] auto install cli plugin', name);
     await installNpm({
       baseDir,
@@ -35,7 +35,7 @@ export const postinstall = async (baseDir: string) => {
     });
   }
   console.log('[midway] cli plugin install complete');
-};
+}
 
 const getPkgJson = (dirPath: string) => {
   const pkgFile = join(dirPath, 'package.json');
@@ -43,4 +43,8 @@ const getPkgJson = (dirPath: string) => {
     return {};
   }
   return JSON.parse(readFileSync(pkgFile).toString());
-};
+}
+
+if (process.env.INIT_CWD) {
+  postinstall(process.env.INIT_CWD);
+}
