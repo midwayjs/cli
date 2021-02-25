@@ -3,7 +3,8 @@
 const minimist = require('minimist');
 const { postinstall } = require('../dist');
 const argv = minimist(process.argv.slice(2));
-if (argv._.includes['postinstall']) {
+const cmd = [].concat(argv._);
+if (cmd.includes(postinstall)) {
   if (process.env.INIT_CWD) {
     postinstall(process.env.INIT_CWD);
   }
