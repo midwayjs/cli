@@ -32,6 +32,7 @@ export const postinstall = async (baseDir: string) => {
       baseDir,
       register: npm,
       npmName: name,
+      slience: true,
     });
   }
   console.log('[midway] cli plugin install complete');
