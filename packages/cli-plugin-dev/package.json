@@ -7,8 +7,8 @@
     "@koa/router": "^10.0.0",
     "@midwayjs/command-core": "^1.2.43-beta.5",
     "@midwayjs/debugger": "^1.0.x",
-    "@midwayjs/faas-dev-framework": "^1.2.43-beta.5",
-    "@midwayjs/mock": "^2.3.0",
+    "@midwayjs/serverless-app": "^2.8.2",
+    "@midwayjs/mock": "^2.8.0",
     "chalk": "^4.1.0",
     "chokidar": "^3.4.2",
     "detect-port": "^1.3.0",
@@ -18,8 +18,8 @@
     "light-spinner": "^1.0.1"
   },
   "devDependencies": {
-    "@midwayjs/core": "^2.6.6",
-    "@midwayjs/web": "^2.6.6",
+    "@midwayjs/core": "^2.8.0",
+    "@midwayjs/web": "^2.8.0",
     "fs-extra": "^8.1.0",
     "node-fetch": "^2.6.1",
     "typescript": "^4.1.0"

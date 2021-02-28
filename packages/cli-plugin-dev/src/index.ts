@@ -97,7 +97,7 @@ export class DevPlugin extends BasePlugin {
     if (!this.options.framework && existsSync(yamlPath)) {
       const ymlData = readFileSync(yamlPath).toString();
       if (!/deployType/.test(ymlData)) {
-        framework = require.resolve('@midwayjs/faas-dev-framework');
+        framework = require.resolve('@midwayjs/serverless-app');
       }
     }
 

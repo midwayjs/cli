@@ -13,7 +13,7 @@
     "react-dom": "^16.4.1",
     "react-router-dom": "^4.2.2",
     "tslib": "^1.9.3",
-    "@midwayjs/faas": "^2.6.6"
+    "@midwayjs/faas": "^2.8.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.0.3",

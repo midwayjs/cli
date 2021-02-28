@@ -4,7 +4,7 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "devDependencies": {
-    "@midwayjs/faas": "^1.2.1"
+    "@midwayjs/faas": "^2.8.0"
   },
   "files": [
     "dist",

@@ -3,7 +3,7 @@
   "version": "1.0.3",
   "description": "该模板基于 TypeScript 适用于从 0 到 1 开始搭建项目，内置基础的页面，路由和菜单展示",
   "dependencies": {
-    "@midwayjs/faas": "^2.6.6",
+    "@midwayjs/faas": "^2.8.0",
     "react-router-dom": "*",
     "tslib": "*"
   },

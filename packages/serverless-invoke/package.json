@@ -7,7 +7,7 @@
     "@midwayjs/fcli-plugin-invoke": "^1.2.43-beta.5"
   },
   "devDependencies": {
-    "@midwayjs/faas": "^2.6.6",
+    "@midwayjs/faas": "^2.8.0",
     "fs-extra": "^8.1.0"
   },
   "engines": {

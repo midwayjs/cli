@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "src/index.ts",
   "dependencies": {
-    "@midwayjs/faas": "^2.6.6",
+    "@midwayjs/faas": "^2.8.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.5"
   },
