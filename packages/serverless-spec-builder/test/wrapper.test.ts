@@ -17,10 +17,6 @@ describe('/test/wrapper.test.ts', () => {
     });
     it('writeWrapper functionMap', async () => {
       const wrapperPath = resolve(__dirname, './fixtures/wrapper');
-      const registerFunction = resolve(wrapperPath, 'registerFunction.js');
-      if (existsSync(registerFunction)) {
-        await remove(registerFunction);
-      }
       writeWrapper({
         initializeName: 'initializeUserDefine',
         middleware: ['test1', 'test2'],
@@ -57,15 +53,6 @@ describe('/test/wrapper.test.ts', () => {
       assert(existsSync(aggrePath));
       assert(existsSync(indexPath));
       assert(existsSync(renderPath));
-      assert(existsSync(registerFunction));
-      assert(
-        /registerFunctionToIocByConfig/.test(readFileSync(aggrePath).toString())
-      );
-      assert(
-        /require\('.\/registerFunction\.js'\)/.test(
-          readFileSync(aggrePath).toString()
-        )
-      );
       assert(
         /exports\.initializeUserDefine\s*=/.test(
           readFileSync(aggrePath).toString()
@@ -81,76 +68,6 @@ describe('/test/wrapper.test.ts', () => {
           readFileSync(renderPath).toString()
         )
       );
-      await remove(registerFunction);
-    });
-
-    it('writeWrapper hooks', async () => {
-      const wrapperPath = resolve(__dirname, './fixtures/wrapper');
-      const registerFunction = resolve(wrapperPath, 'registerFunction.js');
-      if (existsSync(registerFunction)) {
-        await remove(registerFunction);
-      }
-      writeWrapper({
-        initializeName: 'initializeUserDefine',
-        middleware: ['test1', 'test2'],
-        cover: true,
-        service: {
-          functions: {
-            index: {
-              handler: 'index.handler',
-              isFunctional: true,
-              exportFunction: 'aggregation',
-              sourceFilePath: 'fun-index.js',
-            },
-          },
-        },
-        baseDir: wrapperPath,
-        distDir: wrapperPath,
-        starter: 'testStarter',
-      });
-      assert(existsSync(registerFunction));
-      assert(
-        /func\.bind\(bindCtx\)\(\.\.\.args\);/.test(
-          readFileSync(registerFunction).toString()
-        )
-      );
-      await remove(registerFunction);
-    });
-
-    it('writeWrapper hooks: async hooks runtime', async () => {
-      const wrapperPath = resolve(__dirname, './fixtures/wrapper');
-      const registerFunction = resolve(wrapperPath, 'registerFunction.js');
-      if (existsSync(registerFunction)) {
-        await remove(registerFunction);
-      }
-      writeWrapper({
-        initializeName: 'initializeUserDefine',
-        middleware: ['test1', 'test2'],
-        cover: true,
-        service: {
-          functions: {
-            index: {
-              handler: 'index.handler',
-              isFunctional: true,
-              exportFunction: 'aggregation',
-              sourceFilePath: 'fun-index.js',
-            },
-          },
-          hooks: {
-            runtime: 'async_hooks',
-          },
-        },
-        baseDir: wrapperPath,
-        distDir: wrapperPath,
-        starter: 'testStarter',
-      });
-      assert(existsSync(registerFunction));
-      assert(
-        /process\.env\.HOOKS_RUNTIME = 'async_hooks';/.test(
-          readFileSync(registerFunction).toString()
-        )
-      );
-      await remove(registerFunction);
     });
 
     it('writeWrapper aggregation', async () => {
@@ -199,17 +116,12 @@ describe('/test/wrapper.test.ts', () => {
         starter: 'testStarter',
       });
       const aggrePath = resolve(wrapperPath, 'aggre.js');
-      assert(existsSync(registerFunction));
-      assert(
-        /registerFunctionToIocByConfig/.test(readFileSync(aggrePath).toString())
-      );
       assert(
         /const layer_npm_testNpm = require\('test'\);/.test(
           readFileSync(aggrePath).toString()
         )
       );
       assert(/layer_oss_remote_debug/.test(readFileSync(aggrePath).toString()));
-      await remove(registerFunction);
     });
     it('writeWrapper', async () => {
       const wrapperPath = resolve(__dirname, './fixtures/wrapper');
