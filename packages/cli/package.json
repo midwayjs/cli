@@ -12,7 +12,7 @@
     "build": "tsc --build",
     "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
     "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov",
-    "postinstall": "node ./dist/postinstall"
+    "postinstall": "node ./postinstall"
   },
   "keywords": [
     "midway",
@@ -37,7 +37,8 @@
     "bin",
     "lib",
     "dist",
-    "index.js"
+    "index.js",
+    "postinstall.js"
   ],
   "publishConfig": {
     "access": "public"

@@ -45,7 +45,3 @@ const getPkgJson = (dirPath: string) => {
   }
   return JSON.parse(readFileSync(pkgFile).toString());
 };
-
-if (process.env.INIT_CWD) {
-  postinstall(process.env.INIT_CWD);
-}
