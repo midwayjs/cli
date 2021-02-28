@@ -107,3 +107,39 @@ export const removeUselessFiles = async (target: string) => {
     `  - Remove Useless file ${Number(size / (2 << 19)).toFixed(2)} MB`
   );
 };
+
+export const findNpmModule = (cwd, modName) => {
+  const modPath = join(cwd, 'node_modules', modName);
+  if (existsSync(modPath)) {
+    return modPath;
+  }
+  const parentCwd = join(cwd, '../');
+  if (parentCwd !== cwd) {
+    return findNpmModule(parentCwd, modName);
+  }
+};
+
+// 分析装饰器上面的函数信息
+export const analysisDecorator = async (cwd: string) => {
+  const midwayCoreMod = findNpmModule(cwd, '@midwayjs/core');
+  const { WebRouterCollector } = require(midwayCoreMod);
+  const collector = new WebRouterCollector();
+  const result = await collector.getFlattenRouterTable();
+  const allFunc = {};
+  if (Array.isArray(result)) {
+    result.forEach(func => {
+      allFunc[func.funcHandlerName] = {
+        handler: func.funcHandlerName,
+        events: [
+          {
+            http: {
+              method: [].concat(func.requestMethod || 'get'),
+              path: (func.prefix + func.url).replace(/\/{1,}/g, '/'),
+            },
+          },
+        ],
+      };
+    });
+  }
+  return allFunc;
+};

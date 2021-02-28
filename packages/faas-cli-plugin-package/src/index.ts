@@ -24,6 +24,8 @@ import {
   formatLayers,
   uselessFilesMatch,
   removeUselessFiles,
+  findNpmModule,
+  analysisDecorator,
 } from './utils';
 import {
   analysisResultToSpec,
@@ -43,6 +45,7 @@ import { tmpdir } from 'os';
 
 export class PackagePlugin extends BasePlugin {
   options: any;
+  midwayVersion = '';
   servicePath = this.core.config.servicePath;
   // 代表构建产物的路径，非 ts 构建路径
   midwayBuildPath = (this.core.config.buildPath = join(
@@ -154,6 +157,16 @@ export class PackagePlugin extends BasePlugin {
         this.options.sourceDir
       );
     }
+    // 分析midway version
+    const cwd = this.getCwd();
+    const faasModulePath = findNpmModule(cwd, '@midwayjs/faas');
+    if (faasModulePath) {
+      const pkgJson = JSON.parse(
+        readFileSync(join(faasModulePath, 'package.json')).toString()
+      );
+      this.midwayVersion = pkgJson.version[0];
+    }
+
     // 分析目录结构
     const locator = new Locator(this.servicePath);
     this.codeAnalyzeResult = await locator.run({
@@ -321,7 +334,9 @@ export class PackagePlugin extends BasePlugin {
       return;
     }
     this.setGlobalDependencies('picomatch');
-    this.setGlobalDependencies('@midwayjs/bootstrap');
+    if (this.midwayVersion === '2') {
+      this.setGlobalDependencies('@midwayjs/bootstrap');
+    }
     // globalDependencies
     // pkg.json dependencies
     // pkg.json localDependencies
@@ -417,18 +432,30 @@ export class PackagePlugin extends BasePlugin {
     this.compilerHost = new CompilerHost(this.servicePath, config);
     this.program = new Program(this.compilerHost);
 
-    if (this.core.service.functions) {
-      return this.core.service.functions;
+    // midway 2版本的装饰器分析由框架提供了
+    if (this.midwayVersion === '2') {
+      const httpFuncSpec = await analysisDecorator(this.getCwd());
+      if (!this.core.service.functions) {
+        this.core.service.functions = {};
+      }
+      Object.assign(this.core.service.functions, httpFuncSpec);
+    } else {
+      if (this.core.service.functions) {
+        return this.core.service.functions;
+      }
+      const analyzeInstance = new Analyzer({
+        program: this.program,
+        decoratorLowerCase: true,
+      });
+      const analyzeResult = analyzeInstance.analyze();
+      const newSpec = analysisResultToSpec(analyzeResult);
+      this.core.debug('CodeAnalysis', newSpec);
+      this.core.service.functions = newSpec.functions;
     }
+  }
 
-    const analyzeInstance = new Analyzer({
-      program: this.program,
-      decoratorLowerCase: true,
-    });
-    const analyzeResult = analyzeInstance.analyze();
-    const newSpec = analysisResultToSpec(analyzeResult);
-    this.core.debug('CodeAnalysis', newSpec);
-    this.core.service.functions = newSpec.functions;
+  private getCwd() {
+    return this.core.cwd || this.servicePath || process.cwd();
   }
 
   async emit() {
@@ -456,7 +483,7 @@ export class PackagePlugin extends BasePlugin {
         errorNecessary.push(diagnostic);
       }
     });
-    const cwd = this.core.cwd || this.servicePath || process.cwd();
+    const cwd = this.getCwd();
     if (errorNecessary.length) {
       console.log('');
       errorNecessary.forEach(error => {

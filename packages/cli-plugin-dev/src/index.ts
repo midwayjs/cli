@@ -117,6 +117,7 @@ export class DevPlugin extends BasePlugin {
       if (!options.silent) {
         this.spin.start();
       }
+      process.env.IN_CHILD_PROCESS = 'true';
       this.child = fork(require.resolve('./child'), [JSON.stringify(options)], {
         cwd: this.core.cwd,
         env: process.env,
