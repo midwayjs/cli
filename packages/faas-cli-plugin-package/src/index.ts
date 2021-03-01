@@ -24,9 +24,9 @@ import {
   formatLayers,
   uselessFilesMatch,
   removeUselessFiles,
-  findNpmModule,
   analysisDecorator,
 } from './utils';
+import { findNpmModule } from '@midwayjs/command-core';
 import {
   analysisResultToSpec,
   copyFiles,

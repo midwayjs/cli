@@ -57,21 +57,27 @@ export function useKoaDevPack(options: DevPackOptions) {
   ]);
 }
 
-export function getKoaDevPack(cwd, options?) {
+export function getKoaDevPack(cwd: string, options?) {
   return wrapDevPack(useKoaDevPack, cwd, options);
 }
 
-export function getExpressDevPack(cwd, options?) {
+export function getExpressDevPack(cwd: string, options?) {
   return wrapDevPack(useExpressDevPack, cwd, options);
 }
 
-const wrapDevPack = (devPack, cwd, options: any = {}): any => {
+const wrapDevPack = (
+  devPack,
+  cwd,
+  startOptions: {
+    sourceDir?: string;
+  } = {}
+): any => {
   cwd = cwd || process.cwd();
   let devCore;
-  startDev(cwd, options || {}).then(core => {
+  startDev(cwd, startOptions).then(core => {
     devCore = core;
   });
-  const wrapedDevPack = options => {
+  const wrapedDevPack = (options: DevPackOptions) => {
     options.dev = () => {
       return devCore;
     };

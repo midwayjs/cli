@@ -1,7 +1,7 @@
 import { join } from 'path';
 import * as globby from 'globby';
 import { unlink, existsSync, stat } from 'fs-extra';
-
+import { findNpmModule } from '@midwayjs/command-core';
 interface Ilayer {
   [extName: string]: {
     path: string;
@@ -106,17 +106,6 @@ export const removeUselessFiles = async (target: string) => {
   console.log(
     `  - Remove Useless file ${Number(size / (2 << 19)).toFixed(2)} MB`
   );
-};
-
-export const findNpmModule = (cwd, modName) => {
-  const modPath = join(cwd, 'node_modules', modName);
-  if (existsSync(modPath)) {
-    return modPath;
-  }
-  const parentCwd = join(cwd, '../');
-  if (parentCwd !== cwd) {
-    return findNpmModule(parentCwd, modName);
-  }
 };
 
 // 分析装饰器上面的函数信息

@@ -38,6 +38,9 @@ export class DevPlugin extends BasePlugin {
         fast: {
           usage: 'fast mode',
         },
+        sourceDir: {
+          usage: 'ts code source dir',
+        },
       },
     },
   };
@@ -97,6 +100,7 @@ export class DevPlugin extends BasePlugin {
     if (!this.options.framework && existsSync(yamlPath)) {
       const ymlData = readFileSync(yamlPath).toString();
       if (!/deployType/.test(ymlData)) {
+        process.env.MIDWAY_DEV_IS_SERVERLESS = 'true';
         framework = require.resolve('@midwayjs/serverless-app');
       }
     }
@@ -117,13 +121,27 @@ export class DevPlugin extends BasePlugin {
       if (!options.silent) {
         this.spin.start();
       }
-      process.env.IN_CHILD_PROCESS = 'true';
+
+      let tsNodeFast = {};
+      let isEsbuild = false;
+      if (options.fast) {
+        if (options.fast === 'esbuild') {
+          isEsbuild = true;
+        } else {
+          tsNodeFast = {};
+        }
+      }
+
       this.child = fork(require.resolve('./child'), [JSON.stringify(options)], {
         cwd: this.core.cwd,
-        env: process.env,
+        env: {
+          IN_CHILD_PROCESS: 'true',
+          ...tsNodeFast,
+          ...process.env,
+        },
         silent: true,
         execArgv: options.ts
-          ? ['-r', options.fast ? 'esbuild-register' : 'ts-node/register']
+          ? ['-r', isEsbuild ? 'esbuild-register' : 'ts-node/register']
           : [],
       });
       const dataCache = [];

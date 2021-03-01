@@ -35,6 +35,9 @@ export async function startDev(cwd, options) {
   options.ts = true;
   options.slient = options.slient ?? true;
   options.fast = options.fast ?? true;
+  if (options.sourceDir) {
+    options.baseDir = options.sourceDir;
+  }
   const core = new CommandCore({
     commands: ['dev'],
     options: options,
@@ -61,7 +64,7 @@ const waitDev = async callback => {
   return new Promise(resolve => {
     setTimeout(() => {
       waitDev(callback).then(resolve);
-    }, 200);
+    }, 50);
   });
 };
 
