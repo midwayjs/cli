@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/serverless-spec-builder",
-  "version": "1.2.43-beta.7",
+  "version": "1.2.43-beta.8",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {

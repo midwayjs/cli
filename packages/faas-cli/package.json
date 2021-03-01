@@ -1,12 +1,12 @@
 {
   "name": "@midwayjs/faas-cli",
-  "version": "1.2.43-beta.7",
+  "version": "1.2.43-beta.8",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/cli": "^1.2.43-beta.7",
-    "@midwayjs/cli-plugin-faas": "^1.2.43-beta.7",
-    "@midwayjs/cli-plugin-test": "^1.2.43-beta.7",
+    "@midwayjs/cli": "^1.2.43-beta.8",
+    "@midwayjs/cli-plugin-faas": "^1.2.43-beta.8",
+    "@midwayjs/cli-plugin-test": "^1.2.43-beta.8",
     "minimist": "^1.2.5"
   },
   "bin": {
