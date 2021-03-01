@@ -399,14 +399,7 @@ export class PackagePlugin extends BasePlugin {
   }
 
   public getTsCodeRoot(): string {
-    let tsCodeRoot: string;
-    const tmpOutDir = resolve(this.defaultTmpFaaSOut, 'src');
-    if (existsSync(tmpOutDir)) {
-      tsCodeRoot = tmpOutDir;
-    } else {
-      tsCodeRoot = this.codeAnalyzeResult.tsCodeRoot;
-    }
-    return tsCodeRoot;
+    return this.codeAnalyzeResult.tsCodeRoot;
   }
 
   async compile() {
@@ -434,7 +427,7 @@ export class PackagePlugin extends BasePlugin {
 
     // midway 2版本的装饰器分析由框架提供了
     if (this.midwayVersion === '2') {
-      const httpFuncSpec = await analysisDecorator(this.getCwd());
+      const httpFuncSpec = await analysisDecorator(tsCodeRoot);
       if (!this.core.service.functions) {
         this.core.service.functions = {};
       }
@@ -455,7 +448,7 @@ export class PackagePlugin extends BasePlugin {
   }
 
   private getCwd() {
-    return this.core.cwd || this.servicePath || process.cwd();
+    return this.servicePath || this.core.cwd || process.cwd();
   }
 
   async emit() {

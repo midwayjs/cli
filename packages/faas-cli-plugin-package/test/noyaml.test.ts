@@ -4,7 +4,7 @@ import { PackagePlugin } from '../src/index';
 import { AliyunFCPlugin } from '../../faas-cli-plugin-fc/src/index';
 import { FaaSTmpOutPlugin } from './fixtures/plugins/faas_tmp_out';
 import { resolve } from 'path';
-import { remove, existsSync, readFileSync } from 'fs-extra';
+import { remove, existsSync } from 'fs-extra';
 import * as assert from 'assert';
 
 describe('/test/noyaml.test.ts', () => {
@@ -29,11 +29,7 @@ describe('/test/noyaml.test.ts', () => {
       await core.ready();
       await core.invoke(['package']);
       assert(!existsSync(resolve(buildDir, 'faas_tmp_out')));
-      assert(
-        /console.log\('test\.js'\)/.test(
-          readFileSync(resolve(buildDir, 'test.js')).toString()
-        )
-      );
+      assert(existsSync(resolve(buildDir, 'service.js')));
     });
   });
 });

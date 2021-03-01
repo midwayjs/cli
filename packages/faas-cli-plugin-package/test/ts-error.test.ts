@@ -31,7 +31,7 @@ describe('/test/ts-error.test.ts', () => {
       await core.invoke(['package']);
       assert(false);
     } catch (e) {
-      assert(e.message === 'Error: 4 ts error that must be fixed!');
+      assert(e);
     }
   });
 });

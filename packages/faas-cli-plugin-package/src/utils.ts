@@ -123,7 +123,7 @@ export const findNpmModule = (cwd, modName) => {
 export const analysisDecorator = async (cwd: string) => {
   const midwayCoreMod = findNpmModule(cwd, '@midwayjs/core');
   const { WebRouterCollector } = require(midwayCoreMod);
-  const collector = new WebRouterCollector();
+  const collector = new WebRouterCollector(cwd);
   const result = await collector.getFlattenRouterTable();
   const allFunc = {};
   if (Array.isArray(result)) {
