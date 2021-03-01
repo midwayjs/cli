@@ -20,7 +20,9 @@ describe('/test/noyaml.test.ts', () => {
         commands: ['package'],
         service: loadSpec(baseDir),
         provider: 'aliyun',
-        options: {},
+        options: {
+          V: true,
+        },
         log: console,
       });
       core.addPlugin(PackagePlugin);

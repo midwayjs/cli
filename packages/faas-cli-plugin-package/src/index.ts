@@ -431,6 +431,7 @@ export class PackagePlugin extends BasePlugin {
       if (!this.core.service.functions) {
         this.core.service.functions = {};
       }
+      this.core.debug('httpFuncSpec', httpFuncSpec);
       Object.assign(this.core.service.functions, httpFuncSpec);
     } else {
       if (this.core.service.functions) {
