@@ -427,12 +427,16 @@ export class PackagePlugin extends BasePlugin {
 
     // midway 2版本的装饰器分析由框架提供了
     if (this.midwayVersion === '2') {
-      const httpFuncSpec = await analysisDecorator(tsCodeRoot);
-      if (!this.core.service.functions) {
-        this.core.service.functions = {};
+      try {
+        const httpFuncSpec = await analysisDecorator(tsCodeRoot);
+        if (!this.core.service.functions) {
+          this.core.service.functions = {};
+        }
+        this.core.debug('httpFuncSpec', httpFuncSpec);
+        Object.assign(this.core.service.functions, httpFuncSpec);
+      } catch (e) {
+        console.log('e--', e);
       }
-      this.core.debug('httpFuncSpec', httpFuncSpec);
-      Object.assign(this.core.service.functions, httpFuncSpec);
     } else {
       if (this.core.service.functions) {
         return this.core.service.functions;
