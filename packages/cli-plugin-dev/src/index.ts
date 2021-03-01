@@ -128,7 +128,10 @@ export class DevPlugin extends BasePlugin {
         if (options.fast === 'esbuild') {
           isEsbuild = true;
         } else {
-          tsNodeFast = {};
+          tsNodeFast = {
+            TS_NODE_FILES: 'true',
+            TS_NODE_TRANSPILE_ONLY: 'true',
+          };
         }
       }
 
