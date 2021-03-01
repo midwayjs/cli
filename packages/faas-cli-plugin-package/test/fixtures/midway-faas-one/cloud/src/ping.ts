@@ -1,22 +1,20 @@
 import {
   provide,
-  FunctionHandler,
   func,
   inject,
-  FaaSContext,
 } from '@midwayjs/faas';
 
 @provide()
 @func('ping.handler')
-export class ChannelPingHandler implements FunctionHandler {
+export class ChannelPingHandler {
   async handler() {}
 }
 
 @provide()
 @func('post.handler')
-export class PostPingHandler implements FunctionHandler {
+export class PostPingHandler {
   @inject()
-  ctx: FaaSContext;
+  ctx;
 
   async handler() {}
 }
