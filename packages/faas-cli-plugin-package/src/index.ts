@@ -399,7 +399,7 @@ export class PackagePlugin extends BasePlugin {
   }
 
   public getTsCodeRoot(): string {
-    return this.codeAnalyzeResult.tsCodeRoot;
+    return this.codeAnalyzeResult.tsCodeRoot || join(this.getCwd(), 'src');
   }
 
   async compile() {
