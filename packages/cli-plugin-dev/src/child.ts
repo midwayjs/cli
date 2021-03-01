@@ -21,17 +21,12 @@ process.on('exit', async () => {
 
   if (!process.env.MIDWAY_DEV_IS_SERVERLESS) {
     process.on('message', async msg => {
-      if (!msg || !msg.type) {
-        return;
+      if (msg?.type === 'functions') {
+        const data = await analysisDecorator(
+          options.sourceDir || process.cwd()
+        );
+        process.send({ type: 'dev:' + msg.type, data, id: msg.id });
       }
-      const type = msg.type;
-      let data;
-      switch (type) {
-        case 'functions':
-          data = await analysisDecorator(process.cwd());
-          break;
-      }
-      process.send({ type: 'dev:' + type, data, id: msg.id });
     });
   }
 

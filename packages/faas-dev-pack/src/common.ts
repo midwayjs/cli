@@ -35,8 +35,8 @@ export async function startDev(cwd, options) {
   options.ts = true;
   options.slient = options.slient ?? true;
   options.fast = options.fast ?? true;
-  if (options.sourceDir) {
-    options.baseDir = options.sourceDir;
+  if (!options.sourceDir) {
+    options.sourceDir = join(cwd, 'src/apis');
   }
   const core = new CommandCore({
     commands: ['dev'],
