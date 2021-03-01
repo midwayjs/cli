@@ -67,8 +67,9 @@ export class PackagePlugin extends BasePlugin {
         'cleanup', // 清理构建目录
         'installDevDep', // 安装开发期依赖
         'copyFile', // 拷贝文件: package.include 和 shared content
-        'compile', // 代码分析
+        'compile', //
         'emit', // 编译函数  'package:after:tscompile'
+        'analysisCode', // 分析代码
         'copyStaticFile', // 拷贝src中的静态文件到dist目录，例如 html 等
         'checkAggregation', // 检测高密度部署
         'generateSpec', // 生成对应平台的描述文件，例如 serverless.yml 等
@@ -130,6 +131,7 @@ export class PackagePlugin extends BasePlugin {
     'before:package:finalize': this.finalize.bind(this),
     'package:emit': this.emit.bind(this),
     'package:copyStaticFile': this.copyStaticFile.bind(this),
+    'package:analysisCode': this.analysisCode.bind(this),
   };
 
   async cleanup() {
@@ -296,6 +298,17 @@ export class PackagePlugin extends BasePlugin {
 
   async installLayer() {
     this.core.cli.log('Install layers...');
+    const npmList = this.getLayerNpmList();
+    if (npmList && npmList.length) {
+      await this.npmInstall({
+        npmList,
+        production: true,
+      });
+    }
+    this.core.cli.log(' - Layers install complete');
+  }
+
+  getLayerNpmList() {
     const funcLayers = [];
     if (this.core.service.functions) {
       for (const func in this.core.service.functions) {
@@ -306,7 +319,7 @@ export class PackagePlugin extends BasePlugin {
       }
     }
     const layerTypeList = formatLayers(this.core.service.layers, ...funcLayers);
-    const npmList = Object.keys(layerTypeList.npm)
+    return Object.keys(layerTypeList.npm)
       .map((name: string) => {
         // ignore cover deps
         if (
@@ -318,13 +331,6 @@ export class PackagePlugin extends BasePlugin {
         return layerTypeList.npm[name];
       })
       .filter(v => !!v);
-    if (npmList && npmList.length) {
-      await this.npmInstall({
-        npmList,
-        production: true,
-      });
-    }
-    this.core.cli.log(' - Layers install complete');
   }
 
   async installDep() {
@@ -426,14 +432,7 @@ export class PackagePlugin extends BasePlugin {
     this.program = new Program(this.compilerHost);
 
     // midway 2版本的装饰器分析由框架提供了
-    if (this.midwayVersion === '2') {
-      const httpFuncSpec = await analysisDecorator(tsCodeRoot);
-      if (!this.core.service.functions) {
-        this.core.service.functions = {};
-      }
-      this.core.debug('httpFuncSpec', httpFuncSpec);
-      Object.assign(this.core.service.functions, httpFuncSpec);
-    } else {
+    if (this.midwayVersion !== '2') {
       if (this.core.service.functions) {
         return this.core.service.functions;
       }
@@ -502,6 +501,20 @@ export class PackagePlugin extends BasePlugin {
     }
 
     this.core.cli.log(' - Build project complete');
+  }
+
+  async analysisCode() {
+    // midway 2版本的装饰器分析由框架提供了
+    if (this.midwayVersion === '2') {
+      const httpFuncSpec = await analysisDecorator(
+        join(this.midwayBuildPath, 'dist')
+      );
+      if (!this.core.service.functions) {
+        this.core.service.functions = {};
+      }
+      this.core.debug('httpFuncSpec', httpFuncSpec);
+      Object.assign(this.core.service.functions, httpFuncSpec);
+    }
   }
 
   private outputTsErrorMessage(error, errorPath, prefixIndex = 0) {
