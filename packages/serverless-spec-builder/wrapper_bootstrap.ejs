@@ -25,10 +25,8 @@ const initializeMethod = async (initializeContext = {}) => {
           applicationAdapter: runtime
         });
         const boot = new BootstrapStarter();
-        const baseDir = __dirname;
-
         boot.configure({
-          baseDir,
+          appDir: __dirname,
         }).load(starter);
 
         await boot.init();
