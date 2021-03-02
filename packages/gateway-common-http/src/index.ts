@@ -118,7 +118,7 @@ export class ExpressGateway {
             for (const key in result.headers) {
               res.setHeader(key, getHeaderValue(result.headers, key));
             }
-            res.send(data);
+            res.send ? res.send(data): res.end(data);
           }
         )
         .catch(err => {

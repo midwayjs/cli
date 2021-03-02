@@ -115,9 +115,6 @@ export async function parseInvokeOptionsByOriginUrl(
         // 中后台 webpack 的特殊处理，忽略特定函数的通配逻辑
         return currentUrl.indexOf(item.originRouter) !== -1;
       }
-      console.log(
-        `Info: find url "${currentUrl}" match pattern "${item.router}", functionName="${item.functionName}"`
-      );
       return true;
     }
   });
