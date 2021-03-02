@@ -107,6 +107,7 @@ export class DevPlugin extends BasePlugin {
 
     return {
       framework,
+      baseDir: this.getSourceDir(),
       ...this.options,
       port: this.port,
     };
@@ -221,9 +222,13 @@ export class DevPlugin extends BasePlugin {
     }
   }
 
+  private getSourceDir() {
+    return this.options.sourceDir || resolve(this.core.cwd, 'src');
+  }
+
   // watch file change
   private startWatch() {
-    const sourceDir = resolve(this.core.cwd, 'src');
+    const sourceDir = this.getSourceDir();
     const watcher = chokidar.watch(sourceDir, {
       ignored: path => {
         if (path.includes('node_modules')) {

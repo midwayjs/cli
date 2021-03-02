@@ -23,7 +23,7 @@ process.on('exit', async () => {
     process.on('message', async msg => {
       if (msg?.type === 'functions') {
         const data = await analysisDecorator(
-          options.sourceDir || process.cwd()
+          options.baseDir || process.cwd()
         );
         process.send({ type: 'dev:' + msg.type, data, id: msg.id });
       }
