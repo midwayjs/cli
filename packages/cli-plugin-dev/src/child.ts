@@ -22,9 +22,7 @@ process.on('exit', async () => {
   if (!process.env.MIDWAY_DEV_IS_SERVERLESS) {
     process.on('message', async msg => {
       if (msg?.type === 'functions') {
-        const data = await analysisDecorator(
-          options.baseDir || process.cwd()
-        );
+        const data = await analysisDecorator(options.baseDir || process.cwd());
         process.send({ type: 'dev:' + msg.type, data, id: msg.id });
       }
     });
