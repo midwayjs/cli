@@ -8,6 +8,7 @@ const run = async (cwd: string, command: string, options = {}) => {
   const core = new CommandCore({
     commands: [command],
     options: {
+      buildCache: true,
       ...options,
     },
     log: {
