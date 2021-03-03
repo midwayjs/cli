@@ -99,6 +99,7 @@ export class BuildPlugin extends BasePlugin {
           rootDir,
           outDir,
         },
+        include: [rootDir],
       }
     );
     this.core.debug('Compile TSConfig', config);
