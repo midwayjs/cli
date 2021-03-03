@@ -506,9 +506,11 @@ export class PackagePlugin extends BasePlugin {
   async analysisCode() {
     // midway 2版本的装饰器分析由框架提供了
     if (this.midwayVersion === '2') {
+      process.chdir(this.midwayBuildPath);
       const httpFuncSpec = await analysisDecorator(
         join(this.midwayBuildPath, 'dist')
       );
+      process.chdir(this.core.cwd);
       if (!this.core.service.functions) {
         this.core.service.functions = {};
       }

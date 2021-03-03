@@ -88,9 +88,9 @@ export const copyFiles = async (options: ICopyOptions) => {
     log,
   } = options;
   const paths = await globby(
-    (defaultInclude || ['*.yml', '*.js', '*.json', 'app', 'config']).concat(
-      include || []
-    ),
+    (
+      defaultInclude || ['*.yml', '*.js', '*.ts', '*.json', 'app', 'config']
+    ).concat(include || []),
     {
       cwd: sourceDir,
       followSymbolicLinks: false,
