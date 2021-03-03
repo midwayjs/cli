@@ -7,7 +7,13 @@ import * as ts from 'typescript';
 export class BuildPlugin extends BasePlugin {
   commands = {
     build: {
-      lifecycleEvents: ['clean', 'copyFile', 'compile', 'emit'],
+      lifecycleEvents: [
+        'formatOptions',
+        'clean',
+        'copyFile',
+        'compile',
+        'emit',
+      ],
       options: {
         clean: {
           usage: 'clean build target dir',
@@ -34,6 +40,7 @@ export class BuildPlugin extends BasePlugin {
   };
 
   hooks = {
+    'build:formatOptions': this.formatOptions.bind(this),
     'build:clean': this.clean.bind(this),
     'build:copyFile': this.copyFile.bind(this),
     'build:compile': this.compile.bind(this),
@@ -42,6 +49,20 @@ export class BuildPlugin extends BasePlugin {
 
   private compilerHost: CompilerHost;
   private program: Program;
+
+  async formatOptions() {
+    const midwayConfig = [
+      join(this.core.cwd, 'midway.config.ts'),
+      join(this.core.cwd, 'midway.config.js'),
+    ].find(file => existsSync(file));
+    if (midwayConfig) {
+      const mod = require('@midwayjs/hooks-core');
+      const config = mod.getConfig();
+      if (config.source) {
+        this.options.srcDir = config.source;
+      }
+    }
+  }
 
   async clean() {
     if (!this.options.clean) {
@@ -128,7 +149,6 @@ export class BuildPlugin extends BasePlugin {
         join(cwd, outDir, 'midway.build.json'),
       ];
       for (const cacheFile of cacheList) {
-        console.log('cacheFile', cacheFile);
         if (existsSync(cacheFile)) {
           await remove(cacheFile);
         }
