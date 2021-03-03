@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/cli-plugin-build",
-  "version": "1.2.43-beta.12",
+  "version": "1.2.43-beta.13",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {

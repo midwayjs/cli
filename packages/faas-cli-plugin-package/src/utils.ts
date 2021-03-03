@@ -43,7 +43,7 @@ export function commonPrefix(arr: string[]): string {
   let prefix: string = (arr && arr[0]) || '';
   const n = (arr && arr.length) || 0;
   for (let i = 1; i <= n - 1; i++) {
-    prefix = commonPrefixUtil(prefix, arr[i].replace(/([^/])$/, '$1/'));
+    prefix = commonPrefixUtil(prefix, arr[i]);
   }
   if (!prefix || prefix === '/') {
     return '';
@@ -51,6 +51,9 @@ export function commonPrefix(arr: string[]): string {
   const result = prefix.replace(/\/[^/]*$/gi, '') || '/';
   if (result && !/^\//.test(result)) {
     return '/' + result;
+  }
+  if (result === '/') {
+    return '';
   }
   return result;
 }
