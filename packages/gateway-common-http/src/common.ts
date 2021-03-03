@@ -65,10 +65,7 @@ export async function parseInvokeOptionsByOriginUrl(
           functionName,
           functionHandler: functionItem.handler,
           originRouter: eventItem.path || '/*',
-          router: (eventItem.path?.replace(/\/\*$/, '/**') || '/**').replace(
-            /\/$/,
-            ''
-          ),
+          router: (eventItem.path?.replace(/\/\*$/, '/**') || '/**'),
           method: (eventItem.method ? [].concat(eventItem.method) : []).map(
             method => {
               return method.toLowerCase();
@@ -104,7 +101,6 @@ export async function parseInvokeOptionsByOriginUrl(
       }
       return handlerB.level - handlerA.level;
     });
-
   const functionItem = urlMatchList.find(item => {
     if (isMatch(currentUrl, item.router, { dot: true })) {
       if (item.method.length && item.method.indexOf(currentMethod) === -1) {
