@@ -5,11 +5,23 @@ export const PluginList: Array<{
   command?: string | string[];
   platform?: string;
 }> = [
-  { mod: '@midwayjs/fcli-plugin-create', name: 'CreatePlugin' },
-  { mod: '@midwayjs/fcli-plugin-deploy', name: 'DeployPlugin' },
-  { mod: '@midwayjs/fcli-plugin-dev-pack', name: 'DevPackPlugin' },
-  { mod: '@midwayjs/fcli-plugin-invoke', name: 'FaaSInvokePlugin' },
   { mod: '@midwayjs/fcli-plugin-package', name: 'PackagePlugin' },
+  { mod: '@midwayjs/fcli-plugin-deploy', name: 'DeployPlugin' },
+  {
+    mod: '@midwayjs/fcli-plugin-create',
+    name: 'CreatePlugin',
+    command: 'create',
+  },
+  {
+    mod: '@midwayjs/fcli-plugin-dev-pack',
+    name: 'DevPackPlugin',
+    command: 'invoke',
+  },
+  {
+    mod: '@midwayjs/fcli-plugin-invoke',
+    name: 'FaaSInvokePlugin',
+    command: 'invoke',
+  },
   {
     mod: '@midwayjs/fcli-plugin-fc',
     name: 'AliyunFCPlugin',
