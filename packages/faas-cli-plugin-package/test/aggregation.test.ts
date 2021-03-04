@@ -50,11 +50,8 @@ describe('/test/package.test.ts', () => {
       core.addPlugin(FpPackagePlugin);
       await core.ready();
       await core.invoke(['package']);
-      assert(resolve(buildDir, 'registerFunction.js'));
       assert(resolve(buildDir, 'all.js'));
       const allCode = readFileSync(resolve(buildDir, 'all.js')).toString();
-      assert(/registerFunctionToIocByConfig/.test(allCode));
-      assert(/"functionName": "fp"/.test(allCode));
       assert(/"router": "\/multiply\/1"/.test(allCode));
       assert(/"router": "\/multiply\/2"/.test(allCode));
     });

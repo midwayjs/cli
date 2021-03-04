@@ -118,7 +118,17 @@ export class ExpressGateway {
             for (const key in result.headers) {
               res.setHeader(key, getHeaderValue(result.headers, key));
             }
-            res.send(data);
+            if (res.send) {
+              // express
+              res.send(data);
+            } else {
+              // connect
+              if (typeof data === 'string' || Buffer.isBuffer(data)) {
+                res.end(data);
+              } else {
+                res.end(JSON.stringify(data));
+              }
+            }
           }
         )
         .catch(err => {

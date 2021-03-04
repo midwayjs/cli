@@ -7,7 +7,13 @@ import * as ts from 'typescript';
 export class BuildPlugin extends BasePlugin {
   commands = {
     build: {
-      lifecycleEvents: ['clean', 'copyFile', 'compile', 'emit'],
+      lifecycleEvents: [
+        'formatOptions',
+        'clean',
+        'copyFile',
+        'compile',
+        'emit',
+      ],
       options: {
         clean: {
           usage: 'clean build target dir',
@@ -20,14 +26,11 @@ export class BuildPlugin extends BasePlugin {
         srcDir: {
           usage: 'source code path',
         },
+        outDir: {
+          usage: 'build out path',
+        },
         entrypoint: {
           usage: 'bundle the source with the file given as entrypoint',
-        },
-        minify: {
-          usage: '',
-        },
-        mode: {
-          usage: 'bundle mode, "debug" or "release" (default)', // release
         },
         tsConfig: {
           usage: 'tsConfig json file path',
@@ -37,6 +40,7 @@ export class BuildPlugin extends BasePlugin {
   };
 
   hooks = {
+    'build:formatOptions': this.formatOptions.bind(this),
     'build:clean': this.clean.bind(this),
     'build:copyFile': this.copyFile.bind(this),
     'build:compile': this.compile.bind(this),
@@ -46,30 +50,50 @@ export class BuildPlugin extends BasePlugin {
   private compilerHost: CompilerHost;
   private program: Program;
 
+  async formatOptions() {
+    const midwayConfig = [
+      join(this.core.cwd, 'midway.config.ts'),
+      join(this.core.cwd, 'midway.config.js'),
+    ].find(file => existsSync(file));
+    if (midwayConfig) {
+      const mod = require('@midwayjs/hooks-core');
+      const config = mod.getConfig();
+      if (config.source) {
+        this.options.srcDir = config.source;
+      }
+    }
+  }
+
   async clean() {
     if (!this.options.clean) {
       return;
     }
     const outdir = this.getOutDir();
-    if (outdir) {
+    if (existsSync(outdir)) {
       await remove(outdir);
     }
   }
 
   private getOutDir(): string {
+    if (this.options.outDir) {
+      return this.options.outDir;
+    }
     const tsConfig = this.getTsConfig();
     this.core.debug('TSConfig', tsConfig);
     const projectFile = this.getProjectFile();
     this.core.debug('ProjectFile', projectFile);
-    return this.getCompilerOptions(tsConfig, 'outDir', dirname(projectFile));
+    return (
+      this.getCompilerOptions(tsConfig, 'outDir', dirname(projectFile)) ||
+      'dist'
+    );
   }
 
   async copyFile() {
     const targetDir = this.getOutDir();
     this.core.debug('CopyFile TargetDir', targetDir);
     await copyFiles({
-      sourceDir: join(this.core.cwd, 'src'),
-      targetDir: join(this.core.cwd, targetDir || 'dist'),
+      sourceDir: join(this.core.cwd, this.options.srcDir || 'src'),
+      targetDir: join(this.core.cwd, targetDir),
       defaultInclude: ['**/*'],
       exclude: ['**/*.ts', '**/*.js'],
       log: path => {
@@ -79,6 +103,11 @@ export class BuildPlugin extends BasePlugin {
   }
 
   async compile() {
+    const rootDir = this.getTsCodeRoot();
+    this.core.debug('rootDir', rootDir);
+    const outDir = this.getOutDir();
+    this.core.debug('outDir', outDir);
+
     const { cwd } = this.core;
     const { config } = resolveTsConfigFile(
       cwd,
@@ -87,8 +116,11 @@ export class BuildPlugin extends BasePlugin {
       this.getStore('mwccHintConfig', 'global'),
       {
         compilerOptions: {
-          sourceRoot: this.getTsCodeRoot(),
+          sourceRoot: rootDir,
+          rootDir,
+          outDir,
         },
+        include: [rootDir],
       }
     );
     this.core.debug('Compile TSConfig', config);
@@ -98,15 +130,29 @@ export class BuildPlugin extends BasePlugin {
 
   async emit() {
     const { diagnostics } = await this.program.emit();
-    if (!diagnostics || !diagnostics.length) {
-      return;
+    if (diagnostics?.length) {
+      const error = diagnostics.find(diagnostic => {
+        return diagnostic.category === ts.DiagnosticCategory.Error;
+      });
+      if (error) {
+        const errorPath = `(${relative(this.core.cwd, error.file.fileName)})`;
+        throw new Error(`TS Error: ${error.messageText}${errorPath}`);
+      }
     }
-    const error = diagnostics.find(diagnostic => {
-      return diagnostic.category === ts.DiagnosticCategory.Error;
-    });
-    if (error) {
-      const errorPath = `(${relative(this.core.cwd, error.file.fileName)})`;
-      throw new Error(`TS Error: ${error.messageText}${errorPath}`);
+
+    // clear build cache
+    if (!this.options.buildCache) {
+      const { cwd } = this.core;
+      const outDir = this.getOutDir();
+      const cacheList = [
+        join(cwd, outDir, '.mwcc-cache'),
+        join(cwd, outDir, 'midway.build.json'),
+      ];
+      for (const cacheFile of cacheList) {
+        if (existsSync(cacheFile)) {
+          await remove(cacheFile);
+        }
+      }
     }
   }
 

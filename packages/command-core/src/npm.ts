@@ -91,3 +91,14 @@ export async function loadNpm(
     // scope.error('npmPlugin', { npmName, err: e });
   }
 }
+
+export const findNpmModule = (cwd, modName) => {
+  const modPath = join(cwd, 'node_modules', modName);
+  if (existsSync(modPath)) {
+    return modPath;
+  }
+  const parentCwd = join(cwd, '../');
+  if (parentCwd !== cwd) {
+    return findNpmModule(parentCwd, modName);
+  }
+};

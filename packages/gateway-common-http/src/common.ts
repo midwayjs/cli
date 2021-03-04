@@ -93,14 +93,16 @@ export async function parseInvokeOptionsByOriginUrl(
       };
     })
     .sort((handlerA, handlerB) => {
-      if (handlerA.pureRouter === handlerB.pureRouter) {
-        return handlerA.router.length - handlerB.router.length;
+      if (handlerA.level === handlerB.level) {
+        if (handlerB.pureRouter === handlerA.pureRouter) {
+          return handlerA.router.length - handlerB.router.length;
+        }
+        return handlerB.pureRouter.length - handlerA.pureRouter.length;
       }
       return handlerB.level - handlerA.level;
     });
-
   const functionItem = urlMatchList.find(item => {
-    if (isMatch(currentUrl, item.router)) {
+    if (isMatch(currentUrl, item.router, { dot: true })) {
       if (item.method.length && item.method.indexOf(currentMethod) === -1) {
         return false;
       }
@@ -112,9 +114,6 @@ export async function parseInvokeOptionsByOriginUrl(
         // 中后台 webpack 的特殊处理，忽略特定函数的通配逻辑
         return currentUrl.indexOf(item.originRouter) !== -1;
       }
-      console.log(
-        `Info: find url "${currentUrl}" match pattern "${item.router}", functionName="${item.functionName}"`
-      );
       return true;
     }
   });

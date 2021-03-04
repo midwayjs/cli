@@ -44,6 +44,7 @@ export class FaaSPlugin extends BasePlugin {
       cwd: this.core.cwd,
       load: name => require(name),
       npm: options.npm,
+      notAutoInstall: options?.h,
     });
     allPluginClass.forEach(pluginClass => {
       this.core.addPlugin(pluginClass);

@@ -1,7 +1,7 @@
 import { join } from 'path';
 import * as globby from 'globby';
 import { unlink, existsSync, stat } from 'fs-extra';
-
+import { findNpmModule } from '@midwayjs/command-core';
 interface Ilayer {
   [extName: string]: {
     path: string;
@@ -43,7 +43,7 @@ export function commonPrefix(arr: string[]): string {
   let prefix: string = (arr && arr[0]) || '';
   const n = (arr && arr.length) || 0;
   for (let i = 1; i <= n - 1; i++) {
-    prefix = commonPrefixUtil(prefix, arr[i].replace(/([^/])$/, '$1/'));
+    prefix = commonPrefixUtil(prefix, arr[i]);
   }
   if (!prefix || prefix === '/') {
     return '';
@@ -51,6 +51,9 @@ export function commonPrefix(arr: string[]): string {
   const result = prefix.replace(/\/[^/]*$/gi, '') || '/';
   if (result && !/^\//.test(result)) {
     return '/' + result;
+  }
+  if (result === '/') {
+    return '';
   }
   return result;
 }
@@ -106,4 +109,32 @@ export const removeUselessFiles = async (target: string) => {
   console.log(
     `  - Remove Useless file ${Number(size / (2 << 19)).toFixed(2)} MB`
   );
+};
+
+// 分析装饰器上面的函数信息
+export const analysisDecorator = async (cwd: string) => {
+  const midwayCoreMod = findNpmModule(cwd, '@midwayjs/core');
+  const { WebRouterCollector } = require(midwayCoreMod);
+  const collector = new WebRouterCollector(cwd);
+  const result = await collector.getFlattenRouterTable();
+  const allFunc = {};
+  if (Array.isArray(result)) {
+    result.forEach(func => {
+      allFunc[func.funcHandlerName] = {
+        handler: func.funcHandlerName,
+        events: [
+          {
+            http: {
+              method: [].concat(func.requestMethod || 'get'),
+              path: (func.prefix + (func.url === '/' ? '' : func.url)).replace(
+                /\/{1,}/g,
+                '/'
+              ),
+            },
+          },
+        ],
+      };
+    });
+  }
+  return allFunc;
 };

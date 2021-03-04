@@ -5,7 +5,7 @@ import {
 } from './interface/plugin';
 import { ICoreInstance } from './interface/commandCore';
 import { resolve } from 'path';
-import { existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import Spin from 'light-spinner';
 import { installNpm } from './npm';
 export class BasePlugin implements IPluginInstance {
@@ -97,20 +97,32 @@ export const filterPluginByCommand = (pluginList, options) => {
 
 // 获取插件的class列表
 export const getPluginClass = async (pluginList, options) => {
-  const { cwd, npm, load } = options;
+  const { cwd, npm, load, notAutoInstall } = options;
   const classList = [];
   for (const pluginInfo of pluginList) {
     let mod;
     try {
       mod = load(pluginInfo.mod);
     } catch {
-      const userModPath = resolve(cwd, 'node_modules', pluginInfo.mod);
+      if (notAutoInstall) {
+        continue;
+      }
+      let userModPath = resolve(cwd, 'node_modules', pluginInfo.mod);
       // if plugin not exists, auto install
       if (!existsSync(userModPath)) {
         await autoInstallMod(pluginInfo.mod, {
           cwd,
           npm,
         });
+      }
+      // 避免失败的require cache
+      const newPkgPath = resolve(userModPath, 'package.json');
+      if (!existsSync(newPkgPath)) {
+        continue;
+      }
+      const pkg = JSON.parse(readFileSync(newPkgPath).toString());
+      if (pkg.main) {
+        userModPath = resolve(userModPath, pkg.main);
       }
       try {
         mod = load(userModPath);

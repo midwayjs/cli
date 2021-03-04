@@ -24,7 +24,9 @@ import {
   formatLayers,
   uselessFilesMatch,
   removeUselessFiles,
+  analysisDecorator,
 } from './utils';
+import { findNpmModule } from '@midwayjs/command-core';
 import {
   analysisResultToSpec,
   copyFiles,
@@ -43,6 +45,7 @@ import { tmpdir } from 'os';
 
 export class PackagePlugin extends BasePlugin {
   options: any;
+  midwayVersion = '';
   servicePath = this.core.config.servicePath;
   // 代表构建产物的路径，非 ts 构建路径
   midwayBuildPath = (this.core.config.buildPath = join(
@@ -64,8 +67,9 @@ export class PackagePlugin extends BasePlugin {
         'cleanup', // 清理构建目录
         'installDevDep', // 安装开发期依赖
         'copyFile', // 拷贝文件: package.include 和 shared content
-        'compile', // 代码分析
+        'compile', //
         'emit', // 编译函数  'package:after:tscompile'
+        'analysisCode', // 分析代码
         'copyStaticFile', // 拷贝src中的静态文件到dist目录，例如 html 等
         'checkAggregation', // 检测高密度部署
         'generateSpec', // 生成对应平台的描述文件，例如 serverless.yml 等
@@ -127,6 +131,7 @@ export class PackagePlugin extends BasePlugin {
     'before:package:finalize': this.finalize.bind(this),
     'package:emit': this.emit.bind(this),
     'package:copyStaticFile': this.copyStaticFile.bind(this),
+    'package:analysisCode': this.analysisCode.bind(this),
   };
 
   async cleanup() {
@@ -154,6 +159,16 @@ export class PackagePlugin extends BasePlugin {
         this.options.sourceDir
       );
     }
+    // 分析midway version
+    const cwd = this.getCwd();
+    const faasModulePath = findNpmModule(cwd, '@midwayjs/faas');
+    if (faasModulePath) {
+      const pkgJson = JSON.parse(
+        readFileSync(join(faasModulePath, 'package.json')).toString()
+      );
+      this.midwayVersion = pkgJson.version[0];
+    }
+
     // 分析目录结构
     const locator = new Locator(this.servicePath);
     this.codeAnalyzeResult = await locator.run({
@@ -283,6 +298,17 @@ export class PackagePlugin extends BasePlugin {
 
   async installLayer() {
     this.core.cli.log('Install layers...');
+    const npmList = this.getLayerNpmList();
+    if (npmList && npmList.length) {
+      await this.npmInstall({
+        npmList,
+        production: true,
+      });
+    }
+    this.core.cli.log(' - Layers install complete');
+  }
+
+  getLayerNpmList() {
     const funcLayers = [];
     if (this.core.service.functions) {
       for (const func in this.core.service.functions) {
@@ -293,16 +319,18 @@ export class PackagePlugin extends BasePlugin {
       }
     }
     const layerTypeList = formatLayers(this.core.service.layers, ...funcLayers);
-    const npmList = Object.keys(layerTypeList.npm).map(
-      (name: string) => layerTypeList.npm[name]
-    );
-    if (npmList && npmList.length) {
-      await this.npmInstall({
-        npmList,
-        production: true,
-      });
-    }
-    this.core.cli.log(' - Layers install complete');
+    return Object.keys(layerTypeList.npm)
+      .map((name: string) => {
+        // ignore cover deps
+        if (
+          this.core.service.coverDependencies &&
+          this.core.service.coverDependencies[name] === false
+        ) {
+          return false;
+        }
+        return layerTypeList.npm[name];
+      })
+      .filter(v => !!v);
   }
 
   async installDep() {
@@ -312,7 +340,9 @@ export class PackagePlugin extends BasePlugin {
       return;
     }
     this.setGlobalDependencies('picomatch');
-    this.setGlobalDependencies('@midwayjs/bootstrap');
+    if (this.midwayVersion === '2') {
+      this.setGlobalDependencies('@midwayjs/bootstrap');
+    }
     // globalDependencies
     // pkg.json dependencies
     // pkg.json localDependencies
@@ -375,14 +405,7 @@ export class PackagePlugin extends BasePlugin {
   }
 
   public getTsCodeRoot(): string {
-    let tsCodeRoot: string;
-    const tmpOutDir = resolve(this.defaultTmpFaaSOut, 'src');
-    if (existsSync(tmpOutDir)) {
-      tsCodeRoot = tmpOutDir;
-    } else {
-      tsCodeRoot = this.codeAnalyzeResult.tsCodeRoot;
-    }
-    return tsCodeRoot;
+    return this.codeAnalyzeResult.tsCodeRoot || join(this.getCwd(), 'src');
   }
 
   async compile() {
@@ -408,18 +431,24 @@ export class PackagePlugin extends BasePlugin {
     this.compilerHost = new CompilerHost(this.servicePath, config);
     this.program = new Program(this.compilerHost);
 
-    if (this.core.service.functions) {
-      return this.core.service.functions;
+    // midway 2版本的装饰器分析由框架提供了
+    if (this.midwayVersion !== '2') {
+      if (this.core.service.functions) {
+        return this.core.service.functions;
+      }
+      const analyzeInstance = new Analyzer({
+        program: this.program,
+        decoratorLowerCase: true,
+      });
+      const analyzeResult = analyzeInstance.analyze();
+      const newSpec = analysisResultToSpec(analyzeResult);
+      this.core.debug('CodeAnalysis', newSpec);
+      this.core.service.functions = newSpec.functions;
     }
+  }
 
-    const analyzeInstance = new Analyzer({
-      program: this.program,
-      decoratorLowerCase: true,
-    });
-    const analyzeResult = analyzeInstance.analyze();
-    const newSpec = analysisResultToSpec(analyzeResult);
-    this.core.debug('CodeAnalysis', newSpec);
-    this.core.service.functions = newSpec.functions;
+  private getCwd() {
+    return this.servicePath || this.core.cwd || process.cwd();
   }
 
   async emit() {
@@ -447,7 +476,7 @@ export class PackagePlugin extends BasePlugin {
         errorNecessary.push(diagnostic);
       }
     });
-    const cwd = this.core.cwd || this.servicePath || process.cwd();
+    const cwd = this.getCwd();
     if (errorNecessary.length) {
       console.log('');
       errorNecessary.forEach(error => {
@@ -472,6 +501,22 @@ export class PackagePlugin extends BasePlugin {
     }
 
     this.core.cli.log(' - Build project complete');
+  }
+
+  async analysisCode() {
+    // midway 2版本的装饰器分析由框架提供了
+    if (this.midwayVersion === '2') {
+      process.chdir(this.midwayBuildPath);
+      const httpFuncSpec = await analysisDecorator(
+        join(this.midwayBuildPath, 'dist')
+      );
+      process.chdir(this.core.cwd);
+      if (!this.core.service.functions) {
+        this.core.service.functions = {};
+      }
+      this.core.debug('httpFuncSpec', httpFuncSpec);
+      Object.assign(this.core.service.functions, httpFuncSpec);
+    }
   }
 
   private outputTsErrorMessage(error, errorPath, prefixIndex = 0) {

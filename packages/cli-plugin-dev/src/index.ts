@@ -12,6 +12,8 @@ export class DevPlugin extends BasePlugin {
   private started = false;
   private restarting = false;
   private port = 7001;
+  private processMessageMap = {};
+  private spin;
   commands = {
     dev: {
       lifecycleEvents: ['checkEnv', 'run'],
@@ -36,6 +38,9 @@ export class DevPlugin extends BasePlugin {
         fast: {
           usage: 'fast mode',
         },
+        sourceDir: {
+          usage: 'ts code source dir',
+        },
       },
     },
   };
@@ -46,15 +51,23 @@ export class DevPlugin extends BasePlugin {
   };
 
   async checkEnv() {
-    const defaultPort = this.options.port || 7001;
-    const port = await detect(defaultPort);
-    if (port !== defaultPort) {
-      this.log(`Server port ${defaultPort} is in use, now using port ${port}`);
-      this.port = port;
-    } else {
-      this.port = defaultPort;
+    this.setStore('dev:getData', this.getData.bind(this), true);
+    // 仅当不指定entry file的时候才处理端口
+    if (!this.options.entryFile) {
+      const defaultPort = this.options.port || 7001;
+      const port = await detect(defaultPort);
+      if (port !== defaultPort) {
+        if (!this.options.silent) {
+          this.log(
+            `Server port ${defaultPort} is in use, now using port ${port}`
+          );
+        }
+        this.port = port;
+      } else {
+        this.port = defaultPort;
+      }
+      this.setStore('dev:port', this.port, true);
     }
-    this.setStore('dev:port', this.port, true);
     const cwd = this.core.cwd;
     if (this.options.ts === undefined) {
       if (existsSync(resolve(cwd, 'tsconfig.json'))) {
@@ -87,12 +100,14 @@ export class DevPlugin extends BasePlugin {
     if (!this.options.framework && existsSync(yamlPath)) {
       const ymlData = readFileSync(yamlPath).toString();
       if (!/deployType/.test(ymlData)) {
-        framework = require.resolve('@midwayjs/faas-dev-framework');
+        process.env.MIDWAY_DEV_IS_SERVERLESS = 'true';
+        framework = require.resolve('@midwayjs/serverless-app');
       }
     }
 
     return {
       framework,
+      baseDir: this.getSourceDir(),
       ...this.options,
       port: this.port,
     };
@@ -101,31 +116,40 @@ export class DevPlugin extends BasePlugin {
   private start() {
     return new Promise<void>(resolve => {
       const options = this.getOptions();
-      const spin = new Spin({
-        text: this.started ? 'restarting' : 'starting',
+      this.spin = new Spin({
+        text: this.started ? 'Midway Restarting' : 'Midway Starting',
       });
       if (!options.silent) {
-        spin.start();
+        this.spin.start();
       }
+
+      let tsNodeFast = {};
+      let isEsbuild = false;
+      if (options.fast) {
+        if (options.fast === 'esbuild') {
+          isEsbuild = true;
+        } else {
+          tsNodeFast = {
+            TS_NODE_FILES: 'true',
+            TS_NODE_TRANSPILE_ONLY: 'true',
+          };
+        }
+      }
+
       this.child = fork(require.resolve('./child'), [JSON.stringify(options)], {
         cwd: this.core.cwd,
         env: {
-          ...(options.fast
-            ? {
-                TS_NODE_FILES: 'true',
-                TS_NODE_TRANSPILE_ONLY: 'true',
-              }
-            : {}),
+          IN_CHILD_PROCESS: 'true',
+          ...tsNodeFast,
           ...process.env,
         },
         silent: true,
-        execArgv: options.ts ? ['-r', 'ts-node/register'] : [],
+        execArgv: options.ts
+          ? ['-r', isEsbuild ? 'esbuild-register' : 'ts-node/register']
+          : [],
       });
       const dataCache = [];
       this.child.stdout.on('data', data => {
-        if (options.silent) {
-          return;
-        }
         if (this.restarting) {
           dataCache.push(data);
         } else {
@@ -137,7 +161,7 @@ export class DevPlugin extends BasePlugin {
       });
       this.child.on('message', msg => {
         if (msg.type === 'started') {
-          spin.stop();
+          this.spin.stop();
           while (dataCache.length) {
             process.stdout.write(dataCache.shift());
           }
@@ -150,16 +174,24 @@ export class DevPlugin extends BasePlugin {
           }
           resolve();
         } else if (msg.type === 'error') {
-          spin.stop();
+          this.spin.stop();
           console.error(
             chalk.hex('#ff0000')(`[ Midway ] ${msg.message || ''}`)
           );
+        } else if (msg.id) {
+          if (this.processMessageMap[msg.id]) {
+            this.processMessageMap[msg.id](msg.data);
+            delete this.processMessageMap[msg.id];
+          }
         }
       });
     });
   }
 
   private async handleClose(isExit?, signal?) {
+    if (this.spin) {
+      this.spin.stop();
+    }
     if (this.child) {
       this.child.kill();
       this.child = null;
@@ -190,9 +222,13 @@ export class DevPlugin extends BasePlugin {
     }
   }
 
+  private getSourceDir() {
+    return this.options.sourceDir || resolve(this.core.cwd, 'src');
+  }
+
   // watch file change
   private startWatch() {
-    const sourceDir = resolve(this.core.cwd, 'src');
+    const sourceDir = this.getSourceDir();
     const watcher = chokidar.watch(sourceDir, {
       ignored: path => {
         if (path.includes('node_modules')) {
@@ -230,7 +266,7 @@ export class DevPlugin extends BasePlugin {
   }
 
   private displayStartTips(options) {
-    if (options.silent || options.entryFile) {
+    if (options.silent || options.entryFile || options.notStartLog) {
       return;
     }
     this.log(
@@ -271,5 +307,23 @@ export class DevPlugin extends BasePlugin {
     }
     tsconfigJson['ts-node'].compilerOptions.module = 'commonjs';
     writeFileSync(tsconfig, JSON.stringify(tsconfigJson, null, 2));
+  }
+
+  private async getData(type: string, data?: any) {
+    if (!this.started) {
+      throw new Error('not started');
+    }
+    if (!this.child) {
+      throw new Error('child not started');
+    }
+    return new Promise((resolve, reject) => {
+      const id = Date.now() + ':' + Math.random();
+      setTimeout(() => {
+        delete this.processMessageMap[id];
+        reject(new Error('timeout'));
+      }, 2000);
+      this.processMessageMap[id] = resolve;
+      this.child.send({ type, data, id });
+    });
   }
 }

@@ -1,27 +1,6 @@
 const { BootstrapStarter } = require('@midwayjs/bootstrap');
 const { Framework } = require('<%=faasModName %>');
 const { asyncWrapper, start } = require('<%=starter %>');
-<% if (clearCache) { %>
-if (process.env.CLEAR_CACHE === 'true') {
-  process.env.CLEAR_CACHE = 'false';
-  try {
-    const { clearContainerCache } = require('@midwayjs/core');
-    clearContainerCache();
-  } catch (e) {}
-  try {
-    const { clearAllModule } = require('@midwayjs/decorator');
-    clearAllModule();
-  } catch (e) {}
-  try {
-    const { clearAllLoggers } = require('@midwayjs/logger');
-    clearAllLoggers();
-  } catch (e) {}
-}
-<% } %>
-<% if (functionMap) { %>
-const { registerFunctionToIocByConfig } = require('./registerFunction.js');
-const { join } = require('path');
-<% } %>
 const picomatch = require('picomatch');
 const layers = [];
 <% layerDeps.forEach(function(layer){ %>
@@ -34,15 +13,8 @@ try {
 let starter;
 let runtime;
 let inited = false;
-<% if (advancePreventMultiInit) { %>
-let isInitialing = false;
-<% } %>
 
 const initializeMethod = async (initializeContext = {}) => {
-  <% if (advancePreventMultiInit) { %>
-  inited = true;
-  isInitialing = true;
-  <% } %>
   layers.unshift(engine => {
     engine.addRuntimeExtension({
       async beforeFunctionStart(runtime) {
@@ -53,19 +25,11 @@ const initializeMethod = async (initializeContext = {}) => {
           applicationAdapter: runtime
         });
         const boot = new BootstrapStarter();
-        const baseDir = __dirname;
-
         boot.configure({
-          baseDir,
+          appDir: __dirname,
         }).load(starter);
 
         await boot.init();
-        <% if (functionMap) { %>
-        registerFunctionToIocByConfig(<%-JSON.stringify(functionMap, null, 2)%>, {
-          baseDir: join(__dirname, 'dist'),
-          context: starter.getApplicationContext()
-        });
-        <% } %>
         await boot.run();
       }
     });
@@ -75,11 +39,8 @@ const initializeMethod = async (initializeContext = {}) => {
     getHandler: getHandler,
     initContext: initializeContext,
   });
-  
-  <% if (!advancePreventMultiInit) { %> inited = true; <% } %>
-  <% if (advancePreventMultiInit) { %>
-  isInitialing = false;
-  <% } %>
+
+  inited = true;
 };
 
 const getHandler = (hanlderName) => {
@@ -108,20 +69,6 @@ const getHandler = (hanlderName) => {
   <% }); %>
 }
 
-<% if (advancePreventMultiInit) { %>
-const waitInitial = () => {
-  return new Promise(resolve => {
-    if (!isInitialing) {
-      return resolve();
-    }
-    setTimeout(() => {
-      waitInitial().then(resolve);
-    }, 50);
-  });
-};
-<% } %>
-
-
 exports.<%=initializer%> = asyncWrapper(async (...args) => {
   if (!inited) {
     await initializeMethod(...args);
@@ -133,11 +80,6 @@ exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
   if (!inited) {
     await initializeMethod();
   }
-  <% if (advancePreventMultiInit) { %>
-  if (isInitialing) {
-    await waitInitial();
-  }
-  <% } %>
 
   const handler = getHandler('<%=handlerData.name%>');
   return runtime.asyncEvent(handler)(...args);

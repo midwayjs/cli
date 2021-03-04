@@ -7,9 +7,9 @@ export const PluginList: Array<{
 }> = [
   { mod: '@midwayjs/cli-plugin-build', command: 'build' },
   { mod: '@midwayjs/cli-plugin-dev', command: 'dev' },
+  { mod: '@midwayjs/cli-plugin-faas', command: 'deploy' },
   { mod: '@midwayjs/cli-plugin-test', command: 'test' },
   { mod: '@midwayjs/cli-plugin-test', command: 'cov' },
   { mod: '@midwayjs/cli-plugin-clean', command: 'clean' },
-  { mod: '@midwayjs/cli-plugin-faas', name: 'FaaSPlugin' },
-  { mod: '@midwayjs/cli-plugin-add', name: 'AddPlugin' },
+  { mod: '@midwayjs/cli-plugin-add', command: 'new', name: 'AddPlugin' },
 ];

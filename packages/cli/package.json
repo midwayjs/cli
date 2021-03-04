@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/cli",
-  "version": "1.2.42",
+  "version": "1.2.43-beta.13",
   "description": "Midway Command Tools",
   "main": "index.js",
   "bin": {
@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "build": "tsc --build",
     "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
-    "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov"
+    "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov",
+    "postinstall": "node ./postinstall"
   },
   "keywords": [
     "midway",
@@ -19,19 +20,12 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@midwayjs/cli-plugin-add": "^1.2.41",
-    "@midwayjs/cli-plugin-build": "^1.2.41",
-    "@midwayjs/cli-plugin-clean": "^1.2.41",
-    "@midwayjs/cli-plugin-dev": "^1.2.42",
-    "@midwayjs/cli-plugin-faas": "^1.2.41",
-    "@midwayjs/cli-plugin-test": "^1.2.41",
-    "@midwayjs/command-core": "^1.2.41",
+    "@midwayjs/cli-plugin-add": "^1.2.43-beta.12",
+    "@midwayjs/command-core": "^1.2.43-beta.12",
     "@midwayjs/debugger": "^1.0.x",
     "enquirer": "^2.3.4",
-    "jest-environment-node": "^24.9.0",
     "minimist": "^1.2.5",
-    "source-map-support": "^0.5.19",
-    "ts-node": "^9.0.0"
+    "source-map-support": "^0.5.19"
   },
   "devDependencies": {
     "typescript": "^4.1.0"
@@ -42,9 +36,9 @@
   "files": [
     "bin",
     "lib",
-    "jest",
     "dist",
-    "index.js"
+    "index.js",
+    "postinstall.js"
   ],
   "publishConfig": {
     "access": "public"
