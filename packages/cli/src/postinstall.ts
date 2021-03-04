@@ -8,7 +8,7 @@ export const postinstall = async (baseDir: string) => {
   const scripts = pkgJson.scripts;
   const matchReg = /(?:^|\s)(?:midway-bin|mw)\s+([a-z]+?)(?:\s|$)/i;
   const modMap = {};
-  Object.keys(scripts).forEach(script => {
+  Object.keys(scripts || {}).forEach(script => {
     const cmd = scripts[script];
     if (matchReg.test(cmd)) {
       const command = matchReg.exec(cmd)[1];

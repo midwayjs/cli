@@ -4,6 +4,8 @@ import { join, relative } from 'path';
 import { existsSync, remove, readJSONSync } from 'fs-extra';
 import * as chalk from 'chalk';
 import { exec } from 'child_process';
+import { templateList } from './list';
+import { CategorySelect } from './categorySelect';
 import { LightGenerator } from 'light-generator';
 import Spin from 'light-spinner';
 export class AddPlugin extends BasePlugin {
@@ -38,6 +40,11 @@ export class AddPlugin extends BasePlugin {
   };
 
   async newFormatCommand() {
+    this.template = this.options.template;
+    if (!this.options.template) {
+      this.template = await this.userSelectTemplate();
+    }
+
     const { commands } = this.core.coreOptions;
     let projectPath = commands[1];
     if (!projectPath) {
@@ -62,8 +69,6 @@ export class AddPlugin extends BasePlugin {
       await remove(projectDirPath);
     }
     this.projectDirPath = projectDirPath;
-    this.template =
-      this.options.template || '@midwayjs-examples/applicaiton-web';
   }
 
   private async generator() {
@@ -95,6 +100,21 @@ export class AddPlugin extends BasePlugin {
       });
     }
     await generator.run();
+  }
+
+  // 用户选择模板
+  async userSelectTemplate() {
+    const prompt = new CategorySelect({
+      name: 'templateName',
+      message: 'Hello, traveller.\n  Which template do you like?',
+      groupChoices: templateList,
+      result: value => {
+        return value.split(' - ')[0];
+      },
+      show: true,
+    });
+    const type = await prompt.run();
+    return templateList[type].package;
   }
 
   private async installDep() {
