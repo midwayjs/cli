@@ -1,7 +1,0 @@
-{
-  "match": {
-    "file": "f.yml",
-    "command": ["deploy", "package"],
-    "provider": "aliyun"
-  }
-}

@@ -1,6 +1,0 @@
-{
-  "match": {
-    "file": "f.yml",
-    "command": "deploy" 
-  }
-}
