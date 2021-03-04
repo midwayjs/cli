@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.45](https://github.com/midwayjs/bin/compare/v1.2.44...v1.2.45) (2021-03-04)
+
+
+### Bug Fixes
+
+* resume npm ([b0fe4e0](https://github.com/midwayjs/bin/commit/b0fe4e0bf9687b6f9bbb67ee31a37cf2329130d5))
+
+
+
+
+
 ## [1.2.42](https://github.com/midwayjs/bin/compare/v1.2.41...v1.2.42) (2021-02-24)
 
 
