@@ -113,8 +113,8 @@ export class AddPlugin extends BasePlugin {
       },
       show: true,
     });
-
-    return prompt.run();
+    const type = await prompt.run();
+    return templateList[type].package;
   }
 
   private async installDep() {
