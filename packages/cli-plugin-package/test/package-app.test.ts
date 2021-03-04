@@ -5,7 +5,7 @@ import { resolve, join } from 'path';
 import { existsSync, remove, readFileSync } from 'fs-extra';
 import * as assert from 'assert';
 
-import { AliyunFCPlugin } from '../../faas-cli-plugin-fc';
+import { AliyunFCPlugin } from '../../cli-plugin-fc';
 
 describe('/test/package-a[[.test.ts', () => {
   describe('package application layer project', () => {

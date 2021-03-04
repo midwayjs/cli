@@ -1,7 +1,7 @@
 import { CommandCore } from '@midwayjs/command-core';
 import { loadSpec } from '@midwayjs/serverless-spec-builder';
 import { PackagePlugin } from '../src/index';
-import { AliyunFCPlugin } from '../../faas-cli-plugin-fc/src/index';
+import { AliyunFCPlugin } from '../../cli-plugin-fc/src/index';
 import { FaaSTmpOutPlugin } from './fixtures/plugins/faas_tmp_out';
 import { resolve } from 'path';
 import { remove, existsSync } from 'fs-extra';
