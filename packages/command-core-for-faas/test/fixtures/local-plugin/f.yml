@@ -1,3 +1,0 @@
-plugins:
-  - local::./a.js
-  - ./b.js
