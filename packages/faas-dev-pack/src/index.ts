@@ -1,10 +1,4 @@
-import {
-  resolveModule,
-  invokeFunction,
-  startDev,
-  invokeByDev,
-  closeDev,
-} from './common';
+import { resolveModule, invokeFunction } from './common';
 import { DevPackOptions } from '@midwayjs/gateway-common-http';
 import { NextFunction, Request, Response } from 'express';
 import { Context } from 'koa';
@@ -15,12 +9,6 @@ import { compose as expressCompose } from 'compose-middleware';
 
 export function useExpressDevPack(options: DevPackOptions) {
   options.functionDir = options.functionDir || process.cwd();
-  let invokeFun = invokeFunction;
-  if (options.dev) {
-    invokeFun = async () => {
-      return invokeByDev(options.dev);
-    };
-  }
   return expressCompose([
     expressBodyParser.urlencoded({ extended: false }),
     expressBodyParser.json(),
@@ -30,19 +18,13 @@ export function useExpressDevPack(options: DevPackOptions) {
         .createExpressGateway;
       options.originGatewayName = gatewayName;
       const gateway = createExpressGateway(options);
-      gateway.transform(req, res, next, invokeFun);
+      gateway.transform(req, res, next, invokeFunction);
     },
   ]);
 }
 
 export function useKoaDevPack(options: DevPackOptions) {
   options.functionDir = options.functionDir || process.cwd();
-  let invokeFun = invokeFunction;
-  if (options.dev) {
-    invokeFun = async () => {
-      return invokeByDev(options.dev);
-    };
-  }
   return compose([
     koaBodyParser({
       enableTypes: ['form', 'json'],
@@ -52,39 +34,7 @@ export function useKoaDevPack(options: DevPackOptions) {
       const createKoaGateway = resolveModule(gatewayName).createKoaGateway;
       options.originGatewayName = gatewayName;
       const gateway = createKoaGateway(options);
-      await gateway.transform(ctx, next, invokeFun);
+      await gateway.transform(ctx, next, invokeFunction);
     },
   ]);
 }
-
-export function getKoaDevPack(cwd: string, options?) {
-  return wrapDevPack(useKoaDevPack, cwd, options);
-}
-
-export function getExpressDevPack(cwd: string, options?) {
-  return wrapDevPack(useExpressDevPack, cwd, options);
-}
-
-const wrapDevPack = (
-  devPack,
-  cwd,
-  startOptions: {
-    sourceDir?: string;
-  } = {}
-): any => {
-  cwd = cwd || process.cwd();
-  let devCore;
-  startDev(cwd, startOptions).then(core => {
-    devCore = core;
-  });
-  const wrapedDevPack = (options: DevPackOptions) => {
-    options.dev = () => {
-      return devCore;
-    };
-    return devPack(options);
-  };
-  wrapedDevPack.close = async () => {
-    return closeDev(devCore);
-  };
-  return wrapedDevPack;
-};
