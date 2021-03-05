@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/cli",
-  "version": "1.2.45",
+  "version": "1.2.46-beta.1",
   "description": "Midway Command Tools",
   "main": "index.js",
   "bin": {
