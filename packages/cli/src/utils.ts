@@ -54,6 +54,11 @@ const versionToNumber = version => {
 };
 
 export const findNpm = () => {
+  if (process.env.npm_execpath) {
+    return {
+      cmd: process.env.npm_execpath,
+    };
+  }
   const npmList = [{ cmd: 'cnpm' }];
   const currentPlatform = platform();
   for (const npmInfo of npmList) {

@@ -36,8 +36,7 @@ export const postinstall = async (baseDir: string) => {
   });
 
   const allMods = Object.keys(modMap);
-  const npm = process.env.NPM_CLIENT || findNpm().cmd;
-  console.log('[midway] postinstall npm client ', npm);
+  const npm = findNpm().cmd;
   for (const name of allMods) {
     console.log('[midway] auto install', name);
     await installNpm({

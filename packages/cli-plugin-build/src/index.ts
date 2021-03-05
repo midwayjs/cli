@@ -5,6 +5,7 @@ import { CompilerHost, Program, resolveTsConfigFile } from '@midwayjs/mwcc';
 import { copyFiles } from '@midwayjs/faas-code-analysis';
 import * as ts from 'typescript';
 export class BuildPlugin extends BasePlugin {
+  isMidwayHooks = false;
   commands = {
     build: {
       lifecycleEvents: [
@@ -56,6 +57,7 @@ export class BuildPlugin extends BasePlugin {
       join(this.core.cwd, 'midway.config.js'),
     ].find(file => existsSync(file));
     if (midwayConfig) {
+      this.isMidwayHooks = true;
       const mod = require('@midwayjs/hooks-core');
       const config = mod.getConfig();
       if (config.source) {
@@ -107,21 +109,26 @@ export class BuildPlugin extends BasePlugin {
     this.core.debug('rootDir', rootDir);
     const outDir = this.getOutDir();
     this.core.debug('outDir', outDir);
-
     const { cwd } = this.core;
     const { config } = resolveTsConfigFile(
       cwd,
       undefined,
       this.options.tsConfig,
       this.getStore('mwccHintConfig', 'global'),
-      {
-        compilerOptions: {
-          sourceRoot: rootDir,
-          rootDir,
-          outDir,
-        },
-        include: [rootDir],
-      }
+      this.isMidwayHooks
+        ? {
+            compilerOptions: {
+              sourceRoot: rootDir,
+              rootDir,
+              outDir,
+            },
+            include: [rootDir],
+          }
+        : {
+            compilerOptions: {
+              sourceRoot: rootDir,
+            },
+          }
     );
     this.core.debug('Compile TSConfig', config);
     this.compilerHost = new CompilerHost(cwd, config);
