@@ -25,6 +25,8 @@
     "@midwayjs/debugger": "^1.0.x",
     "enquirer": "^2.3.4",
     "minimist": "^1.2.5",
+    "jest-environment-node": "^24.9.0",
+    "ts-node": "^9.0.0",
     "source-map-support": "^0.5.19"
   },
   "devDependencies": {
@@ -37,6 +39,7 @@
     "bin",
     "lib",
     "dist",
+    "jest",
     "index.js",
     "postinstall.js"
   ],
