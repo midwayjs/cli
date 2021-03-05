@@ -120,8 +120,13 @@ export const analysisDecorator = async (cwd: string) => {
   const allFunc = {};
   if (Array.isArray(result)) {
     result.forEach(func => {
-      allFunc[func.funcHandlerName] = {
-        handler: func.funcHandlerName,
+      const handler = func.funcHandlerName;
+      if (!handler) {
+        return;
+      }
+      const funcName = handler.replace(/[^\w]/g, '-');
+      allFunc[funcName] = {
+        handler,
         events: [
           {
             http: {
