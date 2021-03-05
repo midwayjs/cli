@@ -4,10 +4,10 @@ import { join, relative } from 'path';
 import { existsSync, remove, readJSONSync } from 'fs-extra';
 import * as chalk from 'chalk';
 import { exec } from 'child_process';
-import { templateList } from './list';
 import { CategorySelect } from './categorySelect';
 import { LightGenerator } from 'light-generator';
 import Spin from 'light-spinner';
+const templateList = require('@midwayjs/boilerplate-list');
 export class AddPlugin extends BasePlugin {
   private projectName = '';
   private projectDirPath = '';
