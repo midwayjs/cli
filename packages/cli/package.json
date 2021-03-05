@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/cli",
-  "version": "1.2.47",
+  "version": "1.2.48-beta.1",
   "description": "Midway Command Tools",
   "main": "index.js",
   "bin": {
@@ -24,10 +24,10 @@
     "@midwayjs/command-core": "^1.2.46",
     "@midwayjs/debugger": "^1.0.x",
     "enquirer": "^2.3.4",
-    "minimist": "^1.2.5",
     "jest-environment-node": "^24.9.0",
-    "ts-node": "^9.0.0",
-    "source-map-support": "^0.5.19"
+    "minimist": "^1.2.5",
+    "source-map-support": "^0.5.19",
+    "ts-node": "^9.0.0"
   },
   "devDependencies": {
     "typescript": "^4.1.0"
