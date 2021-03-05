@@ -49,15 +49,8 @@ interface INpmInstallOptions {
   slience?: boolean;
 }
 export async function installNpm(options: INpmInstallOptions) {
-  let {
-    baseDir,
-    register = 'npm',
-    npmName,
-    installCmd = 'i',
-    mode,
-    slience,
-    registerPath,
-  } = options;
+  const { baseDir, register = 'npm', npmName, slience, registerPath } = options;
+  let { installCmd = 'i', mode } = options;
   if (/yarn/.test(register)) {
     if (installCmd === 'i') {
       // yarn add
@@ -67,9 +60,9 @@ export async function installNpm(options: INpmInstallOptions) {
       }
     }
   }
-  const cmd = `${register} ${installCmd} ${npmName}${mode ? ` --${mode}` : ' --no-save'}${
-    registerPath ? ` --registry=${registerPath}` : ''
-  }`;
+  const cmd = `${register} ${installCmd} ${npmName}${
+    mode ? ` --${mode}` : ' --no-save'
+  }${registerPath ? ` --registry=${registerPath}` : ''}`;
 
   return new Promise((resolved, rejected) => {
     const execProcess = exec(
