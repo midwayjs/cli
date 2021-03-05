@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.46](https://github.com/midwayjs/bin/compare/v1.2.45...v1.2.46) (2021-03-05)
+
+
+### Bug Fixes
+
+* cli find nm ([#55](https://github.com/midwayjs/bin/issues/55)) ([2c2873c](https://github.com/midwayjs/bin/commit/2c2873c2c0684c69e8b02cda14faeaae4437d534))
+
+
+
+
+
 ## [1.2.45](https://github.com/midwayjs/bin/compare/v1.2.44...v1.2.45) (2021-03-04)
 
 
