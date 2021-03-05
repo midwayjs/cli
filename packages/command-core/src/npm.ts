@@ -42,21 +42,32 @@ async function getNpmPath(
 interface INpmInstallOptions {
   baseDir?: string;
   register?: string;
+  installCmd?: string;
   registerPath?: string;
   npmName: string;
   mode?: string;
   slience?: boolean;
 }
 export async function installNpm(options: INpmInstallOptions) {
-  const {
+  let {
     baseDir,
     register = 'npm',
     npmName,
+    installCmd = 'i',
     mode,
     slience,
     registerPath,
   } = options;
-  const cmd = `${register} i ${npmName}${mode ? ` --${mode}` : ' --no-save'}${
+  if (/yarn/.test(register)) {
+    if (installCmd === 'i') {
+      // yarn add
+      installCmd = 'add';
+      if (!mode) {
+        mode = 'ignore-workspace-root-check';
+      }
+    }
+  }
+  const cmd = `${register} ${installCmd} ${npmName}${mode ? ` --${mode}` : ' --no-save'}${
     registerPath ? ` --registry=${registerPath}` : ''
   }`;
 
