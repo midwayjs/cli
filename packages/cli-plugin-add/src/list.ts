@@ -20,12 +20,14 @@ export const templateList = {
     group: 'Web Application',
   },
   'midway-hooks-koa-with-react': {
-    desc: 'The next generation of integrated front and back-end application development solutions',
+    desc:
+      'The next generation of integrated front and back-end application development solutions',
     package: '@midwayjs-examples/applicaiton-hooks-koa-react',
     group: 'Web Application',
   },
   'midway-hooks-koa-with-vue': {
-    desc: 'The next generation of integrated front and back-end application development solutions',
+    desc:
+      'The next generation of integrated front and back-end application development solutions',
     package: '@midwayjs-examples/applicaiton-hooks-koa-vue',
     group: 'Web Application',
   },
