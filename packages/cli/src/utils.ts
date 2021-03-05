@@ -54,7 +54,7 @@ const versionToNumber = version => {
 };
 
 export const findNpm = () => {
-  const npmList = [{ cmd: 'tnpm' }, { cmd: 'cnpm' }];
+  const npmList = [{ cmd: 'cnpm' }];
   const currentPlatform = platform();
   for (const npmInfo of npmList) {
     const { cmd } = npmInfo;

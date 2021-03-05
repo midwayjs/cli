@@ -11,6 +11,10 @@ async function getNpmPath(
   npmName: string,
   npmRegistry?: string
 ): Promise<string> {
+  const findNmResult = findNpmModule(scope.cwd || process.cwd(), npmName);
+  if (findNmResult) {
+    return findNmResult;
+  }
   const currentNodeModules = getCoreBaseDir();
   const localNpmPath = join(currentNodeModules, npmName);
   if (existsSync(localNpmPath)) {
