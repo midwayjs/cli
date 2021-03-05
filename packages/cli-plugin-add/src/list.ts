@@ -4,12 +4,12 @@ export const templateList = {
     package: '@midwayjs-examples/applicaiton-web',
     group: 'Web Application',
   },
-  'web-koa': {
+  'midway-koa': {
     desc: 'A web application boilerplate with midway and koa',
     package: '@midwayjs-examples/applicaiton-koa',
     group: 'Web Application',
   },
-  'web-express': {
+  'midway-express': {
     desc: 'A web application boilerplate with midway and express',
     package: '@midwayjs-examples/applicaiton-express',
     group: 'Web Application',
@@ -19,19 +19,24 @@ export const templateList = {
     package: '@midwayjs-examples/application-grpc',
     group: 'Web Application',
   },
+  'midway-hooks-koa-with-react': {
+    desc: 'The next generation of integrated front and back-end application development solutions',
+    package: '@midwayjs-examples/applicaiton-hooks-koa-react',
+    group: 'Web Application',
+  },
+  'midway-hooks-koa-with-vue': {
+    desc: 'The next generation of integrated front and back-end application development solutions',
+    package: '@midwayjs-examples/applicaiton-hooks-koa-vue',
+    group: 'Web Application',
+  },
   serverless: {
     desc: 'A serverless boilerplate for aliyun fc, tencent scf and so on',
     package: '@midwayjs/faas-boilerplate-standard',
     group: 'Serverless',
   },
-  'serverless-react-with-hooks': {
-    desc: 'A serverless exmaple with react and use hooks',
+  'serverless-hooks-with-react': {
+    desc: 'A serverless boilerplate with react and use hooks',
     package: '@midwayjs-examples/midway-hooks-react',
-    group: 'Serverless',
-  },
-  'serverless-vue-with-hooks': {
-    desc: 'A serverless exmaple with vue3 and use hooks',
-    package: '@midwayjs-examples/midway-hooks-vue3',
     group: 'Serverless',
   },
 };
