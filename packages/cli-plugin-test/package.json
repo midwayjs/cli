@@ -4,7 +4,7 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/command-core": "^1.2.46",
+    "@midwayjs/command-core": "^1.2.48",
     "globby": "^10.0.1",
     "jest": "^26.4.2",
     "ts-jest": "^26.0.0",

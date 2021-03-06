@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+
+
+**Note:** Version bump only for package @midwayjs/fcli-plugin-scf
+
+
+
+
+
 ## [1.2.48](https://github.com/midwayjs/cli/compare/v1.2.46...v1.2.48) (2021-03-06)
 
 

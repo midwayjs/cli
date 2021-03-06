@@ -5,7 +5,7 @@
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/cli-plugin-dev": "^1.2.48",
-    "@midwayjs/command-core": "^1.2.46",
+    "@midwayjs/command-core": "^1.2.48",
     "@midwayjs/gateway-common-core": "^1.2.48",
     "@midwayjs/gateway-common-http": "^1.2.48",
     "body-parser": "^1.19.0",

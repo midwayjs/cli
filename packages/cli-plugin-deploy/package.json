@@ -4,7 +4,7 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/command-core": "^1.2.46"
+    "@midwayjs/command-core": "^1.2.48"
   },
   "engines": {
     "node": ">= 10"

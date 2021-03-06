@@ -4,7 +4,7 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/command-core": "^1.2.46",
+    "@midwayjs/command-core": "^1.2.48",
     "@midwayjs/serverless-scf-starter": "^2.7.0",
     "@midwayjs/serverless-spec-builder": "^1.2.48",
     "serverless-tencent-scf": "^0.1.36"

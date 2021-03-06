@@ -5,7 +5,7 @@
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/boilerplate-list": "^1.0.0",
-    "@midwayjs/command-core": "^1.2.46",
+    "@midwayjs/command-core": "^1.2.48",
     "chalk": "^4.1.0",
     "enquirer": "^2.3.6",
     "fs-extra": "^9.0.1",
