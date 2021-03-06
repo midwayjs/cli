@@ -13,11 +13,16 @@ export const checkUpdate = (npm?: string) => {
     }
   }
   writeFileSync(lockFile, `${startTime}`);
-  npm = npm || findNpm().cmd;
+  const { registry } = findNpm({ npm });
   try {
-    const data = execSync(`${npm} view @midwayjs/cli dist-tags --json`, {
-      cwd: process.env.HOME,
-    }).toString();
+    const data = execSync(
+      `npm ${
+        registry ? `--registry=${registry}` : ''
+      }view @midwayjs/cli dist-tags --json`,
+      {
+        cwd: process.env.HOME,
+      }
+    ).toString();
     const remoteVersion = JSON.parse(data)['latest'];
     const remoteVersionNumber = versionToNumber(remoteVersion);
     const currentVersion = require('../package.json').version;
@@ -31,7 +36,7 @@ export const checkUpdate = (npm?: string) => {
       console.log();
       console.log('   please reinstall @midwayjs/cli module to update.');
       console.log();
-      console.log(`   ${npm} i @midwayjs/cli -g`);
+      console.log('   npm i @midwayjs/cli -g');
       console.log();
       console.log('*********************************************************');
       console.log();
@@ -53,48 +58,74 @@ const versionToNumber = version => {
   );
 };
 
-export const findNpm = () => {
-  const npmList = [{ cmd: 'cnpm' }];
-  const currentPlatform = platform();
-  for (const npmInfo of npmList) {
-    const { cmd } = npmInfo;
-    if (currentPlatform === 'win32') {
-      // for windows
-      try {
-        const find = execSync(`where ${cmd}`).toString();
-        // windows的命令路径至少会有 C/D/E:\ 前缀
-        if (find.indexOf(':\\') !== -1) {
-          return npmInfo;
+export const findNpm = (argv?) => {
+  let npm = 'npm';
+  let registry = '';
+  // 先找npm客户端
+  if (argv?.npm) {
+    npm = argv.npm;
+  } else if (
+    process.env.npm_config_user_agent &&
+    /yarn/.test(process.env.npm_config_user_agent)
+  ) {
+    npm = 'yarn';
+  } else if (
+    process.env.npm_execpath &&
+    /yarn/.test(process.env.npm_execpath)
+  ) {
+    npm = 'yarn';
+  } else if (process.env.yarn_registry) {
+    npm = 'yarn';
+  } else {
+    const npmList = ['cnpm'];
+    const currentPlatform = platform();
+    const cmd = npmList.find(cmd => {
+      if (currentPlatform === 'win32') {
+        // for windows
+        try {
+          const find = execSync(`where ${cmd}`).toString();
+          // windows的命令路径至少会有 C/D/E:\ 前缀
+          if (find.indexOf(':\\') !== -1) {
+            return cmd;
+          }
+        } catch {
+          //
         }
-      } catch {
-        //
-      }
-    } else {
-      // for mac/linux
-      try {
-        const find = execSync(`which ${cmd}`).toString();
-        // 没有找到not found
-        if (find.indexOf('not found') === -1) {
-          return npmInfo;
+      } else {
+        // for mac/linux
+        try {
+          const find = execSync(`which ${cmd}`).toString();
+          // 没有找到not found
+          if (find.indexOf('not found') === -1) {
+            return cmd;
+          }
+        } catch {
+          //
         }
-      } catch {
-        //
       }
+    });
+    if (cmd) {
+      npm = cmd;
     }
   }
 
-  let isCn = false;
-  const npmInfo: any = { cmd: 'npm' };
-
-  // language is zh_CN
-  if (process.env.LANG === 'zh_CN.UTF-8') {
-    isCn = true;
+  // registry
+  if (argv?.registry !== undefined) {
+    registry = argv.registry || '';
+  } else if (npm === 'yarn' && process.env.yarn_registry) {
+    registry = process.env.yarn_registry;
+  } else if (process.env.npm_config_registry) {
+    registry = process.env.npm_config_registry;
+  } else {
+    // language is zh_CN
+    if (process.env.LANG === 'zh_CN.UTF-8') {
+      registry = 'https://registry.npm.taobao.org';
+    }
   }
 
-  if (isCn) {
-    npmInfo.cmd = `${
-      npmInfo.cmd || 'npm'
-    } --registry=https://registry.npm.taobao.org`;
-  }
-  return npmInfo;
+  return {
+    cmd: `${npm}${registry ? ` --registry=${registry}` : ''}`,
+    npm,
+    registry,
+  };
 };

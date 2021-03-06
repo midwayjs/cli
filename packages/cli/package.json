@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/cli",
-  "version": "1.2.46",
+  "version": "1.2.48-beta.12",
   "description": "Midway Command Tools",
   "main": "index.js",
   "bin": {
@@ -20,12 +20,18 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@midwayjs/cli-plugin-add": "^1.2.46",
-    "@midwayjs/command-core": "^1.2.46",
+    "@midwayjs/cli-plugin-add": "^1.2.48-beta.12",
+    "@midwayjs/cli-plugin-build": "^1.2.48-beta.12",
+    "@midwayjs/cli-plugin-clean": "^1.2.48-beta.12",
+    "@midwayjs/cli-plugin-dev": "^1.2.48-beta.12",
+    "@midwayjs/cli-plugin-test": "^1.2.48-beta.12",
+    "@midwayjs/command-core": "^1.2.48-beta.12",
     "@midwayjs/debugger": "^1.0.x",
     "enquirer": "^2.3.4",
+    "jest-environment-node": "^24.9.0",
     "minimist": "^1.2.5",
-    "source-map-support": "^0.5.19"
+    "source-map-support": "^0.5.19",
+    "ts-node": "^9.0.0"
   },
   "devDependencies": {
     "typescript": "^4.1.0"
@@ -37,6 +43,7 @@
     "bin",
     "lib",
     "dist",
+    "jest",
     "index.js",
     "postinstall.js"
   ],
@@ -48,5 +55,5 @@
     "type": "git",
     "url": "http://github.com/midwayjs/midway.git"
   },
-  "gitHead": "58706de896b8e3b50605bb29f40ff29abe43924d"
+  "gitHead": "bf2f0058672bb0b48a016609cc9bd423bf26b793"
 }

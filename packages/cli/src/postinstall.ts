@@ -11,10 +11,12 @@ export const postinstall = async (baseDir: string) => {
   if (pkgJson) {
     pkgJsonList.push(pkgJson);
   }
+  let isLerna = false;
   // lerna support
   if (existsSync(join(baseDir, 'lerna.json'))) {
     const lernaPackagesJson = getLernaPackagesJson();
     pkgJsonList.push(...lernaPackagesJson);
+    isLerna = true;
   }
   const modMap = {};
   const installedModMap = {};
@@ -36,8 +38,7 @@ export const postinstall = async (baseDir: string) => {
   });
 
   const allMods = Object.keys(modMap);
-  const npm = process.env.NPM_CLIENT || findNpm().cmd;
-  console.log('[midway] postinstall npm client ', npm);
+  const npm = findNpm().cmd;
   for (const name of allMods) {
     console.log('[midway] auto install', name);
     await installNpm({
@@ -45,6 +46,7 @@ export const postinstall = async (baseDir: string) => {
       register: npm,
       npmName: name,
       slience: true,
+      isLerna,
     });
   }
   console.log('[midway] auto install complete');
@@ -54,7 +56,7 @@ const cmdToMod = (cmd: string, modMap, installedModMap) => {
   if (matchReg.test(cmd)) {
     const command = matchReg.exec(cmd)[1];
     const mod = PluginList.filter(plugin => {
-      return plugin.command === command;
+      return !plugin.installed && plugin.command === command;
     });
     if (Array.isArray(mod) && mod.length) {
       mod.forEach(modInfo => {

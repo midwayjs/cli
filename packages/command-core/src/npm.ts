@@ -42,21 +42,41 @@ async function getNpmPath(
 interface INpmInstallOptions {
   baseDir?: string;
   register?: string;
+  installCmd?: string;
   registerPath?: string;
   npmName: string;
   mode?: string;
   slience?: boolean;
+  isLerna?: boolean;
 }
+// yarn: yarn add mod --dev
+// npm: npm i mod --no-save
+// yarn + lerna: yarn add mod --ignore-workspace-root-check
+// npm + lerna: npm i mod --no-save
 export async function installNpm(options: INpmInstallOptions) {
   const {
     baseDir,
     register = 'npm',
     npmName,
-    mode,
     slience,
     registerPath,
+    isLerna,
   } = options;
-  const cmd = `${register} i ${npmName}${mode ? ` --${mode}` : ' --no-save'}${
+  let { installCmd = 'i', mode } = options;
+  if (/yarn/.test(register)) {
+    if (!options.installCmd) {
+      // yarn add
+      installCmd = 'add';
+    }
+    if (mode === undefined) {
+      mode = isLerna ? 'ignore-workspace-root-check' : 'dev';
+    }
+  } else {
+    if (mode === undefined) {
+      mode = 'no-save';
+    }
+  }
+  const cmd = `${register} ${installCmd} ${npmName}${mode ? ` --${mode}` : ''}${
     registerPath ? ` --registry=${registerPath}` : ''
   }`;
 
