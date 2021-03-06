@@ -18,7 +18,7 @@ export const checkUpdate = (npm?: string) => {
     const data = execSync(
       `npm ${
         registry ? `--registry=${registry}` : ''
-      }view @midwayjs/cli dist-tags --json`,
+      } view @midwayjs/cli dist-tags --json`,
       {
         cwd: process.env.HOME,
       }
