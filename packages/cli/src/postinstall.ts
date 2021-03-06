@@ -11,10 +11,12 @@ export const postinstall = async (baseDir: string) => {
   if (pkgJson) {
     pkgJsonList.push(pkgJson);
   }
+  let isLerna = false;
   // lerna support
   if (existsSync(join(baseDir, 'lerna.json'))) {
     const lernaPackagesJson = getLernaPackagesJson();
     pkgJsonList.push(...lernaPackagesJson);
+    isLerna = true;
   }
   const modMap = {};
   const installedModMap = {};
@@ -44,6 +46,7 @@ export const postinstall = async (baseDir: string) => {
       register: npm,
       npmName: name,
       slience: true,
+      isLerna,
     });
   }
   console.log('[midway] auto install complete');
