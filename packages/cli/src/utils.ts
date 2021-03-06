@@ -62,7 +62,7 @@ export const findNpm = (argv?) => {
   let npm = 'npm';
   let registry = '';
   // 先找npm客户端
-  if (argv.npm) {
+  if (argv?.npm) {
     npm = argv.npm;
   } else if (
     process.env.npm_config_user_agent &&
@@ -110,7 +110,7 @@ export const findNpm = (argv?) => {
   }
 
   // registry
-  if (argv.registry !== undefined) {
+  if (argv?.registry !== undefined) {
     registry = argv.registry || '';
   } else if (npm === 'yarn' && process.env.yarn_registry) {
     registry = process.env.yarn_registry;
