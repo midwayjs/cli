@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.48](https://github.com/midwayjs/midway/compare/v1.2.46...v1.2.48) (2021-03-06)
+
+
+### Bug Fixes
+
+* new list ([#56](https://github.com/midwayjs/midway/issues/56)) ([22019c0](https://github.com/midwayjs/midway/commit/22019c047dc716ad263fb74085523c65a35500b2))
+
+
+
+
+
 ## [1.2.46](https://github.com/midwayjs/midway/compare/v1.2.45...v1.2.46) (2021-03-05)
 
 
