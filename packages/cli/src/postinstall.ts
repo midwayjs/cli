@@ -56,7 +56,7 @@ const cmdToMod = (cmd: string, modMap, installedModMap) => {
   if (matchReg.test(cmd)) {
     const command = matchReg.exec(cmd)[1];
     const mod = PluginList.filter(plugin => {
-      return plugin.command === command;
+      return !plugin.installed && plugin.command === command;
     });
     if (Array.isArray(mod) && mod.length) {
       mod.forEach(modInfo => {

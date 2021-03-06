@@ -4,12 +4,18 @@ export const PluginList: Array<{
   name?: string;
   command?: string;
   platform?: string;
+  installed?: boolean;
 }> = [
-  { mod: '@midwayjs/cli-plugin-build', command: 'build' },
-  { mod: '@midwayjs/cli-plugin-dev', command: 'dev' },
+  { mod: '@midwayjs/cli-plugin-build', command: 'build', installed: true },
+  { mod: '@midwayjs/cli-plugin-dev', command: 'dev', installed: true },
   { mod: '@midwayjs/cli-plugin-faas', command: 'deploy' },
-  { mod: '@midwayjs/cli-plugin-test', command: 'test' },
-  { mod: '@midwayjs/cli-plugin-test', command: 'cov' },
-  { mod: '@midwayjs/cli-plugin-clean', command: 'clean' },
-  { mod: '@midwayjs/cli-plugin-add', command: 'new', name: 'AddPlugin' },
+  { mod: '@midwayjs/cli-plugin-test', command: 'test', installed: true },
+  { mod: '@midwayjs/cli-plugin-test', command: 'cov', installed: true },
+  { mod: '@midwayjs/cli-plugin-clean', command: 'clean', installed: true },
+  {
+    mod: '@midwayjs/cli-plugin-add',
+    command: 'new',
+    name: 'AddPlugin',
+    installed: true,
+  },
 ];
