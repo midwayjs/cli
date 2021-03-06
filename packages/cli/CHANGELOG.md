@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+
+
+**Note:** Version bump only for package @midwayjs/cli
+
+
+
+
+
 ## [1.2.49](https://github.com/midwayjs/midway/compare/v1.2.48...v1.2.49) (2021-03-06)
 
 
