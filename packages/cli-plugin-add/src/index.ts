@@ -32,7 +32,7 @@ export class AddPlugin extends BasePlugin {
         },
         type: {
           usage: 'new project type',
-        }
+        },
       },
       passingCommand: true,
     },
@@ -48,7 +48,7 @@ export class AddPlugin extends BasePlugin {
   async newFormatCommand() {
     this.template = this.options.template;
     if (this.options.type) {
-      this.template = templateList[this.options.type]
+      this.template = templateList[this.options.type];
     }
     if (!this.template) {
       this.template = await this.userSelectTemplate();
