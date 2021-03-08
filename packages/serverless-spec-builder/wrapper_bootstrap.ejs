@@ -1,7 +1,7 @@
 const { BootstrapStarter } = require('@midwayjs/bootstrap');
 const { Framework } = require('<%=faasModName %>');
 const { asyncWrapper, start } = require('<%=starter %>');
-const picomatch = require('picomatch');
+const { match } = require('path-to-regexp');
 const layers = [];
 <% layerDeps.forEach(function(layer){ %>
 try {
@@ -54,7 +54,7 @@ const getHandler = (hanlderName) => {
         let ctxPath = ctx && ctx.path || '';
         if (ctxPath) {
           handler = allHandlers.find(handler => {
-            return picomatch.isMatch(ctxPath, handler.router, { dot: true });
+            return match(handler.regRouter)(ctxPath);
           });
         }
 

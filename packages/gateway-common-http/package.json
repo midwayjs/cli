@@ -6,7 +6,7 @@
   "dependencies": {
     "@midwayjs/serverless-spec-builder": "^1.2.49",
     "@types/express": "^4.17.0",
-    "picomatch": "^2.2.1",
+    "path-to-regexp": "^6.2.0",
     "raw-body": "^2.4.1"
   },
   "devDependencies": {

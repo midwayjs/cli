@@ -339,9 +339,12 @@ export class PackagePlugin extends BasePlugin {
       this.core.cli.log(' - Production dependencies install skip: using ncc');
       return;
     }
-    this.setGlobalDependencies('picomatch');
+    
     if (this.midwayVersion === '2') {
       this.setGlobalDependencies('@midwayjs/bootstrap');
+      this.setGlobalDependencies('path-to-regexp');
+    } else {
+      this.setGlobalDependencies('picomatch');
     }
     // globalDependencies
     // pkg.json dependencies
