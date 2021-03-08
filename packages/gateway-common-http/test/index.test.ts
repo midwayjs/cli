@@ -24,7 +24,10 @@ describe('/test/index.test.ts', () => {
     it('test path-to-regexp', () => {
       assert.equal(!!match('/server/user/info')('/server/user/info'), true);
       assert.equal(!!match('/server/user/info/1')('/server/user/info'), false);
-      assert.equal(!!match('/server/user/info/(.*)?')('/server/user/info'), true);
+      assert.equal(
+        !!match('/server/user/info/(.*)?')('/server/user/info'),
+        true
+      );
       assert.equal(!!match('/server/user/(.*)?')('/server/user/info'), true);
       assert.equal(!!match('/(.*)?')('/bbbbbb/ccccc'), true);
       assert.equal(!!match('/api/(.*)?')('/api/abc'), true);
@@ -220,7 +223,6 @@ describe('/test/index.test.ts', () => {
       .expect(/xijian,hello http world/)
       .expect(200, done);
   });
-
 
   describe('test koa ignore pattern', () => {
     it('should test ignore pattern', done => {

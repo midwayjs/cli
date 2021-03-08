@@ -51,7 +51,7 @@ export async function parseInvokeOptionsByOriginUrl(
     base64Encoded: boolean;
     pathParameters: {
       [name: string]: string;
-    }
+    };
   }> = {};
   // 获取路由
   let urlMatchList = [];
