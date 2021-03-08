@@ -27,6 +27,12 @@ export class AddPlugin extends BasePlugin {
           usage: 'new template',
           alias: 't',
         },
+        target: {
+          usage: 'new project target directory',
+        },
+        type: {
+          usage: 'new project type',
+        }
       },
       passingCommand: true,
     },
@@ -41,12 +47,15 @@ export class AddPlugin extends BasePlugin {
 
   async newFormatCommand() {
     this.template = this.options.template;
-    if (!this.options.template) {
+    if (this.options.type) {
+      this.template = templateList[this.options.type]
+    }
+    if (!this.template) {
       this.template = await this.userSelectTemplate();
     }
 
     const { commands } = this.core.coreOptions;
-    let projectPath = commands[1];
+    let projectPath = this.options.target || commands[1];
     if (!projectPath) {
       projectPath = await new (enquirer as any).Input({
         message: 'What name would you like to use for the new project?',
