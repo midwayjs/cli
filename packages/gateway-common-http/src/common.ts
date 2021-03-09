@@ -1,5 +1,5 @@
 import { DevPackOptions, InvokeOptions } from './interface';
-import { isMatch } from 'picomatch';
+import { match } from 'path-to-regexp';
 import * as qs from 'querystring';
 const getRawBody = require('raw-body');
 const ignoreWildcardFunctionsWhiteList = [];
@@ -49,6 +49,9 @@ export async function parseInvokeOptionsByOriginUrl(
     path: string;
     query: any;
     base64Encoded: boolean;
+    pathParameters: {
+      [name: string]: string;
+    };
   }> = {};
   // 获取路由
   let urlMatchList = [];
@@ -61,11 +64,14 @@ export async function parseInvokeOptionsByOriginUrl(
     for (const event of httpEvents) {
       const eventItem = event?.http || event?.apigw;
       if (eventItem) {
+        const router = eventItem.path?.replace(/\/\*$/, '/(.*)?') || '/(.*)?';
         urlMatchList.push({
           functionName,
           functionHandler: functionItem.handler,
+          router,
           originRouter: eventItem.path || '/*',
-          router: eventItem.path?.replace(/\/\*$/, '/**') || '/**',
+          pureRouter: eventItem.path?.replace(/\/\*$/, '/') || '/',
+          level: router.split('/').length - 1,
           method: (eventItem.method ? [].concat(eventItem.method) : []).map(
             method => {
               return method.toLowerCase();
@@ -80,29 +86,19 @@ export async function parseInvokeOptionsByOriginUrl(
   // 3. 如果绝对路径和通配都能匹配一个路径时，绝对规则优先级高
   // 4. 有多个通配能匹配一个路径时，最长的规则匹配，如 /ab/** 和 /ab/cd/** 在匹配 /ab/cd/f 时命中 /ab/cd/**
   // 5. 如果 / 与 /* 都能匹配 / ,但 / 的优先级高于 /*
-  urlMatchList = urlMatchList
-    .map(item => {
-      return {
-        functionName: item.functionName,
-        functionHandler: item.functionHandler,
-        router: item.router,
-        pureRouter: item.router.replace(/\**$/, ''),
-        originRouter: item.originRouter,
-        level: item.router.split('/').length - 1,
-        method: item.method,
-      };
-    })
-    .sort((handlerA, handlerB) => {
-      if (handlerA.level === handlerB.level) {
-        if (handlerB.pureRouter === handlerA.pureRouter) {
-          return handlerA.router.length - handlerB.router.length;
-        }
-        return handlerB.pureRouter.length - handlerA.pureRouter.length;
+  urlMatchList = urlMatchList.sort((handlerA, handlerB) => {
+    if (handlerA.level === handlerB.level) {
+      if (handlerB.pureRouter === handlerA.pureRouter) {
+        return handlerA.router.length - handlerB.router.length;
       }
-      return handlerB.level - handlerA.level;
-    });
+      return handlerB.pureRouter.length - handlerA.pureRouter.length;
+    }
+    return handlerB.level - handlerA.level;
+  });
+  let matchRes;
   const functionItem = urlMatchList.find(item => {
-    if (isMatch(currentUrl, item.router, { dot: true })) {
+    matchRes = match(item.router)(currentUrl);
+    if (matchRes) {
       if (item.method.length && item.method.indexOf(currentMethod) === -1) {
         return false;
       }
@@ -144,6 +140,7 @@ export async function parseInvokeOptionsByOriginUrl(
       invokeHTTPData.body = undefined;
     }
     invokeHTTPData.method = req.method;
+    invokeHTTPData.pathParameters = matchRes.params || {};
     invokeHTTPData.path = currentUrl;
     invokeHTTPData.query = req.query;
     invokeHTTPData.base64Encoded = false;

@@ -38,7 +38,7 @@
     "release": "rm -f ./packages/.DS* && sh scripts/publish.sh",
     "bootstrap": "rm -f ./packages/.DS* && lerna bootstrap",
     "clean": "lerna clean --yes && rm -rf ./packages/**/package-lock.json",
-    "build": "sh scripts/build.sh && npm run gen-rollback",
+    "build": "sh scripts/build.sh",
     "gen-rollback": "node scripts/rollback.js",
     "prettier": "prettier --write 'packages/**/*.ts'",
     "authors": "git log --format='%aN <%aE>' | sort -u > AUTHORS",

@@ -1,7 +1,7 @@
 const { BootstrapStarter } = require('@midwayjs/bootstrap');
 const { Framework } = require('<%=faasModName %>');
 const { asyncWrapper, start } = require('<%=starter %>');
-const picomatch = require('picomatch');
+const { match } = require('path-to-regexp');
 const layers = [];
 <% layerDeps.forEach(function(layer){ %>
 try {
@@ -36,14 +36,13 @@ const initializeMethod = async (initializeContext = {}) => {
   })
   runtime = await start({
     layers: layers,
-    getHandler: getHandler,
     initContext: initializeContext,
   });
 
   inited = true;
 };
 
-const getHandler = (hanlderName) => {
+const getHandler = (hanlderName, ...originArgs) => {
   <% handlers.forEach(function(handlerData){ %>
     if (hanlderName === '<%=handlerData.name%>') {
       return <% if (handlerData.handler) {
@@ -52,13 +51,21 @@ const getHandler = (hanlderName) => {
         const allHandlers = <%-JSON.stringify(handlerData.handlers, null, 2)%>;
         let handler = null;
         let ctxPath = ctx && ctx.path || '';
+        let matchRes;
         if (ctxPath) {
           handler = allHandlers.find(handler => {
-            return picomatch.isMatch(ctxPath, handler.router, { dot: true });
+            matchRes = match(handler.regRouter)(ctxPath);
+            return matchRes;
           });
         }
 
         if (handler) {
+          if (matchRes && matchRes.params) {
+            const req = originArgs && originArgs[0];
+            if (req) {
+              req.pathParameters = Object.assign({}, matchRes.params, req.pathParameters);
+            }
+          }
           return starter.handleInvokeWrapper(handler.handler)(ctx);
         }
         ctx.status = 404;
@@ -81,7 +88,7 @@ exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
     await initializeMethod();
   }
 
-  const handler = getHandler('<%=handlerData.name%>');
+  const handler = getHandler('<%=handlerData.name%>', ...args);
   return runtime.asyncEvent(handler)(...args);
 });
 <% }); %>

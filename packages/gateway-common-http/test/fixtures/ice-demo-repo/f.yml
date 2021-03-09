@@ -36,3 +36,13 @@ functions:
     events:
       - apigw:
           path: /api/
+  jsonAddon:
+    handler: json.handler
+    events:
+      - http:
+          path: /json/*
+  pathParamters:
+    handler: path.handler
+    events:
+      - http:
+          path: /param/:name/info

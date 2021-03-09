@@ -2,6 +2,7 @@ import { join } from 'path';
 import { isMatch } from 'micromatch';
 import * as minimatch from 'minimatch';
 import * as picomatch from 'picomatch';
+import { match } from 'path-to-regexp';
 import * as assert from 'assert';
 import {
   createExpressSuit,
@@ -18,6 +19,19 @@ describe('/test/index.test.ts', () => {
       assert.equal(isMatch('/bbbbbb/ccccc', '/**'), true);
       assert.equal(isMatch('/api/abc', '/api/**'), true);
       assert.equal(isMatch('/api/a/b/c/d', '/api/a/b/c'), false);
+    });
+
+    it('test path-to-regexp', () => {
+      assert.equal(!!match('/server/user/info')('/server/user/info'), true);
+      assert.equal(!!match('/server/user/info/1')('/server/user/info'), false);
+      assert.equal(
+        !!match('/server/user/info/(.*)?')('/server/user/info'),
+        true
+      );
+      assert.equal(!!match('/server/user/(.*)?')('/server/user/info'), true);
+      assert.equal(!!match('/(.*)?')('/bbbbbb/ccccc'), true);
+      assert.equal(!!match('/api/(.*)?')('/api/abc'), true);
+      assert.equal(!!match('/api/a/b/c')('/api/a/b/c/d'), false);
     });
 
     it('test minimatch', () => {
@@ -181,6 +195,32 @@ describe('/test/index.test.ts', () => {
       .expect('Content-type', 'text/html; charset=utf-8')
       .expect(/zhangting,hello http world,doTest/)
       .expect('x-schema', 'bbb')
+      .expect(200, done);
+  });
+
+  it('should invoke *.json', done => {
+    createKoaSuit({
+      functionDir: join(__dirname, './fixtures/ice-demo-repo'),
+      sourceDir: 'src/apis',
+    })
+      .post('/json/test.json')
+      .query({
+        action: 'doTest',
+      })
+      .send({ name: 'zhangting' })
+      .expect('Content-type', 'text/html; charset=utf-8')
+      .expect(/zhangting,hello http world,doTest/)
+      .expect('x-schema', 'bbb')
+      .expect(200, done);
+  });
+
+  it('should get param from path', done => {
+    createKoaSuit({
+      functionDir: join(__dirname, './fixtures/ice-demo-repo'),
+      sourceDir: 'src/apis',
+    })
+      .get('/param/xijian/info')
+      .expect(/xijian,hello http world/)
       .expect(200, done);
   });
 

@@ -1,4 +1,4 @@
-import { BasePlugin } from '@midwayjs/command-core';
+import { BasePlugin, findNpm } from '@midwayjs/command-core';
 import * as enquirer from 'enquirer';
 import { join, relative } from 'path';
 import { existsSync, remove, readJSONSync } from 'fs-extra';
@@ -27,6 +27,15 @@ export class AddPlugin extends BasePlugin {
           usage: 'new template',
           alias: 't',
         },
+        target: {
+          usage: 'new project target directory',
+        },
+        type: {
+          usage: 'new project type',
+        },
+        npm: {
+          usage: 'npm registry',
+        },
       },
       passingCommand: true,
     },
@@ -41,12 +50,19 @@ export class AddPlugin extends BasePlugin {
 
   async newFormatCommand() {
     this.template = this.options.template;
-    if (!this.options.template) {
+    if (this.options.type) {
+      this.template = templateList[this.options.type]?.package;
+    }
+    if (!this.template) {
       this.template = await this.userSelectTemplate();
     }
 
+    if (!this.options.npm) {
+      this.options.npm = findNpm().cmd;
+    }
+
     const { commands } = this.core.coreOptions;
-    let projectPath = commands[1];
+    let projectPath = this.options.target || commands[1];
     if (!projectPath) {
       projectPath = await new (enquirer as any).Input({
         message: 'What name would you like to use for the new project?',
@@ -83,23 +99,33 @@ export class AddPlugin extends BasePlugin {
     this.core.debug('template', template);
     this.core.debug('projectDirPath', projectDirPath);
     this.core.debug('type', type);
-    const lightGenerator = new LightGenerator();
-    let generator;
-    if (type === 'npm') {
-      // 利用 npm 包
-      generator = lightGenerator.defineNpmPackage({
-        npmClient: this.options.npm || 'npm',
-        npmPackage: template,
-        targetPath: projectDirPath,
-      });
-    } else {
-      // 利用本地路径
-      generator = lightGenerator.defineLocalPath({
-        templatePath: template,
-        targetPath: projectDirPath,
-      });
+    const spin = new Spin({
+      text: 'Downloading Boilerplate...',
+    });
+    spin.start();
+    try {
+      const lightGenerator = new LightGenerator();
+      let generator;
+      if (type === 'npm') {
+        // 利用 npm 包
+        generator = lightGenerator.defineNpmPackage({
+          npmClient: this.options.npm || 'npm',
+          npmPackage: template,
+          targetPath: projectDirPath,
+        });
+      } else {
+        // 利用本地路径
+        generator = lightGenerator.defineLocalPath({
+          templatePath: template,
+          targetPath: projectDirPath,
+        });
+      }
+      await generator.run();
+      spin.stop();
+    } catch (e) {
+      spin.stop();
+      throw e;
     }
-    await generator.run();
   }
 
   // 用户选择模板
@@ -134,7 +160,7 @@ export class AddPlugin extends BasePlugin {
         Object.assign({}, pkg.devDependencies, pkg.dependencies)
       );
       const spin = new Spin({
-        text: 'Denpendecies installing...',
+        text: 'Dependencies installing...',
       });
       spin.start();
       this.checkDepInstalled(baseDir, spin, allDeps);
@@ -168,7 +194,7 @@ export class AddPlugin extends BasePlugin {
     }
     spin.text = `[${allDeps.length - notFind.length}/${
       allDeps.length
-    }] Denpendecies installing...`;
+    }] Dependencies installing...`;
     clearTimeout(this.checkDepInstallTimeout);
     this.checkDepInstallTimeout = setTimeout(() => {
       this.checkDepInstalled(baseDir, spin, allDeps);

@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/serverless-meta-json",
-  "version": "1.2.49",
+  "version": "1.2.50-beta.5",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "devDependencies": {

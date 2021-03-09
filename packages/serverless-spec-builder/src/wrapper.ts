@@ -182,6 +182,7 @@ export function formetAggregationHandlers(handlers) {
         handler: handler.handler,
         router: handler.path.replace(/\*/g, '**'), // picomatch use **
         pureRouter: handler.path.replace(/\**$/, ''),
+        regRouter: handler.path.replace(/\/\*$/, '/(.*)?') || '/(.*)?', // path2regexp match use (.*)?
         level: handler.path.split('/').length - 1,
       };
     })

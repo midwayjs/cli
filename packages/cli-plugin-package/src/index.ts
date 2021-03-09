@@ -339,9 +339,12 @@ export class PackagePlugin extends BasePlugin {
       this.core.cli.log(' - Production dependencies install skip: using ncc');
       return;
     }
-    this.setGlobalDependencies('picomatch');
+
     if (this.midwayVersion === '2') {
       this.setGlobalDependencies('@midwayjs/bootstrap');
+      this.setGlobalDependencies('path-to-regexp');
+    } else {
+      this.setGlobalDependencies('picomatch');
     }
     // globalDependencies
     // pkg.json dependencies
@@ -833,9 +836,18 @@ export class PackagePlugin extends BasePlugin {
       let currentPath = commonPrefix(allPaths);
       currentPath =
         currentPath && currentPath !== '/' ? `${currentPath}/*` : '/*';
+
       this.core.cli.log(
         ` - using path '${currentPath}' to deploy '${allPaths.join("', '")}'`
       );
+      // path parameter
+      if (currentPath.includes(':')) {
+        const newCurrentPath = currentPath.replace(/\/:.*$/, '/*');
+        this.core.cli.log(
+          ` - using path '${newCurrentPath}' to deploy '${currentPath}' (for path parameter)`
+        );
+        currentPath = newCurrentPath;
+      }
       if (allAggregationPaths.indexOf(currentPath) !== -1) {
         console.error(
           `Cannot use the same prefix '${currentPath}' for aggregation deployment`
