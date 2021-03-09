@@ -1,7 +1,7 @@
 import { BasePlugin, findNpm } from '@midwayjs/command-core';
 import * as enquirer from 'enquirer';
 import { join, relative } from 'path';
-import { existsSync, remove, readJSONSync, readdirSync } from 'fs-extra';
+import { existsSync, remove, readJSONSync } from 'fs-extra';
 import * as chalk from 'chalk';
 import { exec } from 'child_process';
 import { CategorySelect } from './categorySelect';
@@ -13,7 +13,6 @@ export class AddPlugin extends BasePlugin {
   private projectDirPath = '';
   private template = '';
   private checkDepInstallTimeout;
-  private oldNmMap = {};
   commands = {
     new: {
       // mw new xxx -t
@@ -185,49 +184,21 @@ export class AddPlugin extends BasePlugin {
     });
   }
 
-  getAllModName(baseDir, group?) {
-    const mod = {};
-    if (!existsSync(baseDir)) {
-      return {};
-    }
-    const pkgList = readdirSync(baseDir);
-    for (const modName of pkgList) {
-      if (modName[0] === '_') {
-        continue;
-      }
-      if (modName[0] === '@') {
-        const childMod = this.getAllModName(join(baseDir, modName), modName);
-        Object.assign(mod, childMod);
-        continue;
-      }
-      mod[(group ? group + '/' : '') + modName] = true;
-    }
-    return mod;
-  }
-
   checkDepInstalled(baseDir, spin, allDeps) {
-    clearTimeout(this.checkDepInstallTimeout);
     const nmDir = join(baseDir, 'node_modules');
     const notFind = allDeps.filter(dep => {
       return !existsSync(join(nmDir, dep));
     });
-    const installedModMap = this.getAllModName(nmDir);
-    const installedModList = Object.keys(installedModMap);
-    const diffMod = installedModList.filter(mod => {
-      return !this.oldNmMap[mod];
-    });
-    const installedSize = installedModList.length;
-    this.oldNmMap = installedModMap;
-    const allSize = allDeps.length + installedSize;
-    const percent = allSize
-      ? Math.ceil(((allSize - notFind.length) / allSize) * 99)
-      : 100;
-    spin.text =
-      `[${('   ' + percent).slice(-3)}%] Dependencies installing...` +
-      (diffMod[0] || '');
+    if (!notFind.length) {
+      return;
+    }
+    spin.text = `[${allDeps.length - notFind.length}/${
+      allDeps.length
+    }] Dependencies installing...`;
+    clearTimeout(this.checkDepInstallTimeout);
     this.checkDepInstallTimeout = setTimeout(() => {
       this.checkDepInstalled(baseDir, spin, allDeps);
-    }, 100);
+    }, 200);
   }
 
   printUsage() {
