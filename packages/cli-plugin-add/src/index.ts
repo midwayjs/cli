@@ -161,7 +161,7 @@ export class AddPlugin extends BasePlugin {
         Object.assign({}, pkg.devDependencies, pkg.dependencies)
       );
       const spin = new Spin({
-        text: 'Denpendecies installing...',
+        text: 'Dependencies installing...',
       });
       spin.start();
       this.checkDepInstalled(baseDir, spin, allDeps);
@@ -220,7 +220,7 @@ export class AddPlugin extends BasePlugin {
       ? Math.ceil(((allSize - notFind.length) / allSize) * 99)
       : 100;
     spin.text =
-      `[${('   ' + percent).slice(-3)}%] Denpendecies installing...` +
+      `[${('   ' + percent).slice(-3)}%] Dependencies installing...` +
       (diffMod[0] || '');
     this.checkDepInstallTimeout = setTimeout(() => {
       this.checkDepInstalled(baseDir, spin, allDeps);
