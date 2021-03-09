@@ -1,7 +1,7 @@
-import { BasePlugin } from '@midwayjs/command-core';
+import { BasePlugin, findNpm } from '@midwayjs/command-core';
 import * as enquirer from 'enquirer';
 import { join, relative } from 'path';
-import { existsSync, remove, readJSONSync } from 'fs-extra';
+import { existsSync, remove, readJSONSync, readdirSync } from 'fs-extra';
 import * as chalk from 'chalk';
 import { exec } from 'child_process';
 import { CategorySelect } from './categorySelect';
@@ -13,6 +13,7 @@ export class AddPlugin extends BasePlugin {
   private projectDirPath = '';
   private template = '';
   private checkDepInstallTimeout;
+  private oldNmMap = {};
   commands = {
     new: {
       // mw new xxx -t
@@ -33,6 +34,9 @@ export class AddPlugin extends BasePlugin {
         type: {
           usage: 'new project type',
         },
+        npm: {
+          usage: 'npm registry',
+        },
       },
       passingCommand: true,
     },
@@ -52,6 +56,10 @@ export class AddPlugin extends BasePlugin {
     }
     if (!this.template) {
       this.template = await this.userSelectTemplate();
+    }
+
+    if (!this.options.npm) {
+      this.options.npm = findNpm().cmd;
     }
 
     const { commands } = this.core.coreOptions;
@@ -92,23 +100,33 @@ export class AddPlugin extends BasePlugin {
     this.core.debug('template', template);
     this.core.debug('projectDirPath', projectDirPath);
     this.core.debug('type', type);
-    const lightGenerator = new LightGenerator();
-    let generator;
-    if (type === 'npm') {
-      // 利用 npm 包
-      generator = lightGenerator.defineNpmPackage({
-        npmClient: this.options.npm || 'npm',
-        npmPackage: template,
-        targetPath: projectDirPath,
-      });
-    } else {
-      // 利用本地路径
-      generator = lightGenerator.defineLocalPath({
-        templatePath: template,
-        targetPath: projectDirPath,
-      });
+    const spin = new Spin({
+      text: 'Downloading Boilerplate...',
+    });
+    spin.start();
+    try {
+      const lightGenerator = new LightGenerator();
+      let generator;
+      if (type === 'npm') {
+        // 利用 npm 包
+        generator = lightGenerator.defineNpmPackage({
+          npmClient: this.options.npm || 'npm',
+          npmPackage: template,
+          targetPath: projectDirPath,
+        });
+      } else {
+        // 利用本地路径
+        generator = lightGenerator.defineLocalPath({
+          templatePath: template,
+          targetPath: projectDirPath,
+        });
+      }
+      await generator.run();
+      spin.stop();
+    } catch (e) {
+      spin.stop();
+      throw e;
     }
-    await generator.run();
   }
 
   // 用户选择模板
@@ -167,21 +185,46 @@ export class AddPlugin extends BasePlugin {
     });
   }
 
+  getAllModName(baseDir, group?) {
+    const mod = {};
+    const pkgList = readdirSync(baseDir);
+    for (const modName of pkgList) {
+      if (modName[0] === '_') {
+        continue;
+      }
+      if (modName[0] === '@') {
+        const childMod = this.getAllModName(join(baseDir, modName), modName);
+        Object.assign(mod, childMod);
+        continue;
+      }
+      mod[(group ? group + '/' : '') + modName] = true;
+    }
+    return mod;
+  }
+
   checkDepInstalled(baseDir, spin, allDeps) {
+    clearTimeout(this.checkDepInstallTimeout);
     const nmDir = join(baseDir, 'node_modules');
     const notFind = allDeps.filter(dep => {
       return !existsSync(join(nmDir, dep));
     });
-    if (!notFind.length) {
-      return;
-    }
-    spin.text = `[${allDeps.length - notFind.length}/${
-      allDeps.length
-    }] Denpendecies installing...`;
-    clearTimeout(this.checkDepInstallTimeout);
+    const installedModMap = this.getAllModName(nmDir);
+    const installedModList = Object.keys(installedModMap);
+    const diffMod = installedModList.filter(mod => {
+      return !this.oldNmMap[mod];
+    });
+    const installedSize = installedModList.length;
+    this.oldNmMap = installedModMap;
+    const allSize = allDeps.length + installedSize;
+    const percent = allSize
+      ? Math.ceil(((allSize - notFind.length) / allSize) * 99)
+      : 100;
+    spin.text =
+      `[${('   ' + percent).slice(-3)}%] Denpendecies installing...` +
+      (diffMod[0] || '');
     this.checkDepInstallTimeout = setTimeout(() => {
       this.checkDepInstalled(baseDir, spin, allDeps);
-    }, 200);
+    }, 100);
   }
 
   printUsage() {

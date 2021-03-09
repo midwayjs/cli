@@ -2,6 +2,7 @@ import { join } from 'path';
 import { existsSync, writeFileSync } from 'fs';
 import { exec, execSync } from 'child_process';
 import * as assert from 'assert';
+import { platform } from 'os';
 export const getCoreBaseDir = () => {
   return execSync('npm root').toString().replace(/\n$/, '');
 };
@@ -125,4 +126,76 @@ export const findNpmModule = (cwd, modName) => {
   if (parentCwd !== cwd) {
     return findNpmModule(parentCwd, modName);
   }
+};
+
+export const findNpm = (argv?) => {
+  let npm = 'npm';
+  let registry = '';
+  // 先找npm客户端
+  if (argv?.npm) {
+    npm = argv.npm;
+  } else if (
+    process.env.npm_config_user_agent &&
+    /yarn/.test(process.env.npm_config_user_agent)
+  ) {
+    npm = 'yarn';
+  } else if (
+    process.env.npm_execpath &&
+    /yarn/.test(process.env.npm_execpath)
+  ) {
+    npm = 'yarn';
+  } else if (process.env.yarn_registry) {
+    npm = 'yarn';
+  } else {
+    const npmList = ['cnpm'];
+    const currentPlatform = platform();
+    const cmd = npmList.find(cmd => {
+      if (currentPlatform === 'win32') {
+        // for windows
+        try {
+          const find = execSync(`where ${cmd}`).toString();
+          // windows的命令路径至少会有 C/D/E:\ 前缀
+          if (find.indexOf(':\\') !== -1) {
+            return cmd;
+          }
+        } catch {
+          //
+        }
+      } else {
+        // for mac/linux
+        try {
+          const find = execSync(`which ${cmd}`).toString();
+          // 没有找到not found
+          if (find.indexOf('not found') === -1) {
+            return cmd;
+          }
+        } catch {
+          //
+        }
+      }
+    });
+    if (cmd) {
+      npm = cmd;
+    }
+  }
+
+  // registry
+  if (argv?.registry !== undefined) {
+    registry = argv.registry || '';
+  } else if (npm === 'yarn' && process.env.yarn_registry) {
+    registry = process.env.yarn_registry;
+  } else if (process.env.npm_config_registry) {
+    registry = process.env.npm_config_registry;
+  } else {
+    // language is zh_CN
+    if (process.env.LANG === 'zh_CN.UTF-8') {
+      registry = 'https://registry.npm.taobao.org';
+    }
+  }
+
+  return {
+    cmd: `${npm}${registry ? ` --registry=${registry}` : ''}`,
+    npm,
+    registry,
+  };
 };
