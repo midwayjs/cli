@@ -187,6 +187,9 @@ export class AddPlugin extends BasePlugin {
 
   getAllModName(baseDir, group?) {
     const mod = {};
+    if (!existsSync(baseDir)) {
+      return {};
+    }
     const pkgList = readdirSync(baseDir);
     for (const modName of pkgList) {
       if (modName[0] === '_') {
