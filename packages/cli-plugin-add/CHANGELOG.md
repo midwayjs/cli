@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.50](https://github.com/midwayjs/cli/compare/v1.2.48...v1.2.50) (2021-03-09)
+
+
+### Bug Fixes
+
+* check update view ([#57](https://github.com/midwayjs/cli/issues/57)) ([415ed17](https://github.com/midwayjs/cli/commit/415ed17451475a59ffbce1a19ffb807c9812efd8))
+* support path param ([#58](https://github.com/midwayjs/cli/issues/58)) ([eb5e680](https://github.com/midwayjs/cli/commit/eb5e680240a9cd47760d0e1640755e5d8e189033))
+
+
+
+
+
 
 
 **Note:** Version bump only for package @midwayjs/cli-plugin-add

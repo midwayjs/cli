@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/faas-code-analysis",
-  "version": "1.2.50-beta.5",
+  "version": "1.2.50",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
