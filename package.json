@@ -14,7 +14,7 @@
     "execa": "^4.0.3",
     "gh-pages": "^1.2.0",
     "jest": "^26.4.2",
-    "lerna": "3",
+    "lerna": "4.0.0",
     "lerna-relinker": "^1.4.0",
     "mwts": "^1.0.5",
     "opencollective": "^1.0.3",
