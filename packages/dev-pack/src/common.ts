@@ -71,7 +71,7 @@ export async function invokeByDev(getDevCore) {
       }
       query = Object.keys(params.query || {})
         .map(key => {
-          return `${key}=${decodeURIComponent(params.query[key])}`;
+          return `${key}=${encodeURIComponent(params.query[key])}`;
         })
         .join('&');
       delete params.query;
