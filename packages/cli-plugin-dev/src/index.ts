@@ -228,7 +228,7 @@ export class DevPlugin extends BasePlugin {
   }
 
   private getSourceDir() {
-    return this.options.sourceDir || resolve(this.core.cwd, 'src');
+    return resolve(this.core.cwd, this.options.sourceDir || 'src');
   }
 
   // watch file change
