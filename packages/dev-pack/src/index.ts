@@ -6,6 +6,7 @@ import * as koaBodyParser from 'koa-bodyparser';
 import * as expressBodyParser from 'body-parser';
 import * as compose from 'koa-compose';
 import { compose as expressCompose } from 'compose-middleware';
+import { IStartOptions } from './interface';
 
 export function useExpressDevPack(options: DevPackOptions) {
   options.functionDir = options.functionDir || process.cwd();
@@ -40,21 +41,19 @@ export function useKoaDevPack(options: DevPackOptions) {
   ]);
 }
 
-export function getKoaDevPack(cwd: string, options?) {
+export function getKoaDevPack(cwd: string, options?: IStartOptions) {
   return wrapDevPack(useKoaDevPack, cwd, options);
 }
 
-export function getExpressDevPack(cwd: string, options?) {
+export function getExpressDevPack(cwd: string, options?: IStartOptions) {
   return wrapDevPack(useExpressDevPack, cwd, options);
 }
 
 const wrapDevPack = (
   devPack,
   cwd,
-  startOptions: {
-    sourceDir?: string;
-  } = {}
-): any => {
+  startOptions: IStartOptions = {}
+): ((options: DevPackOptions) => any) => {
   cwd = cwd || process.cwd();
   let devCore;
   startDev(cwd, startOptions).then(core => {

@@ -1,9 +1,11 @@
 import { CommandCore } from '@midwayjs/command-core';
 import { DevPlugin } from '@midwayjs/cli-plugin-dev';
 import { join } from 'path';
+import { IStartOptions } from './interface';
 const fetch = require('node-fetch');
 
-export async function startDev(cwd, options) {
+export async function startDev(cwd, opts: IStartOptions) {
+  const options: any = opts;
   options.notStartLog = true;
   options.ts = true;
   options.slient = options.slient ?? true;
@@ -20,6 +22,11 @@ export async function startDev(cwd, options) {
     cwd,
   });
   core.addPlugin(DevPlugin);
+  if (options.plugins) {
+    options.plugins.forEach(plugin => {
+      core.addPlugin(plugin);
+    });
+  }
   await core.ready();
   core.invoke(['dev'], false, options);
   return core;
@@ -64,7 +71,7 @@ export async function invokeByDev(getDevCore) {
       }
       query = Object.keys(params.query || {})
         .map(key => {
-          return `${key}=${params.query[key]}`;
+          return `${key}=${decodeURIComponent(params.query[key])}`;
         })
         .join('&');
       delete params.query;
