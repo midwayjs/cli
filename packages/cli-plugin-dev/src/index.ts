@@ -98,7 +98,9 @@ export class DevPlugin extends BasePlugin {
 
   protected getOptions() {
     let framework;
-    const layers: string[] = (this.options.layers || '').split(',');
+    const layers: string[] = this.options.layers
+      ? this.options.layers.split(',')
+      : [];
     const cwd = this.core.cwd;
     const yamlPath = resolve(cwd, 'f.yml');
     if (!this.options.framework && existsSync(yamlPath)) {
