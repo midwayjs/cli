@@ -894,7 +894,11 @@ export class PackagePlugin extends BasePlugin {
   defaultBeforeGenerateSpec() {
     const service: any = this.core.service;
     if (service?.deployType) {
-      this.core.cli.log(` - found deployType: ${service?.deployType}`);
+      const deployType =
+        typeof service.deployType === 'string'
+          ? service.deployType
+          : service.deployType?.type;
+      this.core.cli.log(` - found deployType: ${deployType}`);
 
       this.setGlobalDependencies('@midwayjs/simple-lock');
 
@@ -917,21 +921,27 @@ export class PackagePlugin extends BasePlugin {
         service.layers = {};
       }
 
-      if (service?.deployType === 'egg') {
-        this.core.cli.log(' - create default layer: egg');
-        service.layers['eggLayer'] = { path: 'npm:@midwayjs/egg-layer' };
-      }
-
-      if (service?.deployType === 'express') {
-        this.core.cli.log(' - create default layer: express');
-        service.layers['expressLayer'] = {
-          path: 'npm:@midwayjs/express-layer',
-        };
-      }
-
-      if (service?.deployType === 'koa') {
-        this.core.cli.log(' - create default layer: koa');
-        service.layers['koaLayer'] = { path: 'npm:@midwayjs/koa-layer' };
+      switch (deployType) {
+        case 'egg':
+          this.core.cli.log(' - create default layer: egg');
+          service.layers['eggLayer'] = { path: 'npm:@midwayjs/egg-layer' };
+          break;
+        case 'express':
+          this.core.cli.log(' - create default layer: express');
+          service.layers['expressLayer'] = {
+            path: 'npm:@midwayjs/express-layer',
+          };
+          break;
+        case 'koa':
+          this.core.cli.log(' - create default layer: koa');
+          service.layers['koaLayer'] = { path: 'npm:@midwayjs/koa-layer' };
+          break;
+        case 'static':
+          this.core.cli.log(' - create default layer: static');
+          service.layers['staticLayer'] = {
+            path: 'npm:@midwayjs/static-layer',
+          };
+          break;
       }
     }
     writeToSpec(this.midwayBuildPath, this.core.service);
