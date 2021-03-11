@@ -6,7 +6,7 @@ import * as koaBodyParser from 'koa-bodyparser';
 import * as expressBodyParser from 'body-parser';
 import * as compose from 'koa-compose';
 import { compose as expressCompose } from 'compose-middleware';
-import { IStartOptions } from './interface';
+import { IStartOptions, IDevPack } from './interface';
 
 export function useExpressDevPack(options: DevPackOptions) {
   options.functionDir = options.functionDir || process.cwd();
@@ -53,7 +53,7 @@ const wrapDevPack = (
   devPack,
   cwd,
   startOptions: IStartOptions = {}
-): ((options: DevPackOptions) => any) => {
+): IDevPack => {
   cwd = cwd || process.cwd();
   let devCore;
   startDev(cwd, startOptions).then(core => {
