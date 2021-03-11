@@ -134,6 +134,7 @@ export function writeWrapper(options: {
     const layers = getLayers(service.layers, ...files[file].originLayers);
     const content = render(tpl, {
       starter,
+      runtimeConfig: service, // yaml data
       faasModName: faasModName || '@midwayjs/faas',
       loadDirectory,
       // Todo: future need remove middleware, use egg

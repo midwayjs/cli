@@ -37,6 +37,7 @@ const initializeMethod = async (initializeContext = {}) => {
   runtime = await start({
     layers: layers,
     initContext: initializeContext,
+    runtimeConfig: <%-JSON.stringify(runtimeConfig)%>,
   });
 
   inited = true;
