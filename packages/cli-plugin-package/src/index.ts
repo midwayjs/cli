@@ -101,6 +101,9 @@ export class PackagePlugin extends BasePlugin {
           usage: 'Skip zip artifact',
           shortcut: 'z',
         },
+        skipBuild: {
+          usage: 'Skip funciton build',
+        },
         stage: {
           usage: 'Stage of the service',
           shortcut: 's',
@@ -252,14 +255,19 @@ export class PackagePlugin extends BasePlugin {
     await copyFiles({
       sourceDir: this.servicePath,
       targetDir: this.midwayBuildPath,
-      include: [this.options.sourceDir || 'src'].concat(
-        packageObj.include || []
-      ),
+      include: this.options.skipBuild
+        ? [].concat(packageObj.include || [])
+        : [this.options.sourceDir || 'src'].concat(packageObj.include || []),
       exclude: packageObj.exclude,
       log: path => {
         this.core.cli.log(`   - Copy ${path}`);
       },
     });
+
+    if (this.options.skipBuild) {
+      // 跳过编译时也不处理package.json
+      return;
+    }
     if (this.codeAnalyzeResult.integrationProject) {
       let originPkgJson = {};
       try {
@@ -412,6 +420,10 @@ export class PackagePlugin extends BasePlugin {
   }
 
   async compile() {
+    // 跳过编译
+    if (this.options.skipBuild) {
+      return;
+    }
     // 不存在 tsconfig，跳过编译
     if (!existsSync(resolve(this.servicePath, 'tsconfig.json'))) {
       return;
@@ -455,6 +467,10 @@ export class PackagePlugin extends BasePlugin {
   }
 
   async emit() {
+    // 跳过编译
+    if (this.options.skipBuild) {
+      return;
+    }
     const isTsDir = existsSync(join(this.servicePath, 'tsconfig.json'));
     this.core.cli.log('Building project directory files...');
     if (!isTsDir) {
@@ -507,6 +523,10 @@ export class PackagePlugin extends BasePlugin {
   }
 
   async analysisCode() {
+    // 跳过编译
+    if (this.options.skipBuild) {
+      return;
+    }
     // midway 2版本的装饰器分析由框架提供了
     if (this.midwayVersion === '2') {
       process.chdir(this.midwayBuildPath);
@@ -548,6 +568,10 @@ export class PackagePlugin extends BasePlugin {
   }
 
   private copyStaticFile() {
+    // 跳过编译
+    if (this.options.skipBuild) {
+      return;
+    }
     const isTsDir = existsSync(join(this.servicePath, 'tsconfig.json'));
     if (!isTsDir) {
       return;
@@ -898,6 +922,9 @@ export class PackagePlugin extends BasePlugin {
         typeof service.deployType === 'string'
           ? service.deployType
           : service.deployType?.type;
+      const version = service.deployType?.version
+        ? `@${service.deployType.version}`
+        : '';
       this.core.cli.log(` - found deployType: ${deployType}`);
 
       this.setGlobalDependencies('@midwayjs/simple-lock');
@@ -924,22 +951,26 @@ export class PackagePlugin extends BasePlugin {
       switch (deployType) {
         case 'egg':
           this.core.cli.log(' - create default layer: egg');
-          service.layers['eggLayer'] = { path: 'npm:@midwayjs/egg-layer' };
+          service.layers['eggLayer'] = {
+            path: 'npm:@midwayjs/egg-layer' + version,
+          };
           break;
         case 'express':
           this.core.cli.log(' - create default layer: express');
           service.layers['expressLayer'] = {
-            path: 'npm:@midwayjs/express-layer',
+            path: 'npm:@midwayjs/express-layer' + version,
           };
           break;
         case 'koa':
           this.core.cli.log(' - create default layer: koa');
-          service.layers['koaLayer'] = { path: 'npm:@midwayjs/koa-layer' };
+          service.layers['koaLayer'] = {
+            path: 'npm:@midwayjs/koa-layer' + version,
+          };
           break;
         case 'static':
           this.core.cli.log(' - create default layer: static');
           service.layers['staticLayer'] = {
-            path: 'npm:@midwayjs/static-layer',
+            path: 'npm:@midwayjs/static-layer' + version,
           };
           break;
       }
