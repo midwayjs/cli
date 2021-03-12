@@ -41,6 +41,9 @@ export class DevPlugin extends BasePlugin {
         sourceDir: {
           usage: 'ts code source dir',
         },
+        layers: {
+          usage: 'extend serverless by layer',
+        },
       },
     },
   };
@@ -95,6 +98,9 @@ export class DevPlugin extends BasePlugin {
 
   protected getOptions() {
     let framework;
+    const layers: string[] = this.options.layers
+      ? this.options.layers.split(',')
+      : [];
     const cwd = this.core.cwd;
     const yamlPath = resolve(cwd, 'f.yml');
     if (!this.options.framework && existsSync(yamlPath)) {
@@ -107,6 +113,7 @@ export class DevPlugin extends BasePlugin {
 
     return {
       framework,
+      layers,
       baseDir: this.getSourceDir(),
       ...this.options,
       port: this.port,
@@ -223,7 +230,7 @@ export class DevPlugin extends BasePlugin {
   }
 
   private getSourceDir() {
-    return this.options.sourceDir || resolve(this.core.cwd, 'src');
+    return resolve(this.core.cwd, this.options.sourceDir || 'src');
   }
 
   // watch file change

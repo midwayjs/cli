@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/gateway-common-core",
-  "version": "1.2.50",
+  "version": "1.2.51-beta.1",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "devDependencies": {

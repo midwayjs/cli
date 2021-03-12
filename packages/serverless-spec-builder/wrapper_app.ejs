@@ -18,6 +18,7 @@ const initializeMethod = async (initializeContext = {}) => {
       layers: layers,
       isAppMode: true,
       initContext: initializeContext,
+      runtimeConfig: <%-JSON.stringify(runtimeConfig)%>,
     });
   }, 'APP_START_LOCK_KEY');
 };
