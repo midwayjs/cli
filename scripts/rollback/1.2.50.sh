@@ -1,5 +1,4 @@
 #!/bin/bash
-# timestamp: 1615519767711
 
 npm dist-tag add @midwayjs/cli-plugin-add@1.2.50 latest
 npm dist-tag add @midwayjs/fcli-plugin-aws@1.2.50 latest

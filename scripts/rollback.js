@@ -5,7 +5,7 @@ const { join } = require('path');
 const originData = execSync('npx lerna ls --json').toString();
 const data = JSON.parse(originData);
 
-const arr = ['#!/bin/bash\n', `# timestamp: ${Date.now()}\n\n`];
+const arr = ['#!/bin/bash\n\n'];
 const sync = ['\n# sync:\n\n'];
 let versionBase;
 (async () => {
