@@ -5,9 +5,9 @@ const { join } = require('path');
 const originData = execSync('npx lerna ls --json').toString();
 const data = JSON.parse(originData);
 
-const arr = ['#!/bin/bash\n', `# timestamp: ${Date.now()}\n\n`];
-const tnpm = ['\n# tnpm:\n\n'];
-
+const arr = ['#!/bin/bash\n\n'];
+const sync = ['\n# sync:\n\n'];
+let versionBase;
 (async () => {
   await Promise.all(data.map(item => {
     console.log('---->', item.name);
@@ -18,15 +18,16 @@ const tnpm = ['\n# tnpm:\n\n'];
       arr.push(
         `npm dist-tag add ${item.name}@${version} latest\n`
       );
-      tnpm.push(
-        `tnpm dist-tag add ${item.name}@${version} latest\n`
+      sync.push(
+        `cnpm sync ${item.name}\n`,
+        `tnpm sync ${item.name}\n`,
       );
+      if (item.name === '@midwayjs/cli') {
+        versionBase = version;
+      }
     }
   }));
 
-
-  const date = new Date();
-  const ymd = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
-  writeFileSync(join(__dirname, `rollback/${ymd}.sh`), arr.join('') + tnpm.join(''));
-  console.log('success');
+  writeFileSync(join(__dirname, `rollback/${versionBase}.sh`), arr.join('') + sync.join(''));
+  console.log(`rollback ${versionBase} gen success`);
 })();
