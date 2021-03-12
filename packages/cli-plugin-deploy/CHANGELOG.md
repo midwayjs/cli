@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.51](https://github.com/midwayjs/cli/compare/v1.2.50...v1.2.51) (2021-03-12)
+
+
+### Bug Fixes
+
+* dev pack transform & layers support ([#59](https://github.com/midwayjs/cli/issues/59)) ([6fc1ffc](https://github.com/midwayjs/cli/commit/6fc1ffc2effa76604c65a5d4f57f0efa60e29133))
+
+
+
+
+
 ## [1.2.50](https://github.com/midwayjs/cli/compare/v1.2.48...v1.2.50) (2021-03-09)
 
 
