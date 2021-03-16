@@ -13,6 +13,7 @@ let runtime;
 let inited = false;
 
 const initializeMethod = async (initializeContext = {}) => {
+  inited = true;
   return lock.sureOnce(async () => {
     runtime = await start({
       layers: layers,
@@ -25,7 +26,6 @@ const initializeMethod = async (initializeContext = {}) => {
 
 exports.<%=initializer%> = asyncWrapper(async (...args) => {
   if (!inited) {
-    inited = true;
     await initializeMethod();
   }
 });
