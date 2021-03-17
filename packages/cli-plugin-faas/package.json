@@ -7,7 +7,8 @@
     "@midwayjs/command-core": "^1.2.51",
     "@midwayjs/fcli-plugin-deploy": "^1.2.51",
     "@midwayjs/fcli-plugin-package": "^1.2.51",
-    "@midwayjs/serverless-spec-builder": "^1.2.51"
+    "@midwayjs/serverless-spec-builder": "^1.2.51",
+    "@midwayjs/serverless-app": "^2.8.9"
   },
   "devDependencies": {
     "typescript": "^4.1.0"

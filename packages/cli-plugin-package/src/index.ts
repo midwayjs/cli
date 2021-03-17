@@ -156,6 +156,19 @@ export class PackagePlugin extends BasePlugin {
       this.midwayBuildPath = this.core.config.buildPath;
     }
 
+    // midway hooks 支持
+    const midwayConfig = [
+      join(this.core.cwd, 'midway.config.ts'),
+      join(this.core.cwd, 'midway.config.js'),
+    ].find(file => existsSync(file));
+    if (midwayConfig) {
+      const mod = require('@midwayjs/hooks-core');
+      const config = mod.getConfig();
+      if (config.source) {
+        this.options.sourceDir = config.source;
+      }
+    }
+
     if (this.options.sourceDir) {
       this.options.sourceDir = this.transformToRelative(
         this.servicePath,
@@ -922,10 +935,12 @@ export class PackagePlugin extends BasePlugin {
         typeof service.deployType === 'string'
           ? service.deployType
           : service.deployType?.type;
+
+      this.core.cli.log(` - found deployType: ${deployType}`);
       const version = service.deployType?.version
         ? `@${service.deployType.version}`
         : '';
-      this.core.cli.log(` - found deployType: ${deployType}`);
+      const deployName = service.deployType?.name ?? 'app_index';
 
       this.setGlobalDependencies('@midwayjs/simple-lock');
 
@@ -938,7 +953,7 @@ export class PackagePlugin extends BasePlugin {
       if (!service.functions || Object.keys(service.functions).length === 0) {
         this.core.cli.log(' - create default functions');
         service.functions = {
-          app_index: {
+          [deployName]: {
             handler: 'index.handler',
             events: [{ http: { path: '/*' } }],
           },
