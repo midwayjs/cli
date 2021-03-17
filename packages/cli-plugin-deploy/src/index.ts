@@ -6,7 +6,12 @@ export class DeployPlugin extends BasePlugin {
     deploy: {
       usage: 'Deploy to online',
       lifecycleEvents: ['deploy'],
-      options: {},
+      options: {
+        yes: {
+          usage: 'continue with yes',
+          alias: 'y',
+        },
+      },
     },
   };
 

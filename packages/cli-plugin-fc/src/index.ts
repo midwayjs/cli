@@ -49,6 +49,7 @@ export class AliyunFCPlugin extends BasePlugin {
       try {
         await AliyunDeploy({
           template: join(this.midwayBuildPath, 'template.yml'),
+          assumeYes: this.options.yes,
         });
         this.core.cli.log('Deploy success');
       } catch (e) {
