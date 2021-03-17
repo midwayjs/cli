@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.52](https://github.com/midwayjs/bin/compare/v1.2.51...v1.2.52) (2021-03-17)
+
+
+### Bug Fixes
+
+* wrapper template path ([#71](https://github.com/midwayjs/bin/issues/71)) ([827f0a3](https://github.com/midwayjs/bin/commit/827f0a33407db592479d07b2f769e124cbe00ae4))
+
+
+
+
+
 ## [1.2.51](https://github.com/midwayjs/bin/compare/v1.2.50...v1.2.51) (2021-03-12)
 
 

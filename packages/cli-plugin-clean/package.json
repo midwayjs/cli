@@ -1,11 +1,11 @@
 {
   "name": "@midwayjs/cli-plugin-clean",
-  "version": "1.2.51",
+  "version": "1.2.52",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/command-core": "^1.2.51",
-    "@midwayjs/serverless-spec-builder": "^1.2.51",
+    "@midwayjs/serverless-spec-builder": "^1.2.52",
     "fs-extra": "^8.1.0"
   },
   "devDependencies": {
