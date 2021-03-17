@@ -17,6 +17,7 @@ export function writeWrapper(options: {
   middleware?: string[]; // middleware
   clearCache?: boolean; // clearContainerCache clearModule
   preloadModules?: string[]; // pre load module
+  templatePath?: string; // ejs template path
 }) {
   const {
     service,
@@ -32,6 +33,7 @@ export function writeWrapper(options: {
     faasStarterName,
     middleware,
     clearCache = true,
+    templatePath,
   } = options;
 
   const files = {};
@@ -103,14 +105,16 @@ export function writeWrapper(options: {
   }
 
   const tpl = readFileSync(
-    resolve(
-      __dirname,
-      isCustomAppType
-        ? '../wrapper_app.ejs'
-        : isFaaS2
-        ? '../wrapper_bootstrap.ejs'
-        : '../wrapper.ejs'
-    )
+    templatePath
+      ? templatePath
+      : resolve(
+          __dirname,
+          isCustomAppType
+            ? '../wrapper_app.ejs'
+            : isFaaS2
+            ? '../wrapper_bootstrap.ejs'
+            : '../wrapper.ejs'
+        )
   ).toString();
 
   if (functionMap?.functionList?.length) {
@@ -180,6 +184,7 @@ export function formetAggregationHandlers(handlers) {
   return handlers
     .map(handler => {
       return {
+        ...handler,
         handler: handler.handler,
         router: handler.path.replace(/\*/g, '**'), // picomatch use **
         pureRouter: handler.path.replace(/\**$/, ''),
