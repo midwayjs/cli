@@ -3,7 +3,9 @@ const { debugWrapper } = require('@midwayjs/debugger');
 const cliFun = async argv => {
   require('source-map-support/register');
   const { CLI, checkUpdate, findNpm } = require('../dist');
-  argv.npm = findNpm(argv).cmd;
+  if (!argv.npm) {
+    argv.npm = findNpm(argv).cmd;
+  }
   // 检查更新
   checkUpdate(argv.npm);
   const cli = new CLI(argv);
