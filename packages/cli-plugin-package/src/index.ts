@@ -156,10 +156,12 @@ export class PackagePlugin extends BasePlugin {
       this.midwayBuildPath = this.core.config.buildPath;
     }
 
+    const cwd = this.getCwd();
+
     // midway hooks 支持
     const midwayConfig = [
-      join(this.core.cwd, 'midway.config.ts'),
-      join(this.core.cwd, 'midway.config.js'),
+      join(cwd, 'midway.config.ts'),
+      join(cwd, 'midway.config.js'),
     ].find(file => existsSync(file));
     if (midwayConfig) {
       const mod = require('@midwayjs/hooks-core');
@@ -176,7 +178,7 @@ export class PackagePlugin extends BasePlugin {
       );
     }
     // 分析midway version
-    const cwd = this.getCwd();
+
     const faasModulePath = findNpmModule(cwd, '@midwayjs/faas');
     if (faasModulePath) {
       const pkgJson = JSON.parse(
