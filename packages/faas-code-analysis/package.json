@@ -9,7 +9,7 @@
     "globby": "^10.0.1"
   },
   "scripts": {
-    "lint": "eslint .",
+    "lint": "../../node_modules/.bin/eslint .",
     "build": "tsc --build",
     "test": "../../node_modules/.bin/jest",
     "cov": "../../node_modules/.bin/jest --coverage",

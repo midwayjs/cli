@@ -183,13 +183,15 @@ export function formetAggregationHandlers(handlers) {
   }
   return handlers
     .map(handler => {
+      const { path = '' } = handler;
       return {
         ...handler,
         handler: handler.handler,
-        router: handler.path.replace(/\*/g, '**'), // picomatch use **
-        pureRouter: handler.path.replace(/\**$/, ''),
-        regRouter: handler.path.replace(/\/\*$/, '/(.*)?') || '/(.*)?', // path2regexp match use (.*)?
-        level: handler.path.split('/').length - 1,
+        router: path.replace(/\*/g, '**'), // picomatch use **
+        pureRouter: path.replace(/\**$/, ''),
+        regRouter: path.replace(/\/\*$/, '/(.*)?') || '/(.*)?', // path2regexp match use (.*)?
+        level: path.split('/').length - 1,
+        paramsMatchLevel: path.indexOf('/:') !== -1 ? 1 : 0,
       };
     })
     .sort((handlerA, handlerB) => {
@@ -197,7 +199,10 @@ export function formetAggregationHandlers(handlers) {
         if (handlerB.pureRouter === handlerA.pureRouter) {
           return handlerA.router.length - handlerB.router.length;
         }
-        return handlerB.pureRouter.length - handlerA.pureRouter.length;
+        if (handlerA.paramsMatchLevel === handlerB.paramsMatchLevel) {
+          return handlerB.pureRouter.length - handlerA.pureRouter.length;
+        }
+        return handlerA.paramsMatchLevel - handlerB.paramsMatchLevel;
       }
       return handlerB.level - handlerA.level;
     });
