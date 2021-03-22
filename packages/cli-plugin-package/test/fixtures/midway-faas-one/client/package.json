@@ -28,7 +28,7 @@
     "@ice/spec": "^0.1.1",
     "@types/qs": "^6.9.0",
     "css-modules-typescript-loader": "^2.0.4",
-    "eslint": "^6.0.1",
+    "eslint": "^7.9.0",
     "ice-plugin-fusion": "^0.1.10",
     "ice-plugin-moment-locales": "^0.1.0",
     "ice-scripts": "^2.1.9",
