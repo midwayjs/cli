@@ -12,7 +12,7 @@ describe.skip('/test/bugs-midway-915.test.ts', () => {
     const body = await response.text();
     await new Promise(resolve => {
       setTimeout(resolve, 200000);
-    })
+    });
     await close();
     console.log('body', body);
     assert(body === 'json');
