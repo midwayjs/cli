@@ -131,16 +131,11 @@ export class DevPlugin extends BasePlugin {
       }
 
       let tsNodeFast = {};
-      let isEsbuild = false;
       if (options.fast) {
-        if (options.fast === 'esbuild') {
-          isEsbuild = true;
-        } else {
-          tsNodeFast = {
-            TS_NODE_FILES: 'true',
-            TS_NODE_TRANSPILE_ONLY: 'true',
-          };
-        }
+        tsNodeFast = {
+          TS_NODE_FILES: 'true',
+          TS_NODE_TRANSPILE_ONLY: 'true',
+        };
       }
 
       this.child = fork(require.resolve('./child'), [JSON.stringify(options)], {
@@ -152,7 +147,7 @@ export class DevPlugin extends BasePlugin {
         },
         silent: true,
         execArgv: options.ts
-          ? ['-r', isEsbuild ? 'esbuild-register' : 'ts-node/register']
+          ? ['-r', 'ts-node/register']
           : [],
       });
       const dataCache = [];
