@@ -72,6 +72,7 @@ export async function parseInvokeOptionsByOriginUrl(
           originRouter: eventItem.path || '/*',
           pureRouter: eventItem.path?.replace(/\/\*$/, '/') || '/',
           level: router.split('/').length - 1,
+          paramsMatchLevel: router.indexOf('/:') !== -1 ? 1 : 0,
           method: (eventItem.method ? [].concat(eventItem.method) : []).map(
             method => {
               return method.toLowerCase();
@@ -88,10 +89,13 @@ export async function parseInvokeOptionsByOriginUrl(
   // 5. 如果 / 与 /* 都能匹配 / ,但 / 的优先级高于 /*
   urlMatchList = urlMatchList.sort((handlerA, handlerB) => {
     if (handlerA.level === handlerB.level) {
-      if (handlerB.pureRouter === handlerA.pureRouter) {
+      if (handlerA.pureRouter === handlerB.pureRouter) {
         return handlerA.router.length - handlerB.router.length;
       }
-      return handlerB.pureRouter.length - handlerA.pureRouter.length;
+      if (handlerA.paramsMatchLevel === handlerB.paramsMatchLevel) {
+        return handlerB.pureRouter.length - handlerA.pureRouter.length;
+      }
+      return handlerA.paramsMatchLevel - handlerB.paramsMatchLevel;
     }
     return handlerB.level - handlerA.level;
   });
