@@ -1,15 +1,15 @@
 #!/bin/bash
 
 npm dist-tag add @midwayjs/cli-plugin-add@1.2.51 latest
-npm dist-tag add @midwayjs/fcli-plugin-aws@1.2.51 latest
+npm dist-tag add @midwayjs/fcli-plugin-aws@1.2.53 latest
 npm dist-tag add @midwayjs/cli-plugin-build@1.2.51 latest
 npm dist-tag add @midwayjs/cli-plugin-clean@1.2.51 latest
 npm dist-tag add @midwayjs/fcli-plugin-deploy@1.2.51 latest
 npm dist-tag add @midwayjs/cli-plugin-dev@1.2.51 latest
-npm dist-tag add @midwayjs/cli-plugin-faas@1.2.51 latest
-npm dist-tag add @midwayjs/fcli-plugin-fc@1.2.51 latest
-npm dist-tag add @midwayjs/fcli-plugin-package@1.2.51 latest
-npm dist-tag add @midwayjs/fcli-plugin-scf@1.2.51 latest
+npm dist-tag add @midwayjs/cli-plugin-faas@1.2.53 latest
+npm dist-tag add @midwayjs/fcli-plugin-fc@1.2.53 latest
+npm dist-tag add @midwayjs/fcli-plugin-package@1.2.53 latest
+npm dist-tag add @midwayjs/fcli-plugin-scf@1.2.53 latest
 npm dist-tag add @midwayjs/cli-plugin-test@1.2.51 latest
 npm dist-tag add @midwayjs/cli@1.2.51 latest
 npm dist-tag add @midwayjs/command-core@1.2.51 latest
