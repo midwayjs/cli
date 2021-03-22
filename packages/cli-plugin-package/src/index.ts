@@ -267,13 +267,17 @@ export class PackagePlugin extends BasePlugin {
         ''
       )} to ${'f.origin.yml'}`
     );
+    const exclude = [].concat(packageObj.exclude || []);
+    if (!packageObj.lockFile) {
+      exclude.push('package-lock.json');
+    }
     await copyFiles({
       sourceDir: this.servicePath,
       targetDir: this.midwayBuildPath,
       include: this.options.skipBuild
         ? [].concat(packageObj.include || [])
         : [this.options.sourceDir || 'src'].concat(packageObj.include || []),
-      exclude: packageObj.exclude,
+      exclude,
       log: path => {
         this.core.cli.log(`   - Copy ${path}`);
       },
