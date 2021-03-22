@@ -34,7 +34,7 @@
   ],
   "scripts": {
     "build": "tsc --build",
-    "lint": "eslint .",
+    "lint": "../../node_modules/.bin/eslint .",
     "test-bugs": "../../node_modules/.bin/jest ./test/bugs*",
     "test": "../../node_modules/.bin/jest --detectOpenHandles --forceExit --runInBand",
     "cov": "../../node_modules/.bin/jest --coverage --runInBand --forceExit",

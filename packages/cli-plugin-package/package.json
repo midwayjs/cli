@@ -27,7 +27,7 @@
     "dist"
   ],
   "scripts": {
-    "lint": "eslint .",
+    "lint": "../../node_modules/.bin/eslint .",
     "test": "../../node_modules/.bin/jest --runInBand",
     "cov": "../../node_modules/.bin/jest --coverage --runInBand",
     "build": "tsc --build",

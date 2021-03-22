@@ -22,7 +22,7 @@
     "src"
   ],
   "scripts": {
-    "lint": "eslint .",
+    "lint": "../../node_modules/.bin/eslint .",
     "build": "tsc --build",
     "test": "../../node_modules/.bin/jest",
     "cov": "cross-env ../../node_modules/.bin/jest --coverage",
