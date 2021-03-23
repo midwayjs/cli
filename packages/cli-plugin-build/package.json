@@ -9,6 +9,9 @@
     "@midwayjs/mwcc": "^0.5.x",
     "fs-extra": "^8.1.0"
   },
+  "devDependencies": {
+    "typescript": "^4.1.0"
+  },
   "engines": {
     "node": ">= 10"
   },
