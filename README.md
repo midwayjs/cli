@@ -9,5 +9,5 @@ Midway bin
 
 ### Usage
 ```
-npm i @midwawjs/cli -D
+npm i @midwayjs/cli -D
 ```
