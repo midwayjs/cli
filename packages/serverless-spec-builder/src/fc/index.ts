@@ -1,13 +1,17 @@
 import { transform, generate } from '../index';
-import { FCSpecBuilder } from './builder';
+import { FCComponentSpecBuilder, FCSpecBuilder } from './builder';
 
-export const generateFunctionsSpec = filePath => {
-  return transform(filePath, FCSpecBuilder);
+export const generateFunctionsSpec = filePathOrSpecJson => {
+  return transform(filePathOrSpecJson, FCSpecBuilder);
 };
 
 export const generateFunctionsSpecFile = (
-  filePath,
+  filePathOrSpecJson,
   targetFilePath = 'template.yml'
 ) => {
-  generate(filePath, targetFilePath, FCSpecBuilder);
+  generate(filePathOrSpecJson, targetFilePath, FCSpecBuilder);
+};
+
+export const generateComponentSpec = filePathOrSpecJson => {
+  return transform(filePathOrSpecJson, FCComponentSpecBuilder);
 };

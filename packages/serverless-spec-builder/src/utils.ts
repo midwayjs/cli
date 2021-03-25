@@ -58,6 +58,16 @@ export function uppercaseObjectKey(obj) {
   }
 }
 
+export function lowercaseObjectKey(obj) {
+  if (obj) {
+    const json = JSON.stringify(obj);
+    const result = json.replace(/"([^"])([^"]*)":/gim, (...value) => {
+      return `"${value[1].toLowerCase()}${value[2]}":`;
+    });
+    return JSON.parse(result);
+  }
+}
+
 export function removeObjectEmptyAttributes(obj) {
   function isObjectEmpty(el) {
     return el !== null && el !== undefined && el !== '';
