@@ -1,7 +1,7 @@
 import { BasePlugin, ICoreInstance } from '@midwayjs/command-core';
 import * as AliyunDeploy from '@alicloud/fun/lib/commands/deploy';
 import * as AliyunConfig from '@alicloud/fun/lib/commands/config';
-import { loadComponent } from '@serverless-devs/core';
+import { loadComponent, getCredential } from '@serverless-devs/core';
 import { join } from 'path';
 import { homedir } from 'os';
 import { existsSync } from 'fs';
@@ -91,6 +91,8 @@ export class AliyunFCPlugin extends BasePlugin {
   }
 
   async deployUseServerlessDev() {
+    const credential = await getCredential('alibaba');
+    this.core.debug('credential', credential);
     const fcDeploy = await loadComponent('alibaba/fc-deploy');
     const functions = generateComponentSpec(this.core.service);
     try {
