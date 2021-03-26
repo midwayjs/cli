@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.56](https://github.com/midwayjs/bin/compare/v1.2.55...v1.2.56) (2021-03-26)
+
+
+### Bug Fixes
+
+* fix readme ([#79](https://github.com/midwayjs/bin/issues/79)) ([786a903](https://github.com/midwayjs/bin/commit/786a903255df0402da3ebd8878a2af10f0ef4620))
+* test node env ([#81](https://github.com/midwayjs/bin/issues/81)) ([99e780d](https://github.com/midwayjs/bin/commit/99e780ddbfa97ed67aeafb417f1cd049d640d597))
+* v2 template ([#83](https://github.com/midwayjs/bin/issues/83)) ([b63e2b5](https://github.com/midwayjs/bin/commit/b63e2b596291870ef0b9a86f86d22985c55a6eac))
+
+
+
+
+
 ## [1.2.55](https://github.com/midwayjs/bin/compare/v1.2.54...v1.2.55) (2021-03-23)
 
 **Note:** Version bump only for package midway-bin

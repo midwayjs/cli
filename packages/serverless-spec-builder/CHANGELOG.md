@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.56](https://github.com/midwayjs/cli/compare/v1.2.55...v1.2.56) (2021-03-26)
+
+
+### Bug Fixes
+
+* v2 template ([#83](https://github.com/midwayjs/cli/issues/83)) ([b63e2b5](https://github.com/midwayjs/cli/commit/b63e2b596291870ef0b9a86f86d22985c55a6eac))
+
+
+
+
+
 ## [1.2.54](https://github.com/midwayjs/cli/compare/v1.2.53...v1.2.54) (2021-03-22)
 
 

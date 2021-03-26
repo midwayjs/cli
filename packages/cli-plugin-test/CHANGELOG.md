@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.56](https://github.com/midwayjs/cli/compare/v1.2.55...v1.2.56) (2021-03-26)
+
+
+### Bug Fixes
+
+* test node env ([#81](https://github.com/midwayjs/cli/issues/81)) ([99e780d](https://github.com/midwayjs/cli/commit/99e780ddbfa97ed67aeafb417f1cd049d640d597))
+
+
+
+
+
 ## [1.2.54](https://github.com/midwayjs/cli/compare/v1.2.53...v1.2.54) (2021-03-22)
 
 
