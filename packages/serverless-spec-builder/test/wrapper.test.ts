@@ -46,18 +46,23 @@ describe('/test/wrapper.test.ts', () => {
         baseDir: wrapperPath,
         distDir: wrapperPath,
         starter: 'testStarter',
+        moreArgs: true,
       });
       const aggrePath = resolve(wrapperPath, 'aggre.js');
       const indexPath = resolve(wrapperPath, 'index.js');
       const renderPath = resolve(wrapperPath, 'render.js');
+
       assert(existsSync(aggrePath));
       assert(existsSync(indexPath));
       assert(existsSync(renderPath));
+      const aggreContent = readFileSync(aggrePath).toString();
+      assert(/exports\.initializeUserDefine\s*=/.test(aggreContent));
       assert(
-        /exports\.initializeUserDefine\s*=/.test(
-          readFileSync(aggrePath).toString()
-        )
+        aggreContent.indexOf(
+          'starter.handleInvokeWrapper(handler.handler)(ctx, ...args)'
+        ) !== -1
       );
+      assert(aggreContent.indexOf('async (ctx, ...args)') !== -1);
       assert(
         /exports\.initializeUserDefine\s*=/.test(
           readFileSync(indexPath).toString()

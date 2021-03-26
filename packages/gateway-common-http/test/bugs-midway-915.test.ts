@@ -88,4 +88,32 @@ describe('/test/bugs-midway-915.test.ts', () => {
     );
     assert(invokeOptions.functionName === 'c');
   });
+  it('params path', async () => {
+    const { invokeOptions } = await parseInvokeOptionsByOriginUrl(
+      {
+        functionDir: '',
+      },
+      {
+        path: '/name',
+        method: 'get',
+      },
+      () => {
+        return {
+          functionList: {
+            b: {
+              handler: 'test.b',
+              events: [
+                {
+                  http: {
+                    path: '/:user_id',
+                  },
+                },
+              ],
+            },
+          },
+        };
+      }
+    );
+    assert(invokeOptions.functionName === 'b');
+  });
 });

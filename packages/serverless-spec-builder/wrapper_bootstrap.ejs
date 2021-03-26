@@ -48,7 +48,7 @@ const getHandler = (hanlderName, ...originArgs) => {
     if (hanlderName === '<%=handlerData.name%>') {
       return <% if (handlerData.handler) {
       %> starter.handleInvokeWrapper('<%=handlerData.handler%>'); <% } else {
-      %> async (ctx) => {
+      %> async (ctx<% if (moreArgs) { %>, ...args<% } %>) => {
         const allHandlers = <%-JSON.stringify(handlerData.handlers, null, 2)%>;
         let handler = null;
         let ctxPath = ctx && ctx.path || '';
@@ -67,7 +67,7 @@ const getHandler = (hanlderName, ...originArgs) => {
               req.pathParameters = Object.assign({}, matchRes.params, req.pathParameters);
             }
           }
-          return starter.handleInvokeWrapper(handler.handler)(ctx);
+          return starter.handleInvokeWrapper(handler.handler)(ctx<% if (moreArgs) { %>, ...args<% } %>);
         }
         ctx.status = 404;
         ctx.set('Content-Type', 'text/html');
