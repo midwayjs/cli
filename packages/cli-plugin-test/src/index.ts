@@ -75,11 +75,9 @@ export class TestPlugin extends BasePlugin {
         {
           MIDWAY_TS_MODE: isTs,
           MIDWAY_JEST_MODE: true,
-        },
-        process.env,
-        {
           NODE_ENV: 'test',
-        }
+        },
+        process.env
       ),
       execArgv,
     };
