@@ -120,7 +120,7 @@ export class ExpressGateway {
             }
             if (res.send) {
               // express
-              res.send(data);
+              res.send(typeof data === 'number' ? data.toString() : data);
             } else {
               // connect
               if (typeof data === 'string' || Buffer.isBuffer(data)) {
