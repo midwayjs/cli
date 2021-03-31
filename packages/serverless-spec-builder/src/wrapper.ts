@@ -18,6 +18,7 @@ export function writeWrapper(options: {
   clearCache?: boolean; // clearContainerCache clearModule
   preloadModules?: string[]; // pre load module
   templatePath?: string; // ejs template path
+  moreArgs?: boolean; // aggregation more args
 }) {
   const {
     service,
@@ -34,6 +35,7 @@ export function writeWrapper(options: {
     middleware,
     clearCache = true,
     templatePath,
+    moreArgs,
   } = options;
 
   const files = {};
@@ -150,6 +152,7 @@ export function writeWrapper(options: {
       functionMap,
       preloadModules,
       clearCache,
+      moreArgs: moreArgs || false,
       ...layers,
     });
     if (existsSync(fileName)) {

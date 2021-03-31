@@ -24,7 +24,7 @@
     "@midwayjs/cli-plugin-build": "^1.2.55",
     "@midwayjs/cli-plugin-clean": "^1.2.56-beta.1",
     "@midwayjs/cli-plugin-dev": "^1.2.54",
-    "@midwayjs/cli-plugin-test": "^1.2.54",
+    "@midwayjs/cli-plugin-test": "^1.2.56",
     "@midwayjs/command-core": "^1.2.54",
     "@midwayjs/debugger": "^1.0.x",
     "enquirer": "^2.3.4",
