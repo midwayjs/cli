@@ -28,7 +28,7 @@
     "@midwayjs/command-core": "^1.2.54",
     "@midwayjs/debugger": "^1.0.x",
     "enquirer": "^2.3.4",
-    "jest-environment-node": "^24.9.0",
+    "jest-environment-node": "^26.6.2",
     "minimist": "^1.2.5",
     "source-map-support": "^0.5.19",
     "ts-node": "^9.0.0"
