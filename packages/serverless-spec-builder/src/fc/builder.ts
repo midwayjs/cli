@@ -250,14 +250,19 @@ export class FCComponentSpecBuilder extends SpecBuilder {
       nas: lowercaseObjectKey(providerData.nasConfig),
     };
     const region = providerData.region;
-
+    const accessAlias = (providerData as any).accessAlias || 'default';
     let httpEventRouters;
 
     for (const funName in functionsData) {
       const funSpec: FCFunctionStructure = functionsData[funName];
       const handler = funSpec.handler || 'index.handler';
       const newSpec = {
-        Properties: {
+        project: {
+          provider: 'alibaba',
+          accessAlias,
+          projectName: serviceName,
+        },
+        properties: {
           service,
           region,
           function: {
@@ -290,7 +295,7 @@ export class FCComponentSpecBuilder extends SpecBuilder {
       for (const event of funSpec?.['events'] ?? []) {
         if (event['http']) {
           const evt = event['http'] as HTTPEvent;
-          newSpec.Properties.function.triggers.push({
+          newSpec.properties.function.triggers.push({
             name: evt.name || 'http-' + funName,
             type: 'http',
             config: {
@@ -314,7 +319,7 @@ export class FCComponentSpecBuilder extends SpecBuilder {
 
         if (event['timer']) {
           const evt = event['timer'] as TimerEvent;
-          newSpec.Properties.function.triggers.push({
+          newSpec.properties.function.triggers.push({
             name: evt.name || 'timer-' + funName,
             type: 'timer',
             config: {
@@ -329,7 +334,7 @@ export class FCComponentSpecBuilder extends SpecBuilder {
 
         if (event['log']) {
           const evt = event['log'] as LogEvent;
-          newSpec.Properties.function.triggers.push({
+          newSpec.properties.function.triggers.push({
             name: evt.name || 'log-' + funName,
             type: 'log',
             config: {
@@ -355,7 +360,7 @@ export class FCComponentSpecBuilder extends SpecBuilder {
 
         if (osEvent) {
           const evt = osEvent as OSEvent;
-          newSpec.Properties.function.triggers.push({
+          newSpec.properties.function.triggers.push({
             name: evt.name || 'oss-' + funName,
             type: 'oss',
             config: {

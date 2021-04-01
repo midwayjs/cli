@@ -91,18 +91,33 @@ export class AliyunFCPlugin extends BasePlugin {
   }
 
   async deployUseServerlessDev() {
-    const credential = await getCredential('alibaba');
+    const cwd = process.cwd();
+    process.chdir(this.midwayBuildPath);
+    const credential = await getCredential(
+      'alibaba',
+      this.options.serverlessDev?.access ?? 'default'
+    );
     this.core.debug('credential', credential);
     const fcDeploy = await loadComponent('alibaba/fc-deploy');
+    if (!this.core.service) {
+      this.core.service = {};
+    }
+    if (!this.core.service.provider) {
+      this.core.service.provider = {};
+    }
+    if (typeof this.options.serverlessDev === 'object') {
+      Object.assign(this.core.service.provider, this.options.serverlessDev);
+    }
     const functions = generateComponentSpec(this.core.service);
     try {
       for (const fcDeployInputs of functions) {
         await fcDeploy.deploy(fcDeployInputs);
-        const funcName = fcDeployInputs.Properties.function.name;
+        const funcName = fcDeployInputs.properties.function.name;
         this.core.cli.log(`Function '${funcName}' deploy success`);
       }
     } catch (e) {
       this.core.cli.log(`Deploy error: ${e.message}`);
     }
+    process.chdir(cwd);
   }
 }
