@@ -1,10 +1,14 @@
 import { BasePlugin, ICoreInstance } from '@midwayjs/command-core';
 import * as AliyunDeploy from '@alicloud/fun/lib/commands/deploy';
 import * as AliyunConfig from '@alicloud/fun/lib/commands/config';
-import { loadComponent, getCredential } from '@serverless-devs/core';
+import {
+  loadComponent,
+  getCredential,
+  setCredential,
+} from '@serverless-devs/core';
 import { join } from 'path';
 import { homedir } from 'os';
-import { existsSync } from 'fs';
+import { existsSync, mkdirSync } from 'fs';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
 import {
   generateFunctionsSpecFile,
@@ -91,6 +95,24 @@ export class AliyunFCPlugin extends BasePlugin {
   }
 
   async deployUseServerlessDev() {
+    const profDirPath = join(homedir(), '.s');
+    if (!existsSync(profDirPath)) {
+      mkdirSync(profDirPath);
+    }
+    const profPath = join(profDirPath, 'access.yaml');
+    const isExists = existsSync(profPath);
+    if (!isExists || this.options.resetConfig) {
+      // aliyun config
+      this.core.cli.log('please input serverless-dev config');
+      await setCredential('alibaba');
+    }
+    // 执行 package 打包
+    await this.core.invoke(['package'], true, {
+      ...this.options,
+      skipZip: true, // 跳过压缩成zip
+    });
+    this.core.cli.log('Start deploy by serverless-dev');
+
     const cwd = process.cwd();
     process.chdir(this.midwayBuildPath);
     const credential = await getCredential(

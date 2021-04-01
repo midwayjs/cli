@@ -1,6 +1,7 @@
 import { CommandCore } from '@midwayjs/command-core';
 import { loadSpec } from '@midwayjs/serverless-spec-builder';
 import { PackagePlugin } from '@midwayjs/fcli-plugin-package';
+import { DeployPlugin } from '../../cli-plugin-deploy';
 import { AliyunFCPlugin } from '../src';
 import { join } from 'path';
 import { existsSync, remove, readFile } from 'fs-extra';
@@ -70,6 +71,30 @@ describe('/test/index.test.ts', () => {
     assert(existsSync(join(buildPath, 'template.yml')));
     assert(existsSync(join(baseDir, 'serverless.zip')));
 
+    // clean
+    await remove(join(baseDir, '.serverless'));
+  });
+  it.skip('build by serverless-dev', async () => {
+    const baseDir = join(__dirname, './fixtures/base-fc');
+    const core = new CommandCore({
+      config: {
+        servicePath: baseDir,
+      },
+      commands: ['deploy'],
+      service: loadSpec(baseDir),
+      provider: 'aliyun',
+      log: console,
+      options: {
+        serverlessDev: {
+          access: 'default',
+        },
+      },
+    });
+    core.addPlugin(PackagePlugin);
+    core.addPlugin(DeployPlugin);
+    core.addPlugin(AliyunFCPlugin);
+    await core.ready();
+    await core.invoke(['deploy']);
     // clean
     await remove(join(baseDir, '.serverless'));
   });
