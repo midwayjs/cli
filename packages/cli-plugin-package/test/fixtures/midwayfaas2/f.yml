@@ -58,6 +58,8 @@ functions:
       - http:
           method: get
           path: /normal/2
+  cover-config:
+    test: 123456
 
 custom:
   customDomain:

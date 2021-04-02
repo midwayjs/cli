@@ -548,16 +548,17 @@ export class PackagePlugin extends BasePlugin {
     }
     // midway 2版本的装饰器分析由框架提供了
     if (this.midwayVersion === '2') {
-      process.chdir(this.midwayBuildPath);
-      const httpFuncSpec = await analysisDecorator(
-        join(this.midwayBuildPath, 'dist')
-      );
-      process.chdir(this.core.cwd);
       if (!this.core.service.functions) {
         this.core.service.functions = {};
       }
-      this.core.debug('httpFuncSpec', httpFuncSpec);
-      Object.assign(this.core.service.functions, httpFuncSpec);
+      process.chdir(this.midwayBuildPath);
+      const funcSpec = await analysisDecorator(
+        join(this.midwayBuildPath, 'dist'),
+        this.core.service.functions
+      );
+      process.chdir(this.core.cwd);
+      this.core.service.functions = funcSpec;
+      this.core.debug('funcSpec', funcSpec);
     }
   }
 
@@ -895,7 +896,7 @@ export class PackagePlugin extends BasePlugin {
         console.error(
           `Cannot use the same prefix '${currentPath}' for aggregation deployment`
         );
-        process.exit();
+        process.exit(1);
       }
       allAggregationPaths.push(currentPath);
       this.core.service.functions[aggregationFuncName]._handlers = handlers;
