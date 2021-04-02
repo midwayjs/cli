@@ -27,10 +27,9 @@ describe('/test/midwayfaas2.test.ts', () => {
     await core.invoke(['package']);
     const specFunctions = (core as any).coreInstance.service.functions;
     assert(specFunctions['cover-config'].test === 123456);
-    assert(
-      specFunctions['helloService-httpTrigger'].events[1].http.method[1] ===
-        'get'
-    );
+    assert(specFunctions['helloService-httpTrigger'].events[0].http);
+    assert(specFunctions['helloService-httpTrigger'].events[1].http);
+    assert(specFunctions['helloService-httpTrigger'].events.length === 2);
     assert(
       specFunctions['helloService-ossTrigger'].events[0].os.bucket === 'test'
     );
