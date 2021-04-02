@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.57](https://github.com/midwayjs/bin/compare/v1.2.56...v1.2.57) (2021-04-02)
+
+
+### Bug Fixes
+
+* use serverless trigger collector ([#87](https://github.com/midwayjs/bin/issues/87)) ([f956152](https://github.com/midwayjs/bin/commit/f956152879cd603d3cfc5b7475b92fd012ed06d6))
+
+
+
+
+
 ## [1.2.56](https://github.com/midwayjs/bin/compare/v1.2.55...v1.2.56) (2021-03-26)
 
 
