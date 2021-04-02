@@ -25,6 +25,20 @@ describe('/test/midwayfaas2.test.ts', () => {
     core.addPlugin(AliyunFCPlugin);
     await core.ready();
     await core.invoke(['package']);
+    const specFunctions = (core as any).coreInstance.service.functions;
+    assert(specFunctions['cover-config'].test === 123456);
+    assert(
+      specFunctions['helloService-httpTrigger'].events[1].http.method[1] ===
+        'get'
+    );
+    assert(
+      specFunctions['helloService-ossTrigger'].events[0].os.bucket === 'test'
+    );
+    assert(
+      specFunctions['helloService-httpAllTrigger'].events[0].http.method ===
+        'any'
+    );
+    assert(specFunctions['helloService-hsfTrigger'].events[0].hsf === true);
     assert(existsSync(resolve(buildDir, 'api.js')));
     assert(existsSync(resolve(buildDir, 'normal.js')));
     assert(existsSync(resolve(buildDir, 'renderNot2.js')));
