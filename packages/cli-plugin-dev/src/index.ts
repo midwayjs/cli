@@ -113,9 +113,9 @@ export class DevPlugin extends BasePlugin {
 
     return {
       framework,
-      layers,
       baseDir: this.getSourceDir(),
       ...this.options,
+      layers,
       port: this.port,
     };
   }

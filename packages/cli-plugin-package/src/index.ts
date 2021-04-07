@@ -177,15 +177,6 @@ export class PackagePlugin extends BasePlugin {
         this.options.sourceDir
       );
     }
-    // 分析midway version
-
-    const faasModulePath = findNpmModule(cwd, '@midwayjs/faas');
-    if (faasModulePath) {
-      const pkgJson = JSON.parse(
-        readFileSync(join(faasModulePath, 'package.json')).toString()
-      );
-      this.midwayVersion = pkgJson.version[0];
-    }
 
     // 分析目录结构
     const locator = new Locator(this.servicePath);
@@ -250,6 +241,17 @@ export class PackagePlugin extends BasePlugin {
     } else {
       this.core.cli.log(' - Find node_modules and skip...');
     }
+
+    // 分析midway version
+    const cwd = this.getCwd();
+    const faasModulePath = findNpmModule(cwd, '@midwayjs/faas');
+    if (faasModulePath) {
+      const pkgJson = JSON.parse(
+        readFileSync(join(faasModulePath, 'package.json')).toString()
+      );
+      this.midwayVersion = pkgJson.version[0];
+    }
+    this.core.debug('midwayVersion', this.midwayVersion);
   }
 
   async copyFile() {
