@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.59](https://github.com/midwayjs/bin/compare/v1.2.58...v1.2.59) (2021-04-07)
+
+
+### Bug Fixes
+
+* pcakage method ([#90](https://github.com/midwayjs/bin/issues/90)) ([242e694](https://github.com/midwayjs/bin/commit/242e6940a730ce60b57c8e2c09b48fdda1516f4d))
+
+
+
+
+
 ## [1.2.58](https://github.com/midwayjs/bin/compare/v1.2.57...v1.2.58) (2021-04-07)
 
 
