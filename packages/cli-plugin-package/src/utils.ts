@@ -162,6 +162,8 @@ export const analysisDecorator = async (cwd: string, currentFunc?) => {
         if (methodList.includes('any') || methodList.includes('all')) {
           func.functionTriggerMetadata.method = 'any';
           methodList = ['any'];
+        } else {
+          func.functionTriggerMetadata.method = methodList;
         }
         // 避免重复路径创建多个trigger
         const httpTrigger = allFunc[funcName].events.find(event => {
