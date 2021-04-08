@@ -62,7 +62,7 @@ export class FCSpecBuilder extends SpecBuilder {
             funSpec.initializer ||
             handler.split('.').slice(0, -1).join('.') + '.initializer',
           Handler: handler,
-          Runtime: funSpec.runtime || providerData.runtime || 'nodejs10',
+          Runtime: funSpec.runtime || providerData.runtime || 'nodejs12',
           CodeUri: funSpec.codeUri || '.',
           Timeout: funSpec.timeout || providerData.timeout || 3,
           InitializationTimeout:
@@ -277,7 +277,7 @@ export class FCComponentSpecBuilder extends SpecBuilder {
             initializationTimeout:
               funSpec.initTimeout || providerData.initTimeout || 3,
             memorySize: funSpec.memorySize || providerData.memorySize || 128,
-            runtime: funSpec.runtime || providerData.runtime || 'nodejs10',
+            runtime: funSpec.runtime || providerData.runtime || 'nodejs12',
             timeout: funSpec.timeout || providerData.timeout || 3,
             codeUri: funSpec.codeUri || '.',
             instanceConcurrency: funSpec.concurrency || 1,
