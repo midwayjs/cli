@@ -19,6 +19,7 @@ import {
   uppercaseObjectKey,
   removeObjectEmptyAttributes,
   filterUserDefinedEnv,
+  lowercaseObjectKey,
 } from '../utils';
 
 export class FCSpecBuilder extends SpecBuilder {
@@ -61,7 +62,7 @@ export class FCSpecBuilder extends SpecBuilder {
             funSpec.initializer ||
             handler.split('.').slice(0, -1).join('.') + '.initializer',
           Handler: handler,
-          Runtime: funSpec.runtime || providerData.runtime || 'nodejs10',
+          Runtime: funSpec.runtime || providerData.runtime || 'nodejs12',
           CodeUri: funSpec.codeUri || '.',
           Timeout: funSpec.timeout || providerData.timeout || 3,
           InitializationTimeout:
@@ -194,7 +195,7 @@ export class FCSpecBuilder extends SpecBuilder {
             },
           },
         } as FCCustomDomainSpec;
-      } else {
+      } else if (customDomain !== false) {
         template.Resources['midway_auto_domain'] = {
           Type: 'Aliyun::Serverless::CustomDomain',
           Properties: {
@@ -229,4 +230,177 @@ function convertMethods(methods: string | string[]): HTTPEventType[] {
   return methods.map(method => {
     return method.toUpperCase();
   }) as HTTPEventType[];
+}
+
+export class FCComponentSpecBuilder extends SpecBuilder {
+  toJSON() {
+    const providerData: FCProviderStructure = this.getProvider();
+    const serviceData = this.getService();
+    const functionsData: FCFunctionsStructure = this.getFunctions();
+    const serviceName = serviceData.name;
+    const userDefinedEnv = filterUserDefinedEnv();
+    const specList = [];
+    const service = {
+      name: serviceName,
+      description: serviceData.description,
+      internetAccess: providerData.internetAccess,
+      role: providerData.role,
+      logConfig: lowercaseObjectKey(providerData.logConfig),
+      vpc: lowercaseObjectKey(providerData.vpcConfig),
+      nas: lowercaseObjectKey(providerData.nasConfig),
+    };
+    const region = providerData.region;
+    const accessAlias = (providerData as any).accessAlias || 'default';
+    let httpEventRouters;
+
+    for (const funName in functionsData) {
+      const funSpec: FCFunctionStructure = functionsData[funName];
+      const handler = funSpec.handler || 'index.handler';
+      const newSpec = {
+        project: {
+          provider: 'alibaba',
+          accessAlias,
+          projectName: serviceName,
+        },
+        properties: {
+          service,
+          region,
+          function: {
+            name: funName,
+            description: funSpec.description || '',
+            // caPort: '', CustomContainer/Runtime指定端口
+            // customContainerConfig: { image: '', command: '', args: ''}, 自定义镜像配置
+            handler: handler,
+            initializer:
+              funSpec.initializer ||
+              handler.split('.').slice(0, -1).join('.') + '.initializer',
+            initializationTimeout:
+              funSpec.initTimeout || providerData.initTimeout || 3,
+            memorySize: funSpec.memorySize || providerData.memorySize || 128,
+            runtime: funSpec.runtime || providerData.runtime || 'nodejs12',
+            timeout: funSpec.timeout || providerData.timeout || 3,
+            codeUri: funSpec.codeUri || '.',
+            instanceConcurrency: funSpec.concurrency || 1,
+            environmentVariables: {
+              ...providerData.environment,
+              ...funSpec.environment,
+              ...userDefinedEnv,
+            },
+          },
+          triggers: [],
+          customDomains: [],
+        },
+      };
+      specList.push(newSpec);
+
+      for (const event of funSpec?.['events'] ?? []) {
+        if (event['http']) {
+          const evt = event['http'] as HTTPEvent;
+          const methods = convertMethods(evt.method);
+          newSpec.properties.triggers.push({
+            name: evt.name || 'http-' + funName,
+            type: 'http',
+            config: {
+              authType: 'anonymous', // 先写死
+              methods: methods,
+              invocationRole: evt.role,
+              qualifier: evt.version,
+            },
+          });
+
+          // https://github.com/git-qfzhang/fc-deploy-alibaba-component/blob/master/examples/http-trigger/s.yaml
+          if (!httpEventRouters) {
+            httpEventRouters = [];
+          }
+          httpEventRouters.push({
+            path: evt.path || '/*',
+            serviceName,
+            functionName: funSpec.name || funName,
+            methods,
+          });
+        }
+
+        if (event['timer']) {
+          const evt = event['timer'] as TimerEvent;
+          newSpec.properties.triggers.push({
+            name: evt.name || 'timer-' + funName,
+            type: 'timer',
+            config: {
+              cronExpression:
+                evt.type === 'every' ? `@every ${evt.value}` : evt.value,
+              enable: evt.enable === false ? false : true,
+              payload: evt.payload,
+              qualifier: evt.version,
+            },
+          });
+        }
+
+        if (event['log']) {
+          const evt = event['log'] as LogEvent;
+          newSpec.properties.triggers.push({
+            name: evt.name || 'log-' + funName,
+            type: 'log',
+            config: {
+              sourceConfig: {
+                logstore: evt.source,
+              },
+              jobConfig: {
+                maxRetryTime: evt.retryTime || 1,
+                triggerInterval: evt.interval || 30,
+              },
+              logConfig: {
+                project: evt.project,
+                logstore: evt.log,
+              },
+              enable: true,
+              invocationRole: evt.role,
+              qualifier: evt.version,
+            },
+          });
+        }
+
+        const osEvent = event['os'] || event['oss'] || event['cos'];
+
+        if (osEvent) {
+          const evt = osEvent as OSEvent;
+          newSpec.properties.triggers.push({
+            name: evt.name || 'oss-' + funName,
+            type: 'oss',
+            config: {
+              bucketName: evt.bucket,
+              events: [].concat(evt.events),
+              filter: {
+                key: {
+                  Prefix: evt.filter.prefix,
+                  Suffix: evt.filter.suffix,
+                },
+              },
+              enable: true,
+              invocationRole: evt.role,
+              qualifier: evt.version,
+            },
+          });
+        }
+      }
+
+      if (httpEventRouters?.length) {
+        const customDomain = this.originData?.['custom']?.['customDomain'];
+        if (customDomain) {
+          const { domainName } = customDomain;
+          newSpec.properties.customDomains.push({
+            domainName,
+            protocol: 'HTTP',
+            routeConfigs: httpEventRouters,
+          });
+        } else if (customDomain !== false) {
+          newSpec.properties.customDomains.push({
+            domainName: 'auto',
+            protocol: 'HTTP',
+            routeConfigs: httpEventRouters,
+          });
+        }
+      }
+    }
+    return specList;
+  }
 }

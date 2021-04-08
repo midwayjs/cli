@@ -8,7 +8,7 @@
     "@midwayjs/faas-code-analysis": "^1.2.54",
     "@midwayjs/locate": "^1.0.3",
     "@midwayjs/mwcc": "^0.5.x",
-    "@midwayjs/serverless-spec-builder": "^1.2.56",
+    "@midwayjs/serverless-spec-builder": "^1.2.56-beta.4",
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1",
     "jszip": "^3.2.2",

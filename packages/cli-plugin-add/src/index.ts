@@ -165,7 +165,7 @@ export class AddPlugin extends BasePlugin {
       spin.start();
       this.checkDepInstalled(baseDir, spin, allDeps);
       exec(
-        `${this.options.npm || 'npm'} install`,
+        `${this.options.npm || 'npm'} install --legacy-peer-deps`,
         { cwd: installDirectory },
         err => {
           if (err) {

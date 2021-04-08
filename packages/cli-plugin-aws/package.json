@@ -6,7 +6,7 @@
   "dependencies": {
     "@midwayjs/command-core": "^1.2.54",
     "@midwayjs/serverless-fc-starter": "^2.7.0",
-    "@midwayjs/serverless-spec-builder": "^1.2.56",
+    "@midwayjs/serverless-spec-builder": "^1.2.56-beta.4",
     "aws-sdk": "^2.712.0",
     "chalk": "^4.1.0",
     "ejs": "^3.1.3",

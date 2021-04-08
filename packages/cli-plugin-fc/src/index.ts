@@ -1,11 +1,19 @@
 import { BasePlugin, ICoreInstance } from '@midwayjs/command-core';
 import * as AliyunDeploy from '@alicloud/fun/lib/commands/deploy';
 import * as AliyunConfig from '@alicloud/fun/lib/commands/config';
+import {
+  loadComponent,
+  getCredential,
+  setCredential,
+} from '@serverless-devs/core';
 import { join } from 'path';
 import { homedir } from 'os';
-import { existsSync } from 'fs';
+import { existsSync, mkdirSync } from 'fs';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
-import { generateFunctionsSpecFile } from '@midwayjs/serverless-spec-builder/fc';
+import {
+  generateFunctionsSpecFile,
+  generateComponentSpec,
+} from '@midwayjs/serverless-spec-builder/fc';
 export class AliyunFCPlugin extends BasePlugin {
   core: ICoreInstance;
   options: any;
@@ -32,6 +40,9 @@ export class AliyunFCPlugin extends BasePlugin {
       });
     },
     'deploy:deploy': async () => {
+      if (this.options.serverlessDev) {
+        return this.deployUseServerlessDev();
+      }
       const profPath = join(homedir(), '.fcli/config.yaml');
       const isExists = existsSync(profPath);
       if (!isExists || this.options.resetConfig) {
@@ -81,5 +92,54 @@ export class AliyunFCPlugin extends BasePlugin {
       func[funcName] = funcConf;
     }
     return func;
+  }
+
+  async deployUseServerlessDev() {
+    const profDirPath = join(homedir(), '.s');
+    if (!existsSync(profDirPath)) {
+      mkdirSync(profDirPath);
+    }
+    const profPath = join(profDirPath, 'access.yaml');
+    const isExists = existsSync(profPath);
+    if (!isExists || this.options.resetConfig) {
+      // aliyun config
+      this.core.cli.log('please input serverless-dev config');
+      await setCredential('alibaba');
+    }
+    // 执行 package 打包
+    await this.core.invoke(['package'], true, {
+      ...this.options,
+      skipZip: true, // 跳过压缩成zip
+    });
+    this.core.cli.log('Start deploy by serverless-dev');
+
+    const cwd = process.cwd();
+    process.chdir(this.midwayBuildPath);
+    const credential = await getCredential(
+      'alibaba',
+      this.options.serverlessDev?.access ?? 'default'
+    );
+    this.core.debug('credential', credential);
+    const fcDeploy = await loadComponent('alibaba/fc-deploy');
+    if (!this.core.service) {
+      this.core.service = {};
+    }
+    if (!this.core.service.provider) {
+      this.core.service.provider = {};
+    }
+    if (typeof this.options.serverlessDev === 'object') {
+      Object.assign(this.core.service.provider, this.options.serverlessDev);
+    }
+    const functions = generateComponentSpec(this.core.service);
+    try {
+      for (const fcDeployInputs of functions) {
+        await fcDeploy.deploy(fcDeployInputs);
+        const funcName = fcDeployInputs.properties.function.name;
+        this.core.cli.log(`Function '${funcName}' deploy success`);
+      }
+    } catch (e) {
+      this.core.cli.log(`Deploy error: ${e.message}`);
+    }
+    process.chdir(cwd);
   }
 }

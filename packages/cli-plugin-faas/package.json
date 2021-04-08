@@ -8,7 +8,7 @@
     "@midwayjs/fcli-plugin-deploy": "^1.2.54",
     "@midwayjs/fcli-plugin-package": "^1.2.59",
     "@midwayjs/serverless-app": "^2.8.9",
-    "@midwayjs/serverless-spec-builder": "^1.2.56"
+    "@midwayjs/serverless-spec-builder": "^1.2.56-beta.4"
   },
   "devDependencies": {
     "typescript": "^4.1.0"

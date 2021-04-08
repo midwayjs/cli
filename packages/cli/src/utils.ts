@@ -81,6 +81,9 @@ export const findNpm = (argv?) => {
     const currentPlatform = platform();
     const cmd = npmList.find(cmd => {
       if (currentPlatform === 'win32') {
+        if (cmd === 'cnpm') {
+          return;
+        }
         // for windows
         try {
           const find = execSync(`where ${cmd}`).toString();
