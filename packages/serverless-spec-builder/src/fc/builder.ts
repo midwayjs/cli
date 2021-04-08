@@ -195,7 +195,7 @@ export class FCSpecBuilder extends SpecBuilder {
             },
           },
         } as FCCustomDomainSpec;
-      } else {
+      } else if (customDomain !== false) {
         template.Resources['midway_auto_domain'] = {
           Type: 'Aliyun::Serverless::CustomDomain',
           Properties: {
@@ -286,8 +286,9 @@ export class FCComponentSpecBuilder extends SpecBuilder {
               ...funSpec.environment,
               ...userDefinedEnv,
             },
-            triggers: [],
           },
+          triggers: [],
+          customDomains: [],
         },
       };
       specList.push(newSpec);
@@ -295,31 +296,33 @@ export class FCComponentSpecBuilder extends SpecBuilder {
       for (const event of funSpec?.['events'] ?? []) {
         if (event['http']) {
           const evt = event['http'] as HTTPEvent;
-          newSpec.properties.function.triggers.push({
+          const methods = convertMethods(evt.method);
+          newSpec.properties.triggers.push({
             name: evt.name || 'http-' + funName,
             type: 'http',
             config: {
               authType: 'anonymous', // 先写死
-              methods: convertMethods(evt.method),
+              methods: methods,
               invocationRole: evt.role,
               qualifier: evt.version,
             },
           });
 
           // https://github.com/git-qfzhang/fc-deploy-alibaba-component/blob/master/examples/http-trigger/s.yaml
-          // TODO: fc-deploy 暂不支持
           if (!httpEventRouters) {
-            httpEventRouters = {};
+            httpEventRouters = [];
           }
-          httpEventRouters[evt.path || '/*'] = {
+          httpEventRouters.push({
+            path: evt.path || '/*',
             serviceName,
             functionName: funSpec.name || funName,
-          };
+            methods,
+          });
         }
 
         if (event['timer']) {
           const evt = event['timer'] as TimerEvent;
-          newSpec.properties.function.triggers.push({
+          newSpec.properties.triggers.push({
             name: evt.name || 'timer-' + funName,
             type: 'timer',
             config: {
@@ -334,7 +337,7 @@ export class FCComponentSpecBuilder extends SpecBuilder {
 
         if (event['log']) {
           const evt = event['log'] as LogEvent;
-          newSpec.properties.function.triggers.push({
+          newSpec.properties.triggers.push({
             name: evt.name || 'log-' + funName,
             type: 'log',
             config: {
@@ -360,7 +363,7 @@ export class FCComponentSpecBuilder extends SpecBuilder {
 
         if (osEvent) {
           const evt = osEvent as OSEvent;
-          newSpec.properties.function.triggers.push({
+          newSpec.properties.triggers.push({
             name: evt.name || 'oss-' + funName,
             type: 'oss',
             config: {
@@ -376,6 +379,24 @@ export class FCComponentSpecBuilder extends SpecBuilder {
               invocationRole: evt.role,
               qualifier: evt.version,
             },
+          });
+        }
+      }
+
+      if (httpEventRouters?.length) {
+        const customDomain = this.originData?.['custom']?.['customDomain'];
+        if (customDomain) {
+          const { domainName } = customDomain;
+          newSpec.properties.customDomains.push({
+            domainName,
+            protocol: 'HTTP',
+            routeConfigs: httpEventRouters,
+          });
+        } else if (customDomain !== false) {
+          newSpec.properties.customDomains.push({
+            domainName: 'auto',
+            protocol: 'HTTP',
+            routeConfigs: httpEventRouters,
           });
         }
       }

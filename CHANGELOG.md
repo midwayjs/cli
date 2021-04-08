@@ -3,6 +3,39 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.59](https://github.com/midwayjs/bin/compare/v1.2.58...v1.2.59) (2021-04-07)
+
+
+### Bug Fixes
+
+* pcakage method ([#90](https://github.com/midwayjs/bin/issues/90)) ([242e694](https://github.com/midwayjs/bin/commit/242e6940a730ce60b57c8e2c09b48fdda1516f4d))
+
+
+
+
+
+## [1.2.58](https://github.com/midwayjs/bin/compare/v1.2.57...v1.2.58) (2021-04-07)
+
+
+### Bug Fixes
+
+* dev layers ([#89](https://github.com/midwayjs/bin/issues/89)) ([a5528fd](https://github.com/midwayjs/bin/commit/a5528fdf1d706e44882fe8fbcb611ad7cb8a0b70))
+
+
+
+
+
+## [1.2.57](https://github.com/midwayjs/bin/compare/v1.2.56...v1.2.57) (2021-04-02)
+
+
+### Bug Fixes
+
+* use serverless trigger collector ([#87](https://github.com/midwayjs/bin/issues/87)) ([f956152](https://github.com/midwayjs/bin/commit/f956152879cd603d3cfc5b7475b92fd012ed06d6))
+
+
+
+
+
 ## [1.2.56](https://github.com/midwayjs/bin/compare/v1.2.55...v1.2.56) (2021-03-26)
 
 

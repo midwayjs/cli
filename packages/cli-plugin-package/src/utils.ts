@@ -112,33 +112,90 @@ export const removeUselessFiles = async (target: string) => {
 };
 
 // 分析装饰器上面的函数信息
-export const analysisDecorator = async (cwd: string) => {
+export const analysisDecorator = async (cwd: string, currentFunc?) => {
   const midwayCoreMod = findNpmModule(cwd, '@midwayjs/core');
-  const { WebRouterCollector } = require(midwayCoreMod);
-  const collector = new WebRouterCollector(cwd);
-  const result = await collector.getFlattenRouterTable();
-  const allFunc = {};
+  const { ServerlessTriggerCollector } = require(midwayCoreMod);
+  const collector = new ServerlessTriggerCollector(cwd);
+  const result = await collector.getFunctionList();
+  const allFunc = currentFunc || {};
   if (Array.isArray(result)) {
     result.forEach(func => {
+      if (!func.functionTriggerName) {
+        return;
+      }
       const handler = func.funcHandlerName;
       if (!handler) {
         return;
       }
-      const funcName = handler.replace(/[^\w]/g, '-');
-      allFunc[funcName] = {
-        handler,
-        events: [
-          {
-            http: {
-              method: [].concat(func.requestMethod || 'get'),
-              path: (func.prefix + (func.url === '/' ? '' : func.url)).replace(
-                /\/{1,}/g,
-                '/'
-              ),
-            },
-          },
-        ],
-      };
+
+      if (!func.functionTriggerMetadata) {
+        func.functionTriggerMetadata = {};
+      }
+
+      const funcName =
+        func.functionTriggerMetadata.functionName ||
+        func.functionName ||
+        handler.replace(/[^\w]/g, '-');
+      if (!allFunc[funcName]) {
+        allFunc[funcName] = {
+          handler,
+          events: [],
+        };
+      }
+
+      if (!allFunc[funcName].events) {
+        allFunc[funcName].events = [];
+      }
+
+      if (!allFunc[funcName].handler) {
+        allFunc[funcName].handler = handler;
+      }
+
+      delete func.functionTriggerMetadata.functionName;
+      delete func.functionTriggerMetadata.middware;
+
+      const trigger = func.functionTriggerName;
+      let isAddToTrigger = false;
+      if (trigger === 'http') {
+        const { path, method } = func.functionTriggerMetadata;
+        let methodList = [].concat(method || []);
+        if (methodList.includes('any') || methodList.includes('all')) {
+          func.functionTriggerMetadata.method = 'any';
+          methodList = ['any'];
+        } else {
+          func.functionTriggerMetadata.method = methodList;
+        }
+        // 避免重复路径创建多个trigger
+        const httpTrigger = allFunc[funcName].events.find(event => {
+          return !!event.http && event.http.path === path;
+        });
+        if (httpTrigger) {
+          if (
+            httpTrigger.http.method === 'any' ||
+            func.functionTriggerMetadata.method === 'any'
+          ) {
+            httpTrigger.http.method = 'any';
+          } else {
+            httpTrigger.http.method = [].concat(httpTrigger.http.method || []);
+            if (method) {
+              [].concat(method).forEach(methodItem => {
+                if (!httpTrigger.http.method.includes(methodItem)) {
+                  httpTrigger.http.method.push(methodItem);
+                }
+              });
+            }
+          }
+          isAddToTrigger = true;
+        }
+      }
+
+      if (!isAddToTrigger) {
+        const triggerIsBoolean = !Object.keys(func.functionTriggerMetadata)
+          .length;
+        allFunc[funcName].events.push({
+          [trigger]: triggerIsBoolean ? true : func.functionTriggerMetadata,
+        });
+      }
     });
   }
   return allFunc;

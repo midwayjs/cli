@@ -1,14 +1,24 @@
-import { createApp, close } from '@midwayjs/mock';
+import { createApp, close, createBootstrap } from '@midwayjs/mock';
 import { analysisDecorator } from './utils';
 const options = JSON.parse(process.argv[2]);
 let app;
+let bootstrapStarter;
 process.on('exit', async () => {
-  await close(app);
+  if (bootstrapStarter) {
+    await bootstrapStarter.close();
+  } else {
+    await close(app);
+  }
 });
 (async () => {
   let startSuccess = false;
   try {
-    app = await createApp(process.cwd(), options, options.framework);
+    if (options.entryFile) {
+      bootstrapStarter = await createBootstrap(options.entryFile);
+    } else {
+      app = await createApp(process.cwd(), options, options.framework);
+    }
+
     startSuccess = true;
   } catch (e) {
     console.log('');
