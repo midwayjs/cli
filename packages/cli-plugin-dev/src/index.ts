@@ -44,6 +44,9 @@ export class DevPlugin extends BasePlugin {
         layers: {
           usage: 'extend serverless by layer',
         },
+        watchFile: {
+          usage: 'watch more file',
+        },
       },
     },
   };
@@ -249,6 +252,16 @@ export class DevPlugin extends BasePlugin {
     const fyml = resolve(this.core.cwd, 'f.yml');
     if (existsSync(fyml)) {
       watcher.add(fyml);
+    }
+    if (this.options.watchFile) {
+      const watchFileList = this.options.watchFile.split(',');
+      watchFileList.forEach(file => {
+        const filePath = resolve(this.core.cwd, file);
+        this.core.debug('other watch file', filePath);
+        if (existsSync(filePath)) {
+          watcher.add(filePath);
+        }
+      });
     }
     watcher.on('all', (event, path) => {
       if (this.restarting) {
