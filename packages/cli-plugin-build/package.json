@@ -1,11 +1,11 @@
 {
   "name": "@midwayjs/cli-plugin-build",
-  "version": "1.2.61-beta.1",
+  "version": "1.2.61",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/command-core": "^1.2.54",
-    "@midwayjs/faas-code-analysis": "^1.2.61-beta.1",
+    "@midwayjs/faas-code-analysis": "^1.2.61",
     "@midwayjs/mwcc": "^0.6.x",
     "fs-extra": "^8.1.0"
   },
