@@ -3,13 +3,15 @@ import { analysisDecorator } from './utils';
 const options = JSON.parse(process.argv[2]);
 let app;
 let bootstrapStarter;
-process.on('exit', async () => {
+const exit = process.exit;
+(process as any).exit = async () => {
   if (bootstrapStarter) {
     await bootstrapStarter.close();
   } else {
     await close(app);
   }
-});
+  exit();
+};
 (async () => {
   let startSuccess = false;
   try {

@@ -33,7 +33,6 @@ const cli = argv => {
     file: __filename, // 要包裹的方法所在文件
     export: 'cliFun', // 要包裹的方法的方法名
     debug: isDebug,
-    ts: argv.ts,
   })(argv);
 };
 
