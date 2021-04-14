@@ -117,7 +117,7 @@ export class AliyunFCPlugin extends BasePlugin {
     process.chdir(this.midwayBuildPath);
     const credential = await getCredential();
     this.core.debug('credential', credential);
-    const fcDeploy = await loadComponent('alibaba/fc-deploy');
+    const fcDeploy = await loadComponent('fc-deploy');
     if (!this.core.service) {
       this.core.service = {};
     }
