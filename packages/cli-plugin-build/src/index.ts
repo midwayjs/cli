@@ -20,21 +20,17 @@ export class BuildPlugin extends BasePlugin {
           usage: 'clean build target dir',
           shortcut: 'c',
         },
-        project: {
-          usage: 'project file location',
-          shortcut: 'p',
-        },
         srcDir: {
           usage: 'source code path',
         },
         outDir: {
           usage: 'build out path',
         },
-        entrypoint: {
-          usage: 'bundle the source with the file given as entrypoint',
-        },
         tsConfig: {
           usage: 'tsConfig json file path',
+        },
+        buildCache: {
+          usage: 'save build cache',
         },
       },
     },
@@ -62,6 +58,25 @@ export class BuildPlugin extends BasePlugin {
       const config = mod.getConfig();
       if (config.source) {
         this.options.srcDir = config.source;
+      }
+    }
+
+    if (typeof this.options.tsConfig === 'string') {
+      try {
+        // json
+        this.options.tsConfig = JSON.parse(this.options.tsConfig);
+      } catch {
+        // file
+        try {
+          const jsonPath = resolve(this.core.cwd, this.options.tsConfig);
+          if (existsSync(jsonPath)) {
+            this.options.tsConfig = JSON.parse(
+              readFileSync(jsonPath).toString()
+            );
+          }
+        } catch {
+          //
+        }
       }
     }
   }
