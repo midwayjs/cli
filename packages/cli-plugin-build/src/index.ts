@@ -64,25 +64,6 @@ export class BuildPlugin extends BasePlugin {
         this.options.srcDir = config.source;
       }
     }
-
-    if (typeof this.options.tsConfig === 'string') {
-      try {
-        // json
-        this.options.tsConfig = JSON.parse(this.options.tsConfig);
-      } catch {
-        // file
-        try {
-          const jsonPath = resolve(this.core.cwd, this.options.tsConfig);
-          if (existsSync(jsonPath)) {
-            this.options.tsConfig = JSON.parse(
-              readFileSync(jsonPath).toString()
-            );
-          }
-        } catch {
-          //
-        }
-      }
-    }
   }
 
   async clean() {
