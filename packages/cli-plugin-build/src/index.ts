@@ -20,6 +20,10 @@ export class BuildPlugin extends BasePlugin {
           usage: 'clean build target dir',
           shortcut: 'c',
         },
+        project: {
+          usage: 'project file location',
+          shortcut: 'p',
+        },
         srcDir: {
           usage: 'source code path',
         },
