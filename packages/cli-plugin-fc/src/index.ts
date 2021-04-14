@@ -104,7 +104,7 @@ export class AliyunFCPlugin extends BasePlugin {
     if (!isExists || this.options.resetConfig) {
       // aliyun config
       this.core.cli.log('please input serverless-dev config');
-      await setCredential('alibaba');
+      await setCredential();
     }
     // 执行 package 打包
     await this.core.invoke(['package'], true, {
@@ -115,10 +115,7 @@ export class AliyunFCPlugin extends BasePlugin {
 
     const cwd = process.cwd();
     process.chdir(this.midwayBuildPath);
-    const credential = await getCredential(
-      'alibaba',
-      this.options.serverlessDev?.access ?? 'default'
-    );
+    const credential = await getCredential();
     this.core.debug('credential', credential);
     const fcDeploy = await loadComponent('alibaba/fc-deploy');
     if (!this.core.service) {

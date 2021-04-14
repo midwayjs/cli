@@ -23,6 +23,9 @@ export class TestPlugin extends BasePlugin {
         forceExit: {
           usage: 'force exit',
         },
+        runInBand: {
+          usage: 'runInBand',
+        },
       },
     },
     cov: {
@@ -120,6 +123,10 @@ export class TestPlugin extends BasePlugin {
 
     if (this.options.cov) {
       args.push('--coverage');
+    }
+
+    if (this.options.runInBand) {
+      args.push('--runInBand');
     }
 
     if (this.options.forceExit) {
