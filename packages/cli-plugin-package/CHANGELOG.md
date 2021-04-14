@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.62](https://github.com/midwayjs/cli/compare/v1.2.61...v1.2.62) (2021-04-14)
+
+
+### Bug Fixes
+
+* dev not close ([#93](https://github.com/midwayjs/cli/issues/93)) ([f6f330c](https://github.com/midwayjs/cli/commit/f6f330c2e568dfbe112c03740218a55f715c4fb9))
+
+
+
+
+
 ## [1.2.61](https://github.com/midwayjs/cli/compare/v1.2.60...v1.2.61) (2021-04-12)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-package
