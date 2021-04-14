@@ -23,6 +23,7 @@ export const nodejsVersion = {
   nodejs6: 'Nodejs6.10',
   nodejs8: 'Nodejs8.9',
   nodejs10: 'Nodejs10.15',
+  nodejs12: 'Nodejs12.16',
 };
 
 function getNodejsRuntime(runtime) {
@@ -32,7 +33,7 @@ function getNodejsRuntime(runtime) {
   if (runtime) {
     return runtime;
   }
-  return 'Nodejs10.15';
+  return 'Nodejs12.16';
 }
 
 export class SCFServerlessSpecBuilder extends SpecBuilder {
