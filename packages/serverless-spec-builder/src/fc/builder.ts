@@ -182,7 +182,7 @@ export class FCSpecBuilder extends SpecBuilder {
       ] = functionTemplate;
     }
 
-    if (httpEventRouters?.length) {
+    if (httpEventRouters) {
       const customDomain = this.originData?.['custom']?.['customDomain'];
       if (customDomain) {
         const { domainName } = customDomain;
@@ -209,7 +209,7 @@ export class FCSpecBuilder extends SpecBuilder {
           } as FCCustomDomainSpec;
         }
       } else if (customDomain !== false) {
-        console.log('\n\n\n************************\n\n\n');
+        console.log('\n\n\n**************************************\n\n\n');
         console.log('Midway 将于 2021/05/01 起不再提供默认自动域名配置。');
         console.log('\n');
         console.log('若需要使用自动域名，请在 f.yml 文件中加入如下配置：');
@@ -217,7 +217,7 @@ export class FCSpecBuilder extends SpecBuilder {
         console.log('custom:');
         console.log('  customDomain:');
         console.log('    domainName: auto');
-        console.log('\n\n\n************************\n\n\n');
+        console.log('\n\n\n**************************************\n\n\n');
         template.Resources['midway_auto_domain'] = {
           Type: 'Aliyun::Serverless::CustomDomain',
           Properties: {
@@ -423,7 +423,7 @@ export class FCComponentSpecBuilder extends SpecBuilder {
             });
           }
         } else if (customDomain !== false) {
-          console.log('\n\n\n************************\n\n\n');
+          console.log('\n\n\n**************************************\n\n\n');
           console.log('Midway 将于 2021/05/01 起不再提供默认自动域名配置。');
           console.log('\n');
           console.log('若需要使用自动域名，请在 f.yml 文件中加入如下配置：');
@@ -431,7 +431,7 @@ export class FCComponentSpecBuilder extends SpecBuilder {
           console.log('custom:');
           console.log('  customDomain:');
           console.log('    domainName: auto');
-          console.log('\n\n\n************************\n\n\n');
+          console.log('\n\n\n**************************************\n\n\n');
           newSpec.properties.customDomains.push({
             domainName: 'auto',
             protocol: 'HTTP',
