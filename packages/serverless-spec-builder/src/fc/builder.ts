@@ -182,20 +182,42 @@ export class FCSpecBuilder extends SpecBuilder {
       ] = functionTemplate;
     }
 
-    if (httpEventRouters) {
+    if (httpEventRouters?.length) {
       const customDomain = this.originData?.['custom']?.['customDomain'];
       if (customDomain) {
         const { domainName } = customDomain;
-        template.Resources[domainName] = {
-          Type: 'Aliyun::Serverless::CustomDomain',
-          Properties: {
-            Protocol: 'HTTP',
-            RouteConfig: {
-              routes: httpEventRouters,
+        if (domainName === 'auto') {
+          template.Resources['midway_auto_domain'] = {
+            Type: 'Aliyun::Serverless::CustomDomain',
+            Properties: {
+              DomainName: 'Auto',
+              Protocol: 'HTTP',
+              RouteConfig: {
+                routes: httpEventRouters,
+              },
             },
-          },
-        } as FCCustomDomainSpec;
+          } as FCCustomDomainSpec;
+        } else {
+          template.Resources[domainName] = {
+            Type: 'Aliyun::Serverless::CustomDomain',
+            Properties: {
+              Protocol: 'HTTP',
+              RouteConfig: {
+                routes: httpEventRouters,
+              },
+            },
+          } as FCCustomDomainSpec;
+        }
       } else if (customDomain !== false) {
+        console.log('\n\n\n************************\n\n\n');
+        console.log('Midway 将于 2021/05/01 起不再提供默认自动域名配置。');
+        console.log('\n');
+        console.log('若需要使用自动域名，请在 f.yml 文件中加入如下配置：');
+        console.log('\n');
+        console.log('custom:');
+        console.log('  customDomain:');
+        console.log('    domainName: auto');
+        console.log('\n\n\n************************\n\n\n');
         template.Resources['midway_auto_domain'] = {
           Type: 'Aliyun::Serverless::CustomDomain',
           Properties: {
