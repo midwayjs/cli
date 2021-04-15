@@ -1,11 +1,7 @@
 import { BasePlugin, ICoreInstance } from '@midwayjs/command-core';
 import * as AliyunDeploy from '@alicloud/fun/lib/commands/deploy';
 import * as AliyunConfig from '@alicloud/fun/lib/commands/config';
-import {
-  loadComponent,
-  getCredential,
-  setCredential,
-} from '@serverless-devs/core';
+import { loadComponent, setCredential } from '@serverless-devs/core';
 import { join } from 'path';
 import { homedir } from 'os';
 import { existsSync, mkdirSync } from 'fs';
@@ -115,10 +111,6 @@ export class AliyunFCPlugin extends BasePlugin {
 
     const cwd = process.cwd();
     process.chdir(this.midwayBuildPath);
-    const credential = await getCredential(
-      this.options.serverlessDev?.access ?? 'default'
-    );
-    this.core.debug('credential', credential);
     const fcDeploy = await loadComponent('fc-deploy');
     if (!this.core.service) {
       this.core.service = {};
