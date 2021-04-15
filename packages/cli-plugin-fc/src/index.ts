@@ -115,7 +115,9 @@ export class AliyunFCPlugin extends BasePlugin {
 
     const cwd = process.cwd();
     process.chdir(this.midwayBuildPath);
-    const credential = await getCredential();
+    const credential = await getCredential(
+      this.options.serverlessDev?.access ?? 'default'
+    );
     this.core.debug('credential', credential);
     const fcDeploy = await loadComponent('fc-deploy');
     if (!this.core.service) {
