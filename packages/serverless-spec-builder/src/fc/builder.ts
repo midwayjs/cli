@@ -272,7 +272,7 @@ export class FCComponentSpecBuilder extends SpecBuilder {
       nas: lowercaseObjectKey(providerData.nasConfig),
     };
     const region = providerData.region;
-    const accessAlias = (providerData as any).accessAlias || 'default';
+    const access = (providerData as any).access || 'default';
     let httpEventRouters;
 
     for (const funName in functionsData) {
@@ -281,7 +281,7 @@ export class FCComponentSpecBuilder extends SpecBuilder {
       const newSpec = {
         project: {
           provider: 'alibaba',
-          accessAlias,
+          access,
           projectName: serviceName,
         },
         properties: {
