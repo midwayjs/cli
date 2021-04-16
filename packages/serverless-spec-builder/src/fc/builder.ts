@@ -284,7 +284,7 @@ export class FCComponentSpecBuilder extends SpecBuilder {
           access,
           projectName: serviceName,
         },
-        properties: {
+        props: {
           service,
           region,
           function: {
@@ -319,7 +319,7 @@ export class FCComponentSpecBuilder extends SpecBuilder {
         if (event['http']) {
           const evt = event['http'] as HTTPEvent;
           const methods = convertMethods(evt.method);
-          newSpec.properties.triggers.push({
+          newSpec.props.triggers.push({
             name: evt.name || 'http-' + funName,
             type: 'http',
             config: {
@@ -344,7 +344,7 @@ export class FCComponentSpecBuilder extends SpecBuilder {
 
         if (event['timer']) {
           const evt = event['timer'] as TimerEvent;
-          newSpec.properties.triggers.push({
+          newSpec.props.triggers.push({
             name: evt.name || 'timer-' + funName,
             type: 'timer',
             config: {
@@ -359,7 +359,7 @@ export class FCComponentSpecBuilder extends SpecBuilder {
 
         if (event['log']) {
           const evt = event['log'] as LogEvent;
-          newSpec.properties.triggers.push({
+          newSpec.props.triggers.push({
             name: evt.name || 'log-' + funName,
             type: 'log',
             config: {
@@ -385,7 +385,7 @@ export class FCComponentSpecBuilder extends SpecBuilder {
 
         if (osEvent) {
           const evt = osEvent as OSEvent;
-          newSpec.properties.triggers.push({
+          newSpec.props.triggers.push({
             name: evt.name || 'oss-' + funName,
             type: 'oss',
             config: {
@@ -410,13 +410,13 @@ export class FCComponentSpecBuilder extends SpecBuilder {
         if (customDomain) {
           const { domainName } = customDomain;
           if (domainName === 'auto') {
-            newSpec.properties.customDomains.push({
+            newSpec.props.customDomains.push({
               domainName: 'auto',
               protocol: 'HTTP',
               routeConfigs: httpEventRouters,
             });
           } else {
-            newSpec.properties.customDomains.push({
+            newSpec.props.customDomains.push({
               domainName,
               protocol: 'HTTP',
               routeConfigs: httpEventRouters,
@@ -432,7 +432,7 @@ export class FCComponentSpecBuilder extends SpecBuilder {
           console.log('  customDomain:');
           console.log('    domainName: auto');
           console.log('\n\n\n**************************************\n\n\n');
-          newSpec.properties.customDomains.push({
+          newSpec.props.customDomains.push({
             domainName: 'auto',
             protocol: 'HTTP',
             routeConfigs: httpEventRouters,
