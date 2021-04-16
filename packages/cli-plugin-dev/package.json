@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/cli-plugin-dev",
-  "version": "1.2.63-beta.3",
+  "version": "1.2.63",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -15,8 +15,8 @@
     "light-spinner": "^1.0.1"
   },
   "devDependencies": {
-    "@midwayjs/serverless-app": "^2.8.9",
     "@midwayjs/core": "^2.8.0",
+    "@midwayjs/serverless-app": "^2.8.9",
     "@midwayjs/web": "^2.8.0",
     "fs-extra": "^8.1.0",
     "node-fetch": "^2.6.1",
