@@ -30,11 +30,11 @@ export class BuildPlugin extends BasePlugin {
         outDir: {
           usage: 'build out path',
         },
-        entrypoint: {
-          usage: 'bundle the source with the file given as entrypoint',
-        },
         tsConfig: {
           usage: 'tsConfig json file path',
+        },
+        buildCache: {
+          usage: 'save build cache',
         },
       },
     },

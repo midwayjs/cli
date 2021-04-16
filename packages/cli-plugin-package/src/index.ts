@@ -104,10 +104,6 @@ export class PackagePlugin extends BasePlugin {
         skipBuild: {
           usage: 'Skip funciton build',
         },
-        stage: {
-          usage: 'Stage of the service',
-          shortcut: 's',
-        },
         resolve: {
           usage: 'Resolve layer versions and lock them in final archive',
           shortcut: 'r',

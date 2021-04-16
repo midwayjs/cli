@@ -88,7 +88,7 @@ export class DevPlugin extends BasePlugin {
   }
 
   async run() {
-    process.on('exit', this.handleClose.bind(this, true));
+    process.on('exit', this.handleClose.bind(this, false));
     process.on('SIGINT', this.handleClose.bind(this, true));
     this.setStore('dev:closeApp', this.handleClose.bind(this), true);
     const options = this.getOptions();
@@ -110,6 +110,7 @@ export class DevPlugin extends BasePlugin {
       const ymlData = readFileSync(yamlPath).toString();
       if (!/deployType/.test(ymlData)) {
         process.env.MIDWAY_DEV_IS_SERVERLESS = 'true';
+        // eslint-disable-next-line
         framework = require.resolve('@midwayjs/serverless-app');
       }
     }
