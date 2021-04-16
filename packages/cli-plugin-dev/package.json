@@ -15,6 +15,7 @@
     "light-spinner": "^1.0.1"
   },
   "devDependencies": {
+    "@midwayjs/serverless-app": "^2.8.9",
     "@midwayjs/core": "^2.8.0",
     "@midwayjs/web": "^2.8.0",
     "fs-extra": "^8.1.0",
