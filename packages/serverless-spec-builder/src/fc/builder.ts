@@ -64,7 +64,7 @@ export class FCSpecBuilder extends SpecBuilder {
           Handler: handler,
           Runtime: funSpec.runtime || providerData.runtime || 'nodejs12',
           CodeUri: funSpec.codeUri || '.',
-          Timeout: funSpec.timeout || providerData.timeout || 3,
+          Timeout: funSpec.timeout || providerData.timeout,
           InitializationTimeout:
             funSpec.initTimeout || providerData.initTimeout || 3,
           MemorySize: funSpec.memorySize || providerData.memorySize || 128,
@@ -113,6 +113,8 @@ export class FCSpecBuilder extends SpecBuilder {
               Qualifier: evt.version,
             },
           };
+          functionTemplate.Properties.Timeout =
+            functionTemplate.Properties.Timeout || 600;
         }
 
         if (event['log']) {
@@ -136,6 +138,8 @@ export class FCSpecBuilder extends SpecBuilder {
               Qualifier: evt.version,
             },
           };
+          functionTemplate.Properties.Timeout =
+            functionTemplate.Properties.Timeout || 600;
         }
 
         const osEvent = event['os'] || event['oss'] || event['cos'];
@@ -158,6 +162,8 @@ export class FCSpecBuilder extends SpecBuilder {
               Qualifier: evt.version,
             },
           };
+          functionTemplate.Properties.Timeout =
+            functionTemplate.Properties.Timeout || 600;
         }
 
         if (event['mq']) {
@@ -174,8 +180,13 @@ export class FCSpecBuilder extends SpecBuilder {
               Qualifier: evt.version,
             },
           };
+          functionTemplate.Properties.Timeout =
+            functionTemplate.Properties.Timeout || 600;
         }
       }
+
+      functionTemplate.Properties.Timeout =
+        functionTemplate.Properties.Timeout || 3;
 
       template.Resources[serviceName][
         funSpec.name || funName
@@ -237,7 +248,7 @@ export class FCSpecBuilder extends SpecBuilder {
 
 function convertMethods(methods: string | string[]): HTTPEventType[] {
   if (typeof methods === 'string') {
-    if (methods === 'any') {
+    if (methods === 'any' || methods === 'all') {
       return ['GET', 'PUT', 'POST', 'DELETE', 'HEAD'];
     }
 
