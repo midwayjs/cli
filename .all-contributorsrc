@@ -1,0 +1,26 @@
+{
+  "projectName": "@midwayjs/cli",
+  "projectOwner": "midwayjs",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "commitConvention": "none",
+  "contributors": [
+    {
+      "login": "echosoar",
+      "name": "Gao Yang",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14832743?v=4",
+      "profile": "https://iam.gy/",
+      "contributions": [
+        "code",
+        "design",
+        "doc"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7
+}
