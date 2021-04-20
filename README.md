@@ -10,7 +10,7 @@ Midway bin
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/midwayjs/cli/pulls)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ---
@@ -23,14 +23,13 @@ npm i @midwayjs/cli -D
 
 ## Contributors ✨
 
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
-
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
   <tr>
     <td align="center"><a href="https://iam.gy/"><img src="https://avatars.githubusercontent.com/u/14832743?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Gao Yang</b></sub></a><br /><a href="https://github.com/midwayjs/@midwayjs/cli/commits?author=echosoar" title="Code">💻</a> <a href="#design-echosoar" title="Design">🎨</a> <a href="https://github.com/midwayjs/@midwayjs/cli/commits?author=echosoar" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/czy88840616"><img src="https://avatars.githubusercontent.com/u/418820?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Harry Chen</b></sub></a><br /><a href="https://github.com/midwayjs/@midwayjs/cli/commits?author=czy88840616" title="Code">💻</a></td>
   </tr>
 </table>
 
@@ -38,5 +37,3 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
