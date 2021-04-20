@@ -10,7 +10,7 @@ Midway bin
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/midwayjs/cli/pulls)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ---
@@ -32,6 +32,7 @@ npm i @midwayjs/cli -D
     <td align="center"><a href="https://github.com/czy88840616"><img src="https://avatars.githubusercontent.com/u/418820?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Harry Chen</b></sub></a><br /><a href="https://github.com/midwayjs/@midwayjs/cli/commits?author=czy88840616" title="Code">💻</a></td>
     <td align="center"><a href="https://blog.lxxyx.cn/"><img src="https://avatars.githubusercontent.com/u/13161470?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Lxxyx</b></sub></a><br /><a href="https://github.com/midwayjs/@midwayjs/cli/commits?author=Lxxyx" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/fakership"><img src="https://avatars.githubusercontent.com/u/16553183?v=4?s=100" width="100px;" alt=""/><br /><sub><b>fakership</b></sub></a><br /><a href="https://github.com/midwayjs/@midwayjs/cli/commits?author=fakership" title="Code">💻</a> <a href="https://github.com/midwayjs/@midwayjs/cli/commits?author=fakership" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/zhangyuang"><img src="https://avatars.githubusercontent.com/u/17424434?v=4?s=100" width="100px;" alt=""/><br /><sub><b>yuuang</b></sub></a><br /><a href="https://github.com/midwayjs/@midwayjs/cli/commits?author=zhangyuang" title="Code">💻</a></td>
   </tr>
 </table>
 
