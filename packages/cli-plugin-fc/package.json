@@ -9,7 +9,7 @@
     "@midwayjs/serverless-fc-starter": "^2.8.7",
     "@midwayjs/serverless-fc-trigger": "^2.8.7",
     "@midwayjs/serverless-spec-builder": "^1.2.63",
-    "@serverless-devs/core": "^0.0.68",
+    "@serverless-devs/core": "*",
     "request": "^2.88.2"
   },
   "devDependencies": {
