@@ -40,6 +40,9 @@ export class DeployPlugin extends BasePlugin {
       /\/$/,
       ''
     );
+    if (domain === 'auto') {
+      return;
+    }
     console.log('\nDomain bind: ' + domain);
     for (const path of allPaths) {
       console.log(`- path bind: http://${domain}/${path.replace(/^\//, '')}`);
