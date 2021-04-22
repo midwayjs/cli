@@ -58,6 +58,9 @@ describe('/test/wrapper.test.ts', () => {
       const aggreContent = readFileSync(aggrePath).toString();
       assert(/exports\.initializeUserDefine\s*=/.test(aggreContent));
       assert(
+        aggreContent.indexOf('handler.method.indexOf(currentMethod)') !== -1
+      );
+      assert(
         aggreContent.indexOf(
           'starter.handleInvokeWrapper(handler.handler)(ctx, ...args)'
         ) !== -1
@@ -145,8 +148,12 @@ describe('/test/wrapper.test.ts', () => {
               _isAggregation: true,
               functions: ['index'],
               _handlers: [
-                { path: '/api/test', handler: 'index.handler' },
-                { path: '/*', handler: 'render.handler' },
+                { path: '/api/test', handler: 'index.handler', method: 'get' },
+                {
+                  path: '/*',
+                  handler: 'render.handler',
+                  method: ['post', 'Get'],
+                },
               ],
             },
             index: {
@@ -172,6 +179,11 @@ describe('/test/wrapper.test.ts', () => {
         !/registerFunctionToIocByConfig/.test(
           readFileSync(aggrePath).toString()
         )
+      );
+      assert(
+        readFileSync(aggrePath)
+          .toString()
+          .indexOf('handler.method.indexOf(currentMethod)') !== -1
       );
       assert(
         !/require\('registerFunction\.js'\)/.test(

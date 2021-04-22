@@ -7,7 +7,7 @@ npm dist-tag add @midwayjs/cli-plugin-clean@1.2.63 latest
 npm dist-tag add @midwayjs/fcli-plugin-deploy@1.2.54 latest
 npm dist-tag add @midwayjs/cli-plugin-dev@1.2.63 latest
 npm dist-tag add @midwayjs/cli-plugin-faas@1.2.63 latest
-npm dist-tag add @midwayjs/fcli-plugin-fc@1.2.63 latest
+npm dist-tag add @midwayjs/fcli-plugin-fc@1.2.64 latest
 npm dist-tag add @midwayjs/fcli-plugin-package@1.2.63 latest
 npm dist-tag add @midwayjs/fcli-plugin-scf@1.2.63 latest
 npm dist-tag add @midwayjs/cli-plugin-test@1.2.62 latest

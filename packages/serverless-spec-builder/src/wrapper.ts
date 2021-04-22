@@ -189,6 +189,11 @@ export function formetAggregationHandlers(handlers) {
       const { path = '' } = handler;
       return {
         ...handler,
+        method: (handler.method ? [].concat(handler.method) : []).map(
+          method => {
+            return method.toLowerCase();
+          }
+        ),
         handler: handler.handler,
         router: path.replace(/\*/g, '**'), // picomatch use **
         pureRouter: path.replace(/\**$/, ''),
