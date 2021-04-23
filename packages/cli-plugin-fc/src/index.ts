@@ -124,8 +124,11 @@ export class AliyunFCPlugin extends BasePlugin {
     const functions = generateComponentSpec(this.core.service);
     try {
       for (const fcDeployInputs of functions) {
+        Object.assign(fcDeployInputs, this.options.serverlessDev);
+        delete fcDeployInputs.access;
         await fcDeploy.deploy(fcDeployInputs);
         const funcName = fcDeployInputs.props.function.name;
+
         this.core.cli.log(`Function '${funcName}' deploy success`);
       }
     } catch (e) {

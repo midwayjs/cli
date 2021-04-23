@@ -871,6 +871,7 @@ export class PackagePlugin extends BasePlugin {
               ...func,
               events: httpEvent,
               path: httpEvent.http.path,
+              method: httpEvent.http.method,
             });
           });
         });

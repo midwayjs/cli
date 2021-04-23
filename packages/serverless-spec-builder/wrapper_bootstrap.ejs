@@ -52,10 +52,16 @@ const getHandler = (hanlderName, ...originArgs) => {
         const allHandlers = <%-JSON.stringify(handlerData.handlers, null, 2)%>;
         let handler = null;
         let ctxPath = ctx && ctx.path || '';
+        let currentMethod = (ctx && ctx.method || '').toLowerCase();
         let matchRes;
         if (ctxPath) {
           handler = allHandlers.find(handler => {
             matchRes = match(handler.regRouter)(ctxPath);
+            if (matchRes) {
+              if (handler.method && handler.method.length && handler.method.indexOf(currentMethod) === -1) {
+                return false;
+              }
+            }
             return matchRes;
           });
         }

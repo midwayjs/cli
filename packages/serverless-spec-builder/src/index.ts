@@ -33,7 +33,7 @@ export const transform = (sourcefilePathOrJson: any, builderCls?) => {
   }
 };
 
-export { saveYaml } from './parse';
+export { saveYaml, parse } from './parse';
 
 export const generate = (
   sourceFilePathOrJson: any,

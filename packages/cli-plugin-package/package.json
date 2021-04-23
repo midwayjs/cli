@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/fcli-plugin-package",
-  "version": "1.2.63",
+  "version": "1.2.65-beta.2",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -8,7 +8,7 @@
     "@midwayjs/faas-code-analysis": "^1.2.61",
     "@midwayjs/locate": "^1.0.3",
     "@midwayjs/mwcc": "^0.6.x",
-    "@midwayjs/serverless-spec-builder": "^1.2.63",
+    "@midwayjs/serverless-spec-builder": "^1.2.65-beta.2",
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1",
     "jszip": "^3.2.2",

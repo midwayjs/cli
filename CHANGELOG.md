@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.64](https://github.com/midwayjs/bin/compare/v1.2.64-beta.3...v1.2.64) (2021-04-22)
+
+**Note:** Version bump only for package midway-bin
+
+
+
+
+
 ## [1.2.63](https://github.com/midwayjs/bin/compare/v1.2.62...v1.2.63) (2021-04-16)
 
 **Note:** Version bump only for package midway-bin
