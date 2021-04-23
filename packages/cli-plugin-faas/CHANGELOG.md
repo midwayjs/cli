@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.65](https://github.com/midwayjs/cli/compare/v1.2.63...v1.2.65) (2021-04-23)
+
+
+### Bug Fixes
+
+* more serverless dev options ([#95](https://github.com/midwayjs/cli/issues/95)) ([c3b9a4f](https://github.com/midwayjs/cli/commit/c3b9a4fa7f9f0bf6d19420ff38bf1abb23e74e32))
+
+
+
+
+
 ## [1.2.63](https://github.com/midwayjs/cli/compare/v1.2.62...v1.2.63) (2021-04-16)
 
 **Note:** Version bump only for package @midwayjs/cli-plugin-faas
