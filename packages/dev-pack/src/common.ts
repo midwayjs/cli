@@ -75,6 +75,7 @@ export async function invokeByDev(getDevCore) {
         })
         .join('&');
       delete params.query;
+      params.redirect = 'manual';
       const result = await fetch(
         `http://127.0.0.1:${port}${params.path || '/'}${
           query ? `?${query}` : ''
