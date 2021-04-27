@@ -17,3 +17,12 @@ Midway bin
 ```
 npm i @midwayjs/cli -D
 ```
+
+### Document
+
+[中文简体](https://www.yuque.com/midwayjs/midway_v2/cli) | [English](https://www.yuque.com/midwayjs/midway_v2/cli?translate=en)
+
+
+---
+
+© MIT License
