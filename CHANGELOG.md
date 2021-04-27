@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.66](https://github.com/midwayjs/bin/compare/v1.2.65...v1.2.66) (2021-04-27)
+
+
+### Bug Fixes
+
+* child process proxy ([#98](https://github.com/midwayjs/bin/issues/98)) ([e6e176c](https://github.com/midwayjs/bin/commit/e6e176cbdad3610fb5745160c337ac3f12fd99d9))
+
+
+
+
+
 ## [1.2.65](https://github.com/midwayjs/bin/compare/v1.2.63...v1.2.65) (2021-04-23)
 
 

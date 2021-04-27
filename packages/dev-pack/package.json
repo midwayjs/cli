@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/serverless-dev-pack",
-  "version": "1.2.65",
+  "version": "1.2.66",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
