@@ -235,10 +235,12 @@ export class FCSpecBuilder extends SpecBuilder {
   }
 }
 
-function convertMethods(methods: string | string[]): HTTPEventType[] {
+export function convertMethods(methods: string | string[]): HTTPEventType[] {
+  // ref: https://help.aliyun.com/document_detail/71229.html
+  const all: HTTPEventType[] = ['GET', 'PUT', 'POST', 'DELETE', 'HEAD'];
   if (typeof methods === 'string') {
-    if (methods === 'any') {
-      return ['GET', 'PUT', 'POST', 'DELETE', 'HEAD'];
+    if (methods === 'any' || methods === 'all') {
+      return all;
     }
 
     methods = [methods];
@@ -246,12 +248,14 @@ function convertMethods(methods: string | string[]): HTTPEventType[] {
     // has value
   } else {
     // empty
-    return ['GET', 'PUT', 'POST', 'DELETE', 'HEAD'];
+    return all;
   }
 
-  return methods.map(method => {
-    return method.toUpperCase();
-  }) as HTTPEventType[];
+  return methods
+    .map(method => {
+      return method.toUpperCase();
+    })
+    .filter(method => all.includes(method as HTTPEventType)) as HTTPEventType[];
 }
 
 export class FCComponentSpecBuilder extends SpecBuilder {
@@ -424,7 +428,7 @@ export class FCComponentSpecBuilder extends SpecBuilder {
           }
         } else if (customDomain !== false) {
           console.log('\n\n\n**************************************\n\n\n');
-          console.log('Midway 将于 2021/05/01 起不再提供默认自动域名配置。');
+          console.log('Midway 已于 2021/05/01 起不再默认提供自动域名配置。');
           console.log('\n');
           console.log('若需要使用自动域名，请在 f.yml 文件中加入如下配置：');
           console.log('\n');

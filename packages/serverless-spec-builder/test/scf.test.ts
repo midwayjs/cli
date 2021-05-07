@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { generateFunctionsSpec, generateFunctionsSpecFile } from '../src/scf';
 import { SCFServerlessStructure } from '../src/scf/interface';
+import { convertMethods } from '../src/scf/builder';
 import * as mm from 'mm';
 
 describe('/test/scf.test.ts', () => {
@@ -197,5 +198,11 @@ describe('/test/scf.test.ts', () => {
         },
       });
     });
+  });
+
+  it('convertMethods', () => {
+    assert(convertMethods('get') === 'GET');
+    assert(convertMethods('xxxx') === 'ANY');
+    assert(convertMethods(['post', 'xxx', 'head']) === 'POST');
   });
 });
