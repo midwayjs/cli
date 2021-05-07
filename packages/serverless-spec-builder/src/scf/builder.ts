@@ -159,6 +159,7 @@ export class SCFServerlessSpecBuilder extends SpecBuilder {
 }
 
 export function convertMethods(method: string | string[]): SCFHTTPMethod {
+  // ref: https://cloud.tencent.com/document/product/583/12513
   const currentSupport = ['ANY', 'GET', 'HEAD', 'POST', 'PUT', 'DELETE'];
   if (!method) {
     method = 'any';
