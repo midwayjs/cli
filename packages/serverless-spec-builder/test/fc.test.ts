@@ -2,6 +2,7 @@ import { generateFunctionsSpec } from '../src/fc';
 import * as path from 'path';
 import * as assert from 'assert';
 import * as mm from 'mm';
+import { convertMethods } from '../src/fc/builder';
 
 describe('/test/fc.test.ts', () => {
   it('test base', () => {
@@ -233,5 +234,13 @@ describe('/test/fc.test.ts', () => {
 
     funResult = result['Resources']['serverless-hello-world']['index2'];
     assert(funResult['Events']['my_http']);
+  });
+
+  it('convertMethods', () => {
+    assert(convertMethods('get')[0] === 'GET');
+    assert(convertMethods('xxxx')[0] === undefined);
+    assert(convertMethods(['post', 'xxx', 'head']).length === 2);
+    assert(convertMethods(['post', 'xxx', 'head'])[0] === 'POST');
+    assert(convertMethods(['post', 'xxx', 'head'])[1] === 'HEAD');
   });
 });

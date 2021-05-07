@@ -158,7 +158,8 @@ export class SCFServerlessSpecBuilder extends SpecBuilder {
   }
 }
 
-function convertMethods(method: string | string[]): SCFHTTPMethod {
+export function convertMethods(method: string | string[]): SCFHTTPMethod {
+  const currentSupport = ['ANY', 'GET', 'HEAD', 'POST', 'PUT', 'DELETE'];
   if (!method) {
     method = 'any';
   }
@@ -171,5 +172,9 @@ function convertMethods(method: string | string[]): SCFHTTPMethod {
     method = 'any';
   }
 
-  return method.toUpperCase() as SCFHTTPMethod;
+  const upperMethod = method.toUpperCase() as SCFHTTPMethod;
+  if (currentSupport.includes(upperMethod)) {
+    return upperMethod;
+  }
+  return 'ANY';
 }
