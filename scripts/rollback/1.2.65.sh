@@ -13,7 +13,7 @@ npm dist-tag add @midwayjs/fcli-plugin-scf@1.2.65 latest
 npm dist-tag add @midwayjs/cli-plugin-test@1.2.65 latest
 npm dist-tag add @midwayjs/cli@1.2.65 latest
 npm dist-tag add @midwayjs/command-core@1.2.65 latest
-npm dist-tag add @midwayjs/serverless-dev-pack@1.2.65 latest
+npm dist-tag add @midwayjs/serverless-dev-pack@1.2.66 latest
 npm dist-tag add @midwayjs/faas-code-analysis@1.2.61 latest
 npm dist-tag add @midwayjs/gateway-common-core@1.2.54 latest
 npm dist-tag add @midwayjs/gateway-common-http@1.2.65 latest
