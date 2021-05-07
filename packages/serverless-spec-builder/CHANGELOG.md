@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.67](https://github.com/midwayjs/cli/compare/v1.2.66...v1.2.67) (2021-05-07)
+
+
+### Bug Fixes
+
+* deploy filter method ([#101](https://github.com/midwayjs/cli/issues/101)) ([c660a53](https://github.com/midwayjs/cli/commit/c660a535d044105e04e38fa0c134542e826f1560))
+
+
+
+
+
 ## [1.2.65](https://github.com/midwayjs/cli/compare/v1.2.63...v1.2.65) (2021-04-23)
 
 
