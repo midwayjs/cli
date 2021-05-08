@@ -150,7 +150,9 @@ export class DevPlugin extends BasePlugin {
           ...process.env,
         },
         silent: true,
-        execArgv: options.ts ? ['-r', 'ts-node/register'] : [],
+        execArgv: options.ts
+          ? ['-r', 'ts-node/register', '-r', 'tsconfig-paths/register']
+          : [],
       });
       const dataCache = [];
       this.child.stdout.on('data', data => {
