@@ -311,8 +311,8 @@ export class AWSLambdaPlugin extends BasePlugin {
     }
     this.core.cli.log('\n  - stack ready, check api url');
 
-    const result: CloudFormation.DescribeStackResourcesOutput = await new Promise(
-      (resolve, reject) =>
+    const result: CloudFormation.DescribeStackResourcesOutput =
+      await new Promise((resolve, reject) =>
         service.describeStackResources(
           {
             StackName: stackId,
@@ -324,7 +324,7 @@ export class AWSLambdaPlugin extends BasePlugin {
             resolve(data as any);
           }
         )
-    );
+      );
 
     const { StackResources } = result;
     const datas = StackResources.filter(
