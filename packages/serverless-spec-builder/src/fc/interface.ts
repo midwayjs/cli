@@ -104,7 +104,7 @@ export interface FCFunctionSpec {
   };
 }
 
-export type HTTPEventType = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'HEAD';
+export type HTTPEventType = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'HEAD' | 'PATCH';
 
 export interface FCHTTPEvent {
   Type: 'HTTP';
