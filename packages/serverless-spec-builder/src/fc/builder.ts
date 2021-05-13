@@ -177,9 +177,8 @@ export class FCSpecBuilder extends SpecBuilder {
         }
       }
 
-      template.Resources[serviceName][
-        funSpec.name || funName
-      ] = functionTemplate;
+      template.Resources[serviceName][funSpec.name || funName] =
+        functionTemplate;
     }
 
     if (httpEventRouters) {
@@ -237,7 +236,14 @@ export class FCSpecBuilder extends SpecBuilder {
 
 export function convertMethods(methods: string | string[]): HTTPEventType[] {
   // ref: https://help.aliyun.com/document_detail/71229.html
-  const all: HTTPEventType[] = ['GET', 'PUT', 'POST', 'DELETE', 'HEAD'];
+  const all: HTTPEventType[] = [
+    'GET',
+    'PUT',
+    'POST',
+    'DELETE',
+    'HEAD',
+    'PATCH',
+  ];
   if (typeof methods === 'string') {
     if (methods === 'any' || methods === 'all') {
       return all;

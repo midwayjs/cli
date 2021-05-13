@@ -79,14 +79,8 @@ interface ICopyOptions {
 }
 
 export const copyFiles = async (options: ICopyOptions) => {
-  const {
-    defaultInclude,
-    include,
-    exclude,
-    sourceDir,
-    targetDir,
-    log,
-  } = options;
+  const { defaultInclude, include, exclude, sourceDir, targetDir, log } =
+    options;
   const paths = await globby(
     (
       defaultInclude || ['*.yml', '*.js', '*.ts', '*.json', 'app', 'config']

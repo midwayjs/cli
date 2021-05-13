@@ -34,8 +34,9 @@ describe('/test/midwayfaas2.test.ts', () => {
       specFunctions['helloService-ossTrigger'].events[0].os.bucket === 'test'
     );
     assert(
-      specFunctions['helloService-httpAllTrigger'].events[0].http.method ===
-        'any'
+      specFunctions[
+        'helloService-httpAllTrigger'
+      ].events[0].http.method.includes('get')
     );
     assert(specFunctions['helloService-hsfTrigger'].events[0].hsf === true);
     assert(existsSync(resolve(buildDir, 'api.js')));

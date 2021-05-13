@@ -112,7 +112,7 @@ describe('/test/fc.test.ts', () => {
       'http-index': {
         Properties: {
           AuthType: 'ANONYMOUS',
-          Methods: ['GET', 'PUT', 'POST', 'DELETE', 'HEAD'],
+          Methods: ['GET', 'PUT', 'POST', 'DELETE', 'HEAD', 'PATCH'],
         },
         Type: 'HTTP',
       },

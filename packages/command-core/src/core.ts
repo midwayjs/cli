@@ -489,14 +489,12 @@ export class CommandCore implements ICommandCore {
       usage[option] = optionInfo;
       if (optionInfo?.shortcut) {
         if (this.options.options[optionInfo.shortcut]) {
-          this.options.options[option] = this.options.options[
-            optionInfo.shortcut
-          ];
+          this.options.options[option] =
+            this.options.options[optionInfo.shortcut];
         }
       }
-      this.coreInstance.processedInput.options[option] = this.options.options[
-        option
-      ];
+      this.coreInstance.processedInput.options[option] =
+        this.options.options[option];
     }
   }
 
