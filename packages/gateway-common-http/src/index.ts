@@ -19,10 +19,8 @@ export class KoaGateway {
     next: () => Promise<any>,
     invoke: InvokeCallback
   ) {
-    const {
-      invokeOptions,
-      invokeFun = invoke,
-    } = await parseInvokeOptionsByOriginUrl(this.options, ctx.request, invoke);
+    const { invokeOptions, invokeFun = invoke } =
+      await parseInvokeOptionsByOriginUrl(this.options, ctx.request, invoke);
     if (!invokeOptions.functionName) {
       await next();
     } else {
@@ -79,10 +77,8 @@ export class ExpressGateway {
     next: NextFunction,
     invoke: InvokeCallback
   ) {
-    const {
-      invokeOptions,
-      invokeFun = invoke,
-    } = await parseInvokeOptionsByOriginUrl(this.options, req, invoke);
+    const { invokeOptions, invokeFun = invoke } =
+      await parseInvokeOptionsByOriginUrl(this.options, req, invoke);
     if (!invokeOptions.functionName) {
       return next();
     } else {
