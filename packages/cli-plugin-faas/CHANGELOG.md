@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.68](https://github.com/midwayjs/cli/compare/v1.2.67...v1.2.68) (2021-05-13)
+
+
+### Features
+
+* upgrade mwcc 0.7.0 ([3cd2902](https://github.com/midwayjs/cli/commit/3cd2902821167905d789df5a153bed2224920613))
+
+
+
+
+
 ## [1.2.67](https://github.com/midwayjs/cli/compare/v1.2.66...v1.2.67) (2021-05-07)
 
 **Note:** Version bump only for package @midwayjs/cli-plugin-faas
