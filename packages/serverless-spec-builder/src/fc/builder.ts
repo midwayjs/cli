@@ -177,9 +177,8 @@ export class FCSpecBuilder extends SpecBuilder {
         }
       }
 
-      template.Resources[serviceName][
-        funSpec.name || funName
-      ] = functionTemplate;
+      template.Resources[serviceName][funSpec.name || funName] =
+        functionTemplate;
     }
 
     if (httpEventRouters) {
