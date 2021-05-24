@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/faas-code-analysis",
-  "version": "1.2.61",
+  "version": "1.2.68",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/mwcc": "^0.6.x",
+    "@midwayjs/mwcc": "^0.7.x",
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1"
   },
