@@ -552,12 +552,14 @@ export class PackagePlugin extends BasePlugin {
         this.core.service.functions = {};
       }
       process.chdir(this.midwayBuildPath);
-      const funcSpec = await analysisDecorator(
+      const { funcSpec, applicationContext } = await analysisDecorator(
         join(this.midwayBuildPath, 'dist'),
         this.core.service.functions
       );
       process.chdir(this.core.cwd);
       this.core.service.functions = funcSpec;
+      // 添加分析后引用 container
+      this.core.applicationContext = applicationContext;
       this.core.debug('funcSpec', funcSpec);
     }
   }
