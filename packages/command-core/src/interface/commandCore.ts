@@ -53,7 +53,7 @@ export interface ICoreInstance {
   setProvider(providerName: string, providerInstance: IProviderInstance);
   spawn(commandsArray: string[], options?: any);
   [otherProp: string]: any;
-  applicationContext: any;
+  applicationContext?: any;
 }
 
 export declare class IPlugin {
