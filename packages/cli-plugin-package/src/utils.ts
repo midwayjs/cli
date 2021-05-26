@@ -200,6 +200,6 @@ export const analysisDecorator = async (cwd: string, currentFunc?) => {
   }
   return {
     funcSpec: allFunc,
-    applicationContext: collector?.getApplicationContext()
+    applicationContext: collector?.getApplicationContext(),
   };
 };
