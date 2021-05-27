@@ -304,12 +304,14 @@ export class DevPlugin extends BasePlugin {
 
   // 检测tsconfig中module的配置
   private checkTsConfigTsNodeModule() {
+    // 去除tsconfig中的注释 https://github.com/numbcoder/json-comments
+    const jsonc = (m: string) => {var f=/"|(\/\*)|(\*\/)|(\/\/)|\n|\r/g,i=!1,e=!1,t=!1,n,s,l=[],a=0,r=0,g,c;for(f.lastIndex=0;n=f.exec(m);)g=RegExp.leftContext,c=RegExp.rightContext,!e&&!t&&(s=g.substring(r),i||(s=s.replace(/(\n|\r|\s)*/g,"")),l[a++]=s),r=f.lastIndex,n[0]=='"'&&!e&&!t?(s=g.match(/(\\)*$/),(!i||!s||s[0].length%2==0)&&(i=!i),r--,c=m.substring(r)):n[0]=="/*"&&!i&&!e&&!t?e=!0:n[0]=="*/"&&!i&&e&&!t?e=!1:n[0]=="//"&&!i&&!e&&!t?t=!0:(n[0]==`\n`||n[0]=="\r")&&!i&&!e&&t?t=!1:!e&&!t&&!/\n|\r|\s/.test(n[0])&&(l[a++]=n[0]);return l[a++]=c,l.join("")};
     const cwd = this.core.cwd;
     const tsconfig = resolve(cwd, 'tsconfig.json');
     if (!existsSync(tsconfig)) {
       return;
     }
-    const tsconfigJson = JSON.parse(readFileSync(tsconfig).toString());
+    const tsconfigJson = JSON.parse(jsonc(readFileSync(tsconfig).toString()));
     if (tsconfigJson?.compilerOptions?.module?.toLowerCase() === 'commonjs') {
       return;
     }
