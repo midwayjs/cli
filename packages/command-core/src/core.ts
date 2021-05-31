@@ -1,3 +1,9 @@
+// 内核，用于加载并按照生命周期执行插件逻辑
+import { resolve } from 'path';
+import { exec } from 'child_process';
+import { readFileSync, existsSync } from 'fs';
+import Spin from 'light-spinner';
+
 import {
   IOptions,
   ICommandCore,
@@ -9,27 +15,26 @@ import { IPluginInstance, ICommandInstance } from './interface/plugin';
 import { IProviderInstance } from './interface/provider';
 import GetMap from './errorMap';
 import { loadNpm } from './npm';
-import { resolve } from 'path';
-import { exec } from 'child_process';
-import { readFileSync, existsSync } from 'fs';
-import Spin from 'light-spinner';
-const RegProviderNpm = /^npm:([\w]*):(.*)$/i; // npm providerName pkgName
-const RegProviderLocal = /^local:([\w]*):(.*)$/i; // local providerName pkgPath
+
+// npm:providerName:pkgName
+const RegProviderNpm = /^npm:([\w]*):(.*)$/i;
+// local:providerName:pkgPath
+const RegProviderLocal = /^local:([\w]*):(.*)$/i;
 
 export class CommandCore implements ICommandCore {
   options: IOptions;
-  private instances: IPluginInstance[] = [];
-  private commands: ICommands = {};
-  private hooks: IHooks = {};
-  private coreInstance: ICoreInstance;
-  private providers: any = {};
-  private npmPlugin: string[] = [];
-  private loadNpm: any;
-  private preDebugTime: any;
-  private execId: number = Math.ceil(Math.random() * 1000);
-  private userLifecycle: any = {};
+  private instances: IPluginInstance[] = []; // 插件实例列表
+  private commands: ICommands = {}; // 命令列表
+  private hooks: IHooks = {}; // 命令生命周期
+  private coreInstance: ICoreInstance; // 内核实例，用以传递给插件
+  private providers: { [providerName: string]: IProviderInstance } = {};
+  private npmPlugin: string[] = []; // npm类型插件
+  private execId: number = Math.ceil(Math.random() * 1000); // 当前执行ID，用以在多次执行时进行区分
+  private userLifecycle: { [lifecycle: string]: string } = {}; // 用户自定义生命周期钩子，便于项目级扩展
   private cwd: string;
+  private preDebugTime: number;
   private stopLifecycles: string[] = [];
+  private loadNpm = loadNpm.bind(null, this);
 
   store = new Map();
 
