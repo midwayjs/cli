@@ -1,5 +1,5 @@
 import { func, inject, provide } from '@midwayjs/faas';
-import { ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { ServerlessTrigger, ServerlessTriggerType, ServerlessFunction } from '@midwayjs/decorator';
 
 @provide()
 export class HelloService {
@@ -21,6 +21,9 @@ export class HelloService {
     return 'httpall'
   }
 
+  @ServerlessFunction({
+    concurrency: 2
+  })
   @ServerlessTrigger(ServerlessTriggerType.OS, { bucket: 'test', events: 'test', filter: { prefix: '', suffix: ''} })
   async ossTrigger() {
     return 'oss'
