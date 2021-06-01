@@ -33,6 +33,8 @@ describe('/test/midwayfaas2.test.ts', () => {
     assert(
       specFunctions['helloService-ossTrigger'].events[0].os.bucket === 'test'
     );
+    assert(specFunctions['helloService-ossTrigger'].concurrency === 2);
+
     assert(
       specFunctions[
         'helloService-httpAllTrigger'

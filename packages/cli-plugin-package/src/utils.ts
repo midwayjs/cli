@@ -133,7 +133,8 @@ export const analysisDecorator = async (cwd: string, currentFunc?) => {
       }
 
       const funcName =
-        func.functionTriggerMetadata.functionName ||
+        func.functionMetadata?.functionName ||
+        func.functionTriggerMetadata?.functionName ||
         func.functionName ||
         handler.replace(/[^\w]/g, '-');
       if (!allFunc[funcName]) {
@@ -142,6 +143,10 @@ export const analysisDecorator = async (cwd: string, currentFunc?) => {
           events: [],
         };
       }
+
+      Object.assign(allFunc[funcName], func.functionMetadata);
+
+      delete allFunc[funcName].functionName;
 
       if (!allFunc[funcName].events) {
         allFunc[funcName].events = [];
