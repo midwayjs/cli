@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.69](https://github.com/midwayjs/cli/compare/v1.2.68...v1.2.69) (2021-06-01)
+
+
+### Bug Fixes
+
+* tsconfig path ([#103](https://github.com/midwayjs/cli/issues/103)) ([45e03ca](https://github.com/midwayjs/cli/commit/45e03caec022b9c8e4fe51e0f88014ef7c30b3f6))
+
+
+
+
+
 ## [1.2.68](https://github.com/midwayjs/cli/compare/v1.2.67...v1.2.68) (2021-05-13)
 
 

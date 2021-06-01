@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.69](https://github.com/midwayjs/bin/compare/v1.2.68...v1.2.69) (2021-06-01)
+
+
+### Bug Fixes
+
+* tsconfig path ([#103](https://github.com/midwayjs/bin/issues/103)) ([45e03ca](https://github.com/midwayjs/bin/commit/45e03caec022b9c8e4fe51e0f88014ef7c30b3f6))
+
+
+### Features
+
+* support serverlessFunction decorator ([#116](https://github.com/midwayjs/bin/issues/116)) ([006b671](https://github.com/midwayjs/bin/commit/006b671d96f51b627b401808907c5331b8f71d3d))
+
+
+
+
+
 ## [1.2.68](https://github.com/midwayjs/bin/compare/v1.2.67...v1.2.68) (2021-05-13)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.69](https://github.com/midwayjs/cli/compare/v1.2.68...v1.2.69) (2021-06-01)
+
+
+### Features
+
+* support serverlessFunction decorator ([#116](https://github.com/midwayjs/cli/issues/116)) ([006b671](https://github.com/midwayjs/cli/commit/006b671d96f51b627b401808907c5331b8f71d3d))
+
+
+
+
+
 ## [1.2.68](https://github.com/midwayjs/cli/compare/v1.2.67...v1.2.68) (2021-05-13)
 
 
