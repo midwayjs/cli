@@ -7,6 +7,7 @@ import { resolve, relative } from 'path';
 import { statSync, existsSync, readFileSync, writeFileSync } from 'fs';
 import * as chalk from 'chalk';
 import * as detect from 'detect-port';
+import { parse } from 'json5';
 export class DevPlugin extends BasePlugin {
   private child;
   private started = false;
@@ -311,7 +312,7 @@ export class DevPlugin extends BasePlugin {
     if (!existsSync(tsconfig)) {
       return;
     }
-    const tsconfigJson = JSON.parse(readFileSync(tsconfig).toString());
+    const tsconfigJson = parse(readFileSync(tsconfig).toString());
     if (tsconfigJson?.compilerOptions?.module?.toLowerCase() === 'commonjs') {
       return;
     }
