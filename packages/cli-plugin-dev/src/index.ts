@@ -15,6 +15,7 @@ export class DevPlugin extends BasePlugin {
   private port = 7001;
   private processMessageMap = {};
   private spin;
+  private tsconfigJson;
   commands = {
     dev: {
       lifecycleEvents: ['checkEnv', 'run'],
@@ -143,6 +144,14 @@ export class DevPlugin extends BasePlugin {
         };
       }
 
+      let execArgv = [];
+      if (options.ts) {
+        execArgv = ['-r', 'ts-node/register'];
+        if (this.tsconfigJson?.compilerOptions?.baseUrl) {
+          execArgv.push('-r', 'tsconfig-paths/register');
+        }
+      }
+
       this.child = fork(require.resolve('./child'), [JSON.stringify(options)], {
         cwd: this.core.cwd,
         env: {
@@ -151,9 +160,7 @@ export class DevPlugin extends BasePlugin {
           ...process.env,
         },
         silent: true,
-        execArgv: options.ts
-          ? ['-r', 'ts-node/register', '-r', 'tsconfig-paths/register']
-          : [],
+        execArgv,
       });
       const dataCache = [];
       this.child.stdout.on('data', data => {
@@ -323,6 +330,7 @@ export class DevPlugin extends BasePlugin {
       tsconfigJson['ts-node'].compilerOptions = {};
     }
     tsconfigJson['ts-node'].compilerOptions.module = 'commonjs';
+    this.tsconfigJson = tsconfigJson;
     writeFileSync(tsconfig, JSON.stringify(tsconfigJson, null, 2));
   }
 
