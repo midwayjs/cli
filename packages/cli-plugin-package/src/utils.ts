@@ -203,5 +203,14 @@ export const analysisDecorator = async (cwd: string, currentFunc?) => {
       }
     });
   }
-  return allFunc;
+
+  let applicationContext;
+  if (typeof collector?.getApplicationContext === 'function') {
+    applicationContext = collector?.getApplicationContext();
+  }
+
+  return {
+    funcSpec: allFunc,
+    applicationContext,
+  };
 };
