@@ -2,6 +2,7 @@ import * as globby from 'globby';
 import { existsSync, copy, statSync } from 'fs-extra';
 import { join } from 'path';
 import { platform } from 'os';
+import * as plimit from 'p-limit';
 
 // 首字母小写
 export const firstCharLower = str => {
@@ -152,6 +153,7 @@ const docopy = async (
   paths: string[],
   log?
 ) => {
+  const limit = plimit(20);
   await Promise.all(
     paths.map((path: string) => {
       const source = join(sourceDir, path);
@@ -167,15 +169,17 @@ const docopy = async (
       if (log) {
         log(path);
       }
-      return new Promise(resolve => {
-        copy(source, target)
-          .then(resolve)
-          .catch(e => {
-            if (log) {
-              log(`Error!!! From '${source}' to '${target}'`, e);
-            }
-            resolve(void 0);
-          });
+      return limit(() => {
+        return new Promise(resolve => {
+          copy(source, target)
+            .then(resolve)
+            .catch(e => {
+              if (log) {
+                log(`Error!!! From '${source}' to '${target}'`, e);
+              }
+              resolve(void 0);
+            });
+        });
       });
     })
   );

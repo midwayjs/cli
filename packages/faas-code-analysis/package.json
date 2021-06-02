@@ -6,12 +6,13 @@
   "dependencies": {
     "@midwayjs/mwcc": "^0.7.x",
     "fs-extra": "^8.1.0",
-    "globby": "^10.0.1"
+    "globby": "^10.0.1",
+    "p-limit": "^3.1.0"
   },
   "scripts": {
     "lint": "../../node_modules/.bin/eslint .",
     "build": "tsc --build",
-    "test": "../../node_modules/.bin/jest",
+    "test": "../../node_modules/.bin/jest ./test/utils.test.ts",
     "cov": "../../node_modules/.bin/jest --coverage",
     "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
     "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov"
