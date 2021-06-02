@@ -559,7 +559,7 @@ export class PackagePlugin extends BasePlugin {
       process.chdir(this.core.cwd);
       this.core.service.functions = funcSpec;
       // 添加分析后引用 container
-      this.core.applicationContext = applicationContext;
+      this.setStore('MIDWAY_APPLICATION_CONTEXT', applicationContext, true);
       this.core.debug('funcSpec', funcSpec);
     }
   }
