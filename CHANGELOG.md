@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.70](https://github.com/midwayjs/bin/compare/v1.2.69...v1.2.70) (2021-06-02)
+
+
+### Bug Fixes
+
+* some bugs ([#119](https://github.com/midwayjs/bin/issues/119)) ([9cc24d2](https://github.com/midwayjs/bin/commit/9cc24d28b50676efca987466962e8caf13ef2d14))
+
+
+### Features
+
+* this.core 增加 applicationContext ([#112](https://github.com/midwayjs/bin/issues/112)) ([68a0eec](https://github.com/midwayjs/bin/commit/68a0eec724829a9a62f31f1994209cae860894fc))
+
+
+
+
+
 ## [1.2.69](https://github.com/midwayjs/bin/compare/v1.2.68...v1.2.69) (2021-06-01)
 
 
