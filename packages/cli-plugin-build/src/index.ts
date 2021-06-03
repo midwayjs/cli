@@ -14,6 +14,7 @@ export class BuildPlugin extends BasePlugin {
         'copyFile',
         'compile',
         'emit',
+        'complete',
       ],
       options: {
         clean: {
@@ -36,6 +37,12 @@ export class BuildPlugin extends BasePlugin {
         buildCache: {
           usage: 'save build cache',
         },
+        exclude: {
+          usage: 'copy file exclude',
+        },
+        include: {
+          usage: 'copy file include',
+        },
       },
     },
   };
@@ -46,6 +53,7 @@ export class BuildPlugin extends BasePlugin {
     'build:copyFile': this.copyFile.bind(this),
     'build:compile': this.compile.bind(this),
     'build:emit': this.emit.bind(this),
+    'build:complete': this.complete.bind(this),
   };
 
   private compilerHost: CompilerHost;
@@ -91,17 +99,44 @@ export class BuildPlugin extends BasePlugin {
   }
 
   async copyFile() {
-    const targetDir = this.getOutDir();
-    this.core.debug('CopyFile TargetDir', targetDir);
+    const outDir = this.getOutDir();
+    this.core.debug('CopyFile TargetDir', outDir);
+    const exclude = this.options.exclude ? this.options.exclude.split(',') : [];
+    const sourceDir = join(this.core.cwd, this.options.srcDir || 'src');
+    const targetDir = join(this.core.cwd, outDir);
     await copyFiles({
-      sourceDir: join(this.core.cwd, this.options.srcDir || 'src'),
-      targetDir: join(this.core.cwd, targetDir),
+      sourceDir,
+      targetDir,
       defaultInclude: ['**/*'],
-      exclude: ['**/*.ts', '**/*.js'],
+      exclude: ['**/*.ts', '**/*.js'].concat(exclude),
       log: path => {
         this.core.cli.log(`   - Copy ${path}`);
       },
     });
+
+    // midway core DEFAULT_IGNORE_PATTERN
+    let include = [
+      '**/public/**/*.js',
+      '**/view/**/*.js',
+      '**/views/**/*.js',
+      '**/app/extend/**/*.js',
+    ];
+    if (this.options.include !== undefined) {
+      include = this.options.include ? this.options.include.split(',') : [];
+    }
+
+    if (include.length) {
+      await copyFiles({
+        sourceDir,
+        targetDir,
+        defaultInclude: include,
+        exclude,
+        log: path => {
+          this.core.cli.log(`   - Copy ${path}`);
+        },
+      });
+    }
+    this.core.cli.log('   - Copy Complete');
   }
 
   async compile() {
@@ -221,5 +256,9 @@ export class BuildPlugin extends BasePlugin {
       }
     }
     return tsConfigResult;
+  }
+
+  async complete() {
+    this.core.cli.log('Build Complete!');
   }
 }
