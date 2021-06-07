@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.71](https://github.com/midwayjs/bin/compare/v1.2.70...v1.2.71) (2021-06-07)
+
+
+### Bug Fixes
+
+* midwayjs/midway[#1084](https://github.com/midwayjs/bin/issues/1084) ([#122](https://github.com/midwayjs/bin/issues/122)) ([460ac4a](https://github.com/midwayjs/bin/commit/460ac4ab74f0fd843695edacb91fc1e397ed382f))
+
+
+
+
+
 ## [1.2.70](https://github.com/midwayjs/bin/compare/v1.2.69...v1.2.70) (2021-06-02)
 
 
