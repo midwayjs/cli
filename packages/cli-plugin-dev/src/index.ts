@@ -320,6 +320,7 @@ export class DevPlugin extends BasePlugin {
       return;
     }
     const tsconfigJson = parse(readFileSync(tsconfig).toString());
+    this.tsconfigJson = tsconfigJson;
     if (tsconfigJson?.compilerOptions?.module?.toLowerCase() === 'commonjs') {
       return;
     }
@@ -330,7 +331,6 @@ export class DevPlugin extends BasePlugin {
       tsconfigJson['ts-node'].compilerOptions = {};
     }
     tsconfigJson['ts-node'].compilerOptions.module = 'commonjs';
-    this.tsconfigJson = tsconfigJson;
     writeFileSync(tsconfig, JSON.stringify(tsconfigJson, null, 2));
   }
 

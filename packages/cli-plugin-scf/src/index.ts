@@ -95,7 +95,7 @@ export class TencentSCFPlugin extends BasePlugin {
       await generateFunctionsSpec(
         this.getSpecJson({
           provider: {
-            stage: 'test',
+            stage: this.core.service?.provider?.stage || 'test',
           },
         })
       )
