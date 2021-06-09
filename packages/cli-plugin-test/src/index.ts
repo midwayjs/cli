@@ -125,17 +125,21 @@ export class TestPlugin extends BasePlugin {
       args.push('--coverage');
     }
 
-    if (this.options.runInBand) {
-      args.push('--runInBand');
-    }
+    const ignoreOptions = ['cov', 'f', 'file', 'ts', 'npm', 'debug'];
 
-    if (this.options.forceExit) {
-      args.push('--forceExit');
-    }
-
-    if (this.options.watch) {
-      args.push('--watch');
-    }
+    Object.keys(this.options).forEach(option => {
+      if (ignoreOptions.includes(option)) {
+        return;
+      }
+      const value = this.options[option];
+      if (typeof value === 'boolean') {
+        if (value === true) {
+          args.push('--' + option);
+        }
+      } else {
+        args.push(`--${option}=${value}`);
+      }
+    });
 
     args.push(
       `--config=${join(
