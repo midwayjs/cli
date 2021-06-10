@@ -4,7 +4,7 @@ import * as AliyunConfig from '@alicloud/fun/lib/commands/config';
 import { loadComponent, setCredential } from '@serverless-devs/core';
 import { join } from 'path';
 import { homedir } from 'os';
-import { existsSync, mkdirSync } from 'fs';
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
 import {
   generateFunctionsSpecFile,
@@ -43,8 +43,36 @@ export class AliyunFCPlugin extends BasePlugin {
       const isExists = existsSync(profPath);
       if (!isExists || this.options.resetConfig) {
         // aliyun config
-        this.core.cli.log('please input aliyun config');
-        await AliyunConfig();
+        if (
+          process.env.SERVERLESS_DEPLOY_ID &&
+          process.env.SERVERLESS_DEPLOY_AK &&
+          process.env.SERVERLESS_DEPLOY_SECRET
+        ) {
+          // for ci
+          const profDir = join(homedir(), '.fcli');
+          if (!existsSync(profDir)) {
+            mkdirSync(profDir);
+          }
+          const endPoint =
+            process.env.SERVERLESS_DEPLOY_ENDPOINT || 'cn-hangzhou';
+          const config = [
+            `endpoint: 'https://${process.env.SERVERLESS_DEPLOY_ID}.${endPoint}.fc.aliyuncs.com'`,
+            "api_version: '2016-08-15'",
+            `access_key_id: ${process.env.SERVERLESS_DEPLOY_AK}`,
+            `access_key_secret: ${process.env.SERVERLESS_DEPLOY_SECRET}`,
+            "security_token: ''",
+            'debug: false',
+            `timeout: ${process.env.SERVERLESS_DEPLOY_TIMEOUT || 1000}`,
+            'retries: 3',
+            `sls_endpoint: ${endPoint}.log.aliyuncs.com`,
+            'report: true',
+            'enable_custom_endpoint: false',
+          ].join('\n');
+          writeFileSync(profPath, config);
+        } else {
+          this.core.cli.log('please input aliyun config');
+          await AliyunConfig();
+        }
       }
 
       // 执行 package 打包
