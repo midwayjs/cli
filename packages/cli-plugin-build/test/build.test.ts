@@ -29,6 +29,8 @@ describe('test/build.test.ts', () => {
     }
     await run(cwd, 'build');
     assert(existsSync(join(dist, 'index.js')));
+    assert(existsSync(join(dist, 'app/public/public.js')));
+    assert(!existsSync(join(dist, 'a.js')));
   });
   it('build clean', async () => {
     const dist = join(cwd, 'dist');
@@ -43,7 +45,8 @@ describe('test/build.test.ts', () => {
     if (existsSync(dist)) {
       await remove(dist);
     }
-    await run(cwd, 'build', { clean: true });
+    await run(cwd, 'build', { clean: true, include: 'a.js' });
+    assert(existsSync(join(dist, 'a.js')));
     assert(existsSync(join(dist, 'index.js')));
     assert(existsSync(join(dist, 'a.json')));
     assert(existsSync(join(dist, 'b/b.txt')));
