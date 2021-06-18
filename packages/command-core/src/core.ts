@@ -583,7 +583,7 @@ export class CommandCore implements ICommandCore {
 
   async execCommand(command: string) {
     return new Promise<void>((resolve, reject) => {
-      exec(
+      const execProcess = exec(
         command,
         {
           cwd: this.cwd,
@@ -596,6 +596,9 @@ export class CommandCore implements ICommandCore {
           resolve();
         }
       );
+      execProcess.stdout.on('data', data => {
+        this.getLog().log(data);
+      });
     });
   }
 }
