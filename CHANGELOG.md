@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.72](https://github.com/midwayjs/bin/compare/v1.2.71...v1.2.72) (2021-06-18)
+
+
+### Bug Fixes
+
+* copy js file when execute build command ([#120](https://github.com/midwayjs/bin/issues/120)) ([404aa40](https://github.com/midwayjs/bin/commit/404aa4074e3866a0914d918e96a922bbb267bad9))
+* deploy with env ([#128](https://github.com/midwayjs/bin/issues/128)) ([bcfbff8](https://github.com/midwayjs/bin/commit/bcfbff8e70f9707695f2a837f4c6f7c55cb56d38))
+
+
+
+
+
 ## [1.2.71](https://github.com/midwayjs/bin/compare/v1.2.70...v1.2.71) (2021-06-07)
 
 
