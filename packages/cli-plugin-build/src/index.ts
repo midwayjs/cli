@@ -32,7 +32,7 @@ export class BuildPlugin extends BasePlugin {
           usage: 'build out path',
         },
         tsConfig: {
-          usage: 'tsConfig json file path',
+          usage: 'tsConfig json string / tsConfig file path',
         },
         buildCache: {
           usage: 'save build cache',
@@ -230,9 +230,13 @@ export class BuildPlugin extends BasePlugin {
   private getTsConfig() {
     const { cwd } = this.core;
     this.core.debug('CWD', cwd);
-    const { tsConfig } = this.options;
+    let { tsConfig } = this.options;
     let tsConfigResult;
     if (typeof tsConfig === 'string') {
+      // if ts config is file
+      if (existsSync(tsConfig)) {
+        tsConfig = readFileSync(tsConfig).toString();
+      }
       try {
         tsConfigResult = JSON.parse(tsConfig);
       } catch (e) {
