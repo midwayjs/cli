@@ -32,7 +32,7 @@ export class BuildPlugin extends BasePlugin {
           usage: 'build out path',
         },
         tsConfig: {
-          usage: 'tsConfig json string / tsConfig file path',
+          usage: 'json string / file path / object',
         },
         buildCache: {
           usage: 'save build cache',

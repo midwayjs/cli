@@ -109,7 +109,7 @@ export class PackagePlugin extends BasePlugin {
           shortcut: 'r',
         },
         tsConfig: {
-          usage: 'tsConfig json file path',
+          usage: 'json string / file path / object',
         },
       },
     },
@@ -449,17 +449,34 @@ export class PackagePlugin extends BasePlugin {
     }
     const tsCodeRoot: string = this.getTsCodeRoot();
 
+    let configName;
+    let configObj: any = {};
+    if (this.options.tsConfig) {
+      if (typeof this.options.tsConfig === 'string') {
+        // 先判断是否为json
+        try {
+          configObj = JSON.parse(this.options.tsConfig);
+        } catch {
+          configName = this.options.tsConfig;
+        }
+      } else if (typeof this.options.tsConfig === 'object') {
+        configObj = this.options.tsConfig;
+      }
+    }
+
     const { config } = resolveTsConfigFile(
       this.servicePath,
       join(this.midwayBuildPath, 'dist'),
-      this.options.tsConfig,
+      configName,
       this.getStore('mwccHintConfig', 'global'),
       {
+        ...configObj,
         compilerOptions: {
           sourceRoot: '../src',
           rootDir: tsCodeRoot,
+          ...(configObj.compilerOptions || {}),
         },
-        include: [tsCodeRoot],
+        include: (configObj.include || []).concat[tsCodeRoot],
       }
     );
     this.compilerHost = new CompilerHost(this.servicePath, config);
