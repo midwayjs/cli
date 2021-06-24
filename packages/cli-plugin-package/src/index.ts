@@ -476,7 +476,7 @@ export class PackagePlugin extends BasePlugin {
           rootDir: tsCodeRoot,
           ...(configObj.compilerOptions || {}),
         },
-        include: (configObj.include || []).concat[tsCodeRoot],
+        include: (configObj.include || []).concat(tsCodeRoot),
       }
     );
     this.compilerHost = new CompilerHost(this.servicePath, config);
