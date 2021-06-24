@@ -72,6 +72,7 @@ export class PackagePlugin extends BasePlugin {
         'analysisCode', // 分析代码
         'copyStaticFile', // 拷贝src中的静态文件到dist目录，例如 html 等
         'checkAggregation', // 检测高密度部署
+        'selectFunction', // 选择要发布的函数
         'generateSpec', // 生成对应平台的描述文件，例如 serverless.yml 等
         'generateEntry', // 生成对应平台的入口文件
         'installLayer', // 安装layer
@@ -111,6 +112,10 @@ export class PackagePlugin extends BasePlugin {
         tsConfig: {
           usage: 'tsConfig json file path',
         },
+        function: {
+          usage: 'select function need to publish',
+          shortcut: 'f',
+        },
       },
     },
   };
@@ -124,6 +129,7 @@ export class PackagePlugin extends BasePlugin {
     'package:installLayer': this.installLayer.bind(this),
     'package:installDep': this.installDep.bind(this),
     'package:checkAggregation': this.checkAggregation.bind(this),
+    'package:selectFunction': this.selectFunction.bind(this),
     'package:package': this.package.bind(this),
     'before:package:generateSpec': this.defaultBeforeGenerateSpec.bind(this),
     'after:package:generateEntry': this.defaultGenerateEntry.bind(this),
@@ -634,6 +640,24 @@ export class PackagePlugin extends BasePlugin {
       this.core.debug('Tmp Out Dir Removed');
       await remove(this.defaultTmpFaaSOut);
     }
+  }
+
+  // 选择有哪些函数要进行发布
+  async selectFunction() {
+    if (!this.options.function) {
+      return;
+    }
+    const functions = this.options.function.split(',').filter(v => !!v);
+    if (!functions.length) {
+      return;
+    }
+    this.core.debug(' - Skip Function');
+    Object.keys(this.core.service.functions).forEach(functionName => {
+      if (!functions.includes(functionName)) {
+        this.core.debug(`   skip ${functionName}`);
+        delete this.core.service.functions[functionName];
+      }
+    });
   }
 
   async package() {
