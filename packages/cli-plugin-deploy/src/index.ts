@@ -11,6 +11,10 @@ export class DeployPlugin extends BasePlugin {
           usage: 'continue with yes',
           alias: 'y',
         },
+        function: {
+          usage: 'select function need to publish',
+          shortcut: 'f',
+        },
       },
     },
   };
