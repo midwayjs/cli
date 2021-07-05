@@ -6,7 +6,7 @@ import { copyFiles } from '@midwayjs/faas-code-analysis';
 import * as ts from 'typescript';
 export class BuildPlugin extends BasePlugin {
   isMidwayHooks = false;
-  private midwayBinBuild: { include?: string[]} = {};
+  private midwayBinBuild: { include?: string[] } = {};
   commands = {
     build: {
       lifecycleEvents: [
@@ -114,7 +114,9 @@ export class BuildPlugin extends BasePlugin {
     await copyFiles({
       sourceDir,
       targetDir,
-      defaultInclude: this.midwayBinBuild.include ? this.midwayBinBuild.include : ['**/*'],
+      defaultInclude: this.midwayBinBuild.include
+        ? this.midwayBinBuild.include
+        : ['**/*'],
       exclude: ['**/*.ts', '**/*.js'].concat(exclude),
       log: path => {
         this.core.cli.log(`   - Copy ${path}`);
