@@ -47,6 +47,7 @@ export async function parseInvokeOptionsByOriginUrl(
     body: string;
     method: string;
     path: string;
+    url: string;
     query: any;
     base64Encoded: boolean;
     pathParameters: {
@@ -146,6 +147,7 @@ export async function parseInvokeOptionsByOriginUrl(
     invokeHTTPData.method = req.method;
     invokeHTTPData.pathParameters = matchRes.params || {};
     invokeHTTPData.path = currentUrl;
+    invokeHTTPData.url = req.url;
     invokeHTTPData.query = req.query;
     invokeHTTPData.base64Encoded = false;
     invokeOptions.data = [invokeHTTPData];

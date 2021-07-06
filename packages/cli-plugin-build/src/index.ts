@@ -6,6 +6,7 @@ import { copyFiles } from '@midwayjs/faas-code-analysis';
 import * as ts from 'typescript';
 export class BuildPlugin extends BasePlugin {
   isMidwayHooks = false;
+  private midwayBinBuild: { include?: string[] } = {};
   commands = {
     build: {
       lifecycleEvents: [
@@ -72,6 +73,12 @@ export class BuildPlugin extends BasePlugin {
         this.options.srcDir = config.source;
       }
     }
+
+    const packageJsonPath = join(this.core.cwd, 'package.json');
+    if (existsSync(packageJsonPath)) {
+      const pkgJson = JSON.parse(readFileSync(packageJsonPath).toString());
+      this.midwayBinBuild = pkgJson['midway-bin-build'] || {};
+    }
   }
 
   async clean() {
@@ -107,7 +114,9 @@ export class BuildPlugin extends BasePlugin {
     await copyFiles({
       sourceDir,
       targetDir,
-      defaultInclude: ['**/*'],
+      defaultInclude: this.midwayBinBuild.include
+        ? this.midwayBinBuild.include
+        : ['**/*'],
       exclude: ['**/*.ts', '**/*.js'].concat(exclude),
       log: path => {
         this.core.cli.log(`   - Copy ${path}`);
