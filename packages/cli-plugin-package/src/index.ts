@@ -669,6 +669,9 @@ export class PackagePlugin extends BasePlugin {
       return;
     }
     this.core.debug(' - Skip Function');
+    if (!this.core.service.functions) {
+      return;
+    }
     Object.keys(this.core.service.functions).forEach(functionName => {
       if (!functions.includes(functionName)) {
         this.core.debug(`   skip ${functionName}`);
