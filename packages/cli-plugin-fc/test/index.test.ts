@@ -4,7 +4,7 @@ import { PackagePlugin } from '@midwayjs/fcli-plugin-package';
 import { DeployPlugin } from '../../cli-plugin-deploy';
 import { AliyunFCPlugin } from '../src';
 import { join } from 'path';
-import { existsSync, remove, readFile } from 'fs-extra';
+import { existsSync, remove, readFile, readFileSync } from 'fs-extra';
 import * as assert from 'assert';
 import * as JSZip from 'jszip';
 
@@ -33,6 +33,45 @@ describe('/test/index.test.ts', () => {
     assert(existsSync(join(buildPath, 'tsconfig.json')));
     assert(existsSync(join(buildPath, 'template.yml')));
     assert(existsSync(join(baseDir, 'serverless.zip')));
+
+    const zip = new JSZip();
+    const zipData = await readFile(join(baseDir, 'serverless.zip'));
+    const zipObj = await zip.loadAsync(zipData);
+    assert(zipObj.file('f.yml'));
+    assert(zipObj.file('dist/index.js'));
+    assert(zipObj.file('node_modules/@midwayjs/core/package.json'));
+    // clean
+    await remove(join(baseDir, 'serverless.zip'));
+  });
+
+  it('only build index2', async () => {
+    const baseDir = join(__dirname, './fixtures/base-fc');
+    const core = new CommandCore({
+      config: {
+        servicePath: baseDir,
+      },
+      commands: ['package'],
+      service: loadSpec(baseDir),
+      provider: 'aliyun',
+      log: console,
+    });
+    core.addPlugin(PackagePlugin);
+    core.addPlugin(AliyunFCPlugin);
+    await core.ready();
+    await core.invoke(['package'], false, { function: 'index2' });
+    const buildPath = join(baseDir, '.serverless');
+    assert(existsSync(join(buildPath, 'dist/index.js')));
+    assert(existsSync(join(buildPath, 'node_modules')));
+    assert(existsSync(join(buildPath, 'src')));
+    assert(existsSync(join(buildPath, 'index.js')));
+    assert(existsSync(join(buildPath, 'package.json')));
+    assert(existsSync(join(buildPath, 'tsconfig.json')));
+    assert(existsSync(join(buildPath, 'template.yml')));
+    assert(existsSync(join(baseDir, 'serverless.zip')));
+
+    const entryData = readFileSync(join(buildPath, 'index.js')).toString();
+    assert(!entryData.includes('exports.handler '));
+    assert(entryData.includes('exports.handler2 '));
 
     const zip = new JSZip();
     const zipData = await readFile(join(baseDir, 'serverless.zip'));

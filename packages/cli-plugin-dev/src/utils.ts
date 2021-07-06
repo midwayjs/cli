@@ -9,12 +9,16 @@ export const analysisDecorator = async (cwd: string) => {
   const allFunc = {};
   if (Array.isArray(result)) {
     result.forEach(func => {
+      let method = [].concat(func.requestMethod || 'get');
+      if (method.includes('all')) {
+        method = [];
+      }
       allFunc[func.funcHandlerName] = {
         handler: func.funcHandlerName,
         events: [
           {
             http: {
-              method: [].concat(func.requestMethod || 'get'),
+              method,
               path: (func.prefix + func.url).replace(/\/{1,}/g, '/'),
             },
           },

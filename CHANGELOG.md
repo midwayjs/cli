@@ -3,6 +3,77 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.74](https://github.com/midwayjs/bin/compare/v1.2.73...v1.2.74) (2021-07-06)
+
+**Note:** Version bump only for package midway-bin
+
+
+
+
+
+## [1.2.73](https://github.com/midwayjs/bin/compare/v1.2.73-beta.1...v1.2.73) (2021-06-25)
+
+**Note:** Version bump only for package midway-bin
+
+
+
+
+
+## [1.2.72](https://github.com/midwayjs/bin/compare/v1.2.71...v1.2.72) (2021-06-18)
+
+
+### Bug Fixes
+
+* copy js file when execute build command ([#120](https://github.com/midwayjs/bin/issues/120)) ([404aa40](https://github.com/midwayjs/bin/commit/404aa4074e3866a0914d918e96a922bbb267bad9))
+* deploy with env ([#128](https://github.com/midwayjs/bin/issues/128)) ([bcfbff8](https://github.com/midwayjs/bin/commit/bcfbff8e70f9707695f2a837f4c6f7c55cb56d38))
+
+
+
+
+
+## [1.2.71](https://github.com/midwayjs/bin/compare/v1.2.70...v1.2.71) (2021-06-07)
+
+
+### Bug Fixes
+
+* midwayjs/midway[#1084](https://github.com/midwayjs/bin/issues/1084) ([#122](https://github.com/midwayjs/bin/issues/122)) ([460ac4a](https://github.com/midwayjs/bin/commit/460ac4ab74f0fd843695edacb91fc1e397ed382f))
+
+
+
+
+
+## [1.2.70](https://github.com/midwayjs/bin/compare/v1.2.69...v1.2.70) (2021-06-02)
+
+
+### Bug Fixes
+
+* some bugs ([#119](https://github.com/midwayjs/bin/issues/119)) ([9cc24d2](https://github.com/midwayjs/bin/commit/9cc24d28b50676efca987466962e8caf13ef2d14))
+
+
+### Features
+
+* this.core 增加 applicationContext ([#112](https://github.com/midwayjs/bin/issues/112)) ([68a0eec](https://github.com/midwayjs/bin/commit/68a0eec724829a9a62f31f1994209cae860894fc))
+
+
+
+
+
+## [1.2.69](https://github.com/midwayjs/bin/compare/v1.2.68...v1.2.69) (2021-06-01)
+
+
+### Bug Fixes
+
+* tsconfig path ([#103](https://github.com/midwayjs/bin/issues/103)) ([45e03ca](https://github.com/midwayjs/bin/commit/45e03caec022b9c8e4fe51e0f88014ef7c30b3f6))
+
+
+### Features
+
+* support serverlessFunction decorator ([#116](https://github.com/midwayjs/bin/issues/116)) ([006b671](https://github.com/midwayjs/bin/commit/006b671d96f51b627b401808907c5331b8f71d3d))
+
+
+
+
+
 ## [1.2.68](https://github.com/midwayjs/bin/compare/v1.2.67...v1.2.68) (2021-05-13)
 
 

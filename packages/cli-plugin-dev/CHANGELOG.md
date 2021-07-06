@@ -3,6 +3,55 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.73](https://github.com/midwayjs/cli/compare/v1.2.73-beta.1...v1.2.73) (2021-06-25)
+
+**Note:** Version bump only for package @midwayjs/cli-plugin-dev
+
+
+
+
+
+## [1.2.72](https://github.com/midwayjs/cli/compare/v1.2.71...v1.2.72) (2021-06-18)
+
+**Note:** Version bump only for package @midwayjs/cli-plugin-dev
+
+
+
+
+
+## [1.2.71](https://github.com/midwayjs/cli/compare/v1.2.70...v1.2.71) (2021-06-07)
+
+
+### Bug Fixes
+
+* midwayjs/midway[#1084](https://github.com/midwayjs/cli/issues/1084) ([#122](https://github.com/midwayjs/cli/issues/122)) ([460ac4a](https://github.com/midwayjs/cli/commit/460ac4ab74f0fd843695edacb91fc1e397ed382f))
+
+
+
+
+
+## [1.2.70](https://github.com/midwayjs/cli/compare/v1.2.69...v1.2.70) (2021-06-02)
+
+
+### Bug Fixes
+
+* some bugs ([#119](https://github.com/midwayjs/cli/issues/119)) ([9cc24d2](https://github.com/midwayjs/cli/commit/9cc24d28b50676efca987466962e8caf13ef2d14))
+
+
+
+
+
+## [1.2.69](https://github.com/midwayjs/cli/compare/v1.2.68...v1.2.69) (2021-06-01)
+
+
+### Bug Fixes
+
+* tsconfig path ([#103](https://github.com/midwayjs/cli/issues/103)) ([45e03ca](https://github.com/midwayjs/cli/commit/45e03caec022b9c8e4fe51e0f88014ef7c30b3f6))
+
+
+
+
+
 ## [1.2.68](https://github.com/midwayjs/cli/compare/v1.2.67...v1.2.68) (2021-05-13)
 
 

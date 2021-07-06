@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.74](https://github.com/midwayjs/cli/compare/v1.2.73...v1.2.74) (2021-07-06)
+
+**Note:** Version bump only for package @midwayjs/fcli-plugin-package
+
+
+
+
+
+## [1.2.73](https://github.com/midwayjs/cli/compare/v1.2.73-beta.1...v1.2.73) (2021-06-25)
+
+**Note:** Version bump only for package @midwayjs/fcli-plugin-package
+
+
+
+
+
+## [1.2.72](https://github.com/midwayjs/cli/compare/v1.2.71...v1.2.72) (2021-06-18)
+
+**Note:** Version bump only for package @midwayjs/fcli-plugin-package
+
+
+
+
+
+## [1.2.70](https://github.com/midwayjs/cli/compare/v1.2.69...v1.2.70) (2021-06-02)
+
+
+### Features
+
+* this.core 增加 applicationContext ([#112](https://github.com/midwayjs/cli/issues/112)) ([68a0eec](https://github.com/midwayjs/cli/commit/68a0eec724829a9a62f31f1994209cae860894fc))
+
+
+
+
+
+## [1.2.69](https://github.com/midwayjs/cli/compare/v1.2.68...v1.2.69) (2021-06-01)
+
+
+### Features
+
+* support serverlessFunction decorator ([#116](https://github.com/midwayjs/cli/issues/116)) ([006b671](https://github.com/midwayjs/cli/commit/006b671d96f51b627b401808907c5331b8f71d3d))
+
+
+
+
+
 ## [1.2.68](https://github.com/midwayjs/cli/compare/v1.2.67...v1.2.68) (2021-05-13)
 
 

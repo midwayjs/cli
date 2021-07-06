@@ -7,6 +7,7 @@ import { resolve, relative } from 'path';
 import { statSync, existsSync, readFileSync, writeFileSync } from 'fs';
 import * as chalk from 'chalk';
 import * as detect from 'detect-port';
+import { parse } from 'json5';
 export class DevPlugin extends BasePlugin {
   private child;
   private started = false;
@@ -14,6 +15,7 @@ export class DevPlugin extends BasePlugin {
   private port = 7001;
   private processMessageMap = {};
   private spin;
+  private tsconfigJson;
   commands = {
     dev: {
       lifecycleEvents: ['checkEnv', 'run'],
@@ -142,6 +144,14 @@ export class DevPlugin extends BasePlugin {
         };
       }
 
+      let execArgv = [];
+      if (options.ts) {
+        execArgv = ['-r', 'ts-node/register'];
+        if (this.tsconfigJson?.compilerOptions?.baseUrl) {
+          execArgv.push('-r', 'tsconfig-paths/register');
+        }
+      }
+
       this.child = fork(require.resolve('./child'), [JSON.stringify(options)], {
         cwd: this.core.cwd,
         env: {
@@ -150,7 +160,7 @@ export class DevPlugin extends BasePlugin {
           ...process.env,
         },
         silent: true,
-        execArgv: options.ts ? ['-r', 'ts-node/register'] : [],
+        execArgv,
       });
       const dataCache = [];
       this.child.stdout.on('data', data => {
@@ -309,7 +319,8 @@ export class DevPlugin extends BasePlugin {
     if (!existsSync(tsconfig)) {
       return;
     }
-    const tsconfigJson = JSON.parse(readFileSync(tsconfig).toString());
+    const tsconfigJson = parse(readFileSync(tsconfig).toString());
+    this.tsconfigJson = tsconfigJson;
     if (tsconfigJson?.compilerOptions?.module?.toLowerCase() === 'commonjs') {
       return;
     }

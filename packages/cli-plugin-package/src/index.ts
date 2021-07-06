@@ -72,6 +72,7 @@ export class PackagePlugin extends BasePlugin {
         'analysisCode', // 分析代码
         'copyStaticFile', // 拷贝src中的静态文件到dist目录，例如 html 等
         'checkAggregation', // 检测高密度部署
+        'selectFunction', // 选择要发布的函数
         'generateSpec', // 生成对应平台的描述文件，例如 serverless.yml 等
         'generateEntry', // 生成对应平台的入口文件
         'installLayer', // 安装layer
@@ -109,7 +110,11 @@ export class PackagePlugin extends BasePlugin {
           shortcut: 'r',
         },
         tsConfig: {
-          usage: 'tsConfig json file path',
+          usage: 'json string / file path / object',
+        },
+        function: {
+          usage: 'select function need to publish',
+          shortcut: 'f',
         },
       },
     },
@@ -124,6 +129,7 @@ export class PackagePlugin extends BasePlugin {
     'package:installLayer': this.installLayer.bind(this),
     'package:installDep': this.installDep.bind(this),
     'package:checkAggregation': this.checkAggregation.bind(this),
+    'package:selectFunction': this.selectFunction.bind(this),
     'package:package': this.package.bind(this),
     'before:package:generateSpec': this.defaultBeforeGenerateSpec.bind(this),
     'after:package:generateEntry': this.defaultGenerateEntry.bind(this),
@@ -449,17 +455,34 @@ export class PackagePlugin extends BasePlugin {
     }
     const tsCodeRoot: string = this.getTsCodeRoot();
 
+    let configName;
+    let configObj: any = {};
+    if (this.options.tsConfig) {
+      if (typeof this.options.tsConfig === 'string') {
+        // 先判断是否为json
+        try {
+          configObj = JSON.parse(this.options.tsConfig);
+        } catch {
+          configName = this.options.tsConfig;
+        }
+      } else if (typeof this.options.tsConfig === 'object') {
+        configObj = this.options.tsConfig;
+      }
+    }
+
     const { config } = resolveTsConfigFile(
       this.servicePath,
       join(this.midwayBuildPath, 'dist'),
-      this.options.tsConfig,
+      configName,
       this.getStore('mwccHintConfig', 'global'),
       {
+        ...configObj,
         compilerOptions: {
           sourceRoot: '../src',
           rootDir: tsCodeRoot,
+          ...(configObj.compilerOptions || {}),
         },
-        include: [tsCodeRoot],
+        include: (configObj.include || []).concat(tsCodeRoot),
       }
     );
     this.compilerHost = new CompilerHost(this.servicePath, config);
@@ -634,6 +657,27 @@ export class PackagePlugin extends BasePlugin {
       this.core.debug('Tmp Out Dir Removed');
       await remove(this.defaultTmpFaaSOut);
     }
+  }
+
+  // 选择有哪些函数要进行发布
+  async selectFunction() {
+    if (!this.options.function) {
+      return;
+    }
+    const functions = this.options.function.split(',').filter(v => !!v);
+    if (!functions.length) {
+      return;
+    }
+    this.core.debug(' - Skip Function');
+    if (!this.core.service.functions) {
+      return;
+    }
+    Object.keys(this.core.service.functions).forEach(functionName => {
+      if (!functions.includes(functionName)) {
+        this.core.debug(`   skip ${functionName}`);
+        delete this.core.service.functions[functionName];
+      }
+    });
   }
 
   async package() {
