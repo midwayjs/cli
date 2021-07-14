@@ -124,7 +124,11 @@ export const analysisDecorator = async (cwd: string, currentFunc?) => {
         return;
       }
       const handler = func.funcHandlerName;
-      if (!handler) {
+      if (
+        !handler ||
+        func.functionName.includes('undefined') ||
+        func.handlerName.includes('undefined')
+      ) {
         return;
       }
 
