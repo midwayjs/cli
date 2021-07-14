@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.75](https://github.com/midwayjs/cli/compare/v1.2.74...v1.2.75) (2021-07-14)
+
+**Note:** Version bump only for package @midwayjs/fcli-plugin-aws
+
+
+
+
+
 ## [1.2.74](https://github.com/midwayjs/cli/compare/v1.2.73...v1.2.74) (2021-07-06)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-aws
