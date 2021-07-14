@@ -44,7 +44,8 @@
     "authors": "git log --format='%aN <%aE>' | sort -u > AUTHORS",
     "site": "vuepress dev docs",
     "lint": "lerna exec mwts check",
-    "lint:fix": "lerna exec mwts fix"
+    "lint:fix": "lerna exec mwts fix",
+    "patch": "lerna version patch && git add . && lerna publish --dist-tag latest from-package"
   },
   "keywords": [
     "midway",
