@@ -23,7 +23,6 @@ describe('/test/index.test.ts', () => {
     await core.ready();
     await core.invoke(['package']);
     const buildPath = join(baseDir, '.serverless');
-    assert(existsSync(join(buildPath, 'node_modules')));
     assert(existsSync(join(buildPath, 'config.json')));
   });
 });
