@@ -373,6 +373,11 @@ export class PackagePlugin extends BasePlugin {
       return;
     }
 
+    if (this.options.skipInstallDep) {
+      this.core.cli.log(' - Production dependencies install skip');
+      return;
+    }
+
     if (this.midwayVersion === '2') {
       this.setGlobalDependencies('@midwayjs/bootstrap');
       this.setGlobalDependencies('path-to-regexp');
