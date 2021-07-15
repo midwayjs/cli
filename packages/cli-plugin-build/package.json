@@ -4,6 +4,7 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
+    "@midwayjs/hooks-core": "^2.2.4",
     "@midwayjs/command-core": "^1.2.76-beta.2",
     "@midwayjs/faas-code-analysis": "^1.2.76-beta.2",
     "@midwayjs/mwcc": "^0.7.x",
