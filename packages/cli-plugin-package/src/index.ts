@@ -1,6 +1,7 @@
 import { BasePlugin } from '@midwayjs/command-core';
 import { getSpecFile, writeToSpec } from '@midwayjs/serverless-spec-builder';
 import { isAbsolute, join, relative, resolve } from 'path';
+import { getConfig } from '@midwayjs/hooks-core';
 import {
   copy,
   ensureDir,
@@ -166,8 +167,7 @@ export class PackagePlugin extends BasePlugin {
       join(cwd, 'midway.config.js'),
     ].find(file => existsSync(file));
     if (midwayConfig) {
-      const mod = require('@midwayjs/hooks-core');
-      const config = mod.getConfig();
+      const config = getConfig();
       if (config.source) {
         this.options.sourceDir = config.source;
       }
