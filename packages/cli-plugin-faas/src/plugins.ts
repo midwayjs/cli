@@ -35,6 +35,12 @@ export const PluginList: Array<{
     command: ['deploy', 'package'],
   },
   {
+    mod: '@midwayjs/fcli-plugin-wechat',
+    name: 'WeChatPlugin',
+    platform: 'wechat',
+    command: ['package'],
+  },
+  {
     mod: '@midwayjs/fcli-plugin-aws',
     name: 'AWSLambdaPlugin',
     platform: 'aws',
