@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/fcli-plugin-deploy",
-  "version": "1.2.76-beta.2",
+  "version": "1.2.76-beta.3",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/command-core": "^1.2.76-beta.2"
+    "@midwayjs/command-core": "^1.2.76-beta.3"
   },
   "engines": {
     "node": ">= 10"
