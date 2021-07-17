@@ -15,30 +15,35 @@ let runtime;
 let inited = false;
 
 const initializeMethod = async (initializeContext = {}) => {
-  layers.unshift(engine => {
-    engine.addRuntimeExtension({
-      async beforeFunctionStart(runtime) {
-        starter = new Framework();
-        starter.configure({
-          initializeContext,
-          preloadModules: <%-JSON.stringify(preloadModules, null, 2)%>,
-          applicationAdapter: runtime
-        });
-        const boot = new BootstrapStarter();
-        boot.configure({
-          appDir: __dirname,
-        }).load(starter);
+  
+  try {
+    layers.unshift(engine => {
+      engine.addRuntimeExtension({
+        async beforeFunctionStart(runtime) {
+          starter = new Framework();
+          starter.configure({
+            initializeContext,
+            preloadModules: <%-JSON.stringify(preloadModules, null, 2)%>,
+            applicationAdapter: runtime
+          });
+          const boot = new BootstrapStarter();
+          boot.configure({
+            appDir: __dirname,
+          }).load(starter);
 
-        await boot.init();
-        await boot.run();
-      }
+          await boot.init();
+          await boot.run();
+        }
+      });
     });
-  })
-  runtime = await start({
-    layers: layers,
-    initContext: initializeContext,
-    runtimeConfig: <%-JSON.stringify(runtimeConfig)%>,
-  });
+    runtime = await start({
+      layers: layers,
+      initContext: initializeContext,
+      runtimeConfig: <%-JSON.stringify(runtimeConfig)%>,
+    });
+  } catch (e) {
+    console.error('initializeMethod error => ' + e.stack);
+  }
 
   inited = true;
 };
