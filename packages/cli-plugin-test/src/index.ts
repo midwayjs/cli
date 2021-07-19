@@ -2,6 +2,7 @@ import { BasePlugin, forkNode } from '@midwayjs/command-core';
 import { existsSync } from 'fs';
 import * as globby from 'globby';
 import { join } from 'path';
+const mochaBin = 'mocha/bin/_mocha';
 export class TestPlugin extends BasePlugin {
   commands = {
     test: {
@@ -81,12 +82,15 @@ export class TestPlugin extends BasePlugin {
         if (this.options.cov) {
           binFile = require.resolve('nyc/bin/nyc.js');
         } else {
-          binFile = require.resolve('mocha/bin/_mocha');
+          binFile = require.resolve(mochaBin);
         }
       } catch (e) {
-        console.log('using mocha test need deps ', this.options.cov ? 'nyc': 'mocha');
+        console.log(
+          'using mocha test need deps ',
+          this.options.cov ? 'nyc' : 'mocha'
+        );
         throw e;
-      }  
+      }
     } else {
       binFile = require.resolve('jest/bin/jest');
       defaultOptionsEnv['MIDWAY_JEST_MODE'] = true;
@@ -97,16 +101,13 @@ export class TestPlugin extends BasePlugin {
     }
     const opt = {
       cwd,
-      env: Object.assign(
-        defaultOptionsEnv,
-        process.env
-      ),
+      env: Object.assign(defaultOptionsEnv, process.env),
       execArgv,
     };
 
     let args;
     if (this.options.mocha) {
-      
+      args = await this.formatMochaTestArgs(isTs, testFiles);
     } else {
       args = await this.formatJestTestArgs(isTs, testFiles);
     }
@@ -176,4 +177,74 @@ export class TestPlugin extends BasePlugin {
     return args;
   }
 
+  async formatMochaTestArgs(isTs, testFiles) {
+    const argsPre = [];
+    const args = [];
+    if (this.options.cov) {
+      if (this.options.nyc) {
+        argsPre.push(...this.options.nyc.split(' '));
+        argsPre.push('--temp-directory', './node_modules/.nyc_output');
+      }
+      if (isTs) {
+        argsPre.push('--extension');
+        argsPre.push('.ts');
+      }
+      argsPre.push(require.resolve(mochaBin));
+    } else if (this.options.extension) {
+      args.push(`--extension=${this.options.extension}`);
+    }
+    let timeout = this.options.timeout || process.env.TEST_TIMEOUT || 60000;
+    if (process.env.JB_DEBUG_FILE) {
+      // --no-timeout
+      timeout = false;
+    }
+    args.push(timeout ? `--timeout=${timeout}` : '--no-timeout');
+
+    if (this.options.reporter || process.env.TEST_REPORTER) {
+      args.push('--reporter=true');
+    }
+
+    args.push('--exit=true');
+
+    const requireArr = [].concat(this.options.require || this.options.r || []);
+
+    if (!this.options.fullTrace) {
+      requireArr.unshift(require.resolve('./mocha-clean'));
+    }
+
+    requireArr.forEach(requireItem => {
+      args.push(`--require=${requireItem}`);
+    });
+
+    let pattern;
+
+    if (!pattern) {
+      // specific test files
+      pattern = testFiles;
+    }
+    if (!pattern.length && process.env.TESTS) {
+      pattern = process.env.TESTS.split(',');
+    }
+
+    if (!pattern.length) {
+      pattern = [`test/**/*.test.${isTs ? 'ts' : 'js'}`];
+    }
+    pattern = pattern.concat(['!test/fixtures', '!test/node_modules']);
+
+    const files = globby.sync(pattern);
+
+    if (files.length === 0) {
+      console.log(`No test files found with ${pattern}`);
+      return;
+    }
+
+    args.push(...files);
+
+    // auto add setup file as the first test file
+    const setupFile = join(process.cwd(), `test/.setup.${isTs ? 'ts' : 'js'}`);
+    if (existsSync(setupFile)) {
+      args.unshift(setupFile);
+    }
+    return argsPre.concat(args);
+  }
 }

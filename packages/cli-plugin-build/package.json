@@ -7,6 +7,7 @@
     "@midwayjs/command-core": "^1.2.73",
     "@midwayjs/faas-code-analysis": "^1.2.73",
     "@midwayjs/mwcc": "^0.7.x",
+    "@midwayjs/hooks-core": "^2.2.4",
     "fs-extra": "^8.1.0"
   },
   "devDependencies": {
