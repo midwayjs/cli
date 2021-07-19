@@ -1,0 +1,8 @@
+service: midway-wechat-test
+
+provider:
+  name: wechat
+  wechatConfig:
+    permissions:
+      openapi:
+        - "wxacode.get"

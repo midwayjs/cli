@@ -26,6 +26,9 @@ export class TestPlugin extends BasePlugin {
         runInBand: {
           usage: 'runInBand',
         },
+        mocha: {
+          usage: 'using mocha test',
+        },
       },
     },
     cov: {
@@ -66,8 +69,28 @@ export class TestPlugin extends BasePlugin {
     } else {
       this.core.cli.log(`Testing all *.test.${isTs ? 'ts' : 'js'}...`);
     }
+
+    const defaultOptionsEnv = {
+      MIDWAY_TS_MODE: isTs,
+      NODE_ENV: 'test',
+    };
     // exec bin file
-    const binFile = require.resolve('jest/bin/jest');
+    let binFile;
+    if (this.options.mocha) {
+      try {
+        if (this.options.cov) {
+          binFile = require.resolve('nyc/bin/nyc.js');
+        } else {
+          binFile = require.resolve('mocha/bin/_mocha');
+        }
+      } catch (e) {
+        console.log('using mocha test need deps ', this.options.cov ? 'nyc': 'mocha');
+        throw e;
+      }  
+    } else {
+      binFile = require.resolve('jest/bin/jest');
+      defaultOptionsEnv['MIDWAY_JEST_MODE'] = true;
+    }
     const execArgv = process.execArgv || [];
     if (isTs) {
       execArgv.push('--require', require.resolve('ts-node/register'));
@@ -75,23 +98,25 @@ export class TestPlugin extends BasePlugin {
     const opt = {
       cwd,
       env: Object.assign(
-        {
-          MIDWAY_TS_MODE: isTs,
-          MIDWAY_JEST_MODE: true,
-          NODE_ENV: 'test',
-        },
+        defaultOptionsEnv,
         process.env
       ),
       execArgv,
     };
-    const args = await this.formatTestArgs(isTs, testFiles);
+
+    let args;
+    if (this.options.mocha) {
+      
+    } else {
+      args = await this.formatJestTestArgs(isTs, testFiles);
+    }
     if (!args) {
       return;
     }
     return forkNode(binFile, args, opt);
   }
 
-  async formatTestArgs(isTs, testFiles) {
+  async formatJestTestArgs(isTs, testFiles) {
     const args = [];
 
     let pattern;
@@ -150,4 +175,5 @@ export class TestPlugin extends BasePlugin {
 
     return args;
   }
+
 }
