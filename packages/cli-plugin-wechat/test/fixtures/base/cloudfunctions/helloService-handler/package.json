@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@midwayjs/faas": "^2.8.0"
+  },
+  "name": "helloService-handler",
+  "version": "1.0.0",
+  "main": "helloService-handler-entry.js"
+}
