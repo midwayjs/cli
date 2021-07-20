@@ -66,18 +66,29 @@ export class WeChatPlugin extends BasePlugin {
         const [originFileName, handlerName] = handlerConf.handler.split('.');
         const cloudFunctionName = func;
         this.core.cli.log('Create function: ' + cloudFunctionName);
-        const main = cloudFunctionName + '-entry.js';
-        const originFile = originFileName + '.js';
 
         const functionDir = join(
           this.wechatFunctionBuildPath,
           cloudFunctionName
         );
         await copy(this.midwayBuildPath, functionDir);
-        writeFileSync(
-          join(functionDir, main),
-          `exports.main = require('./${originFile}').${handlerName};`
-        );
+
+        await this.saveRemove(join(functionDir, 'src'));
+        await this.saveRemove(join(functionDir, 'f.yml'));
+        await this.saveRemove(join(functionDir, 'f.origin.yml'));
+        await this.saveRemove(join(functionDir, 'tsconfig.json'));
+        await this.saveRemove(join(functionDir, 'dist/midway.build.json'));
+        await this.saveRemove(join(functionDir, 'dist/.mwcc-cache'));
+
+        if (originFileName !== 'index') {
+          const main = 'index.js';
+          const originFile = originFileName + '.js';
+          writeFileSync(
+            join(functionDir, main),
+            `exports.main = require('./${originFile}').${handlerName};`
+          );
+        }
+
         const pkgJsonFile = join(functionDir, 'package.json');
         let pkgJson: any = {};
 
@@ -87,9 +98,17 @@ export class WeChatPlugin extends BasePlugin {
 
         pkgJson.name = `${cloudFunctionName}`;
         pkgJson.version = projectPkgJson.version || '1.0.0';
-        pkgJson.main = main;
+        pkgJson.main = 'index.js';
+        delete pkgJson.devDependencies;
         writeFileSync(pkgJsonFile, JSON.stringify(pkgJson, null, 2));
       }
     },
   };
+
+  async saveRemove(dir: string) {
+    if (!existsSync(dir)) {
+      return;
+    }
+    await remove(dir);
+  }
 }

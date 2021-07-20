@@ -1,13 +1,13 @@
 {
   "name": "@midwayjs/serverless-dev-pack",
-  "version": "1.2.76-beta.3",
+  "version": "1.2.76-beta.4",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/cli-plugin-dev": "^1.2.76-beta.3",
-    "@midwayjs/command-core": "^1.2.76-beta.3",
-    "@midwayjs/gateway-common-core": "^1.2.76-beta.3",
-    "@midwayjs/gateway-common-http": "^1.2.76-beta.3",
+    "@midwayjs/cli-plugin-dev": "^1.2.76-beta.4",
+    "@midwayjs/command-core": "^1.2.76-beta.4",
+    "@midwayjs/gateway-common-core": "^1.2.76-beta.4",
+    "@midwayjs/gateway-common-http": "^1.2.76-beta.4",
     "body-parser": "^1.19.0",
     "compose-middleware": "^5.0.1",
     "fs-extra": "^8.1.0",
