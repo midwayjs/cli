@@ -70,7 +70,7 @@ export class TestPlugin extends BasePlugin {
     } else {
       this.core.cli.log(`Testing all *.test.${isTs ? 'ts' : 'js'}...`);
     }
-
+    const execArgv = process.execArgv || [];
     const defaultOptionsEnv = {
       MIDWAY_TS_MODE: isTs,
       NODE_ENV: 'test',
@@ -85,8 +85,9 @@ export class TestPlugin extends BasePlugin {
           binFile = require.resolve(mochaBin);
         }
       } catch (e) {
-        console.log(
-          'using mocha test need deps ',
+        console.log('');
+        console.error(
+          'Using mocha test need deps ',
           this.options.cov ? 'nyc' : 'mocha'
         );
         throw e;
@@ -94,11 +95,11 @@ export class TestPlugin extends BasePlugin {
     } else {
       binFile = require.resolve('jest/bin/jest');
       defaultOptionsEnv['MIDWAY_JEST_MODE'] = true;
+      if (isTs) {
+        execArgv.push('--require', require.resolve('ts-node/register'));
+      }
     }
-    const execArgv = process.execArgv || [];
-    if (isTs) {
-      execArgv.push('--require', require.resolve('ts-node/register'));
-    }
+
     const opt = {
       cwd,
       env: Object.assign(defaultOptionsEnv, process.env),
@@ -114,6 +115,7 @@ export class TestPlugin extends BasePlugin {
     if (!args) {
       return;
     }
+    this.core.debug('Test Info', binFile, args, opt);
     return forkNode(binFile, args, opt);
   }
 
@@ -141,7 +143,8 @@ export class TestPlugin extends BasePlugin {
         return file.endsWith(`.${isTs ? 'ts' : 'js'}`);
       });
       if (files.length === 0) {
-        console.log(`No test files found with ${pattern}`);
+        console.log('');
+        console.error(`No test files found with ${pattern}`);
         return;
       }
       args.push('--findRelatedTests', ...files);
@@ -180,6 +183,9 @@ export class TestPlugin extends BasePlugin {
   async formatMochaTestArgs(isTs, testFiles) {
     const argsPre = [];
     const args = [];
+    if (isTs) {
+      argsPre.push('--require', require.resolve('ts-node/register'));
+    }
     if (this.options.cov) {
       if (this.options.nyc) {
         argsPre.push(...this.options.nyc.split(' '));
