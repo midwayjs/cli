@@ -225,11 +225,13 @@ export class DevPlugin extends BasePlugin {
           if (!isWin) {
             execSync(`kill -9 ${this.child.pid} || true`);
           }
-          this.child.kill();
           this.log('Pre Process Force Exit.');
         } catch (e) {
           this.error('Pre Process Force Exit Error.', e.message);
         }
+      }
+      if (this.child?.kill) {
+        this.child.kill();
       }
       this.child = null;
     }

@@ -9,7 +9,7 @@ const cwd = join(__dirname, 'fixtures/base-app');
 const api = join(cwd, 'src/controller/api.ts');
 const api1 = join(cwd, 'src/controller/api.cache');
 const api2 = join(cwd, 'src/controller/api2.cache');
-describe.skip('test/index.test.ts', () => {
+describe('test/index.test.ts', () => {
   it('dev', async () => {
     const dist = join(cwd, 'dist');
     if (existsSync(dist)) {
