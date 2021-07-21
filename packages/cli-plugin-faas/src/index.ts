@@ -42,7 +42,14 @@ export class FaaSPlugin extends BasePlugin {
     this.core.debug('FaaS Plugin load list', command, needLoad);
     const allPluginClass = await getPluginClass(needLoad, {
       cwd: this.core.cwd,
-      load: name => require(name),
+      load: name => {
+        try {
+          return require(name);
+        } catch (e) {
+          this.core.debug('Load FaaS Plugin Error', e);
+          throw e;
+        }
+      },
       npm: options.npm,
       notAutoInstall: options?.h,
     });
