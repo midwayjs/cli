@@ -1,8 +1,8 @@
 import { BasePlugin } from '@midwayjs/command-core';
-import { fork } from 'child_process';
+import { fork, execSync } from 'child_process';
 import Spin from 'light-spinner';
 import * as chokidar from 'chokidar';
-import { networkInterfaces } from 'os';
+import { networkInterfaces, platform } from 'os';
 import { resolve, relative } from 'path';
 import { statSync, existsSync, readFileSync, writeFileSync } from 'fs';
 import * as chalk from 'chalk';
@@ -171,7 +171,7 @@ export class DevPlugin extends BasePlugin {
         }
       });
       this.child.stderr.on('data', data => {
-        console.error(chalk.hex('#ff0000')(data.toString()));
+        this.error(data.toString());
       });
       this.child.on('message', msg => {
         if (msg.type === 'started') {
@@ -189,9 +189,7 @@ export class DevPlugin extends BasePlugin {
           resolve();
         } else if (msg.type === 'error') {
           this.spin.stop();
-          console.error(
-            chalk.hex('#ff0000')(`[ Midway ] ${msg.message || ''}`)
-          );
+          this.error(msg.message || '');
         } else if (msg.id) {
           if (this.processMessageMap[msg.id]) {
             this.processMessageMap[msg.id](msg.data);
@@ -207,7 +205,30 @@ export class DevPlugin extends BasePlugin {
       this.spin.stop();
     }
     if (this.child) {
-      this.child.kill();
+      const timeoutErr = 'timeout';
+      const closeChildRes = await new Promise(resolve => {
+        const id = Date.now() + ':exit:' + Math.random();
+        setTimeout(() => {
+          delete this.processMessageMap[id];
+          resolve(timeoutErr);
+        }, 3000);
+        this.processMessageMap[id] = resolve;
+        this.child.send({ type: 'exit', id });
+      });
+      if (closeChildRes === timeoutErr) {
+        const isWin = platform() === 'win32';
+        if (!isWin) {
+          try {
+            execSync(`kill -9 ${this.child.pid}`);
+            this.child.kill();
+            this.log('Pre Process Force Exit.');
+          } catch (e) {
+            this.error('Pre Process Force Exit Error.', e.message);
+          }
+        } else {
+          this.error("Pre Process Can't Force Exit.");
+        }
+      }
       this.child = null;
     }
     if (isExit) {
@@ -310,6 +331,10 @@ export class DevPlugin extends BasePlugin {
 
   private log(...args: any[]) {
     console.log('[ Midway ]', ...args);
+  }
+
+  private error(...args: any[]) {
+    console.error(chalk.hex('#ff0000')('[ Midway ]', ...args));
   }
 
   // 检测tsconfig中module的配置

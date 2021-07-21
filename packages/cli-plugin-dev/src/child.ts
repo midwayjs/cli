@@ -4,12 +4,21 @@ const options = JSON.parse(process.argv[2]);
 let app;
 let bootstrapStarter;
 const exit = process.exit;
-(process as any).exit = async () => {
+
+let isCloseApp = false;
+const closeApp = async () => {
+  if (isCloseApp) {
+    return;
+  }
+  isCloseApp = true;
   if (bootstrapStarter) {
     await bootstrapStarter.close();
   } else {
     await close(app);
   }
+};
+(process as any).exit = async () => {
+  await closeApp();
   exit();
 };
 (async () => {
@@ -36,6 +45,10 @@ const exit = process.exit;
       if (msg?.type === 'functions') {
         const data = await analysisDecorator(options.baseDir || process.cwd());
         process.send({ type: 'dev:' + msg.type, data, id: msg.id });
+      } else if (msg?.type === 'exit') {
+        await closeApp();
+        process.send({ type: 'dev:' + msg.type, id: msg.id });
+        process.exit();
       }
     });
   }
