@@ -227,7 +227,7 @@ export class DevPlugin extends BasePlugin {
           }
           this.log('Pre Process Force Exit.');
         } catch (e) {
-          this.error('Pre Process Force Exit Error.', e.message);
+          this.error('Pre Process Force Exit Error', e.message);
         }
       }
       if (this.child?.kill) {
