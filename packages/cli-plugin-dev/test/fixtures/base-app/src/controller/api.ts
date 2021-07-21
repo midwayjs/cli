@@ -28,7 +28,7 @@ export class APIController {
   @Get('/', { middleware: [] })
   @HttpCode(201)
   async home(@Query('name') name: string) {
-    return 'hello world,' + name;
+    return 'hello world2,' + name;
   }
 
   @Get('/login')

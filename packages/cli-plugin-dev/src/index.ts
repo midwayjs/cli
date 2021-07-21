@@ -205,17 +205,21 @@ export class DevPlugin extends BasePlugin {
       this.spin.stop();
     }
     if (this.child) {
-      const timeoutErr = 'timeout';
+      const childExitError = 'childExitError';
       const closeChildRes = await new Promise(resolve => {
-        const id = Date.now() + ':exit:' + Math.random();
-        setTimeout(() => {
-          delete this.processMessageMap[id];
-          resolve(timeoutErr);
-        }, 3000);
-        this.processMessageMap[id] = resolve;
-        this.child.send({ type: 'exit', id });
+        if (this.child.connected) {
+          const id = Date.now() + ':exit:' + Math.random();
+          setTimeout(() => {
+            delete this.processMessageMap[id];
+            resolve(childExitError);
+          }, 3000);
+          this.processMessageMap[id] = resolve;
+          this.child.send({ type: 'exit', id });
+        } else {
+          resolve(childExitError);
+        }
       });
-      if (closeChildRes === timeoutErr) {
+      if (closeChildRes === childExitError) {
         const isWin = platform() === 'win32';
         if (!isWin) {
           try {
