@@ -212,25 +212,23 @@ export class DevPlugin extends BasePlugin {
           setTimeout(() => {
             delete this.processMessageMap[id];
             resolve(childExitError);
-          }, 3000);
+          }, 2000);
           this.processMessageMap[id] = resolve;
           this.child.send({ type: 'exit', id });
         } else {
-          resolve(childExitError);
+          resolve(void 0);
         }
       });
       if (closeChildRes === childExitError) {
         const isWin = platform() === 'win32';
-        if (!isWin) {
-          try {
-            execSync(`kill -9 ${this.child.pid}`);
-            this.child.kill();
-            this.log('Pre Process Force Exit.');
-          } catch (e) {
-            this.error('Pre Process Force Exit Error.', e.message);
+        try {
+          if (!isWin) {
+            execSync(`kill -9 ${this.child.pid} || true`);
           }
-        } else {
-          this.error("Pre Process Can't Force Exit.");
+          this.child.kill();
+          this.log('Pre Process Force Exit.');
+        } catch (e) {
+          this.error('Pre Process Force Exit Error.', e.message);
         }
       }
       this.child = null;
