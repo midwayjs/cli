@@ -113,7 +113,9 @@ export async function loadNpm(
     const plugin = require(npmPath);
     scope.addPlugin(plugin);
   } catch (e) {
-    // scope.error('npmPlugin', { npmName, err: e });
+    if (scope && scope.debug) {
+      scope.debug('Load NPM Error', e);
+    }
   }
 }
 
