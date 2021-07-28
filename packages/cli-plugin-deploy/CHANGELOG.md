@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.76](https://github.com/midwayjs/cli/compare/v1.2.75...v1.2.76) (2021-07-22)
+
+
+### Bug Fixes
+
+* dev restart not change([#156](https://github.com/midwayjs/cli/issues/156)) ([505813e](https://github.com/midwayjs/cli/commit/505813eb1434292d1fcc799d582344ff5fde7fc9))
+
+
+### Features
+
+* mocha test support ([#155](https://github.com/midwayjs/cli/issues/155)) ([d363607](https://github.com/midwayjs/cli/commit/d3636076ee0391a5ddd45c3864a13010b8f01e78))
+
+
+
+
+
 ## [1.2.73](https://github.com/midwayjs/cli/compare/v1.2.73-beta.1...v1.2.73) (2021-06-25)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-deploy
