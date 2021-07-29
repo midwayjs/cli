@@ -4,9 +4,11 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
+    "js-yaml": "^4.1.0",
     "@midwayjs/command-core": "^1.2.76",
     "@midwayjs/luckyeye": "^1.0.2",
     "@midwayjs/serverless-spec-builder": "^1.2.76",
+    "chalk": "^4.1.1",
     "fs-extra": "^8.1.0"
   },
   "devDependencies": {
@@ -23,7 +25,8 @@
   "scripts": {
     "build": "tsc --build",
     "lint": "../../node_modules/.bin/eslint .",
-    "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
+    "test": "../../node_modules/.bin/jest",
+    "cov": "../../node_modules/.bin/jest --coverage",
     "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov"
   },
   "repository": {

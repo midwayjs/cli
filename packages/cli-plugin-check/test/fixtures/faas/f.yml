@@ -1,0 +1,7 @@
+functions:
+  a:
+    events:
+      http: true
+  b:
+    events:
+      - http: true
