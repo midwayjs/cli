@@ -42,7 +42,6 @@ export class WeChatPlugin extends BasePlugin {
     },
     'package:package': async () => {
       // 拷贝到 cloudfunctions 目录
-      console.log('this.core.service', this.core.service.functions);
       let projectPkgJson: any = {};
       try {
         const json: string = readFileSync(
