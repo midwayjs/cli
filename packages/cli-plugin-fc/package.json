@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/fcli-plugin-fc",
-  "version": "1.2.76",
+  "version": "1.2.77",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -13,7 +13,7 @@
     "request": "^2.88.2"
   },
   "devDependencies": {
-    "@midwayjs/fcli-plugin-package": "^1.2.76",
+    "@midwayjs/fcli-plugin-package": "^1.2.77",
     "fs-extra": "^8.1.0",
     "jszip": "^3.5.0"
   },
