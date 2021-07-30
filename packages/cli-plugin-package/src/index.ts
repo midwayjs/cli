@@ -66,6 +66,7 @@ export class PackagePlugin extends BasePlugin {
       lifecycleEvents: [
         'cleanup', // 清理构建目录
         'installDevDep', // 安装开发期依赖
+        'locate', // 确定项目结构
         'copyFile', // 拷贝文件: package.include 和 shared content
         'compile', //
         'emit', // 编译函数  'package:after:tscompile'
@@ -123,6 +124,7 @@ export class PackagePlugin extends BasePlugin {
   hooks = {
     'package:cleanup': this.cleanup.bind(this),
     'package:installDevDep': this.installDevDep.bind(this),
+    'package:locate': this.locate.bind(this),
     'before:package:copyFile': this.deployTypeBeforeCopyFile.bind(this),
     'package:copyFile': this.copyFile.bind(this),
     'package:compile': this.compile.bind(this),
@@ -158,6 +160,35 @@ export class PackagePlugin extends BasePlugin {
       this.midwayBuildPath = this.core.config.buildPath;
     }
 
+    await remove(this.midwayBuildPath);
+    await ensureDir(this.midwayBuildPath);
+    this.setStore('defaultTmpFaaSOut', this.defaultTmpFaaSOut);
+  }
+
+  async installDevDep() {
+    this.core.cli.log('Install development dependencies...');
+    if (!existsSync(join(this.servicePath, 'node_modules'))) {
+      await this.npmInstall({
+        baseDir: this.servicePath,
+      });
+      this.core.cli.log(' - Install development dependencies complete...');
+    } else {
+      this.core.cli.log(' - Find node_modules and skip...');
+    }
+
+    // 分析midway version
+    const cwd = this.getCwd();
+    const faasModulePath = findNpmModule(cwd, '@midwayjs/faas');
+    if (faasModulePath) {
+      const pkgJson = JSON.parse(
+        readFileSync(join(faasModulePath, 'package.json')).toString()
+      );
+      this.midwayVersion = pkgJson.version[0];
+    }
+    this.core.debug('midwayVersion', this.midwayVersion);
+  }
+
+  async locate() {
     const cwd = this.getCwd();
 
     // midway hooks 支持
@@ -228,32 +259,6 @@ export class PackagePlugin extends BasePlugin {
         `   - PackageRoot: ${relative(this.servicePath, this.midwayBuildPath)}`
       );
     }
-    await remove(this.midwayBuildPath);
-    await ensureDir(this.midwayBuildPath);
-    this.setStore('defaultTmpFaaSOut', this.defaultTmpFaaSOut);
-  }
-
-  async installDevDep() {
-    this.core.cli.log('Install development dependencies...');
-    if (!existsSync(join(this.servicePath, 'node_modules'))) {
-      await this.npmInstall({
-        baseDir: this.servicePath,
-      });
-      this.core.cli.log(' - Install development dependencies complete...');
-    } else {
-      this.core.cli.log(' - Find node_modules and skip...');
-    }
-
-    // 分析midway version
-    const cwd = this.getCwd();
-    const faasModulePath = findNpmModule(cwd, '@midwayjs/faas');
-    if (faasModulePath) {
-      const pkgJson = JSON.parse(
-        readFileSync(join(faasModulePath, 'package.json')).toString()
-      );
-      this.midwayVersion = pkgJson.version[0];
-    }
-    this.core.debug('midwayVersion', this.midwayVersion);
   }
 
   async copyFile() {
