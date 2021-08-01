@@ -41,7 +41,7 @@ export const PluginList: Array<{
     command: ['deploy', 'package'],
   },
   {
-    mod: '@midwayjs/fcli-plugin-vercel',
+    mod: '@midwayjs/cli-plugin-vercel',
     name: 'VercelPlugin',
     platform: 'vercel',
     command: ['deploy', 'package'],

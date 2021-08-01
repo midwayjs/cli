@@ -1,4 +1,4 @@
-import { BasePlugin, ICoreInstance } from '@midwayjs/command-core';
+import { BasePlugin, ICoreInstance, forkNode } from '@midwayjs/command-core';
 import { join } from 'path';
 import * as globby from 'globby';
 import {
@@ -80,8 +80,8 @@ export class VercelPlugin extends BasePlugin {
           continue;
         }
 
-        // TODO * to 正则表达式
-        const path = trigger.path || '/.*';
+        // * to 正则表达式
+        const path = (trigger.path || '/*').replace(/\*/g, '.*');
         vercelJson.routes.push({
           src: path,
           dest: entryFileName,
@@ -96,7 +96,7 @@ export class VercelPlugin extends BasePlugin {
   // generate api/function.js
   async gengerateVercelEntry() {
     this.core.cli.log('Generate entry file...');
-    this.setGlobalDependencies('@midwayjs/serverless-scf-starter');
+    this.setGlobalDependencies('@midwayjs/serverless-vercel-starter');
     const apiDir = join(this.midwayBuildPath, 'api');
     await ensureDir(apiDir);
 
@@ -116,7 +116,7 @@ export class VercelPlugin extends BasePlugin {
       distDir: apiDir,
       isDefaultFunc: true,
       skipInitializer: true,
-      starter: '@midwayjs/serverless-scf-starter',
+      starter: '@midwayjs/serverless-vercel-starter',
     });
   }
 
@@ -133,6 +133,20 @@ export class VercelPlugin extends BasePlugin {
 
     this.core.cli.log('Start deploy by vercel/cli');
     try {
+      const vercelPkg = require.resolve('vercel/package.json');
+      const vercelPkgJson = JSON.parse(readFileSync(vercelPkg).toString());
+      const vercelBin = join(vercelPkg, vercelPkgJson.bin.vercel);
+
+      const args = [`--local-config=${this.vercelJsonFile}`];
+      const token = this.options.token || process.env.VERCEL_TOKEN;
+      if (token) {
+        args.push(`--token=${token}`);
+      }
+      this.core.debug('Vercel Bin', vercelBin);
+      this.core.debug('Vercel Deploy Args', args);
+      await forkNode(`${vercelBin}}`, args, {
+        cwd: this.midwayBuildPath,
+      });
       this.core.cli.log('Deploy success');
     } catch (e) {
       this.core.cli.log(`Deploy error: ${e.message}`);
@@ -153,8 +167,9 @@ export class VercelPlugin extends BasePlugin {
 
     await Promise.all(
       files.map(async file => {
-        if (existsSync(file)) {
-          await remove(file);
+        const filePosi = join(this.midwayBuildPath, file);
+        if (existsSync(filePosi)) {
+          await remove(filePosi);
         }
       })
     );

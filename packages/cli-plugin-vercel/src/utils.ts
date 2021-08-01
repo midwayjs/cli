@@ -3,7 +3,11 @@ export const convertMethods = (method: string | string[]) => {
     return;
   }
   const methods = [].concat(method);
-  return methods.map(method => {
+  const upperMthoeds = methods.map(method => {
     return method.toUpperCase();
   });
+  if (upperMthoeds.includes('ANY') || upperMthoeds.includes('ALL')) {
+    return;
+  }
+  return upperMthoeds;
 };
