@@ -43,7 +43,6 @@ export function writeWrapper(options: {
   } = options;
 
   const files = {};
-  let defaultFunctionHandlerName = '';
 
   // for function programing，function
   let functionMap: any;
@@ -68,7 +67,6 @@ export function writeWrapper(options: {
     const name = handlerSplitInfo[1];
     if (isDefaultFunc) {
       handlerFileName = func;
-      defaultFunctionHandlerName = name;
     }
     if (!cover && existsSync(join(baseDir, handlerFileName + '.js'))) {
       // 如果入口文件名存在，则跳过
@@ -80,6 +78,11 @@ export function writeWrapper(options: {
         originLayers: [],
       };
     }
+
+    if (isDefaultFunc) {
+      files[handlerFileName].defaultFunctionHandlerName = name;
+    }
+
     if (handlerConf.layers && handlerConf.layers.length) {
       files[handlerFileName].originLayers.push(handlerConf.layers);
     }
@@ -166,7 +169,7 @@ export function writeWrapper(options: {
       moreArgs: moreArgs || false,
       isDefaultFunc,
       skipInitializer,
-      defaultFunctionHandlerName,
+      defaultFunctionHandlerName: files[file].defaultFunctionHandlerName,
       ...layers,
     });
     if (existsSync(fileName)) {

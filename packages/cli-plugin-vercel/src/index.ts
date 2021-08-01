@@ -1,6 +1,13 @@
 import { BasePlugin, ICoreInstance } from '@midwayjs/command-core';
 import { join } from 'path';
-import { existsSync, readFileSync, writeFileSync, ensureDir } from 'fs-extra';
+import * as globby from 'globby';
+import {
+  existsSync,
+  readFileSync,
+  writeFileSync,
+  ensureDir,
+  remove,
+} from 'fs-extra';
 import { convertMethods } from './utils';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
 // refs: vercel.com/docs/configuration
@@ -92,9 +99,20 @@ export class VercelPlugin extends BasePlugin {
     this.setGlobalDependencies('@midwayjs/serverless-scf-starter');
     const apiDir = join(this.midwayBuildPath, 'api');
     await ensureDir(apiDir);
+
+    // strip other trigger except http
+    const functionList = this.getFunctionList();
+    const functions = {};
+    for (const func of functionList) {
+      functions[func.funcName] = func.funcInfo;
+    }
+
     writeWrapper({
       baseDir: this.servicePath,
-      service: this.core.service,
+      service: {
+        ...this.core.service,
+        functions,
+      },
       distDir: apiDir,
       isDefaultFunc: true,
       skipInitializer: true,
@@ -110,11 +128,47 @@ export class VercelPlugin extends BasePlugin {
       skipZip: true, // 跳过压缩成zip
       skipInstallDep: true,
     });
+
+    await this.safeRemoveUselessFile();
+
     this.core.cli.log('Start deploy by vercel/cli');
     try {
       this.core.cli.log('Deploy success');
     } catch (e) {
       this.core.cli.log(`Deploy error: ${e.message}`);
+    }
+  }
+
+  // remove useless file
+  async safeRemoveUselessFile() {
+    const files = [
+      'src',
+      'f.origin.yml',
+      'f.yml',
+      'jest.config.js',
+      'tsconfig.json',
+      'dist/.mwcc-cache',
+      'dist/midway-build.json',
+    ];
+
+    await Promise.all(
+      files.map(async file => {
+        if (existsSync(file)) {
+          await remove(file);
+        }
+      })
+    );
+
+    const list = await globby(['**/*.d.ts', '**/*.ts.map', '**/*.js.map'], {
+      cwd: join(this.midwayBuildPath, 'dist'),
+      deep: 10,
+    });
+
+    for (const file of list) {
+      const path = join(this.midwayBuildPath, 'dist', file);
+      if (existsSync(path)) {
+        await remove(path);
+      }
     }
   }
 }

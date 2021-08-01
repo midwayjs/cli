@@ -22,14 +22,26 @@ const initializeMethod = async (initializeContext = {}) => {
     });
   }, 'APP_START_LOCK_KEY');
 };
-
+<% if (skipInitializer) { %>
+// initializer skip
+<% } else { %> 
 exports.<%=initializer%> = asyncWrapper(async (...args) => {
   if (!inited) {
     inited = true;
     await initializeMethod();
   }
 });
+<% } %>
 
+
+<% if (isDefaultFunc) { %>
+module.exports = asyncWrapper(async (...args) => {
+  if (!inited) {
+    await initializeMethod();
+  }
+  return runtime.asyncEvent()(...args);
+});
+<% } else { %> 
 <% handlers.forEach(function(handlerData){ %>
   exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
     if (!inited) {
@@ -39,3 +51,4 @@ exports.<%=initializer%> = asyncWrapper(async (...args) => {
     return runtime.asyncEvent()(...args);
   });
 <% }); %>
+<% } %>
