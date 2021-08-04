@@ -318,15 +318,16 @@ export class DevPlugin extends BasePlugin {
     if (options.silent || options.entryFile || options.notStartLog) {
       return;
     }
+    const protocol = options.ssl ? 'https' : 'http';
     this.log(
       'Start Server at ',
-      chalk.hex('#9999ff').underline('http://127.0.0.1:' + options.port)
+      chalk.hex('#9999ff').underline(`${protocol}://127.0.0.1:${options.port}`)
     );
     const lanIp = this.getIp();
     if (lanIp) {
       this.log(
         'Start on LAN',
-        chalk.hex('#9999ff').underline(`http://${lanIp}:${options.port}`)
+        chalk.hex('#9999ff').underline(`${protocol}://${lanIp}:${options.port}`)
       );
     }
     this.core.cli.log('');

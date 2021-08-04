@@ -3,6 +3,7 @@ import { resolve, join, dirname, relative } from 'path';
 import { existsSync, readFileSync, remove } from 'fs-extra';
 import { CompilerHost, Program, resolveTsConfigFile } from '@midwayjs/mwcc';
 import { copyFiles } from '@midwayjs/faas-code-analysis';
+import { getConfig } from '@midwayjs/hooks-core';
 import * as ts from 'typescript';
 export class BuildPlugin extends BasePlugin {
   isMidwayHooks = false;
@@ -67,8 +68,7 @@ export class BuildPlugin extends BasePlugin {
     ].find(file => existsSync(file));
     if (midwayConfig) {
       this.isMidwayHooks = true;
-      const mod = require('@midwayjs/hooks-core');
-      const config = mod.getConfig();
+      const config = getConfig();
       if (config.source) {
         this.options.srcDir = config.source;
       }
