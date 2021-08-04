@@ -83,11 +83,27 @@ const getHandler = (hanlderName, ...originArgs) => {
   <% }); %>
 }
 
+
+<% if (skipInitializer) { %>
+// initializer skip
+<% } else { %> 
 exports.<%=initializer%> = asyncWrapper(async (...args) => {
   if (!inited) {
     await initializeMethod(...args);
   }
 });
+<% } %>
+
+<% if (isDefaultFunc) { %>
+module.exports = asyncWrapper(async (...args) => {
+  if (!inited) {
+    await initializeMethod();
+  }
+
+  const handler = getHandler('<%=defaultFunctionHandlerName%>', ...args);
+  return runtime.asyncEvent(handler)(...args);
+});
+<% } else { %> 
 
 <% handlers.forEach(function(handlerData){ %>
 exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
@@ -99,3 +115,5 @@ exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
   return runtime.asyncEvent(handler)(...args);
 });
 <% }); %>
+<% } %>
+

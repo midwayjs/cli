@@ -435,6 +435,11 @@ export class PackagePlugin extends BasePlugin {
       this.core.service.resolutions
     );
     writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, null, 2));
+
+    if (this.options.skipInstallDep) {
+      this.core.cli.log(' - Production dependencies install skip');
+      return;
+    }
     await this.npmInstall({
       production: true,
     });

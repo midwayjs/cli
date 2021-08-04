@@ -19,6 +19,8 @@ export function writeWrapper(options: {
   preloadModules?: string[]; // pre load module
   templatePath?: string; // ejs template path
   moreArgs?: boolean; // aggregation more args
+  isDefaultFunc?: boolean; // entry is module.export = () => {}
+  skipInitializer?: boolean; // skip generate initializer method
 }) {
   const {
     service,
@@ -36,6 +38,8 @@ export function writeWrapper(options: {
     clearCache = true,
     templatePath,
     moreArgs,
+    isDefaultFunc = false,
+    skipInitializer = false,
   } = options;
 
   const files = {};
@@ -58,7 +62,12 @@ export function writeWrapper(options: {
     if (handlerConf._ignore) {
       continue;
     }
-    const [handlerFileName, name] = handlerConf.handler.split('.');
+    const handlerSplitInfo = handlerConf.handler.split('.');
+    let handlerFileName = handlerSplitInfo[0];
+    const name = handlerSplitInfo[1];
+    if (isDefaultFunc) {
+      handlerFileName = func;
+    }
     if (!cover && existsSync(join(baseDir, handlerFileName + '.js'))) {
       // 如果入口文件名存在，则跳过
       continue;
@@ -69,6 +78,11 @@ export function writeWrapper(options: {
         originLayers: [],
       };
     }
+
+    if (isDefaultFunc) {
+      files[handlerFileName].defaultFunctionHandlerName = name;
+    }
+
     if (handlerConf.layers && handlerConf.layers.length) {
       files[handlerFileName].originLayers.push(handlerConf.layers);
     }
@@ -153,6 +167,9 @@ export function writeWrapper(options: {
       preloadModules,
       clearCache,
       moreArgs: moreArgs || false,
+      isDefaultFunc,
+      skipInitializer,
+      defaultFunctionHandlerName: files[file].defaultFunctionHandlerName,
       ...layers,
     });
     if (existsSync(fileName)) {
