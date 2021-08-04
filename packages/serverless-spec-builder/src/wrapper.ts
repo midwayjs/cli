@@ -21,6 +21,7 @@ export function writeWrapper(options: {
   moreArgs?: boolean; // aggregation more args
   isDefaultFunc?: boolean; // entry is module.export = () => {}
   skipInitializer?: boolean; // skip generate initializer method
+  requireList?: string[]; // pre require in entry file
 }) {
   const {
     service,
@@ -40,6 +41,7 @@ export function writeWrapper(options: {
     moreArgs,
     isDefaultFunc = false,
     skipInitializer = false,
+    requireList = [],
   } = options;
 
   const files = {};
@@ -149,6 +151,13 @@ export function writeWrapper(options: {
     }
   }
 
+  // 提前加载文件，并将加载的文件传递给midway
+  let isUseFileDetector = false;
+
+  if (requireList.length) {
+    isUseFileDetector = true;
+  }
+
   for (const file in files) {
     const fileName = join(distDir, `${file}.js`);
     const layers = getLayers(service.layers, ...files[file].originLayers);
@@ -170,6 +179,8 @@ export function writeWrapper(options: {
       isDefaultFunc,
       skipInitializer,
       defaultFunctionHandlerName: files[file].defaultFunctionHandlerName,
+      isUseFileDetector,
+      requireList,
       ...layers,
     });
     if (existsSync(fileName)) {

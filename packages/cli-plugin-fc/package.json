@@ -10,6 +10,7 @@
     "@midwayjs/serverless-fc-trigger": "^2.8.7",
     "@midwayjs/serverless-spec-builder": "^1.2.78-beta.2",
     "@serverless-devs/core": "*",
+    "globby": "^10.0.2",
     "request": "^2.88.2"
   },
   "devDependencies": {
