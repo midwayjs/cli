@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.77](https://github.com/midwayjs/bin/compare/v1.2.76...v1.2.77) (2021-07-30)
+
+
+### Features
+
+* package locate lifecycle ([#162](https://github.com/midwayjs/bin/issues/162)) ([c29d102](https://github.com/midwayjs/bin/commit/c29d102bfdcdad4f34da2f3dddb253086409d8df))
+
+
+
+
+
 ## [1.2.76](https://github.com/midwayjs/bin/compare/v1.2.75...v1.2.76) (2021-07-22)
 
 
