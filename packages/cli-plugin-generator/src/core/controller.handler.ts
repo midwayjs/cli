@@ -28,7 +28,7 @@ export const mountControllerCommand = (): ICommandInstance => {
 
   return {
     controller: {
-      usage: 'orm genrator',
+      usage: 'controller genrator',
       lifecycleEvents: ['gen'],
       opts: {
         dry: {
@@ -48,10 +48,12 @@ export const mountControllerCommand = (): ICommandInstance => {
 };
 
 export async function controllerHandler(
-  { cwd }: ICoreInstance,
+  { cwd: projectDirPath }: ICoreInstance,
   opts: ControllerOptions
 ) {
   try {
+    consola.info(`Project location: ${chalk.green(projectDirPath)}`);
+
     if (opts.dry) {
       consola.success('Executing in `dry run` mode, nothing will happen.');
     }
@@ -77,7 +79,7 @@ export async function controllerHandler(
       : fileNameNames.fileName;
 
     const controllerFilePath = path.resolve(
-      cwd,
+      projectDirPath,
       'src',
       opts.dir,
       `${fileName}.ts`

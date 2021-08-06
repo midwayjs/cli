@@ -13,6 +13,12 @@ import {
   controllerHandler,
 } from './core/controller.handler';
 
+import {
+  mountORMCommand,
+  ormHandler,
+  TypeORMGeneratorType,
+} from './core/orm.handler';
+
 // midway-bin gen -> prompt
 
 export class GeneratorPlugin extends BasePlugin {
@@ -22,6 +28,7 @@ export class GeneratorPlugin extends BasePlugin {
       lifecycleEvents: ['gen'],
       commands: {
         ...mountControllerCommand(),
+        ...mountORMCommand(),
       },
     },
   };
@@ -29,13 +36,25 @@ export class GeneratorPlugin extends BasePlugin {
   hooks = {
     'gen:gen': this.noGeneratorSpecifiedHandler.bind(this),
     'gen:controller:gen': this.controllerHandler.bind(this),
+    'gen:orm:gen': this.ormHandler.bind(this),
+    'gen:orm:setup:gen': this.ormHandler.bind(this, TypeORMGeneratorType.SETUP),
+    'gen:orm:entity:gen': this.ormHandler.bind(
+      this,
+      TypeORMGeneratorType.SETUP
+    ),
+    'gen:orm:subscriber:gen': this.ormHandler.bind(
+      this,
+      TypeORMGeneratorType.SUBSCRIBER
+    ),
   };
 
   async controllerHandler() {
     await controllerHandler(this.core, this.options);
   }
 
-  async ormHandler() {}
+  async ormHandler(type?: TypeORMGeneratorType) {
+    await ormHandler(this.core, this.options, type);
+  }
 
   async noGeneratorSpecifiedHandler() {
     const promptedType = await inquirer.prompt([
