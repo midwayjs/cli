@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compileOnSave": true,
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "noUnusedLocals": false,
+    "esModuleInterop": true,
+    "lib": ["ESNext"]
+  },
+  "include": ["./src/**/*.ts", "./src/templates"]
+}

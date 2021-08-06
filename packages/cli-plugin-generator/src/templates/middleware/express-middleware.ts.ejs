@@ -1,0 +1,20 @@
+import { Provide } from '@midwayjs/decorator';
+<% if (useExternalLib) { -%>
+import { IMidwayExpressContext, IWebMiddleware } from '@midwayjs/express';
+import { NextFunction } from 'express';
+import ThirdPartyLib from 'ThirdPartyLib';
+<% } else { -%>
+import { IMidwayExpressContext, IWebMiddleware } from '@midwayjs/express';
+import { NextFunction, Request, Response } from 'express';
+<% } -%>
+
+@Provide('<%=name%>')
+export default class <%=name%> implements IWebMiddleware {
+  resolve() {
+<% if (useExternalLib) { -%>
+    return ThirdPartyLib();
+<% } else { -%>
+    return async (req: Request, res: Response, next: NextFunction) => {};
+<% } -%>
+  }
+}

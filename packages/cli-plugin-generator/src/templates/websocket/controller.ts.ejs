@@ -1,0 +1,16 @@
+import { WSController, Provide, OnWSConnection, Inject } from '@midwayjs/decorator';
+import { Context } from '@midwayjs/ws';
+import * as http from 'http';
+
+@Provide()
+@WSController()
+export class <%=name%>Controller {
+
+  @Inject()
+  ctx: Context;
+
+  @OnWSConnection()
+  async onConnectionMethod(socket: Context, request: http.IncomingMessage) {
+    console.log(`namespace / got a connection ${this.ctx.readyState}`);
+  }
+}

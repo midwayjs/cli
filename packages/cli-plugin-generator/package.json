@@ -1,0 +1,62 @@
+{
+  "name": "@midwayjs/cli-plugin-generator",
+  "version": "1.2.78-beta.2",
+  "main": "dist/index",
+  "typings": "dist/index.d.ts",
+  "dependencies": {
+    "@midwayjs/command-core": "^1.2.76",
+    "@midwayjs/serverless-spec-builder": "^1.2.78-beta.2",
+    "chalk": "^4.1.2",
+    "consola": "^2.15.3",
+    "cpy": "^8.1.2",
+    "ejs": "^3.1.6",
+    "find-up": "^5.0.0",
+    "fs-extra": "^8.1.0",
+    "inquirer": "^8.1.2",
+    "js-yaml": "^4.1.0",
+    "jsonfile": "^6.1.0",
+    "lodash": "^4.17.21",
+    "read-pkg": "^6.0.0",
+    "strip-comments": "^2.0.1",
+    "strip-indent": "^4.0.0",
+    "ts-morph": "^11.0.3"
+  },
+  "devDependencies": {
+    "@types/ejs": "^3.0.7",
+    "@types/fs-extra": "^9.0.12",
+    "@types/inquirer": "^7.3.3",
+    "@types/jest": "^26.0.24",
+    "@types/js-yaml": "^4.0.2",
+    "@types/jsonfile": "^6.0.1",
+    "@types/lodash": "^4.14.171",
+    "@types/node": "^16.4.10",
+    "@types/parse-json": "^4.0.0",
+    "@types/prettier": "^2.3.2",
+    "@types/strip-comments": "^2.0.1",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.1.0"
+  },
+  "engines": {
+    "node": ">= 10"
+  },
+  "files": [
+    "plugin.json",
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc --build",
+    "lint": "../../node_modules/.bin/eslint .",
+    "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
+    "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov",
+    "copy": "tsnd  --respawn --transpile-only ./scripts/copy.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:midwayjs/cli.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT"
+}
