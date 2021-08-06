@@ -40,7 +40,7 @@ export class GeneratorPlugin extends BasePlugin {
     'gen:orm:setup:gen': this.ormHandler.bind(this, TypeORMGeneratorType.SETUP),
     'gen:orm:entity:gen': this.ormHandler.bind(
       this,
-      TypeORMGeneratorType.SETUP
+      TypeORMGeneratorType.ENTITY
     ),
     'gen:orm:subscriber:gen': this.ormHandler.bind(
       this,

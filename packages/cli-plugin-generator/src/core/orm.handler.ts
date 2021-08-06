@@ -1,28 +1,15 @@
-import {
-  BasePlugin,
-  ICommandInstance,
-  ICoreInstance,
-  IPluginCommands,
-  IPluginHooks,
-} from '@midwayjs/command-core';
+import { ICommandInstance, ICoreInstance } from '@midwayjs/command-core';
 
 import path from 'path';
 import inquirer from 'inquirer';
 import fs from 'fs-extra';
 import consola from 'consola';
 import chalk from 'chalk';
-import findUp from 'find-up';
 import { compile as EJSCompile } from 'ejs';
 import { Project } from 'ts-morph';
 
 import prettier from 'prettier';
-import {
-  ensureBooleanType,
-  inputPromptStringValue,
-  formatTSFile,
-  names,
-  updateGitIgnore,
-} from '../lib/helper';
+import { inputPromptStringValue, formatTSFile, names } from '../lib/helper';
 
 import { capitalCase } from '../lib/case';
 import { ensureDepsInstalled } from '../lib/package';
@@ -34,52 +21,75 @@ import {
 } from '../lib/ast';
 import { generatorInvokeWrapper } from '../lib/wrapper';
 
+import { GeneratorSharedOptions } from './utils';
+
 export enum TypeORMGeneratorType {
   SETUP = 'setup',
   ENTITY = 'entity',
   SUBSCRIBER = 'subscriber',
 }
 
-export interface ORMOptions {
+export interface ORMOptions extends GeneratorSharedOptions {
+  /**
+   * @description Use Active-Record mode in entity class
+   * @value true
+   */
   activeRecord: boolean;
+  /**
+   * @description Generate relation sample props in entity class
+   * @value true
+   */
   relation: boolean;
+  /**
+   * @description Listen to transaction in subscriber ckass
+   * @value true
+   */
   transaction: boolean;
-  dry: boolean;
-  // work in entity / subscriber
+  /**
+   * @description Class identifier, works in entity / subscriber
+   */
   class: string;
-  dotFile: boolean;
-  override: boolean;
-  file: string;
-  dir: string;
 }
 
 const DEFAULT_ENTITY_DIR_PATH = 'entity';
 const DEFAULT_SUBSCRIBER_DIR_PATH = 'entity/subscriber';
 const ORM_PKG = ['@midwayjs/orm', 'sqlite'];
 
+// TODO: mw gen orm entity!
 export const mountORMCommand = (): ICommandInstance => {
   // TODO: 从接口中直接生成选项
 
+  // TODO: setup / entity options
+  const baseOptions = {
+    dry: {
+      usage: '',
+    },
+    class: {
+      usage: '',
+    },
+    dotFile: { usage: '' },
+    override: { usage: '' },
+    file: { usage: '' },
+    dir: { usage: '' },
+    light: { usage: '' },
+  };
+
   return {
     orm: {
-      usage: 'controller genrator',
+      usage: 'orm genrator',
       lifecycleEvents: ['gen'],
       commands: {
         setup: {
           lifecycleEvents: ['gen'],
-          opts: {
-            dry: {
-              usage: '',
-            },
-            class: {
-              usage: '',
-            },
-            dotFile: { usage: '' },
-            override: { usage: '' },
-            file: { usage: '' },
-            dir: { usage: '' },
-            light: { usage: '' },
-          },
+          opts: baseOptions,
+        },
+        entity: {
+          lifecycleEvents: ['gen'],
+          opts: baseOptions,
+        },
+        subscriber: {
+          lifecycleEvents: ['gen'],
+          opts: baseOptions,
         },
       },
     },
