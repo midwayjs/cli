@@ -15,11 +15,15 @@ import {
   middlewareHandler,
 } from './core/internal/middleware.handler';
 import {
+  mountServerlessCommand,
+  serverlessHandler,
+} from './core/internal/serverless.handler';
+
+import {
   mountORMCommand,
   ormHandler,
   TypeORMGeneratorType,
 } from './core/external/orm.handler';
-
 import { mountDebugCommand, debugHandler } from './core/internal/debug.handler';
 import { mountAxiosCommand, axiosHandler } from './core/external/axios.handler';
 
@@ -31,10 +35,13 @@ export class GeneratorPlugin extends BasePlugin {
       usage: 'generator tmp',
       lifecycleEvents: ['gen'],
       commands: {
+        // internal
         ...mountControllerCommand(),
         ...mountServiceCommand(),
         ...mountDebugCommand(),
         ...mountMiddlewareCommand(),
+        ...mountServerlessCommand(),
+        // external
         ...mountORMCommand(),
         ...mountAxiosCommand(),
       },
@@ -42,11 +49,17 @@ export class GeneratorPlugin extends BasePlugin {
   };
 
   hooks = {
+    // entry
     'gen:gen': this.noGeneratorSpecifiedHandler.bind(this),
+    // internal
     'gen:controller:gen': this.controllerHandler.bind(this),
     'gen:service:gen': this.serviceHandler.bind(this),
     'gen:debug:gen': this.debugHandler.bind(this),
     'gen:middleware:gen': this.middlewareHandler.bind(this),
+    'gen:sls:gen': this.serverlessHandler.bind(this),
+
+    // external
+    // orm
     'gen:orm:gen': this.ormHandler.bind(this),
     'gen:orm:setup:gen': this.ormHandler.bind(this, TypeORMGeneratorType.SETUP),
     'gen:orm:entity:gen': this.ormHandler.bind(
@@ -57,7 +70,9 @@ export class GeneratorPlugin extends BasePlugin {
       this,
       TypeORMGeneratorType.SUBSCRIBER
     ),
+    // axios
     'gen:axios:gen': this.axiosHandler.bind(this),
+    //
   };
 
   async controllerHandler() {
@@ -74,6 +89,10 @@ export class GeneratorPlugin extends BasePlugin {
 
   async middlewareHandler() {
     await middlewareHandler(this.core, this.options);
+  }
+
+  async serverlessHandler() {
+    await serverlessHandler(this.core, this.options);
   }
 
   async ormHandler(type?: TypeORMGeneratorType) {
