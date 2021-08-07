@@ -19,28 +19,19 @@ import {
 } from '../utils';
 import pick from 'lodash/pick';
 
-export interface AxiosOptions extends Pick<GeneratorSharedOptions, 'dry'> {
-  /**
-   * @description Import namespace for @midwayjs/axios import
-   * @value axios
-   */
-  namespace: string;
-}
+export interface CacheOptions extends Pick<GeneratorSharedOptions, 'dry'> {}
 
-const AXIOS_DEP = '@midwayjs/axios';
+const CACHE_DEP = ['@midwayjs/cache', 'cache-manager'];
+const CACHE_DEV_DEP = ['@types/cache-manager'];
 
-export const mountAxiosCommand = (): ICommandInstance => {
+export const mountCacheCommand = (): ICommandInstance => {
   // TODO: 从接口中直接生成选项
 
-  const writerSharedOptions = {
-    namespace: {
-      usage: 'Import namespace for @midwayjs/axios import ',
-    },
-  };
+  const writerSharedOptions = {};
 
   return {
-    axios: {
-      usage: 'axios genrator',
+    cache: {
+      usage: 'cache genrator',
       lifecycleEvents: ['gen'],
       opts: {
         ...pick(sharedOption, ['dry']),
@@ -50,14 +41,14 @@ export const mountAxiosCommand = (): ICommandInstance => {
   };
 };
 
-export async function axiosHandlerCore(
+export async function cacheHandlerCore(
   { cwd: projectDirPath }: ICoreInstance,
-  opts: AxiosOptions
+  opts: CacheOptions
 ) {
   consola.info(`Project location: ${chalk.green(projectDirPath)}`);
 
   const { dry } = applyDefaultValueToSharedOption(opts);
-  const { namespace = 'orm' } = opts;
+  const {} = opts;
 
   if (dry) {
     consola.success('Executing in `dry run` mode, nothing will happen.');
@@ -65,7 +56,11 @@ export async function axiosHandlerCore(
 
   dry
     ? consola.info('`[DryRun]` Skip dependencies installation check.')
-    : await ensureDepsInstalled(AXIOS_DEP, projectDirPath);
+    : await ensureDepsInstalled(CACHE_DEP, projectDirPath);
+
+  dry
+    ? consola.info('`[DryRun]` Skip devDependencies installation check.')
+    : await ensureDepsInstalled(CACHE_DEV_DEP, projectDirPath);
 
   if (!dry) {
     consola.info('Source code will be transformed.');
@@ -90,8 +85,8 @@ export async function axiosHandlerCore(
 
     addImportDeclaration(
       configurationSource,
-      namespace,
-      '@midwayjs/orm',
+      'cache',
+      '@midwayjs/cache',
       ImportType.NAMESPACE_IMPORT
     );
 
@@ -99,7 +94,7 @@ export async function axiosHandlerCore(
       configurationSource,
       'Configuration',
       'imports',
-      namespace
+      'cache'
     );
 
     formatTSFile(configurationPath);
@@ -109,5 +104,5 @@ export async function axiosHandlerCore(
 }
 
 export async function axiosHandler(...args: unknown[]) {
-  await generatorInvokeWrapper(axiosHandlerCore, ...args);
+  await generatorInvokeWrapper(cacheHandlerCore, ...args);
 }

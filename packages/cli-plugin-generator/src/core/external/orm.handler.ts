@@ -170,26 +170,45 @@ export async function ormHandlerCore(
         ? consola.info('`[DryRun]` Skip dependencies installation check.')
         : await ensureDepsInstalled(ORM_PKG, projectDirPath);
 
-      const project = new Project();
-
-      const configPath = path.resolve(
-        projectDirPath,
-        './src/config/config.default.ts'
-      );
-
-      const configSource = project.addSourceFileAtPath(configPath);
-
-      const configurationPath = path.resolve(
-        projectDirPath,
-        './src/configuration.ts'
-      );
-
       if (!dry) {
         consola.info('Source code will be transformed.');
+
+        const project = new Project();
+
+        const configPath = path.resolve(
+          projectDirPath,
+          './src/config/config.default.ts'
+        );
+
+        if (!fs.existsSync(configPath)) {
+          consola.error(
+            `Cannot find ${chalk.cyan('configuration.ts')} in ${chalk.green(
+              configPath
+            )}`
+          );
+          process.exit(0);
+        }
+
+        const configSource = project.addSourceFileAtPath(configPath);
+
         // 新增export const orm = {}
         addConstExport(configSource, 'orm', { type: 'sqlite' });
 
         formatTSFile(configPath);
+
+        const configurationPath = path.resolve(
+          projectDirPath,
+          './src/configuration.ts'
+        );
+
+        if (!fs.existsSync(configurationPath)) {
+          consola.error(
+            `Cannot find ${chalk.cyan('configuration.ts')} in ${chalk.green(
+              configurationPath
+            )}`
+          );
+          process.exit(0);
+        }
 
         const configurationSource =
           project.addSourceFileAtPath(configurationPath);
