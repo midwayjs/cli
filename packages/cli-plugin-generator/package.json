@@ -5,6 +5,7 @@
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/command-core": "^1.2.76",
+    "@midwayjs/orm": "^2.12.1",
     "@midwayjs/serverless-spec-builder": "^1.2.78-beta.2",
     "chalk": "^4.1.2",
     "consola": "^2.15.3",
@@ -17,6 +18,7 @@
     "jsonfile": "^6.1.0",
     "lodash": "^4.17.21",
     "read-pkg": "^6.0.0",
+    "sqlite": "^4.0.23",
     "strip-comments": "^2.0.1",
     "strip-indent": "^4.0.0",
     "ts-morph": "^11.0.3",

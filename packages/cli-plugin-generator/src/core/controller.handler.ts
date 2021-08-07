@@ -60,8 +60,6 @@ export async function controllerHandlerCore(
     opts.class = await inputPromptStringValue('controller name');
   }
 
-  // apply default value
-
   opts.dotFile = opts.dotFile ?? true;
   opts.dry = opts.dry ?? false;
   opts.dir = opts.dir ?? 'controller';

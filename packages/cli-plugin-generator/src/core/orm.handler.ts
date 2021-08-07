@@ -254,6 +254,7 @@ export async function ormHandlerCore(
 
       const outputContent = prettier.format(renderedTemplate, {
         parser: 'typescript',
+        singleQuote: true,
       });
 
       const generatedPath = path.resolve(
