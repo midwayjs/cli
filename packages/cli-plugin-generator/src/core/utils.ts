@@ -62,11 +62,11 @@ export const applyFalsyDefaultValue = (val?: boolean) => {
 
 // TODO: pick by value
 export const applyDefaultValueToSharedOption = (
-  shared: GeneratorSharedOptions
+  shared: Partial<GeneratorSharedOptions>
 ): Record<'dry' | 'dotFile' | 'override', boolean> => {
   return {
-    dry: applyFalsyDefaultValue(shared.dry),
-    dotFile: applyTruthyDefaultValue(shared.dotFile),
-    override: applyFalsyDefaultValue(shared.override),
+    dry: applyFalsyDefaultValue(shared.dry ?? false),
+    dotFile: applyTruthyDefaultValue(shared.dotFile ?? true),
+    override: applyFalsyDefaultValue(shared.override ?? false),
   };
 };

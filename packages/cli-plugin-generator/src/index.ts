@@ -15,6 +15,7 @@ import {
   mountServiceCommand,
   serviceHandler,
 } from './core/internal/service.handler';
+import { mountDebugCommand, debugHandler } from './core/internal/debug.handler';
 
 // midway-bin gen -> prompt
 
@@ -26,6 +27,7 @@ export class GeneratorPlugin extends BasePlugin {
       commands: {
         ...mountControllerCommand(),
         ...mountServiceCommand(),
+        ...mountDebugCommand(),
         ...mountORMCommand(),
       },
     },
@@ -35,6 +37,7 @@ export class GeneratorPlugin extends BasePlugin {
     'gen:gen': this.noGeneratorSpecifiedHandler.bind(this),
     'gen:controller:gen': this.controllerHandler.bind(this),
     'gen:service:gen': this.serviceHandler.bind(this),
+    'gen:debug:gen': this.debugHandler.bind(this),
     'gen:orm:gen': this.ormHandler.bind(this),
     'gen:orm:setup:gen': this.ormHandler.bind(this, TypeORMGeneratorType.SETUP),
     'gen:orm:entity:gen': this.ormHandler.bind(
@@ -53,6 +56,10 @@ export class GeneratorPlugin extends BasePlugin {
 
   async serviceHandler() {
     await serviceHandler(this.core, this.options);
+  }
+
+  async debugHandler() {
+    await debugHandler(this.core, this.options);
   }
 
   async ormHandler(type?: TypeORMGeneratorType) {
