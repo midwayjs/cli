@@ -23,3 +23,50 @@ export interface GeneratorSharedOptions {
    */
   dir: string;
 }
+
+export const sharedOption: Record<
+  keyof GeneratorSharedOptions,
+  { usage: string }
+> = {
+  dry: {
+    usage: 'Invoke generator in dry run mode',
+  },
+  dotFile: {
+    usage: 'Use dot file name like `user.service.ts`',
+  },
+  override: {
+    usage: 'Override when file exist',
+  },
+  file: {
+    usage: 'Customize generated file name',
+  },
+  dir: {
+    usage: 'Customize generated dir (relative to `PROJECT/src`)',
+  },
+};
+
+// true / "true" -> true
+// false / "false" -> false
+// other("xxxx") -> true
+export const ensureBooleanType = (val: string | boolean): boolean => {
+  return typeof val === 'boolean' ? val : val !== 'false';
+};
+
+export const applyTruthyDefaultValue = (val?: boolean) => {
+  return val ?? true;
+};
+
+export const applyFalsyDefaultValue = (val?: boolean) => {
+  return val ?? false;
+};
+
+// TODO: pick by value
+export const applyDefaultValueToSharedOption = (
+  shared: GeneratorSharedOptions
+): Record<'dry' | 'dotFile' | 'override', boolean> => {
+  return {
+    dry: applyFalsyDefaultValue(shared.dry),
+    dotFile: applyTruthyDefaultValue(shared.dotFile),
+    override: applyFalsyDefaultValue(shared.override),
+  };
+};

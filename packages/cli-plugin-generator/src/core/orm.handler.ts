@@ -1,3 +1,4 @@
+import { ControllerOptions } from './controller.handler';
 import { ICommandInstance, ICoreInstance } from '@midwayjs/command-core';
 
 import path from 'path';
@@ -7,7 +8,6 @@ import consola from 'consola';
 import chalk from 'chalk';
 import { compile as EJSCompile } from 'ejs';
 import { Project } from 'ts-morph';
-
 import prettier from 'prettier';
 import { inputPromptStringValue, formatTSFile, names } from '../lib/helper';
 
@@ -21,7 +21,37 @@ import {
 } from '../lib/ast';
 import { generatorInvokeWrapper } from '../lib/wrapper';
 
-import { GeneratorSharedOptions } from './utils';
+import {
+  GeneratorSharedOptions,
+  sharedOption,
+  applyTruthyDefaultValue,
+  applyFalsyDefaultValue,
+  ensureBooleanType,
+  applyDefaultValueToSharedOption,
+} from './utils';
+import pick from 'lodash/pick';
+
+export interface ORMOptions extends GeneratorSharedOptions {
+  /**
+   * @description Use Active-Record mode in entity class
+   * @value true
+   */
+  activeRecord?: boolean;
+  /**
+   * @description Generate relation sample props in entity class
+   * @value true
+   */
+  relation?: boolean;
+  /**
+   * @description Listen to transaction in subscriber ckass
+   * @value true
+   */
+  transaction?: boolean;
+  /**
+   * @description Class identifier, works in entity / subscriber
+   */
+  class?: string;
+}
 
 export enum TypeORMGeneratorType {
   SETUP = 'setup',
@@ -29,49 +59,22 @@ export enum TypeORMGeneratorType {
   SUBSCRIBER = 'subscriber',
 }
 
-export interface ORMOptions extends GeneratorSharedOptions {
-  /**
-   * @description Use Active-Record mode in entity class
-   * @value true
-   */
-  activeRecord: boolean;
-  /**
-   * @description Generate relation sample props in entity class
-   * @value true
-   */
-  relation: boolean;
-  /**
-   * @description Listen to transaction in subscriber ckass
-   * @value true
-   */
-  transaction: boolean;
-  /**
-   * @description Class identifier, works in entity / subscriber
-   */
-  class: string;
-}
-
 const DEFAULT_ENTITY_DIR_PATH = 'entity';
 const DEFAULT_SUBSCRIBER_DIR_PATH = 'entity/subscriber';
 const ORM_PKG = ['@midwayjs/orm', 'sqlite'];
 
-// TODO: mw gen orm entity!
+export const WriterGenerator: TypeORMGeneratorType[] = [
+  TypeORMGeneratorType.ENTITY,
+  TypeORMGeneratorType.SUBSCRIBER,
+];
+
 export const mountORMCommand = (): ICommandInstance => {
   // TODO: 从接口中直接生成选项
 
-  // TODO: setup / entity options
-  const baseOptions = {
-    dry: {
-      usage: '',
-    },
+  const writerSharedOptions = {
     class: {
-      usage: '',
+      usage: 'Class identifier, works in entity / subscriber',
     },
-    dotFile: { usage: '' },
-    override: { usage: '' },
-    file: { usage: '' },
-    dir: { usage: '' },
-    light: { usage: '' },
   };
 
   return {
@@ -81,15 +84,33 @@ export const mountORMCommand = (): ICommandInstance => {
       commands: {
         setup: {
           lifecycleEvents: ['gen'],
-          opts: baseOptions,
+          opts: {
+            // TODO: option: driver / orm config namespac
+            ...pick(sharedOption, 'dry'),
+          },
         },
         entity: {
           lifecycleEvents: ['gen'],
-          opts: baseOptions,
+          opts: {
+            ...sharedOption,
+            ...writerSharedOptions,
+            activeRecord: {
+              usage: 'Use Active-Record mode in entity class',
+            },
+            relation: {
+              usage: 'Generate relation sample props in entity class',
+            },
+          },
         },
         subscriber: {
           lifecycleEvents: ['gen'],
-          opts: baseOptions,
+          opts: {
+            ...sharedOption,
+            ...writerSharedOptions,
+            transaction: {
+              usage: 'Listen to transaction in subscriber ckass',
+            },
+          },
         },
       },
     },
@@ -103,7 +124,6 @@ export async function ormHandlerCore(
 ) {
   consola.info(`Project location: ${chalk.green(projectDirPath)}`);
 
-  // undefined type -> prompt
   if (!type) {
     consola.info('Choose generator type:');
     type = (
@@ -114,28 +134,36 @@ export async function ormHandlerCore(
           choices: ['setup', 'entity', 'subscriber'] as TypeORMGeneratorType[],
         },
       ])
-    ).type;
+    ).type as TypeORMGeneratorType;
   }
 
-  if (['entity', 'subscriber'].includes(type) && !opts.class) {
+  if (WriterGenerator.includes(type) && !opts.class) {
     consola.warn(`${capitalCase(type)} name cannot be empty!`);
     opts.class = await inputPromptStringValue(`${type} name`, 'sample');
   }
 
-  opts.dotFile = opts.dotFile ?? true;
-  opts.dry = opts.dry ?? false;
-  opts.override = opts.override ?? false;
-  opts.activeRecord = opts.activeRecord ?? true;
-  opts.relation = opts.relation ?? false;
-  opts.transaction = opts.transaction ?? true;
+  const { dry, dotFile, override } = applyDefaultValueToSharedOption(opts);
 
-  // modify names internal
+  // NOTE: If specified, will be either "true" (--activeRecord true) or true (--activeRecord)
+  const activeRecord = opts.activeRecord
+    ? ensureBooleanType(opts.activeRecord)
+    : applyTruthyDefaultValue(opts.activeRecord);
+
+  const relation = opts.relation
+    ? ensureBooleanType(opts.relation)
+    : applyTruthyDefaultValue(opts.relation);
+
+  const transaction = opts.transaction
+    ? ensureBooleanType(opts.transaction)
+    : applyTruthyDefaultValue(opts.transaction);
+
+  // TODO: modify names internal for skip
   const nameNames = names(opts.class ?? '__SKIP__');
   const fileNameNames = names(opts.file ?? opts.class ?? '__SKIP__');
 
   switch (type) {
     case TypeORMGeneratorType.SETUP:
-      opts.dry
+      dry
         ? consola.info('`[DryRun]` Skip dependencies installation check.')
         : await ensureDepsInstalled(ORM_PKG, projectDirPath);
 
@@ -153,7 +181,7 @@ export async function ormHandlerCore(
         './src/configuration.ts'
       );
 
-      if (!opts.dry) {
+      if (!dry) {
         consola.info('Source code will be transformed.');
         // 新增export const orm = {}
         addConstExport(configSource, 'orm', { type: 'sqlite' });
@@ -198,8 +226,7 @@ export async function ormHandlerCore(
           : DEFAULT_SUBSCRIBER_DIR_PATH
       );
 
-      // use functions?
-      const writeFileName = opts.dotFile
+      const writeFileName = dotFile
         ? `${fileNameNames.fileName}.${entityMode ? 'entity' : 'subscriber'}`
         : fileNameNames.fileName;
 
@@ -209,7 +236,7 @@ export async function ormHandlerCore(
             __dirname,
             `../templates/typeorm/${
               entityMode
-                ? opts.relation
+                ? relation
                   ? 'relation-entity.ts.ejs'
                   : 'plain-entity.ts.ejs'
                 : 'subscriber.ts.ejs'
@@ -220,9 +247,9 @@ export async function ormHandlerCore(
         {}
       )({
         entity: nameNames.className,
-        activeRecord: opts.activeRecord,
+        activeRecord,
         subscriber: nameNames.className,
-        transaction: opts.transaction,
+        transaction,
       });
 
       const outputContent = prettier.format(renderedTemplate, {
@@ -240,28 +267,28 @@ export async function ormHandlerCore(
         )} will be created in ${chalk.green(generatedPath)}`
       );
 
-      if (!opts.dry) {
+      if (!dry) {
         fs.ensureFileSync(generatedPath);
         fs.writeFileSync(generatedPath, outputContent);
       } else {
         consola.success('TypeORM generator invoked with:');
-        consola.info(`type: ${chalk.cyan(capitalCase(type))}`);
-        consola.info(`name: ${chalk.cyan(opts.class)}`);
+        consola.info(`Type: ${chalk.cyan(capitalCase(type))}`);
+        consola.info(`Class Name: ${chalk.cyan(opts.class)}`);
 
         if (type === TypeORMGeneratorType.ENTITY) {
-          consola.info(`active record: ${chalk.cyan(opts.activeRecord)}`);
-          consola.info(`relation: ${chalk.cyan(opts.relation)}`);
+          consola.info(`Active Record: ${chalk.cyan(activeRecord)}`);
+          consola.info(`Relation: ${chalk.cyan(relation)}`);
         }
 
         if (type === TypeORMGeneratorType.SUBSCRIBER) {
-          consola.info(`transaction: ${chalk.cyan(opts.transaction)}`);
+          consola.info(`Transaction: ${chalk.cyan(transaction)}`);
         }
 
-        consola.info(`dot name: ${chalk.cyan(opts.dotFile)}`);
+        consola.info(`Dot File: ${chalk.cyan(dotFile)}`);
 
-        consola.info(`dir: ${chalk.cyan(dir)}`);
-        consola.info(`file name: ${chalk.cyan(fileNameNames.fileName)}`);
-        opts.dir && consola.info(`dir: ${chalk.cyan(opts.dir)}`);
+        consola.info(`Dir: ${chalk.cyan(dir)}`);
+        consola.info(`Input File Name: ${chalk.cyan(fileNameNames.fileName)}`);
+        consola.info(`Generated File Name: ${chalk.cyan(writeFileName)}`);
 
         consola.info(`File will be created: ${chalk.green(generatedPath)}`);
       }

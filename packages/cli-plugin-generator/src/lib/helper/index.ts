@@ -73,12 +73,21 @@ type Names = Record<
 // dotName -> dotCase
 // fileName -> lowerCase
 // constantName -> constantCase
-export const names = (origin: string): Names => ({
-  className: capitalCase(origin),
-  dotName: dotCase(origin),
-  fileName: lowerCase(origin),
-  constantName: constantCase(origin),
-});
+
+// export const NAME_SKIP_FLAG = '__SKIP__';
+
+// export function names(origin: string): Names;
+
+// export function names(origin: string, flag: typeof NAME_SKIP_FLAG): undefined;
+
+export function names(origin: string): Names | undefined {
+  return {
+    className: capitalCase(origin),
+    dotName: dotCase(origin),
+    fileName: lowerCase(origin),
+    constantName: constantCase(origin),
+  };
+}
 
 export const updateGitIgnore = (patterns: string[]) => {
   const pathUnderGitControl = findUp.sync(['.git'], {

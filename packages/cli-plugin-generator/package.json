@@ -19,7 +19,8 @@
     "read-pkg": "^6.0.0",
     "strip-comments": "^2.0.1",
     "strip-indent": "^4.0.0",
-    "ts-morph": "^11.0.3"
+    "ts-morph": "^11.0.3",
+    "ts-transformer-keys": "^0.4.3"
   },
   "devDependencies": {
     "@types/ejs": "^3.0.7",
