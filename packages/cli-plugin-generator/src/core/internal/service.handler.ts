@@ -1,12 +1,12 @@
 import { ICommandInstance, ICoreInstance } from '@midwayjs/command-core';
 import consola from 'consola';
 import prettier from 'prettier';
-import { inputPromptStringValue, names } from '../lib/helper';
+import { inputPromptStringValue, names } from '../../lib/helper';
 import chalk from 'chalk';
 import path from 'path';
 import fs from 'fs-extra';
 import { compile as EJSCompile } from 'ejs';
-import { generatorInvokeWrapper } from '../lib/wrapper';
+import { generatorInvokeWrapper } from '../../lib/wrapper';
 import {
   GeneratorSharedOptions,
   sharedOption,
@@ -14,33 +14,25 @@ import {
   applyFalsyDefaultValue,
   ensureBooleanType,
   applyDefaultValueToSharedOption,
-} from './utils';
+} from '../utils';
 
-export interface ControllerOptions extends GeneratorSharedOptions {
-  /**
-   * @description Use simplest template
-   * @value false
-   */
-  light: boolean;
+export interface ServiceOptions extends GeneratorSharedOptions {
   /**
    * @description Class identifier
    */
   class: string;
 }
 
-export const mountControllerCommand = (): ICommandInstance => {
-  // TODO: 从接口中直接生成选项
-
+export const mountServiceCommand = (): ICommandInstance => {
   const writerSharedOptions = {
     class: {
       usage: 'Class identifier',
     },
-    light: { usage: 'Use simplest template' },
   };
 
   return {
-    controller: {
-      usage: 'controller genrator',
+    service: {
+      usage: 'service genrator',
       lifecycleEvents: ['gen'],
       opts: {
         ...sharedOption,
@@ -50,9 +42,9 @@ export const mountControllerCommand = (): ICommandInstance => {
   };
 };
 
-export async function controllerHandlerCore(
+export async function serviceHandlerCore(
   { cwd: projectDirPath }: ICoreInstance,
-  opts: ControllerOptions
+  opts: ServiceOptions
 ) {
   consola.info(`Project location: ${chalk.green(projectDirPath)}`);
 
@@ -63,35 +55,29 @@ export async function controllerHandlerCore(
   }
 
   if (!opts.class) {
-    consola.warn('Controller name cannot be empty!');
-    opts.class = await inputPromptStringValue('controller name', 'sample');
+    consola.warn('Service name cannot be empty!');
+    opts.class = await inputPromptStringValue('service name', 'sample');
   }
 
-  const light = opts.light
-    ? ensureBooleanType(opts.light)
-    : applyFalsyDefaultValue(opts.light);
+  const dir = opts.dir ?? 'service';
 
-  const dir = opts.dir ?? 'controller';
-
-  const controllerNames = names(opts.class);
+  const serviceNames = names(opts.class);
   const fileNameNames = names(opts.file ?? opts.class);
 
   const fileName = dotFile
-    ? `${fileNameNames.fileName}.controller`
+    ? `${fileNameNames.fileName}.service`
     : fileNameNames.fileName;
 
-  const controllerFilePath = path.resolve(
+  const serviceFilePath = path.resolve(
     projectDirPath,
     'src',
     dir,
     `${fileName}.ts`
   );
 
-  consola.info(
-    `Controller will be created in ${chalk.green(controllerFilePath)}`
-  );
+  consola.info(`Service will be created in ${chalk.green(serviceFilePath)}`);
 
-  const exist = fs.existsSync(controllerFilePath);
+  const exist = fs.existsSync(serviceFilePath);
 
   if (exist && !override) {
     consola.error('File exist, enable `--override` to override existing file.');
@@ -102,16 +88,11 @@ export async function controllerHandlerCore(
 
   const renderedTemplate = EJSCompile(
     fs.readFileSync(
-      path.join(
-        __dirname,
-        `../templates/controller/${
-          light ? 'controller.ts.ejs' : 'controller-full.ts.ejs'
-        }`
-      ),
+      path.join(__dirname, `../../templates/service/service.ts.ejs`),
       { encoding: 'utf8' }
     ),
     {}
-  )({ name: controllerNames.className });
+  )({ name: serviceNames.className });
 
   const outputContent = prettier.format(renderedTemplate, {
     parser: 'typescript',
@@ -119,23 +100,21 @@ export async function controllerHandlerCore(
   });
 
   if (!dry) {
-    fs.ensureFileSync(controllerFilePath);
-    fs.writeFileSync(controllerFilePath, outputContent);
+    fs.ensureFileSync(serviceFilePath);
+    fs.writeFileSync(serviceFilePath, outputContent);
   } else {
-    consola.success('Controller generator invoked with:');
+    consola.success('Service generator invoked with:');
     consola.info(`Class Name: ${chalk.cyan(opts.class)}`);
-
-    consola.info(`Light: ${chalk.cyan(light)}`);
 
     consola.info(`Override: ${chalk.cyan(override)}`);
     consola.info(`Dot File: ${chalk.cyan(dotFile)}`);
     consola.info(`Dir: ${chalk.cyan(dir)}`);
     consola.info(`Generated File Name: ${chalk.cyan(fileNameNames.fileName)}`);
 
-    consola.info(`File will be created: ${chalk.green(controllerFilePath)}`);
+    consola.info(`File will be created: ${chalk.green(serviceFilePath)}`);
   }
 }
 
-export async function controllerHandler(...args: unknown[]) {
-  await generatorInvokeWrapper(controllerHandlerCore, ...args);
+export async function serviceHandler(...args: unknown[]) {
+  await generatorInvokeWrapper(serviceHandlerCore, ...args);
 }

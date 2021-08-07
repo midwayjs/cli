@@ -29,14 +29,6 @@ export function readPackageSync({
   return json;
 }
 
-// true -> true
-// "true" -> true
-// "false" -> false
-// false -> false
-export const ensureBooleanType = (value: boolean | string) => {
-  return value === true || value === 'true';
-};
-
 export function stripIndent(string: string) {
   const indent = minIndent(string);
 

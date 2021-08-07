@@ -1,23 +1,20 @@
 import { BasePlugin } from '@midwayjs/command-core';
 import consola from 'consola';
-import prettier from 'prettier';
 import inquirer from 'inquirer';
-import { inputPromptStringValue, names } from './lib/helper';
 import chalk from 'chalk';
-import path from 'path';
-import fs from 'fs-extra';
-import { compile as EJSCompile } from 'ejs';
-
 import {
   mountControllerCommand,
   controllerHandler,
-} from './core/controller.handler';
-
+} from './core/internal/controller.handler';
 import {
   mountORMCommand,
   ormHandler,
   TypeORMGeneratorType,
-} from './core/orm.handler';
+} from './core/external/orm.handler';
+import {
+  mountServiceCommand,
+  serviceHandler,
+} from './core/internal/service.handler';
 
 // midway-bin gen -> prompt
 
@@ -28,6 +25,7 @@ export class GeneratorPlugin extends BasePlugin {
       lifecycleEvents: ['gen'],
       commands: {
         ...mountControllerCommand(),
+        ...mountServiceCommand(),
         ...mountORMCommand(),
       },
     },
@@ -36,6 +34,7 @@ export class GeneratorPlugin extends BasePlugin {
   hooks = {
     'gen:gen': this.noGeneratorSpecifiedHandler.bind(this),
     'gen:controller:gen': this.controllerHandler.bind(this),
+    'gen:service:gen': this.serviceHandler.bind(this),
     'gen:orm:gen': this.ormHandler.bind(this),
     'gen:orm:setup:gen': this.ormHandler.bind(this, TypeORMGeneratorType.SETUP),
     'gen:orm:entity:gen': this.ormHandler.bind(
@@ -50,6 +49,10 @@ export class GeneratorPlugin extends BasePlugin {
 
   async controllerHandler() {
     await controllerHandler(this.core, this.options);
+  }
+
+  async serviceHandler() {
+    await serviceHandler(this.core, this.options);
   }
 
   async ormHandler(type?: TypeORMGeneratorType) {

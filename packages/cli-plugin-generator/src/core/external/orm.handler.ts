@@ -1,4 +1,3 @@
-import { ControllerOptions } from './controller.handler';
 import { ICommandInstance, ICoreInstance } from '@midwayjs/command-core';
 
 import path from 'path';
@@ -9,17 +8,17 @@ import chalk from 'chalk';
 import { compile as EJSCompile } from 'ejs';
 import { Project } from 'ts-morph';
 import prettier from 'prettier';
-import { inputPromptStringValue, formatTSFile, names } from '../lib/helper';
+import { inputPromptStringValue, formatTSFile, names } from '../../lib/helper';
 
-import { capitalCase } from '../lib/case';
-import { ensureDepsInstalled } from '../lib/package';
+import { capitalCase } from '../../lib/case';
+import { ensureDepsInstalled } from '../../lib/package';
 import {
   addConstExport,
   updateDecoratorArrayArgs,
   addImportDeclaration,
   ImportType,
-} from '../lib/ast';
-import { generatorInvokeWrapper } from '../lib/wrapper';
+} from '../../lib/ast';
+import { generatorInvokeWrapper } from '../../lib/wrapper';
 
 import {
   GeneratorSharedOptions,
@@ -28,7 +27,7 @@ import {
   applyFalsyDefaultValue,
   ensureBooleanType,
   applyDefaultValueToSharedOption,
-} from './utils';
+} from '../utils';
 import pick from 'lodash/pick';
 
 export interface ORMOptions extends GeneratorSharedOptions {
@@ -238,7 +237,7 @@ export async function ormHandlerCore(
         fs.readFileSync(
           path.join(
             __dirname,
-            `../templates/typeorm/${
+            `../../templates/typeorm/${
               entityMode
                 ? relation
                   ? 'relation-entity.ts.ejs'
