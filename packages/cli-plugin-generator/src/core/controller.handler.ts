@@ -7,7 +7,14 @@ import path from 'path';
 import fs from 'fs-extra';
 import { compile as EJSCompile } from 'ejs';
 import { generatorInvokeWrapper } from '../lib/wrapper';
-import { GeneratorSharedOptions } from './utils';
+import {
+  GeneratorSharedOptions,
+  sharedOption,
+  applyTruthyDefaultValue,
+  applyFalsyDefaultValue,
+  ensureBooleanType,
+  applyDefaultValueToSharedOption,
+} from './utils';
 
 export interface ControllerOptions extends GeneratorSharedOptions {
   /**
@@ -24,22 +31,20 @@ export interface ControllerOptions extends GeneratorSharedOptions {
 export const mountControllerCommand = (): ICommandInstance => {
   // TODO: 从接口中直接生成选项
 
+  const writerSharedOptions = {
+    class: {
+      usage: 'Class identifier',
+    },
+    light: { usage: 'Use simplest template' },
+  };
+
   return {
     controller: {
       usage: 'controller genrator',
       lifecycleEvents: ['gen'],
       opts: {
-        dry: {
-          usage: '',
-        },
-        class: {
-          usage: '',
-        },
-        dotFile: { usage: '' },
-        override: { usage: '' },
-        file: { usage: '' },
-        dir: { usage: '' },
-        light: { usage: '' },
+        ...sharedOption,
+        ...writerSharedOptions,
       },
     },
   };
@@ -51,32 +56,34 @@ export async function controllerHandlerCore(
 ) {
   consola.info(`Project location: ${chalk.green(projectDirPath)}`);
 
-  if (opts.dry) {
+  const { dry, dotFile, override } = applyDefaultValueToSharedOption(opts);
+
+  if (dry) {
     consola.success('Executing in `dry run` mode, nothing will happen.');
   }
 
   if (!opts.class) {
     consola.warn('Controller name cannot be empty!');
-    opts.class = await inputPromptStringValue('controller name');
+    opts.class = await inputPromptStringValue('controller name', 'sample');
   }
 
-  opts.dotFile = opts.dotFile ?? true;
-  opts.dry = opts.dry ?? false;
-  opts.dir = opts.dir ?? 'controller';
-  opts.override = opts.override ?? false;
-  opts.light = opts.light ?? false;
+  const light = opts.light
+    ? ensureBooleanType(opts.light)
+    : applyFalsyDefaultValue(opts.light);
+
+  const dir = opts.dir ?? 'controller';
 
   const controllerNames = names(opts.class);
   const fileNameNames = names(opts.file ?? opts.class);
 
-  const fileName = opts.dotFile
+  const fileName = dotFile
     ? `${fileNameNames.fileName}.controller`
     : fileNameNames.fileName;
 
   const controllerFilePath = path.resolve(
     projectDirPath,
     'src',
-    opts.dir,
+    dir,
     `${fileName}.ts`
   );
 
@@ -86,7 +93,7 @@ export async function controllerHandlerCore(
 
   const exist = fs.existsSync(controllerFilePath);
 
-  if (exist && !opts.override) {
+  if (exist && !override) {
     consola.error('File exist, enable `--override` to override existing file.');
     process.exit(0);
   } else if (exist) {
@@ -98,7 +105,7 @@ export async function controllerHandlerCore(
       path.join(
         __dirname,
         `../templates/controller/${
-          opts.light ? 'controller.ts.ejs' : 'controller-full.ts.ejs'
+          light ? 'controller.ts.ejs' : 'controller-full.ts.ejs'
         }`
       ),
       { encoding: 'utf8' }
@@ -111,17 +118,19 @@ export async function controllerHandlerCore(
     singleQuote: true,
   });
 
-  if (!opts.dry) {
+  if (!dry) {
     fs.ensureFileSync(controllerFilePath);
     fs.writeFileSync(controllerFilePath, outputContent);
   } else {
     consola.success('Controller generator invoked with:');
-    consola.info(`name: ${chalk.cyan(opts.class)}`);
-    consola.info(`light: ${chalk.cyan(opts.light)}`);
-    consola.info(`dot name: ${chalk.cyan(opts.dotFile)}`);
-    consola.info(`override: ${chalk.cyan(opts.override)}`);
-    consola.info(`file name: ${chalk.cyan(fileNameNames.fileName)}`);
-    consola.info(`dir: ${chalk.cyan(opts.dir)}`);
+    consola.info(`Class Name: ${chalk.cyan(opts.class)}`);
+
+    consola.info(`Light: ${chalk.cyan(light)}`);
+
+    consola.info(`Override: ${chalk.cyan(override)}`);
+    consola.info(`Dot File: ${chalk.cyan(dotFile)}`);
+    consola.info(`Dir: ${chalk.cyan(dir)}`);
+    consola.info(`Generated File Name: ${chalk.cyan(fileNameNames.fileName)}`);
 
     consola.info(`File will be created: ${chalk.green(controllerFilePath)}`);
   }

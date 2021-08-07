@@ -144,6 +144,10 @@ export async function ormHandlerCore(
 
   const { dry, dotFile, override } = applyDefaultValueToSharedOption(opts);
 
+  if (dry) {
+    consola.success('Executing in `dry run` mode, nothing will happen.');
+  }
+
   // NOTE: If specified, will be either "true" (--activeRecord true) or true (--activeRecord)
   const activeRecord = opts.activeRecord
     ? ensureBooleanType(opts.activeRecord)
@@ -286,9 +290,7 @@ export async function ormHandlerCore(
         }
 
         consola.info(`Dot File: ${chalk.cyan(dotFile)}`);
-
         consola.info(`Dir: ${chalk.cyan(dir)}`);
-        consola.info(`Input File Name: ${chalk.cyan(fileNameNames.fileName)}`);
         consola.info(`Generated File Name: ${chalk.cyan(writeFileName)}`);
 
         consola.info(`File will be created: ${chalk.green(generatedPath)}`);
