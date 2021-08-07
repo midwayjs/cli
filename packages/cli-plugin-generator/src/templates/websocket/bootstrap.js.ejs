@@ -1,0 +1,11 @@
+const WebSocketFramework = require('@midwayjs/ws').Framework;
+const { Bootstrap } = require('@midwayjs/bootstrap');
+
+// 初始化 socket.io 框架
+const webSocketFramework = new WebSocketFramework().configure({
+  port: 3000
+});
+
+Bootstrap
+  .load(webSocketFramework)
+  .run();

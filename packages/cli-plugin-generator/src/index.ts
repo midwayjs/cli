@@ -32,6 +32,11 @@ import {
   mountSwaggerCommand,
   swaggerHandler,
 } from './core/external/swagger.handler';
+import {
+  mountWebSocketCommand,
+  webSocketHandler,
+  WebSocketGeneratorType,
+} from './core/external/websocket.handler';
 
 // midway-bin gen -> prompt
 
@@ -53,6 +58,7 @@ export class GeneratorPlugin extends BasePlugin {
         ...mountCacheCommand(),
         ...mountOSSCommand(),
         ...mountSwaggerCommand(),
+        ...mountWebSocketCommand(),
       },
     },
   };
@@ -87,6 +93,16 @@ export class GeneratorPlugin extends BasePlugin {
     'gen:oss:gen': this.ossHandler.bind(this),
     // swagger
     'gen:swagger:gen': this.swaggerHandler.bind(this),
+    // web socket
+    'gen:ws:gen': this.webSocketHandler.bind(this),
+    'gen:ws:setup:gen': this.webSocketHandler.bind(
+      this,
+      WebSocketGeneratorType.SETUP
+    ),
+    'gen:ws:controller:gen': this.webSocketHandler.bind(
+      this,
+      WebSocketGeneratorType.Controller
+    ),
   };
 
   async controllerHandler() {
@@ -127,6 +143,10 @@ export class GeneratorPlugin extends BasePlugin {
 
   async swaggerHandler() {
     await swaggerHandler(this.core, this.options);
+  }
+
+  async webSocketHandler(type?: WebSocketGeneratorType) {
+    await webSocketHandler(this.core, this.options, type);
   }
 
   async noGeneratorSpecifiedHandler() {
