@@ -16,6 +16,7 @@ import {
   serviceHandler,
 } from './core/internal/service.handler';
 import { mountDebugCommand, debugHandler } from './core/internal/debug.handler';
+import { mountAxiosCommand, axiosHandler } from './core/external/axios.handler';
 
 // midway-bin gen -> prompt
 
@@ -29,6 +30,7 @@ export class GeneratorPlugin extends BasePlugin {
         ...mountServiceCommand(),
         ...mountDebugCommand(),
         ...mountORMCommand(),
+        ...mountAxiosCommand(),
       },
     },
   };
@@ -48,6 +50,7 @@ export class GeneratorPlugin extends BasePlugin {
       this,
       TypeORMGeneratorType.SUBSCRIBER
     ),
+    'gen:axios:gen': this.axiosHandler.bind(this),
   };
 
   async controllerHandler() {
@@ -64,6 +67,10 @@ export class GeneratorPlugin extends BasePlugin {
 
   async ormHandler(type?: TypeORMGeneratorType) {
     await ormHandler(this.core, this.options, type);
+  }
+
+  async axiosHandler() {
+    await axiosHandler(this.core, this.options);
   }
 
   async noGeneratorSpecifiedHandler() {
