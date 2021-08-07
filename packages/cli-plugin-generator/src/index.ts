@@ -26,6 +26,8 @@ import {
 } from './core/external/orm.handler';
 import { mountDebugCommand, debugHandler } from './core/internal/debug.handler';
 import { mountAxiosCommand, axiosHandler } from './core/external/axios.handler';
+import { mountCacheCommand, cacheHandler } from './core/external/cache.handler';
+import { mountOSSCommand, ossHandler } from './core/external/oss.handler';
 
 // midway-bin gen -> prompt
 
@@ -44,6 +46,8 @@ export class GeneratorPlugin extends BasePlugin {
         // external
         ...mountORMCommand(),
         ...mountAxiosCommand(),
+        ...mountCacheCommand(),
+        ...mountOSSCommand(),
       },
     },
   };
@@ -72,7 +76,9 @@ export class GeneratorPlugin extends BasePlugin {
     ),
     // axios
     'gen:axios:gen': this.axiosHandler.bind(this),
-    //
+    // cache
+    'gen:cache:gen': this.cacheHandler.bind(this),
+    'gen:oss:gen': this.ossHandler.bind(this),
   };
 
   async controllerHandler() {
@@ -101,6 +107,14 @@ export class GeneratorPlugin extends BasePlugin {
 
   async axiosHandler() {
     await axiosHandler(this.core, this.options);
+  }
+
+  async cacheHandler() {
+    await cacheHandler(this.core, this.options);
+  }
+
+  async ossHandler() {
+    await ossHandler(this.core, this.options);
   }
 
   async noGeneratorSpecifiedHandler() {

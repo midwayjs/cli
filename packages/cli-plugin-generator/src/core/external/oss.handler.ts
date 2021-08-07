@@ -19,19 +19,17 @@ import {
 } from '../utils';
 import pick from 'lodash/pick';
 
-export interface CacheOptions extends Pick<GeneratorSharedOptions, 'dry'> {}
+export interface OSSOptions extends Pick<GeneratorSharedOptions, 'dry'> {}
 
-const CACHE_DEP = ['@midwayjs/cache', 'cache-manager'];
-const CACHE_DEV_DEP = ['@types/cache-manager'];
+const OSS_DEP = ['@midwayjs/oss'];
+const OSS_DEV_DEP = ['@types/ali-oss'];
 
-export const mountCacheCommand = (): ICommandInstance => {
-  // TODO: 从接口中直接生成选项
-
+export const mountOSSCommand = (): ICommandInstance => {
   const writerSharedOptions = {};
 
   return {
-    cache: {
-      usage: 'cache genrator',
+    oss: {
+      usage: 'oss genrator',
       lifecycleEvents: ['gen'],
       opts: {
         ...pick(sharedOption, ['dry']),
@@ -41,9 +39,9 @@ export const mountCacheCommand = (): ICommandInstance => {
   };
 };
 
-export async function cacheHandlerCore(
+export async function ossHandlerCore(
   { cwd: projectDirPath }: ICoreInstance,
-  opts: CacheOptions
+  opts: OSSOptions
 ) {
   consola.info(`Project location: ${chalk.green(projectDirPath)}`);
 
@@ -56,11 +54,11 @@ export async function cacheHandlerCore(
 
   dry
     ? consola.info('`[DryRun]` Skip dependencies installation check.')
-    : await ensureDepsInstalled(CACHE_DEP, projectDirPath);
+    : await ensureDepsInstalled(OSS_DEP, projectDirPath);
 
   dry
     ? consola.info('`[DryRun]` Skip devDependencies installation check.')
-    : await ensureDevDepsInstalled(CACHE_DEV_DEP, projectDirPath);
+    : await ensureDevDepsInstalled(OSS_DEV_DEP, projectDirPath);
 
   if (!dry) {
     consola.info('Source code will be transformed.');
@@ -85,8 +83,8 @@ export async function cacheHandlerCore(
 
     addImportDeclaration(
       configurationSource,
-      'cache',
-      '@midwayjs/cache',
+      'oss',
+      '@midwayjs/oss',
       ImportType.NAMESPACE_IMPORT
     );
 
@@ -94,7 +92,7 @@ export async function cacheHandlerCore(
       configurationSource,
       'Configuration',
       'imports',
-      'cache'
+      'oss'
     );
 
     formatTSFile(configurationPath);
@@ -103,6 +101,6 @@ export async function cacheHandlerCore(
   }
 }
 
-export async function cacheHandler(...args: unknown[]) {
-  await generatorInvokeWrapper(cacheHandlerCore, ...args);
+export async function ossHandler(...args: unknown[]) {
+  await generatorInvokeWrapper(ossHandlerCore, ...args);
 }
