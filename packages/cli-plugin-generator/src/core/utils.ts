@@ -24,6 +24,8 @@ export interface GeneratorSharedOptions {
   dir: string;
 }
 
+export type Framework = 'koa' | 'express' | 'egg';
+
 export const sharedOption: Record<
   keyof GeneratorSharedOptions,
   { usage: string }

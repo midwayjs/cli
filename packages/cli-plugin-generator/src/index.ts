@@ -7,14 +7,19 @@ import {
   controllerHandler,
 } from './core/internal/controller.handler';
 import {
+  mountServiceCommand,
+  serviceHandler,
+} from './core/internal/service.handler';
+import {
+  mountMiddlewareCommand,
+  middlewareHandler,
+} from './core/internal/middleware.handler';
+import {
   mountORMCommand,
   ormHandler,
   TypeORMGeneratorType,
 } from './core/external/orm.handler';
-import {
-  mountServiceCommand,
-  serviceHandler,
-} from './core/internal/service.handler';
+
 import { mountDebugCommand, debugHandler } from './core/internal/debug.handler';
 import { mountAxiosCommand, axiosHandler } from './core/external/axios.handler';
 
@@ -29,6 +34,7 @@ export class GeneratorPlugin extends BasePlugin {
         ...mountControllerCommand(),
         ...mountServiceCommand(),
         ...mountDebugCommand(),
+        ...mountMiddlewareCommand(),
         ...mountORMCommand(),
         ...mountAxiosCommand(),
       },
@@ -40,6 +46,7 @@ export class GeneratorPlugin extends BasePlugin {
     'gen:controller:gen': this.controllerHandler.bind(this),
     'gen:service:gen': this.serviceHandler.bind(this),
     'gen:debug:gen': this.debugHandler.bind(this),
+    'gen:middleware:gen': this.middlewareHandler.bind(this),
     'gen:orm:gen': this.ormHandler.bind(this),
     'gen:orm:setup:gen': this.ormHandler.bind(this, TypeORMGeneratorType.SETUP),
     'gen:orm:entity:gen': this.ormHandler.bind(
@@ -63,6 +70,10 @@ export class GeneratorPlugin extends BasePlugin {
 
   async debugHandler() {
     await debugHandler(this.core, this.options);
+  }
+
+  async middlewareHandler() {
+    await middlewareHandler(this.core, this.options);
   }
 
   async ormHandler(type?: TypeORMGeneratorType) {
