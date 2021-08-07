@@ -37,7 +37,10 @@ import {
   webSocketHandler,
   WebSocketGeneratorType,
 } from './core/external/websocket.handler';
-
+import {
+  mountPrismaCommand,
+  prismaHandler,
+} from './core/external/prisma.handler';
 // midway-bin gen -> prompt
 
 export class GeneratorPlugin extends BasePlugin {
@@ -59,6 +62,7 @@ export class GeneratorPlugin extends BasePlugin {
         ...mountOSSCommand(),
         ...mountSwaggerCommand(),
         ...mountWebSocketCommand(),
+        ...mountPrismaCommand(),
       },
     },
   };
@@ -103,6 +107,8 @@ export class GeneratorPlugin extends BasePlugin {
       this,
       WebSocketGeneratorType.Controller
     ),
+    // prisma
+    'gen:prisma:gen': this.prismaHandler.bind(this),
   };
 
   async controllerHandler() {
@@ -147,6 +153,10 @@ export class GeneratorPlugin extends BasePlugin {
 
   async webSocketHandler(type?: WebSocketGeneratorType) {
     await webSocketHandler(this.core, this.options, type);
+  }
+
+  async prismaHandler() {
+    await prismaHandler(this.core, this.options);
   }
 
   async noGeneratorSpecifiedHandler() {
