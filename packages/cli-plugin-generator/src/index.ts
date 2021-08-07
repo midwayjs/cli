@@ -28,6 +28,10 @@ import { mountDebugCommand, debugHandler } from './core/internal/debug.handler';
 import { mountAxiosCommand, axiosHandler } from './core/external/axios.handler';
 import { mountCacheCommand, cacheHandler } from './core/external/cache.handler';
 import { mountOSSCommand, ossHandler } from './core/external/oss.handler';
+import {
+  mountSwaggerCommand,
+  swaggerHandler,
+} from './core/external/swagger.handler';
 
 // midway-bin gen -> prompt
 
@@ -48,6 +52,7 @@ export class GeneratorPlugin extends BasePlugin {
         ...mountAxiosCommand(),
         ...mountCacheCommand(),
         ...mountOSSCommand(),
+        ...mountSwaggerCommand(),
       },
     },
   };
@@ -78,7 +83,10 @@ export class GeneratorPlugin extends BasePlugin {
     'gen:axios:gen': this.axiosHandler.bind(this),
     // cache
     'gen:cache:gen': this.cacheHandler.bind(this),
+    // oss
     'gen:oss:gen': this.ossHandler.bind(this),
+    // swagger
+    'gen:swagger:gen': this.swaggerHandler.bind(this),
   };
 
   async controllerHandler() {
@@ -115,6 +123,10 @@ export class GeneratorPlugin extends BasePlugin {
 
   async ossHandler() {
     await ossHandler(this.core, this.options);
+  }
+
+  async swaggerHandler() {
+    await swaggerHandler(this.core, this.options);
   }
 
   async noGeneratorSpecifiedHandler() {

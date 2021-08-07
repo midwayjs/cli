@@ -19,7 +19,12 @@ import {
 } from '../utils';
 import pick from 'lodash/pick';
 
-export interface OSSOptions extends Pick<GeneratorSharedOptions, 'dry'> {
+export interface SwaggerOptions extends Pick<GeneratorSharedOptions, 'dry'> {
+  /**
+   * @description Output Swagger UI in server side.
+   * @value false
+   */
+  ui: boolean;
   /**
    * @description Import namespace for @midwayjs/swagger import
    * @value axios
@@ -27,15 +32,19 @@ export interface OSSOptions extends Pick<GeneratorSharedOptions, 'dry'> {
   namespace: string;
 }
 
-const OSS_DEP = ['@midwayjs/oss'];
-const OSS_DEV_DEP = ['@types/ali-oss'];
+const SWAGGER_DEP = ['@midwayjs/swagger'];
+const SWAGGER_DEV_DEP = ['swagger-ui-dist'];
 
-export const mountOSSCommand = (): ICommandInstance => {
-  const writerSharedOptions = {};
+export const mountSwaggerCommand = (): ICommandInstance => {
+  const writerSharedOptions = {
+    ui: {
+      usage: 'Output Swagger UI in server side.',
+    },
+  };
 
   return {
-    oss: {
-      usage: 'oss genrator',
+    swagger: {
+      usage: 'swagger genrator',
       lifecycleEvents: ['gen'],
       opts: {
         ...pick(sharedOption, ['dry']),
@@ -45,26 +54,34 @@ export const mountOSSCommand = (): ICommandInstance => {
   };
 };
 
-export async function ossHandlerCore(
+export async function swaggerHandlerCore(
   { cwd: projectDirPath }: ICoreInstance,
-  opts: OSSOptions
+  opts: SwaggerOptions
 ) {
   consola.info(`Project location: ${chalk.green(projectDirPath)}`);
 
   const { dry } = applyDefaultValueToSharedOption(opts);
-  const { namespace = 'oss' } = opts;
+  const { ui = false, namespace = 'swagger' } = opts;
 
   if (dry) {
     consola.success('Executing in `dry run` mode, nothing will happen.');
   }
 
+  if (ui) {
+    consola.info(
+      '`swagger-ui-dist` will be installed as `dependencies` by enabled `--ui` option.'
+    );
+    SWAGGER_DEP.push(...SWAGGER_DEV_DEP);
+    SWAGGER_DEV_DEP.pop();
+  }
+
   dry
     ? consola.info('`[DryRun]` Skip dependencies installation check.')
-    : await ensureDepsInstalled(OSS_DEP, projectDirPath);
+    : await ensureDepsInstalled(SWAGGER_DEP, projectDirPath);
 
   dry
     ? consola.info('`[DryRun]` Skip devDependencies installation check.')
-    : await ensureDevDepsInstalled(OSS_DEV_DEP, projectDirPath);
+    : await ensureDevDepsInstalled(SWAGGER_DEV_DEP, projectDirPath);
 
   if (!dry) {
     consola.info('Source code will be transformed.');
@@ -90,7 +107,7 @@ export async function ossHandlerCore(
     addImportDeclaration(
       configurationSource,
       namespace,
-      '@midwayjs/oss',
+      '@midwayjs/swagger',
       ImportType.NAMESPACE_IMPORT
     );
 
@@ -107,6 +124,6 @@ export async function ossHandlerCore(
   }
 }
 
-export async function ossHandler(...args: unknown[]) {
-  await generatorInvokeWrapper(ossHandlerCore, ...args);
+export async function swaggerHandler(...args: unknown[]) {
+  await generatorInvokeWrapper(swaggerHandlerCore, ...args);
 }
