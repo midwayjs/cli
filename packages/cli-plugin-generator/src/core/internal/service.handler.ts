@@ -42,7 +42,7 @@ export const mountServiceCommand = (): ICommandInstance => {
   };
 };
 
-export async function serviceHandlerCore(
+async function serviceHandlerCore(
   { cwd: projectDirPath }: ICoreInstance,
   opts: ServiceOptions
 ) {
@@ -115,6 +115,6 @@ export async function serviceHandlerCore(
   }
 }
 
-export async function serviceHandler(...args: unknown[]) {
+export default async function serviceHandler(...args: unknown[]) {
   await generatorInvokeWrapper(serviceHandlerCore, ...args);
 }

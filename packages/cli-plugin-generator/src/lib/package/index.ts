@@ -80,20 +80,20 @@ export const ensureDepsInstalled = async (
   depOrDeps: string | string[],
   cwd = process.cwd()
 ) => {
-  consola.info(`Checking dependencies...`);
+  consola.info('Checking required `dependencies`...');
 
   const depsArr = Array.isArray(depOrDeps) ? depOrDeps : [depOrDeps];
 
   const missingDeps = depsArr.filter(dep => !checkDepExist(dep, cwd));
 
   if (!missingDeps.length) {
-    consola.success(`dependencies Installed.`);
+    consola.success('`dependencies` Installed.');
 
     return;
   }
 
   consola.info(
-    `Installing missing deps: ${chalk.cyan(missingDeps.join(', '))} ...`
+    `Installing missing dependencies: ${chalk.cyan(missingDeps.join(', '))} ...`
   );
 
   await installDep(missingDeps, false, cwd);
@@ -104,15 +104,14 @@ export const ensureDevDepsInstalled = async (
   depOrDeps: string | string[],
   cwd = process.cwd()
 ) => {
-  consola.info(`Checking devDependencies...`);
+  consola.info('Checking required `devDependencies`...');
 
   const depsArr = Array.isArray(depOrDeps) ? depOrDeps : [depOrDeps];
 
   const missingDeps = depsArr.filter(dep => !checkDepExist(dep, cwd));
 
   if (!missingDeps.length) {
-    consola.success(`devDependencies Installed.`);
-
+    consola.success('`devDependencies` Installed.');
     return;
   }
 
@@ -142,6 +141,7 @@ export const installDep = async (
       shell: true,
       cwd,
     });
+
     consola.success('Installation succeed.\n');
   } catch (error) {
     consola.fatal('Installation failed.\n');

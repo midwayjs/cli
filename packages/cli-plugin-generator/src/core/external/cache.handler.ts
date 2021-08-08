@@ -41,7 +41,7 @@ export const mountCacheCommand = (): ICommandInstance => {
   };
 };
 
-export async function cacheHandlerCore(
+async function cacheHandlerCore(
   { cwd: projectDirPath }: ICoreInstance,
   opts: CacheOptions
 ) {
@@ -103,6 +103,6 @@ export async function cacheHandlerCore(
   }
 }
 
-export async function cacheHandler(...args: unknown[]) {
+export default async function cacheHandler(...args: unknown[]) {
   await generatorInvokeWrapper(cacheHandlerCore, ...args);
 }

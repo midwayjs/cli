@@ -50,7 +50,7 @@ export const mountControllerCommand = (): ICommandInstance => {
   };
 };
 
-export async function controllerHandlerCore(
+async function controllerHandlerCore(
   { cwd: projectDirPath }: ICoreInstance,
   opts: ControllerOptions
 ) {
@@ -136,6 +136,6 @@ export async function controllerHandlerCore(
   }
 }
 
-export async function controllerHandler(...args: unknown[]) {
+export default async function controllerHandler(...args: unknown[]) {
   await generatorInvokeWrapper(controllerHandlerCore, ...args);
 }

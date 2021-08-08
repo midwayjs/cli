@@ -92,7 +92,7 @@ export const frameworkSpecificInfo = (
   }
 };
 
-export async function middlewareHandlerCore(
+async function middlewareHandlerCore(
   { cwd: projectDirPath }: ICoreInstance,
   opts: MiddlewareOptions
 ) {
@@ -180,6 +180,6 @@ export async function middlewareHandlerCore(
   }
 }
 
-export async function middlewareHandler(...args: unknown[]) {
+export default async function middlewareHandler(...args: unknown[]) {
   await generatorInvokeWrapper(middlewareHandlerCore, ...args);
 }

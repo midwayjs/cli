@@ -50,7 +50,7 @@ export const mountAxiosCommand = (): ICommandInstance => {
   };
 };
 
-export async function axiosHandlerCore(
+async function axiosHandlerCore(
   { cwd: projectDirPath }: ICoreInstance,
   opts: AxiosOptions
 ) {
@@ -108,6 +108,6 @@ export async function axiosHandlerCore(
   }
 }
 
-export async function axiosHandler(...args: unknown[]) {
+export default async function axiosHandler(...args: unknown[]) {
   await generatorInvokeWrapper(axiosHandlerCore, ...args);
 }

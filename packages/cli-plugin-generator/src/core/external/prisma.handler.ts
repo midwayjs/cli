@@ -108,7 +108,7 @@ export const mountPrismaCommand = (): ICommandInstance => {
   };
 };
 
-export async function prismaHandlerCore(
+async function prismaHandlerCore(
   { cwd: projectDirPath }: ICoreInstance,
   opts: PrismaOptions
 ) {
@@ -300,6 +300,6 @@ export async function prismaHandlerCore(
   }
 }
 
-export async function prismaHandler(...args: unknown[]) {
+export default async function prismaHandler(...args: unknown[]) {
   await generatorInvokeWrapper(prismaHandlerCore, ...args);
 }

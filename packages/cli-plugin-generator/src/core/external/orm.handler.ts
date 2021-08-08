@@ -116,7 +116,7 @@ export const mountORMCommand = (): ICommandInstance => {
   };
 };
 
-export async function ormHandlerCore(
+async function ormHandlerCore(
   { cwd: projectDirPath }: ICoreInstance,
   opts: ORMOptions,
   type: TypeORMGeneratorType
@@ -318,6 +318,6 @@ export async function ormHandlerCore(
   }
 }
 
-export async function ormHandler(...args: unknown[]) {
+export default async function ormHandler(...args: unknown[]) {
   await generatorInvokeWrapper(ormHandlerCore, ...args);
 }

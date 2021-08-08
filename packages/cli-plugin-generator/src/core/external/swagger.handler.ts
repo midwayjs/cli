@@ -54,7 +54,7 @@ export const mountSwaggerCommand = (): ICommandInstance => {
   };
 };
 
-export async function swaggerHandlerCore(
+async function swaggerHandlerCore(
   { cwd: projectDirPath }: ICoreInstance,
   opts: SwaggerOptions
 ) {
@@ -124,6 +124,6 @@ export async function swaggerHandlerCore(
   }
 }
 
-export async function swaggerHandler(...args: unknown[]) {
+export default async function swaggerHandler(...args: unknown[]) {
   await generatorInvokeWrapper(swaggerHandlerCore, ...args);
 }

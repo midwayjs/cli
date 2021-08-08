@@ -2,45 +2,38 @@ import { BasePlugin } from '@midwayjs/command-core';
 import consola from 'consola';
 import inquirer from 'inquirer';
 import chalk from 'chalk';
-import {
+import controllerHandler, {
   mountControllerCommand,
-  controllerHandler,
 } from './core/internal/controller.handler';
-import {
+import serviceHandler, {
   mountServiceCommand,
-  serviceHandler,
 } from './core/internal/service.handler';
-import {
+import middlewareHandler, {
   mountMiddlewareCommand,
-  middlewareHandler,
 } from './core/internal/middleware.handler';
-import {
+import serverlessHandler, {
   mountServerlessCommand,
-  serverlessHandler,
 } from './core/internal/serverless.handler';
 
-import {
+import ormHandler, {
   mountORMCommand,
-  ormHandler,
   TypeORMGeneratorType,
 } from './core/external/orm.handler';
-import { mountDebugCommand, debugHandler } from './core/internal/debug.handler';
-import { mountAxiosCommand, axiosHandler } from './core/external/axios.handler';
-import { mountCacheCommand, cacheHandler } from './core/external/cache.handler';
-import { mountOSSCommand, ossHandler } from './core/external/oss.handler';
-import {
+import debugHandler, { mountDebugCommand } from './core/internal/debug.handler';
+import axiosHandler, { mountAxiosCommand } from './core/external/axios.handler';
+import cacheHandler, { mountCacheCommand } from './core/external/cache.handler';
+import ossHandler, { mountOSSCommand } from './core/external/oss.handler';
+import swaggerHandler, {
   mountSwaggerCommand,
-  swaggerHandler,
 } from './core/external/swagger.handler';
-import {
+import webSocketHandler, {
   mountWebSocketCommand,
-  webSocketHandler,
   WebSocketGeneratorType,
 } from './core/external/websocket.handler';
-import {
+import prismaHandler, {
   mountPrismaCommand,
-  prismaHandler,
 } from './core/external/prisma.handler';
+
 // midway-bin gen -> prompt
 
 export class GeneratorPlugin extends BasePlugin {
@@ -71,91 +64,94 @@ export class GeneratorPlugin extends BasePlugin {
     // entry
     'gen:gen': this.noGeneratorSpecifiedHandler.bind(this),
     // internal
-    'gen:controller:gen': this.controllerHandler.bind(this),
-    'gen:service:gen': this.serviceHandler.bind(this),
-    'gen:debug:gen': this.debugHandler.bind(this),
-    'gen:middleware:gen': this.middlewareHandler.bind(this),
-    'gen:sls:gen': this.serverlessHandler.bind(this),
+    'gen:controller:gen': this.invokeControllerHandler.bind(this),
+    'gen:service:gen': this.invokeServiceHandler.bind(this),
+    'gen:debug:gen': this.invokeDebugHandler.bind(this),
+    'gen:middleware:gen': this.invokeMiddlewareHandler.bind(this),
+    'gen:sls:gen': this.invokeServerlessHandler.bind(this),
 
     // external
     // orm
-    'gen:orm:gen': this.ormHandler.bind(this),
-    'gen:orm:setup:gen': this.ormHandler.bind(this, TypeORMGeneratorType.SETUP),
-    'gen:orm:entity:gen': this.ormHandler.bind(
+    'gen:orm:gen': this.invokeORMHandler.bind(this),
+    'gen:orm:setup:gen': this.invokeORMHandler.bind(
+      this,
+      TypeORMGeneratorType.SETUP
+    ),
+    'gen:orm:entity:gen': this.invokeORMHandler.bind(
       this,
       TypeORMGeneratorType.ENTITY
     ),
-    'gen:orm:subscriber:gen': this.ormHandler.bind(
+    'gen:orm:subscriber:gen': this.invokeORMHandler.bind(
       this,
       TypeORMGeneratorType.SUBSCRIBER
     ),
     // axios
-    'gen:axios:gen': this.axiosHandler.bind(this),
+    'gen:axios:gen': this.invokeAxiosHandler.bind(this),
     // cache
-    'gen:cache:gen': this.cacheHandler.bind(this),
+    'gen:cache:gen': this.invokeCacheHandler.bind(this),
     // oss
-    'gen:oss:gen': this.ossHandler.bind(this),
+    'gen:oss:gen': this.invokeOSSHandler.bind(this),
     // swagger
-    'gen:swagger:gen': this.swaggerHandler.bind(this),
+    'gen:swagger:gen': this.invokeSwaggerHandler.bind(this),
     // web socket
-    'gen:ws:gen': this.webSocketHandler.bind(this),
-    'gen:ws:setup:gen': this.webSocketHandler.bind(
+    'gen:ws:gen': this.invokeWebSocketHandler.bind(this),
+    'gen:ws:setup:gen': this.invokeWebSocketHandler.bind(
       this,
       WebSocketGeneratorType.SETUP
     ),
-    'gen:ws:controller:gen': this.webSocketHandler.bind(
+    'gen:ws:controller:gen': this.invokeWebSocketHandler.bind(
       this,
       WebSocketGeneratorType.Controller
     ),
     // prisma
-    'gen:prisma:gen': this.prismaHandler.bind(this),
+    'gen:prisma:gen': this.invokePismaHandler.bind(this),
   };
 
-  async controllerHandler() {
+  async invokeControllerHandler() {
     await controllerHandler(this.core, this.options);
   }
 
-  async serviceHandler() {
+  async invokeServiceHandler() {
     await serviceHandler(this.core, this.options);
   }
 
-  async debugHandler() {
+  async invokeDebugHandler() {
     await debugHandler(this.core, this.options);
   }
 
-  async middlewareHandler() {
+  async invokeMiddlewareHandler() {
     await middlewareHandler(this.core, this.options);
   }
 
-  async serverlessHandler() {
+  async invokeServerlessHandler() {
     await serverlessHandler(this.core, this.options);
   }
 
-  async ormHandler(type?: TypeORMGeneratorType) {
+  async invokeORMHandler(type?: TypeORMGeneratorType) {
     await ormHandler(this.core, this.options, type);
   }
 
-  async axiosHandler() {
+  async invokeAxiosHandler() {
     await axiosHandler(this.core, this.options);
   }
 
-  async cacheHandler() {
+  async invokeCacheHandler() {
     await cacheHandler(this.core, this.options);
   }
 
-  async ossHandler() {
+  async invokeOSSHandler() {
     await ossHandler(this.core, this.options);
   }
 
-  async swaggerHandler() {
+  async invokeSwaggerHandler() {
     await swaggerHandler(this.core, this.options);
   }
 
-  async webSocketHandler(type?: WebSocketGeneratorType) {
+  async invokeWebSocketHandler(type?: WebSocketGeneratorType) {
     await webSocketHandler(this.core, this.options, type);
   }
 
-  async prismaHandler() {
+  async invokePismaHandler() {
     await prismaHandler(this.core, this.options);
   }
 
@@ -171,13 +167,13 @@ export class GeneratorPlugin extends BasePlugin {
 
     consola.success(`Invoking Generator: ${chalk.cyan(promptedType.type)}`);
 
-    switch (promptedType.type) {
-      case 'controller':
-        await this.controllerHandler();
-        break;
-      case 'orm':
-        await this.ormHandler();
-        break;
-    }
+    // switch (promptedType.type) {
+    //   case 'controller':
+    //     await this.controllerHandler();
+    //     break;
+    //   case 'orm':
+    //     await this.ormHandler();
+    //     break;
+    // }
   }
 }

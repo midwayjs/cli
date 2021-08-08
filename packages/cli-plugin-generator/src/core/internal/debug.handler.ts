@@ -53,7 +53,7 @@ export const mountDebugCommand = (): ICommandInstance => {
   };
 };
 
-export async function debugHandlerCore(
+async function debugHandlerCore(
   { cwd: projectDirPath }: ICoreInstance,
   opts: DebugOptions
 ) {
@@ -138,6 +138,6 @@ export async function debugHandlerCore(
   }
 }
 
-export async function debugHandler(...args: unknown[]) {
+export default async function debugHandler(...args: unknown[]) {
   await generatorInvokeWrapper(debugHandlerCore, ...args);
 }

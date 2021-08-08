@@ -45,7 +45,7 @@ export const mountOSSCommand = (): ICommandInstance => {
   };
 };
 
-export async function ossHandlerCore(
+async function ossHandlerCore(
   { cwd: projectDirPath }: ICoreInstance,
   opts: OSSOptions
 ) {
@@ -107,6 +107,6 @@ export async function ossHandlerCore(
   }
 }
 
-export async function ossHandler(...args: unknown[]) {
+export default async function ossHandler(...args: unknown[]) {
   await generatorInvokeWrapper(ossHandlerCore, ...args);
 }

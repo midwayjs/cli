@@ -93,7 +93,7 @@ export const mountServerlessCommand = (): ICommandInstance => {
   };
 };
 
-export async function serverlessHandlerCore(
+async function serverlessHandlerCore(
   { cwd: projectDirPath }: ICoreInstance,
   opts: ServerlessOptions
 ) {
@@ -213,6 +213,6 @@ export async function serverlessHandlerCore(
   }
 }
 
-export async function serverlessHandler(...args: unknown[]) {
+export default async function serverlessHandler(...args: unknown[]) {
   await generatorInvokeWrapper(serverlessHandlerCore, ...args);
 }

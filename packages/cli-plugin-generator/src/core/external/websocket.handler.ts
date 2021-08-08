@@ -98,7 +98,7 @@ export const mountWebSocketCommand = (): ICommandInstance => {
   };
 };
 
-export async function webSocketHandlerCore(
+async function webSocketHandlerCore(
   { cwd: projectDirPath }: ICoreInstance,
   opts: WebSocketOptions,
   type: WebSocketGeneratorType
@@ -292,6 +292,6 @@ export async function webSocketHandlerCore(
   }
 }
 
-export async function webSocketHandler(...args: unknown[]) {
+export default async function webSocketHandler(...args: unknown[]) {
   await generatorInvokeWrapper(webSocketHandlerCore, ...args);
 }
