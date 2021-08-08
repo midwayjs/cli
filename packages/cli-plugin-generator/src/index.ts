@@ -2,6 +2,11 @@ import { BasePlugin } from '@midwayjs/command-core';
 import consola from 'consola';
 import inquirer from 'inquirer';
 import chalk from 'chalk';
+import {
+  AvailableInternalGenerator,
+  AvailableExternalGenerator,
+} from './utils';
+
 import controllerHandler, {
   mountControllerCommand,
 } from './core/internal/controller.handler';
@@ -107,6 +112,25 @@ export class GeneratorPlugin extends BasePlugin {
     'gen:prisma:gen': this.invokePismaHandler.bind(this),
   };
 
+  // TODO: generate by enum AST
+  availableInternalGenerators: Set<AvailableInternalGenerator> = new Set([
+    AvailableInternalGenerator.Controller,
+    AvailableInternalGenerator.Service,
+    AvailableInternalGenerator.Debug,
+    AvailableInternalGenerator.Serverless,
+    AvailableInternalGenerator.Middleware,
+  ]);
+
+  availableExternalGenerators: Set<AvailableExternalGenerator> = new Set([
+    AvailableExternalGenerator.Axios,
+    AvailableExternalGenerator.Cache,
+    AvailableExternalGenerator.ORM,
+    AvailableExternalGenerator.OSS,
+    AvailableExternalGenerator.Prisma,
+    AvailableExternalGenerator.Swagger,
+    AvailableExternalGenerator.WebSocket,
+  ]);
+
   async invokeControllerHandler() {
     await controllerHandler(this.core, this.options);
   }
@@ -161,19 +185,55 @@ export class GeneratorPlugin extends BasePlugin {
         name: 'type',
         type: 'list',
         loop: true,
-        choices: ['controller', 'orm'],
+        choices: [
+          ...Array.from(this.availableInternalGenerators),
+          ...Array.from(this.availableExternalGenerators),
+        ] as (AvailableInternalGenerator | AvailableExternalGenerator)[],
       },
     ]);
 
     consola.success(`Invoking Generator: ${chalk.cyan(promptedType.type)}`);
 
-    // switch (promptedType.type) {
-    //   case 'controller':
-    //     await this.controllerHandler();
-    //     break;
-    //   case 'orm':
-    //     await this.ormHandler();
-    //     break;
-    // }
+    switch (promptedType.type) {
+      // Internal
+      case AvailableInternalGenerator.Controller:
+        await this.invokeControllerHandler();
+        break;
+      case AvailableInternalGenerator.Debug:
+        await this.invokeDebugHandler();
+        break;
+      case AvailableInternalGenerator.Service:
+        await this.invokeServiceHandler();
+        break;
+      case AvailableInternalGenerator.Middleware:
+        await this.invokeMiddlewareHandler();
+        break;
+      case AvailableInternalGenerator.Serverless:
+        await this.invokeServerlessHandler();
+        break;
+
+      // External
+      case AvailableExternalGenerator.Axios:
+        await this.invokeAxiosHandler();
+        break;
+      case AvailableExternalGenerator.Cache:
+        await this.invokeCacheHandler();
+        break;
+      case AvailableExternalGenerator.ORM:
+        await this.invokeORMHandler();
+        break;
+      case AvailableExternalGenerator.OSS:
+        await this.invokeOSSHandler();
+        break;
+      case AvailableExternalGenerator.Prisma:
+        await this.invokePismaHandler();
+        break;
+      case AvailableExternalGenerator.Swagger:
+        await this.invokeSwaggerHandler();
+        break;
+      case AvailableExternalGenerator.WebSocket:
+        await this.invokeWebSocketHandler();
+        break;
+    }
   }
 }
