@@ -27,7 +27,7 @@ export interface AxiosOptions extends Pick<GeneratorSharedOptions, 'dry'> {
   namespace: string;
 }
 
-const AXIOS_DEP = '@midwayjs/axios';
+export const AXIOS_DEP = ['@midwayjs/axios'];
 
 export const mountAxiosCommand = (): ICommandInstance => {
   // TODO: 从接口中直接生成选项
@@ -57,7 +57,7 @@ async function axiosHandlerCore(
   consola.info(`Project location: ${chalk.green(projectDirPath)}`);
 
   const { dry } = applyDefaultValueToSharedOption(opts);
-  const { namespace = 'orm' } = opts;
+  const { namespace = 'axios' } = opts;
 
   if (dry) {
     consola.success('Executing in `dry run` mode, nothing will happen.');
@@ -91,7 +91,7 @@ async function axiosHandlerCore(
     addImportDeclaration(
       configurationSource,
       namespace,
-      '@midwayjs/orm',
+      '@midwayjs/axios',
       ImportType.NAMESPACE_IMPORT
     );
 

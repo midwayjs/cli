@@ -52,7 +52,9 @@
     "lint": "../../node_modules/.bin/eslint .",
     "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
     "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov",
-    "copy": "tsnd  --respawn --transpile-only ./scripts/copy.ts"
+    "copy": "tsnd  --respawn --transpile-only ./scripts/copy.ts",
+    "test": "jest",
+    "posttest": "node ./tests/copy.js"
   },
   "repository": {
     "type": "git",
