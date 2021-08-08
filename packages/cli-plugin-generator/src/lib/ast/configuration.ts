@@ -111,6 +111,29 @@ export function ensureLifeCycleMethods(
   apply && source.saveSync();
 }
 
+export function unshiftStatementInsideClassMethod(
+  source: SourceFile,
+  classIdentifier: string,
+  methodIdentifier: string,
+  statement: string,
+  apply = true
+) {
+  const methodDeclaration = getExistClassMethodsDeclaration(
+    source,
+    classIdentifier,
+    methodIdentifier
+  );
+
+  if (!methodDeclaration) {
+    console.log('class or method declaration inexist');
+    return;
+  }
+
+  methodDeclaration.insertStatements(0, statement);
+
+  apply && source.saveSync();
+}
+
 // 确保容器配置类的方法具有标准参数
 export function ensureLifeCycleMethodArguments(
   source: SourceFile,

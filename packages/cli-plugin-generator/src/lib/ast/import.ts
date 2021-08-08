@@ -77,6 +77,33 @@ export function addImportDeclaration(
   shouldApplySave ? source.saveSync() : void 0;
 }
 
+export function appendStatementAfterImports(
+  source: SourceFile,
+  statement: string,
+  apply = true
+) {
+  const imports = source
+
+    .getFirstChildByKind(SyntaxKind.SyntaxList)
+    .getChildrenOfKind(SyntaxKind.ImportDeclaration);
+
+  let appendIdx: number;
+
+  if (!imports.length) {
+    appendIdx = 0;
+  } else {
+    appendIdx =
+      source.getLastChildByKind(SyntaxKind.ImportDeclaration).getChildIndex() +
+      1;
+  }
+
+  source.insertStatements(appendIdx, writer => {
+    writer.newLine();
+    writer.write(statement);
+  });
+  apply && source.saveSync();
+}
+
 export function findImportsDeclaration(source: SourceFile): ImportDeclaration[];
 
 export function findImportsDeclaration(

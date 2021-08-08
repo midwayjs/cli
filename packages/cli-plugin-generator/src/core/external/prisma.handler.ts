@@ -14,6 +14,10 @@ import {
   updateDecoratorArrayArgs,
   addImportDeclaration,
   ImportType,
+  appendStatementAfterImports,
+  unshiftStatementInsideClassMethod,
+  ensureLifeCycleClassPropertyWithMidwayDecorator,
+  LIFE_CYCLE_CLASS_IDENTIFIER,
 } from '../../lib/ast';
 import { generatorInvokeWrapper } from '../../lib/wrapper';
 import {
@@ -66,7 +70,19 @@ const initialSchemaToAppend = `
       }
     `;
 
-const envPairToAppend = `DATABASE_URL="file:../../demo.sqlite"`;
+const envPairToAppend = `
+# Environment variables declared in this file are automatically made available to Prisma.
+# See the documentation for more detail: https://pris.ly/d/prisma-schema#using-environment-variables
+
+# Prisma supports the native connection string format for PostgreSQL, MySQL, SQLite, SQL Server (Preview) and MongoDB (Preview).
+# See the documentation for all the connection string options: https://pris.ly/d/connection-strings
+
+DATABASE_URL="file:../../demo.sqlite"`;
+
+const updateGitIgnore = `
+.env
+*.sqlite
+`;
 
 export const mountPrismaCommand = (): ICommandInstance => {
   // TODO: 从接口中直接生成选项
@@ -143,6 +159,14 @@ export async function prismaHandlerCore(
       preferLocal: true,
       shell: true,
     });
+    consola.info('Updating `.env` `.gitignore` file...');
+    fs.rmSync(path.join(projectDirPath, 'src', '.env'));
+    fs.rmSync(path.join(projectDirPath, 'src', '.gitignore'));
+    fs.appendFileSync(path.resolve(projectDirPath, '.env'), envPairToAppend);
+    fs.appendFileSync(
+      path.resolve(projectDirPath, '.gitignore'),
+      updateGitIgnore
+    );
     consola.success('Command `prisma init` succeed...');
 
     const prismaSchemaPath = path.resolve(
@@ -156,7 +180,6 @@ export async function prismaHandlerCore(
     if (initSchema) {
       consola.info('Appending initial `Prisma Schema` content...');
       fs.writeFileSync(prismaSchemaPath, initialSchemaToAppend);
-      // TODO: ENV 相关
       consola.info('Initial `Prisma Schema` append successfully');
     }
 
@@ -200,9 +223,7 @@ export async function prismaHandlerCore(
     if (initClient) {
       consola.info('Initializing `Prisma Client`...');
       consola.info('Executing command `npm run prisma:push` under project.');
-      consola.info(
-        'This command will also execute `Prisma Client` generation.'
-      );
+      consola.info('This command will also handle `Prisma Client` generation.');
 
       await execa('npm run prisma:push', {
         cwd: projectDirPath,
@@ -239,10 +260,39 @@ export async function prismaHandlerCore(
       configurationSource,
       ['PrismaClient'],
       '@prisma/client',
-      ImportType.NAMED_IMPORTS
+      ImportType.NAMED_IMPORTS,
+      false
     );
 
-    // TODO: 相关实例化、注册语句
+    appendStatementAfterImports(
+      configurationSource,
+      'const client = new PrismaClient()',
+      false
+    );
+
+    ensureLifeCycleClassPropertyWithMidwayDecorator(
+      configurationSource,
+      'app',
+      'App',
+      false
+    );
+
+    // reverse order of statements to insert
+    unshiftStatementInsideClassMethod(
+      configurationSource,
+      LIFE_CYCLE_CLASS_IDENTIFIER,
+      'onReady',
+      `this.app.getApplicationContext().registerObject('prisma', client);`,
+      false
+    );
+
+    unshiftStatementInsideClassMethod(
+      configurationSource,
+      LIFE_CYCLE_CLASS_IDENTIFIER,
+      'onReady',
+      'client.$connect()',
+      true
+    );
 
     formatTSFile(configurationPath);
   } else {
