@@ -9,15 +9,15 @@ import {
   configurationPath,
   packagePath,
   baseDir,
+  expectGenerateValidFile,
 } from '../../shared';
 import {
   WEB_SOCKET_DEP,
   scriptKey,
   scriptValue,
 } from '../../../src/core/external/websocket.handler';
-import { capitalCase } from 'capital-case';
 
-describe('WebSocket handler (setup)', () => {
+describe.skip('WebSocket handler (setup)', () => {
   beforeAll(() => {
     jest.setTimeout(300000);
   });
@@ -161,24 +161,7 @@ describe('WebSocket handler (setup)', () => {
   });
 });
 
-const expectGenerateValidFile = (
-  generatedPath: string,
-  classIdentifier: string
-) => {
-  expect(fs.existsSync(generatedPath)).toBeTruthy();
-
-  expect(
-    fs.readFileSync(generatedPath, { encoding: 'utf-8' }).length
-  ).toBeGreaterThan(0);
-
-  expect(
-    fs
-      .readFileSync(generatedPath, { encoding: 'utf-8' })
-      .includes(capitalCase(classIdentifier))
-  ).toBeTruthy();
-};
-
-describe('WebSocket handler (controller)', () => {
+describe.skip('WebSocket handler (controller)', () => {
   beforeAll(() => {
     jest.setTimeout(300000);
   });
@@ -332,5 +315,41 @@ describe('WebSocket handler (controller)', () => {
     );
 
     expectGenerateValidFile(generatedControllerPath, sharedClassIdentifier);
+  });
+
+  it('should not actually work in dry run mode (--dry --dir `sharedDirName` --file `sharedFileName` --class `sharedClassIdentifier`)', async () => {
+    const core = await createGeneratorCommand();
+    await core.invoke(['gen', 'ws', 'controller'], undefined, {
+      dry: true,
+      dir: sharedDirName,
+      file: sharedFileName,
+      class: sharedClassIdentifier,
+    });
+
+    const generatedControllerPath = path.resolve(
+      baseDir,
+      'src',
+      sharedDirName,
+      `${sharedFileName}.controller.ts`
+    );
+
+    expect(fs.existsSync(generatedControllerPath)).not.toBeTruthy();
+  });
+
+  it('should not actually work in dry run mode (--dry --class `sharedClassIdentifier`)', async () => {
+    const core = await createGeneratorCommand();
+    await core.invoke(['gen', 'ws', 'controller'], undefined, {
+      dry: true,
+      class: sharedClassIdentifier,
+    });
+
+    const generatedControllerPath = path.resolve(
+      baseDir,
+      'src',
+      'controller',
+      `${sharedClassIdentifier}.controller.ts`
+    );
+
+    expect(fs.existsSync(generatedControllerPath)).not.toBeTruthy();
   });
 });

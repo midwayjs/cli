@@ -5,6 +5,24 @@ import consola from 'consola';
 import jsonfile from 'jsonfile';
 import execa from 'execa';
 import { GeneratorPlugin } from '../src';
+import { capitalCase } from 'capital-case';
+
+export const expectGenerateValidFile = (
+  generatedPath: string,
+  classIdentifier: string
+) => {
+  expect(fs.existsSync(generatedPath)).toBeTruthy();
+
+  expect(
+    fs.readFileSync(generatedPath, { encoding: 'utf-8' }).length
+  ).toBeGreaterThan(0);
+
+  expect(
+    fs
+      .readFileSync(generatedPath, { encoding: 'utf-8' })
+      .includes(capitalCase(classIdentifier))
+  ).toBeTruthy();
+};
 
 export async function resetFixtures() {
   await execa('node ./tests/copy.js', {

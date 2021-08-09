@@ -63,9 +63,9 @@ export enum TypeORMGeneratorType {
   SUBSCRIBER = 'subscriber',
 }
 
-const DEFAULT_ENTITY_DIR_PATH = 'entity';
-const DEFAULT_SUBSCRIBER_DIR_PATH = 'entity/subscriber';
-const ORM_DEV = ['@midwayjs/orm', 'sqlite'];
+export const DEFAULT_ENTITY_DIR_PATH = 'entity';
+export const DEFAULT_SUBSCRIBER_DIR_PATH = 'entity/subscriber';
+export const ORM_DEP = ['@midwayjs/orm', 'sqlite'];
 
 export const WriterGenerator: TypeORMGeneratorType[] = [
   TypeORMGeneratorType.ENTITY,
@@ -178,7 +178,7 @@ async function ormHandlerCore(
 
       dry
         ? consola.info('`[DryRun]` Skip dependencies installation check.')
-        : await ensureDepsInstalled(ORM_DEV, projectDirPath);
+        : await ensureDepsInstalled(ORM_DEP, projectDirPath);
 
       if (!dry) {
         consola.info('Source code will be transformed.');
