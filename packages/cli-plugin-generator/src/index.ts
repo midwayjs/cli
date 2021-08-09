@@ -46,6 +46,7 @@ export class GeneratorPlugin extends BasePlugin {
     gen: {
       usage: 'generator tmp',
       lifecycleEvents: ['gen'],
+
       commands: {
         // internal
         ...mountControllerCommand(),

@@ -13,7 +13,7 @@ import {
   CACHE_DEV_DEP,
 } from '../../../src/core/external/cache.handler';
 
-describe('Cache handler', () => {
+describe.skip('Cache handler', () => {
   beforeAll(() => {
     jest.setTimeout(300000);
   });
@@ -59,12 +59,6 @@ describe('Cache handler', () => {
     await core.invoke(['gen', 'cache'], undefined, {
       namespace: 'cacheMod',
     });
-
-    console.log(
-      fs.readFileSync(configurationPath, {
-        encoding: 'utf-8',
-      })
-    );
 
     expect(
       fs

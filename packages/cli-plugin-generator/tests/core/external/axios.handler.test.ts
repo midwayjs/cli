@@ -10,7 +10,7 @@ import {
 } from '../../shared';
 import { AXIOS_DEP } from '../../../src/core/external/axios.handler';
 
-describe('Axios handler', () => {
+describe.skip('Axios handler', () => {
   beforeAll(() => {
     jest.setTimeout(300000);
   });

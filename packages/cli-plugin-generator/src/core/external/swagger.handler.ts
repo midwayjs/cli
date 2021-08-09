@@ -32,8 +32,8 @@ export interface SwaggerOptions extends Pick<GeneratorSharedOptions, 'dry'> {
   namespace: string;
 }
 
-const SWAGGER_DEP = ['@midwayjs/swagger'];
-const SWAGGER_DEV_DEP = ['swagger-ui-dist'];
+export const SWAGGER_DEP = ['@midwayjs/swagger'];
+export const SWAGGER_DEV_DEP = ['swagger-ui-dist'];
 
 export const mountSwaggerCommand = (): ICommandInstance => {
   const writerSharedOptions = {

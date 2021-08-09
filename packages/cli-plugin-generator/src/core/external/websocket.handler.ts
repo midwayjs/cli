@@ -54,11 +54,11 @@ export enum WebSocketGeneratorType {
   Controller = 'controller',
 }
 
-const WEB_SOCKET_DEV = ['@midwayjs/ws'];
+export const WEB_SOCKET_DEP = ['@midwayjs/ws'];
 
-const scriptKey = 'start:ws';
+export const scriptKey = 'start:ws';
 
-const scriptValue =
+export const scriptValue =
   'cross-env NODE_ENV=local midway-bin dev --ts --entryFile=ws-bootstrap.js';
 
 export const WriterGenerator: WebSocketGeneratorType[] = [
@@ -142,7 +142,7 @@ async function webSocketHandlerCore(
     case WebSocketGeneratorType.SETUP:
       dry
         ? consola.info('`[DryRun]` Skip dependencies installation check.')
-        : await ensureDepsInstalled(WEB_SOCKET_DEV, projectDirPath);
+        : await ensureDepsInstalled(WEB_SOCKET_DEP, projectDirPath);
 
       const renderedBootStrapTemplate = EJSCompile(
         fs.readFileSync(
