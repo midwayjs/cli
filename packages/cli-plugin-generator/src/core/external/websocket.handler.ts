@@ -141,7 +141,7 @@ async function webSocketHandlerCore(
   switch (type) {
     case WebSocketGeneratorType.SETUP:
       dry
-        ? consola.info('`[DryRun]` Skip dependencies installation check.')
+        ? consola.info('`[DryRun]` Skip `dependencies` installation check.')
         : await ensureDepsInstalled(WEB_SOCKET_DEP, projectDirPath);
 
       const renderedBootStrapTemplate = EJSCompile(
@@ -179,7 +179,7 @@ async function webSocketHandlerCore(
           consola.error(
             `Cannot find ${chalk.cyan('configuration.ts')} in ${chalk.green(
               configurationPath
-            )}`
+            )}.`
           );
           process.exit(0);
         }

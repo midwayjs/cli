@@ -64,7 +64,7 @@ async function axiosHandlerCore(
   }
 
   dry
-    ? consola.info('`[DryRun]` Skip dependencies installation check.')
+    ? consola.info('`[DryRun]` Skip `dependencies` installation check.')
     : await ensureDepsInstalled(AXIOS_DEP, projectDirPath);
 
   if (!dry) {
@@ -81,7 +81,7 @@ async function axiosHandlerCore(
       consola.error(
         `Cannot find ${chalk.cyan('configuration.ts')} in ${chalk.green(
           configurationPath
-        )}`
+        )}.`
       );
       process.exit(0);
     }

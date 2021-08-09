@@ -63,11 +63,11 @@ async function ossHandlerCore(
   }
 
   dry
-    ? consola.info('`[DryRun]` Skip dependencies installation check.')
+    ? consola.info('`[DryRun]` Skip `dependencies` installation check.')
     : await ensureDepsInstalled(OSS_DEP, projectDirPath);
 
   dry
-    ? consola.info('`[DryRun]` Skip devDependencies installation check.')
+    ? consola.info('`[DryRun]` Skip `devDependencies` installation check.')
     : await ensureDevDepsInstalled(OSS_DEV_DEP, projectDirPath);
 
   if (!dry) {
@@ -84,7 +84,7 @@ async function ossHandlerCore(
       consola.error(
         `Cannot find ${chalk.cyan('configuration.ts')} in ${chalk.green(
           configurationPath
-        )}`
+        )}.`
       );
       process.exit(0);
     }

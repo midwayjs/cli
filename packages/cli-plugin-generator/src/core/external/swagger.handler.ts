@@ -79,11 +79,11 @@ async function swaggerHandlerCore(
   }
 
   dry
-    ? consola.info('`[DryRun]` Skip dependencies installation check.')
+    ? consola.info('`[DryRun]` Skip `dependencies` installation check.')
     : await ensureDepsInstalled(SWAGGER_DEP, projectDirPath);
 
   dry
-    ? consola.info('`[DryRun]` Skip devDependencies installation check.')
+    ? consola.info('`[DryRun]` Skip `devDependencies` installation check.')
     : await ensureDevDepsInstalled(SWAGGER_DEV_DEP, projectDirPath);
 
   if (!dry) {
@@ -100,7 +100,7 @@ async function swaggerHandlerCore(
       consola.error(
         `Cannot find ${chalk.cyan('configuration.ts')} in ${chalk.green(
           configurationPath
-        )}`
+        )}.`
       );
       process.exit(0);
     }

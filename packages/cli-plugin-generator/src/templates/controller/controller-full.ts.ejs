@@ -13,10 +13,15 @@ import {
   SetHeader,
   ContentType,
 } from '@midwayjs/decorator';
+import { IMidwayContext } from '@midwayjs/core';
+
 
 @Provide()
 @Controller('/')
 export class <%=name%> {
+  @Inject()
+  ctx: IMidwayContext;
+  
   @Get('/')
   async GetHandler(@Query(ALL) query: unknown): Promise<string> {
     return 'Hello Midwayjs!';

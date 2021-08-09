@@ -177,7 +177,7 @@ async function ormHandlerCore(
       const { namespace = 'orm' } = opts;
 
       dry
-        ? consola.info('`[DryRun]` Skip dependencies installation check.')
+        ? consola.info('`[DryRun]` Skip `dependencies` installation check.')
         : await ensureDepsInstalled(ORM_DEP, projectDirPath);
 
       if (!dry) {
@@ -194,7 +194,7 @@ async function ormHandlerCore(
           consola.error(
             `Cannot find ${chalk.cyan('configuration.ts')} in ${chalk.green(
               configPath
-            )}`
+            )}.`
           );
           process.exit(0);
         }
@@ -215,7 +215,7 @@ async function ormHandlerCore(
           consola.error(
             `Cannot find ${chalk.cyan('configuration.ts')} in ${chalk.green(
               configurationPath
-            )}`
+            )}.`
           );
           process.exit(0);
         }

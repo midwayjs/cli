@@ -161,11 +161,11 @@ async function prismaHandlerCore(
   }
 
   dry
-    ? consola.info('`[DryRun]` Skip dependencies installation check.')
+    ? consola.info('`[DryRun]` Skip `dependencies` installation check.')
     : await ensureDepsInstalled(PRISMA_DEP, projectDirPath);
 
   dry
-    ? consola.info('`[DryRun]` Skip dependencies installation check.')
+    ? consola.info('`[DryRun]` Skip `devDependencies` installation check.')
     : await ensureDevDepsInstalled(PRISMA_DEV_DEP, projectDirPath);
 
   // 执行prisma init
@@ -252,7 +252,7 @@ async function prismaHandlerCore(
       consola.error(
         `Cannot find ${chalk.cyan('configuration.ts')} in ${chalk.green(
           configurationPath
-        )}`
+        )}.`
       );
       process.exit(0);
     }

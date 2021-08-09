@@ -80,7 +80,7 @@ export const ensureDepsInstalled = async (
   depOrDeps: string | string[],
   cwd = process.cwd()
 ) => {
-  consola.info('Checking required `dependencies`...');
+  consola.info('Checking required `dependencies` ...');
 
   const depsArr = Array.isArray(depOrDeps) ? depOrDeps : [depOrDeps];
 
@@ -104,7 +104,7 @@ export const ensureDevDepsInstalled = async (
   depOrDeps: string | string[],
   cwd = process.cwd()
 ) => {
-  consola.info('Checking required `devDependencies`...');
+  consola.info('Checking required `devDependencies` ...');
 
   const depsArr = Array.isArray(depOrDeps) ? depOrDeps : [depOrDeps];
 
@@ -128,7 +128,8 @@ export const installDep = async (
   cwd = process.cwd()
 ) => {
   try {
-    const manager = getManager();
+    const manager = getManager(cwd);
+    consola.info(`Using package manager: ${chalk.cyan(manager)}`);
     const command = `${manager} ${
       manager === 'yarn' ? 'add' : 'install'
     } ${(Array.isArray(dep) ? dep : [dep]).join(' ')} ${
@@ -149,13 +150,12 @@ export const installDep = async (
   }
 };
 
-type PkgManager = 'npm' | 'yarn';
+export type PkgManager = 'npm' | 'yarn' | 'pnpm';
 
-export const getManager = (cwd?: string): PkgManager => {
-  return findUp.sync('yarn.lock', {
-    type: 'file',
-    cwd,
-  })
-    ? 'yarn'
-    : 'npm';
+export const getManager = (projectDir: string): PkgManager => {
+  const hasYarnLockFile = fs.existsSync(path.resolve('yarn.lock'));
+  const hasPackageLockFile = fs.existsSync(path.resolve('package-lock.json'));
+  const hasPnpmLockFile = fs.existsSync(path.resolve('pnpm-lock.yaml'));
+
+  return hasYarnLockFile ? 'yarn' : hasPnpmLockFile ? 'pnpm' : 'npm';
 };
