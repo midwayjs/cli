@@ -10,7 +10,7 @@ import { Project } from 'ts-morph';
 import prettier from 'prettier';
 import { inputPromptStringValue, formatTSFile, names } from '../../lib/helper';
 
-import { capitalCase } from '../../lib/case';
+import { capitalCase } from 'capital-case';
 import { ensureDepsInstalled } from '../../lib/package';
 import {
   addConstExport,
