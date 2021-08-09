@@ -1,7 +1,7 @@
 import consola from 'consola';
 import { generatorInvokeWrapper } from '../../src/lib/wrapper';
 
-describe.only('generator wrapper', () => {
+describe.skip('generator wrapper', () => {
   beforeAll(() => {
     jest.setTimeout(300000);
 

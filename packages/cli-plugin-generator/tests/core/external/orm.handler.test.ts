@@ -10,7 +10,12 @@ import {
   baseDir,
   expectGenerateValidFile,
 } from '../../shared';
-import { ORM_DEP } from '../../../src/core/external/orm.handler';
+import {
+  ORM_DEP,
+  DEFAULT_ENTITY_DIR_PATH,
+  DEFAULT_SUBSCRIBER_DIR_PATH,
+  TypeORMGeneratorType,
+} from '../../../src/core/external/orm.handler';
 
 describe.skip('ORM handler (setup)', () => {
   beforeAll(async () => {
@@ -127,12 +132,12 @@ describe.skip('ORM handler (entity)', () => {
   });
 
   const sharedClassIdentifier = 'tmp';
-  const sharedFileName = 'orm-file';
-  const sharedDirName = 'orm-dir';
+  const sharedFileName = 'entity-file';
+  const sharedDirName = 'entity-dir';
 
   it('should use option passed in (--dotFile --class `sharedClassIdentifier`)', async () => {
     const core = await createGeneratorCommand();
-    await core.invoke(['gen', 'orm', 'entity'], undefined, {
+    await core.invoke(['gen', 'orm', TypeORMGeneratorType.ENTITY], undefined, {
       dotFile: true,
       class: sharedClassIdentifier,
     });
@@ -140,7 +145,7 @@ describe.skip('ORM handler (entity)', () => {
     const generatedEntityPath = path.resolve(
       baseDir,
       'src',
-      'entity',
+      DEFAULT_ENTITY_DIR_PATH,
       `${sharedClassIdentifier}.entity.ts`
     );
 
@@ -149,7 +154,7 @@ describe.skip('ORM handler (entity)', () => {
 
   it('should use option passed in (--dotFile false --class `sharedClassIdentifier`)', async () => {
     const core = await createGeneratorCommand();
-    await core.invoke(['gen', 'orm', 'entity'], undefined, {
+    await core.invoke(['gen', 'orm', TypeORMGeneratorType.ENTITY], undefined, {
       dotFile: true,
       class: sharedClassIdentifier,
     });
@@ -157,7 +162,7 @@ describe.skip('ORM handler (entity)', () => {
     const generatedEntityPath = path.resolve(
       baseDir,
       'src',
-      'entity',
+      DEFAULT_ENTITY_DIR_PATH,
       `${sharedClassIdentifier}.entity.ts`
     );
 
@@ -166,7 +171,7 @@ describe.skip('ORM handler (entity)', () => {
 
   it('should use option passed in (--file `sharedFileName` --dotFile --class `sharedClassIdentifier`)', async () => {
     const core = await createGeneratorCommand();
-    await core.invoke(['gen', 'orm', 'entity'], undefined, {
+    await core.invoke(['gen', 'orm', TypeORMGeneratorType.ENTITY], undefined, {
       dotFile: true,
       file: sharedFileName,
       class: sharedClassIdentifier,
@@ -175,7 +180,7 @@ describe.skip('ORM handler (entity)', () => {
     const generatedEntityPath = path.resolve(
       baseDir,
       'src',
-      'entity',
+      DEFAULT_ENTITY_DIR_PATH,
       `${sharedFileName}.entity.ts`
     );
     expectGenerateValidFile(generatedEntityPath, sharedClassIdentifier);
@@ -183,7 +188,7 @@ describe.skip('ORM handler (entity)', () => {
 
   it('should use option passed in (--file `sharedFileName` --dotFile false --class `sharedClassIdentifier`)', async () => {
     const core = await createGeneratorCommand();
-    await core.invoke(['gen', 'orm', 'entity'], undefined, {
+    await core.invoke(['gen', 'orm', TypeORMGeneratorType.ENTITY], undefined, {
       dotFile: false,
       file: sharedFileName,
       class: sharedClassIdentifier,
@@ -192,7 +197,7 @@ describe.skip('ORM handler (entity)', () => {
     const generatedEntityPath = path.resolve(
       baseDir,
       'src',
-      'entity',
+      DEFAULT_ENTITY_DIR_PATH,
       `${sharedFileName}.ts`
     );
 
@@ -201,7 +206,7 @@ describe.skip('ORM handler (entity)', () => {
 
   it('should use option passed in (--dir `sharedDirName` --dotFile --class `sharedClassIdentifier`)', async () => {
     const core = await createGeneratorCommand();
-    await core.invoke(['gen', 'orm', 'entity'], undefined, {
+    await core.invoke(['gen', 'orm', TypeORMGeneratorType.ENTITY], undefined, {
       dotFile: true,
       dir: sharedDirName,
       class: sharedClassIdentifier,
@@ -219,7 +224,7 @@ describe.skip('ORM handler (entity)', () => {
 
   it('should use option passed in (--file `sharedFileName` --dir `sharedDirName` --dotFile --class `sharedClassIdentifier`)', async () => {
     const core = await createGeneratorCommand();
-    await core.invoke(['gen', 'orm', 'entity'], undefined, {
+    await core.invoke(['gen', 'orm', TypeORMGeneratorType.ENTITY], undefined, {
       dotFile: true,
       file: sharedFileName,
       dir: sharedDirName,
@@ -238,7 +243,7 @@ describe.skip('ORM handler (entity)', () => {
 
   it('should use option passed in (--file `sharedFileName` --dir `sharedDirName` --dotFile false --class `sharedClassIdentifier`)', async () => {
     const core = await createGeneratorCommand();
-    await core.invoke(['gen', 'orm', 'entity'], undefined, {
+    await core.invoke(['gen', 'orm', TypeORMGeneratorType.ENTITY], undefined, {
       dotFile: false,
       file: sharedFileName,
       dir: sharedDirName,
@@ -257,7 +262,7 @@ describe.skip('ORM handler (entity)', () => {
 
   it('should use option passed in (--dir `sharedDirName` --dotFile false --class `sharedClassIdentifier`)', async () => {
     const core = await createGeneratorCommand();
-    await core.invoke(['gen', 'orm', 'entity'], undefined, {
+    await core.invoke(['gen', 'orm', TypeORMGeneratorType.ENTITY], undefined, {
       dotFile: false,
       dir: sharedDirName,
       class: sharedClassIdentifier,
@@ -273,9 +278,84 @@ describe.skip('ORM handler (entity)', () => {
     expectGenerateValidFile(generatedEntityPath, sharedClassIdentifier);
   });
 
+  it('should use option passed in (--dir `sharedDirName` --dotFile false --class `sharedClassIdentifier`)', async () => {
+    const core = await createGeneratorCommand();
+    await core.invoke(['gen', 'orm', TypeORMGeneratorType.ENTITY], undefined, {
+      dotFile: false,
+      dir: sharedDirName,
+      class: sharedClassIdentifier,
+    });
+
+    const generatedEntityPath = path.resolve(
+      baseDir,
+      'src',
+      sharedDirName,
+      `${sharedClassIdentifier}.ts`
+    );
+
+    expectGenerateValidFile(generatedEntityPath, sharedClassIdentifier);
+  });
+
+  it('should use option passed in (--activeRecord relation --class `sharedClassIdentifier`)', async () => {
+    const core = await createGeneratorCommand();
+    await core.invoke(['gen', 'orm', TypeORMGeneratorType.ENTITY], undefined, {
+      class: sharedClassIdentifier,
+      activeRecord: true,
+      relation: true,
+    });
+
+    const generatedEntityPath = path.resolve(
+      baseDir,
+      'src',
+      DEFAULT_ENTITY_DIR_PATH,
+      `${sharedClassIdentifier}.entity.ts`
+    );
+
+    expectGenerateValidFile(generatedEntityPath, sharedClassIdentifier);
+
+    expect(
+      fs
+        .readFileSync(generatedEntityPath, { encoding: 'utf-8' })
+        .includes('BaseEntity')
+    ).toBeTruthy();
+
+    for (const relationType of [
+      '@OneToOne',
+      '@JoinColumn',
+      '@ManyToOne',
+      '@OneToMany',
+      '@ManyToMany',
+    ]) {
+      expect(
+        fs
+          .readFileSync(generatedEntityPath, { encoding: 'utf-8' })
+          .includes(relationType)
+      ).toBeTruthy();
+    }
+  });
+
+  it('should not actually work in dry run mode (--activeRecord relation --class `sharedClassIdentifier`)', async () => {
+    const core = await createGeneratorCommand();
+    await core.invoke(['gen', 'orm', TypeORMGeneratorType.ENTITY], undefined, {
+      dry: true,
+      class: sharedClassIdentifier,
+      activeRecord: true,
+      relation: true,
+    });
+
+    const generatedEntityPath = path.resolve(
+      baseDir,
+      'src',
+      DEFAULT_ENTITY_DIR_PATH,
+      `${sharedClassIdentifier}.entity.ts`
+    );
+
+    expect(fs.existsSync(generatedEntityPath)).toBeFalsy();
+  });
+
   it('should not actually work in dry run mode (--dry --dir `sharedDirName` --file `sharedFileName` --class `sharedClassIdentifier`)', async () => {
     const core = await createGeneratorCommand();
-    await core.invoke(['gen', 'orm', 'entity'], undefined, {
+    await core.invoke(['gen', 'orm', TypeORMGeneratorType.ENTITY], undefined, {
       dry: true,
       dir: sharedDirName,
       file: sharedFileName,
@@ -294,7 +374,7 @@ describe.skip('ORM handler (entity)', () => {
 
   it('should not actually work in dry run mode (--dry --class `sharedClassIdentifier`)', async () => {
     const core = await createGeneratorCommand();
-    await core.invoke(['gen', 'orm', 'entity'], undefined, {
+    await core.invoke(['gen', 'orm', TypeORMGeneratorType.ENTITY], undefined, {
       dry: true,
       class: sharedClassIdentifier,
     });
@@ -302,10 +382,321 @@ describe.skip('ORM handler (entity)', () => {
     const generatedEntityPath = path.resolve(
       baseDir,
       'src',
-      'entity',
+      DEFAULT_ENTITY_DIR_PATH,
       `${sharedClassIdentifier}.entity.ts`
     );
 
     expect(fs.existsSync(generatedEntityPath)).not.toBeTruthy();
+  });
+});
+
+describe.only('ORM handler (subscriber)', () => {
+  beforeAll(async () => {
+    jest.setTimeout(300000);
+    await resetFixtures();
+  });
+
+  beforeEach(async () => {
+    await resetFixtures();
+  });
+
+  const sharedClassIdentifier = 'tmp';
+  const sharedFileName = 'subscriber-file';
+  const sharedDirName = 'subscriber-dir';
+
+  it('should use option passed in (--dotFile --class `sharedClassIdentifier`)', async () => {
+    const core = await createGeneratorCommand();
+    await core.invoke(
+      ['gen', 'orm', TypeORMGeneratorType.SUBSCRIBER],
+      undefined,
+      {
+        dotFile: true,
+        class: sharedClassIdentifier,
+      }
+    );
+
+    const generatedSubscriberPath = path.resolve(
+      baseDir,
+      'src',
+      DEFAULT_SUBSCRIBER_DIR_PATH,
+      `${sharedClassIdentifier}.subscriber.ts`
+    );
+
+    expectGenerateValidFile(generatedSubscriberPath, sharedClassIdentifier);
+  });
+
+  it('should use option passed in (--dotFile false --class `sharedClassIdentifier`)', async () => {
+    const core = await createGeneratorCommand();
+    await core.invoke(
+      ['gen', 'orm', TypeORMGeneratorType.SUBSCRIBER],
+      undefined,
+      {
+        dotFile: true,
+        class: sharedClassIdentifier,
+      }
+    );
+
+    const generatedSubscriberPath = path.resolve(
+      baseDir,
+      'src',
+      DEFAULT_SUBSCRIBER_DIR_PATH,
+      `${sharedClassIdentifier}.subscriber.ts`
+    );
+
+    expectGenerateValidFile(generatedSubscriberPath, sharedClassIdentifier);
+  });
+
+  it('should use option passed in (--file `sharedFileName` --dotFile --class `sharedClassIdentifier`)', async () => {
+    const core = await createGeneratorCommand();
+    await core.invoke(
+      ['gen', 'orm', TypeORMGeneratorType.SUBSCRIBER],
+      undefined,
+      {
+        dotFile: true,
+        file: sharedFileName,
+        class: sharedClassIdentifier,
+      }
+    );
+
+    const generatedSubscriberPath = path.resolve(
+      baseDir,
+      'src',
+      DEFAULT_SUBSCRIBER_DIR_PATH,
+      `${sharedFileName}.subscriber.ts`
+    );
+    expectGenerateValidFile(generatedSubscriberPath, sharedClassIdentifier);
+  });
+
+  it('should use option passed in (--file `sharedFileName` --dotFile false --class `sharedClassIdentifier`)', async () => {
+    const core = await createGeneratorCommand();
+    await core.invoke(
+      ['gen', 'orm', TypeORMGeneratorType.SUBSCRIBER],
+      undefined,
+      {
+        dotFile: false,
+        file: sharedFileName,
+        class: sharedClassIdentifier,
+      }
+    );
+
+    const generatedEntityPath = path.resolve(
+      baseDir,
+      'src',
+      DEFAULT_SUBSCRIBER_DIR_PATH,
+      `${sharedFileName}.ts`
+    );
+
+    expectGenerateValidFile(generatedEntityPath, sharedClassIdentifier);
+  });
+
+  it('should use option passed in (--dir `sharedDirName` --dotFile --class `sharedClassIdentifier`)', async () => {
+    const core = await createGeneratorCommand();
+    await core.invoke(
+      ['gen', 'orm', TypeORMGeneratorType.SUBSCRIBER],
+      undefined,
+      {
+        dotFile: true,
+        dir: sharedDirName,
+        class: sharedClassIdentifier,
+      }
+    );
+
+    const generatedSubscriberPath = path.resolve(
+      baseDir,
+      'src',
+      sharedDirName,
+      `${sharedClassIdentifier}.subscriber.ts`
+    );
+
+    expectGenerateValidFile(generatedSubscriberPath, sharedClassIdentifier);
+  });
+
+  it('should use option passed in (--file `sharedFileName` --dir `sharedDirName` --dotFile --class `sharedClassIdentifier`)', async () => {
+    const core = await createGeneratorCommand();
+    await core.invoke(
+      ['gen', 'orm', TypeORMGeneratorType.SUBSCRIBER],
+      undefined,
+      {
+        dotFile: true,
+        file: sharedFileName,
+        dir: sharedDirName,
+        class: sharedClassIdentifier,
+      }
+    );
+
+    const generatedSubscriberPath = path.resolve(
+      baseDir,
+      'src',
+      sharedDirName,
+      `${sharedFileName}.subscriber.ts`
+    );
+
+    expectGenerateValidFile(generatedSubscriberPath, sharedClassIdentifier);
+  });
+
+  it('should use option passed in (--file `sharedFileName` --dir `sharedDirName` --dotFile false --class `sharedClassIdentifier`)', async () => {
+    const core = await createGeneratorCommand();
+    await core.invoke(
+      ['gen', 'orm', TypeORMGeneratorType.SUBSCRIBER],
+      undefined,
+      {
+        dotFile: false,
+        file: sharedFileName,
+        dir: sharedDirName,
+        class: sharedClassIdentifier,
+      }
+    );
+
+    const generatedSubscriberPath = path.resolve(
+      baseDir,
+      'src',
+      sharedDirName,
+      `${sharedFileName}.ts`
+    );
+
+    expectGenerateValidFile(generatedSubscriberPath, sharedClassIdentifier);
+  });
+
+  it('should use option passed in (--dir `sharedDirName` --dotFile false --class `sharedClassIdentifier`)', async () => {
+    const core = await createGeneratorCommand();
+    await core.invoke(
+      ['gen', 'orm', TypeORMGeneratorType.SUBSCRIBER],
+      undefined,
+      {
+        dotFile: false,
+        dir: sharedDirName,
+        class: sharedClassIdentifier,
+      }
+    );
+
+    const generatedSubscriberPath = path.resolve(
+      baseDir,
+      'src',
+      sharedDirName,
+      `${sharedClassIdentifier}.ts`
+    );
+
+    expectGenerateValidFile(generatedSubscriberPath, sharedClassIdentifier);
+  });
+
+  it('should use option passed in (--dir `sharedDirName` --dotFile false --class `sharedClassIdentifier`)', async () => {
+    const core = await createGeneratorCommand();
+    await core.invoke(
+      ['gen', 'orm', TypeORMGeneratorType.SUBSCRIBER],
+      undefined,
+      {
+        dotFile: false,
+        dir: sharedDirName,
+        class: sharedClassIdentifier,
+      }
+    );
+
+    const generatedSubscriberPath = path.resolve(
+      baseDir,
+      'src',
+      sharedDirName,
+      `${sharedClassIdentifier}.ts`
+    );
+
+    expectGenerateValidFile(generatedSubscriberPath, sharedClassIdentifier);
+  });
+
+  it('should use option passed in (--transaction true --class `sharedClassIdentifier`)', async () => {
+    const core = await createGeneratorCommand();
+    await core.invoke(
+      ['gen', 'orm', TypeORMGeneratorType.SUBSCRIBER],
+      undefined,
+      {
+        class: sharedClassIdentifier,
+        transaction: true,
+      }
+    );
+
+    const generatedSubscriberPath = path.resolve(
+      baseDir,
+      'src',
+      DEFAULT_SUBSCRIBER_DIR_PATH,
+      `${sharedClassIdentifier}.subscriber.ts`
+    );
+
+    expectGenerateValidFile(generatedSubscriberPath, sharedClassIdentifier);
+
+    for (const transactionType of [
+      'TransactionStartEvent',
+      'TransactionCommitEvent',
+      'TransactionRollbackEvent',
+    ]) {
+      expect(
+        fs
+          .readFileSync(generatedSubscriberPath, { encoding: 'utf-8' })
+          .includes(transactionType)
+      ).toBeTruthy();
+    }
+  });
+
+  it('should not actually work in dry run mode (--transaction true --class `sharedClassIdentifier`)', async () => {
+    const core = await createGeneratorCommand();
+    await core.invoke(
+      ['gen', 'orm', TypeORMGeneratorType.SUBSCRIBER],
+      undefined,
+      {
+        dry: true,
+        class: sharedClassIdentifier,
+        transaction: true,
+      }
+    );
+
+    const generatedSubscriberPath = path.resolve(
+      baseDir,
+      'src',
+      DEFAULT_ENTITY_DIR_PATH,
+      `${sharedClassIdentifier}.subscriber.ts`
+    );
+
+    expect(fs.existsSync(generatedSubscriberPath)).not.toBeTruthy();
+  });
+
+  it('should not actually work in dry run mode (--dry --dir `sharedDirName` --file `sharedFileName` --class `sharedClassIdentifier`)', async () => {
+    const core = await createGeneratorCommand();
+    await core.invoke(
+      ['gen', 'orm', TypeORMGeneratorType.SUBSCRIBER],
+      undefined,
+      {
+        dry: true,
+        dir: sharedDirName,
+        file: sharedFileName,
+        class: sharedClassIdentifier,
+      }
+    );
+
+    const generatedSubscriberPath = path.resolve(
+      baseDir,
+      'src',
+      sharedDirName,
+      `${sharedFileName}.subscriber.ts`
+    );
+
+    expect(fs.existsSync(generatedSubscriberPath)).not.toBeTruthy();
+  });
+
+  it('should not actually work in dry run mode (--dry --class `sharedClassIdentifier`)', async () => {
+    const core = await createGeneratorCommand();
+    await core.invoke(
+      ['gen', 'orm', TypeORMGeneratorType.SUBSCRIBER],
+      undefined,
+      {
+        dry: true,
+        class: sharedClassIdentifier,
+      }
+    );
+
+    const generatedSubscriberPath = path.resolve(
+      baseDir,
+      'src',
+      DEFAULT_SUBSCRIBER_DIR_PATH,
+      `${sharedClassIdentifier}.subscriber.ts`
+    );
+
+    expect(fs.existsSync(generatedSubscriberPath)).not.toBeTruthy();
   });
 });

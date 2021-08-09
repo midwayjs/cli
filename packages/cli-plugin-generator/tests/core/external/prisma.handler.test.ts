@@ -19,7 +19,7 @@ import {
   PRISMA_NPM_SCRIPTS,
 } from '../../../src/core/external/prisma.handler';
 
-describe.only('Prisma handler', () => {
+describe.skip('Prisma handler', () => {
   beforeAll(async () => {
     jest.setTimeout(300000);
     await resetFixtures();
@@ -120,12 +120,6 @@ describe.only('Prisma handler', () => {
     ).toBeTruthy();
 
     // app
-
-    console.log(
-      fs.readFileSync(configurationPath, {
-        encoding: 'utf-8',
-      })
-    );
 
     // register
     expect(
