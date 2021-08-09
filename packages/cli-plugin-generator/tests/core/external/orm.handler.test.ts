@@ -390,7 +390,7 @@ describe.skip('ORM handler (entity)', () => {
   });
 });
 
-describe.only('ORM handler (subscriber)', () => {
+describe.skip('ORM handler (subscriber)', () => {
   beforeAll(async () => {
     jest.setTimeout(300000);
     await resetFixtures();

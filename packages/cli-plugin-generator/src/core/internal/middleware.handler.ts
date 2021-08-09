@@ -15,6 +15,7 @@ import {
   ensureBooleanType,
   applyDefaultValueToSharedOption,
   Framework,
+  FrameworkGroup,
 } from '../utils';
 import omit from 'lodash/omit';
 
@@ -69,7 +70,7 @@ export const mountMiddlewareCommand = (): ICommandInstance => {
   };
 };
 
-type FrameworkSpecificInfo = {
+export type FrameworkSpecificInfo = {
   templatePath: string;
 };
 
@@ -86,6 +87,7 @@ export const frameworkSpecificInfo = (
         templatePath: '../../templates/middleware/express-middleware.ts.ejs',
       };
     case 'egg':
+    default:
       return {
         templatePath: '../../templates/middleware/egg-middleware.ts.ejs',
       };
@@ -103,6 +105,15 @@ async function middlewareHandlerCore(
 
   if (dry) {
     consola.success('Executing in `dry run` mode, nothing will happen.');
+  }
+
+  if (!FrameworkGroup.includes(framework)) {
+    consola.error(
+      `Unsupported framework: ${framework}, use oneof ${chalk.cyan(
+        FrameworkGroup.join(' ')
+      )}`
+    );
+    process.exit(0);
   }
 
   if (!opts.class) {

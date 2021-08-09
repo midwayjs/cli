@@ -18,6 +18,8 @@ import {
 import jsonfile from 'jsonfile';
 import pick from 'lodash/pick';
 
+export const DEBUG_CONFIG_PATH = '.vscode/launch.json';
+
 export interface DebugOptions extends Pick<GeneratorSharedOptions, 'dry'> {
   /**
    * @description Debug port
@@ -67,7 +69,7 @@ async function debugHandlerCore(
     consola.success('Executing in `dry run` mode, nothing will happen.');
   }
 
-  const debugFilePath = path.resolve(projectDirPath, '.vscode/launch.json');
+  const debugFilePath = path.resolve(projectDirPath, DEBUG_CONFIG_PATH);
 
   consola.info(
     `Debug configuration will be created in ${chalk.green(debugFilePath)}`

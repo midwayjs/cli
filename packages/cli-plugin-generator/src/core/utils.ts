@@ -26,6 +26,8 @@ export interface GeneratorSharedOptions {
 
 export type Framework = 'koa' | 'express' | 'egg';
 
+export const FrameworkGroup: Framework[] = ['egg', 'express', 'koa'];
+
 export type SLSType = 'faas' | 'aggr';
 
 export const sharedOption: Record<
