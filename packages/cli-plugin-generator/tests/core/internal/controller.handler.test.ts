@@ -1,5 +1,7 @@
 import fs from 'fs-extra';
+import path from 'path';
 import jsonfile from 'jsonfile';
+import { capitalCase } from 'capital-case';
 import {
   resetFixtures,
   createGeneratorCommand,
@@ -7,8 +9,8 @@ import {
   configurationPath,
   packagePath,
   baseDir,
+  expectGenerateValidFile,
 } from '../../shared';
-import { AXIOS_DEP } from '../../../src/core/external/axios.handler';
 
 describe.skip('Controller handler', () => {
   beforeAll(async () => {
@@ -20,60 +22,131 @@ describe.skip('Controller handler', () => {
     await resetFixtures();
   });
 
-  it('should install required deps only', async () => {
+  const sharedClassIdentifier = 'sample';
+  const sharedFileName = 'controller-file';
+  const sharedDirName = 'controller-dir';
+
+  it('should create files', async () => {
     const core = await createGeneratorCommand();
-    await core.invoke(['gen', 'axios']);
 
-    const pkg = jsonfile.readFileSync(packagePath);
+    await core.invoke(['gen', 'controller'], undefined, {
+      class: sharedClassIdentifier,
+    });
 
-    expect(Object.keys(pkg?.dependencies ?? {})).toEqual(AXIOS_DEP);
+    const generatedFilePath = path.resolve(
+      baseDir,
+      'src',
+      'controller',
+      `${sharedClassIdentifier}.controller.ts`
+    );
+
+    expectGenerateValidFile(generatedFilePath, sharedClassIdentifier);
   });
 
-  it('should transform source code', async () => {
+  it('should use full template by default', async () => {
     const core = await createGeneratorCommand();
 
-    await core.invoke(['gen', 'axios']);
+    await core.invoke(['gen', 'controller'], undefined, {
+      class: sharedClassIdentifier,
+    });
+
+    const generatedFilePath = path.resolve(
+      baseDir,
+      'src',
+      'controller',
+      `${sharedClassIdentifier}.controller.ts`
+    );
+
+    expectGenerateValidFile(generatedFilePath, sharedClassIdentifier);
 
     expect(
       fs
-        .readFileSync(configurationPath, {
-          encoding: 'utf-8',
-        })
-        .includes('import * as axios from "@midwayjs/axios"')
+        .readFileSync(generatedFilePath, { encoding: 'utf8' })
+        .includes('HttpCode')
     ).toBeTruthy();
+  });
+
+  it('should use light template when --light', async () => {
+    const core = await createGeneratorCommand();
+
+    await core.invoke(['gen', 'controller'], undefined, {
+      class: sharedClassIdentifier,
+      light: true,
+    });
+
+    const generatedFilePath = path.resolve(
+      baseDir,
+      'src',
+      'controller',
+      `${sharedClassIdentifier}.controller.ts`
+    );
+
+    expectGenerateValidFile(generatedFilePath, sharedClassIdentifier);
 
     expect(
       fs
-        .readFileSync(configurationPath, {
-          encoding: 'utf-8',
-        })
-        .includes('[axios]')
-    ).toBeTruthy();
+        .readFileSync(generatedFilePath, { encoding: 'utf8' })
+        .includes('HttpCode')
+    ).not.toBeTruthy();
+  });
+
+  it('should use option passed in (--file --dir)', async () => {
+    const core = await createGeneratorCommand();
+
+    await core.invoke(['gen', 'controller'], undefined, {
+      class: sharedClassIdentifier,
+      file: sharedFileName,
+      dir: sharedDirName,
+    });
+
+    const generatedFilePath = path.resolve(
+      baseDir,
+      'src',
+      sharedDirName,
+      `${sharedFileName}.controller.ts`
+    );
+
+    expectGenerateValidFile(generatedFilePath, sharedClassIdentifier);
+  });
+
+  it('should use option passed in (--file --dir --dot false)', async () => {
+    const core = await createGeneratorCommand();
+
+    await core.invoke(['gen', 'controller'], undefined, {
+      dotFile: false,
+      class: sharedClassIdentifier,
+      file: sharedFileName,
+      dir: sharedDirName,
+    });
+
+    const generatedFilePath = path.resolve(
+      baseDir,
+      'src',
+      sharedDirName,
+      `${sharedFileName}.ts`
+    );
+
+    expectGenerateValidFile(generatedFilePath, sharedClassIdentifier);
   });
 
   it('should not actually work in dry run mode', async () => {
     const core = await createGeneratorCommand();
-    await core.invoke(['gen', 'axios'], undefined, {
+
+    await core.invoke(['gen', 'controller'], undefined, {
+      dotFile: false,
+      class: sharedClassIdentifier,
+      file: sharedFileName,
+      dir: sharedDirName,
       dry: true,
     });
-    const pkg = jsonfile.readFileSync(packagePath);
 
-    expect(Object.keys(pkg?.dependencies ?? {})).not.toEqual(AXIOS_DEP);
+    const generatedFilePath = path.resolve(
+      baseDir,
+      'src',
+      sharedDirName,
+      `${sharedClassIdentifier}.ts`
+    );
 
-    expect(
-      fs
-        .readFileSync(configurationPath, {
-          encoding: 'utf-8',
-        })
-        .includes('import * as http from "@midwayjs/axios"')
-    ).toBeFalsy();
-
-    expect(
-      fs
-        .readFileSync(configurationPath, {
-          encoding: 'utf-8',
-        })
-        .includes('[axios]')
-    ).toBeFalsy();
+    expect(fs.existsSync(generatedFilePath)).not.toBeTruthy();
   });
 });
