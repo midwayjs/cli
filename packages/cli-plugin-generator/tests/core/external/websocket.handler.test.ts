@@ -18,8 +18,9 @@ import {
 } from '../../../src/core/external/websocket.handler';
 
 describe.skip('WebSocket handler (setup)', () => {
-  beforeAll(() => {
+  beforeAll(async () => {
     jest.setTimeout(300000);
+    await resetFixtures();
   });
 
   beforeEach(async () => {
@@ -162,8 +163,9 @@ describe.skip('WebSocket handler (setup)', () => {
 });
 
 describe.skip('WebSocket handler (controller)', () => {
-  beforeAll(() => {
+  beforeAll(async () => {
     jest.setTimeout(300000);
+    await resetFixtures();
   });
 
   beforeEach(async () => {

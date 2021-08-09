@@ -44,11 +44,11 @@ export interface PrismaOptions extends Pick<GeneratorSharedOptions, 'dry'> {
   initClient: boolean;
 }
 
-const PRISMA_DEP = '@prisma/client';
+export const PRISMA_DEP = ['@prisma/client'];
 
-const PRISMA_DEV_DEP = 'prisma';
+export const PRISMA_DEV_DEP = ['prisma'];
 
-const initialSchemaToAppend = `
+export const initialSchemaToAppend = `
       // This is your Prisma schema file,
       // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
@@ -70,7 +70,31 @@ const initialSchemaToAppend = `
       }
     `;
 
-const envPairToAppend = `
+export const PRISMA_NPM_SCRIPTS = [
+  {
+    script: 'prisma:gen',
+    content: 'prisma generate --schema=./src/prisma/schema.prisma',
+  },
+  {
+    script: 'prisma:push',
+    content: 'prisma db push --schema=./src/prisma/schema.prisma',
+  },
+  {
+    script: 'prisma:pull',
+    content: 'prisma db pull --schema=./src/prisma/schema.prisma',
+  },
+  {
+    script: 'prisma:migrate',
+    content:
+      'prisma migrate --preview-feature --schema=./src/prisma/schema.prisma',
+  },
+  {
+    script: 'prisma:format',
+    content: 'prisma format --schema=./src/prisma/schema.prisma',
+  },
+];
+
+export const envPairToAppend = `
 # Environment variables declared in this file are automatically made available to Prisma.
 # See the documentation for more detail: https://pris.ly/d/prisma-schema#using-environment-variables
 
@@ -79,7 +103,7 @@ const envPairToAppend = `
 
 DATABASE_URL="file:../../demo.sqlite"`;
 
-const updateGitIgnore = `
+export const updateGitIgnore = `
 .env
 *.sqlite
 `;
@@ -147,7 +171,7 @@ async function prismaHandlerCore(
   // 执行prisma init
   // 添加npm script
   // initSchema -> 写入初始内容 -> prisma format
-  // initClien -> prisma db push + prisma generate
+  // initClient -> prisma db push + prisma generate
   // 修改configuration
 
   if (!dry) {
@@ -185,29 +209,10 @@ async function prismaHandlerCore(
 
     consola.info('Adding `Prisma` related npm scripts...');
 
-    addNPMScripts(path.resolve(projectDirPath, 'package.json'), [
-      {
-        script: 'prisma:gen',
-        content: 'prisma generate --schema=./src/prisma/schema.prisma',
-      },
-      {
-        script: 'prisma:push',
-        content: 'prisma db push --schema=./src/prisma/schema.prisma',
-      },
-      {
-        script: 'prisma:pull',
-        content: 'prisma db pull --schema=./src/prisma/schema.prisma',
-      },
-      {
-        script: 'prisma:migrate',
-        content:
-          'prisma migrate --preview-feature --schema=./src/prisma/schema.prisma',
-      },
-      {
-        script: 'prisma:format',
-        content: 'prisma format --schema=./src/prisma/schema.prisma',
-      },
-    ]);
+    addNPMScripts(
+      path.resolve(projectDirPath, 'package.json'),
+      PRISMA_NPM_SCRIPTS
+    );
 
     consola.success('Prisma related npm scripts added.');
 
@@ -290,7 +295,7 @@ async function prismaHandlerCore(
       configurationSource,
       LIFE_CYCLE_CLASS_IDENTIFIER,
       'onReady',
-      'client.$connect()',
+      'client.$connect();',
       true
     );
 

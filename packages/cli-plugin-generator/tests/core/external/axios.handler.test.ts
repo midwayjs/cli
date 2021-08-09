@@ -11,8 +11,9 @@ import {
 import { AXIOS_DEP } from '../../../src/core/external/axios.handler';
 
 describe.skip('Axios handler', () => {
-  beforeAll(() => {
+  beforeAll(async () => {
     jest.setTimeout(300000);
+    await resetFixtures();
   });
 
   beforeEach(async () => {

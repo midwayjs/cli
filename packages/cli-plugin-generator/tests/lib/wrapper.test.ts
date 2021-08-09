@@ -3,8 +3,8 @@ import { generatorInvokeWrapper } from '../../src/lib/wrapper';
 
 describe.only('generator wrapper', () => {
   beforeAll(() => {
-    // Redirect std and console to consola too
-    // Calling this once is sufficient
+    jest.setTimeout(300000);
+
     consola.wrapAll();
   });
 

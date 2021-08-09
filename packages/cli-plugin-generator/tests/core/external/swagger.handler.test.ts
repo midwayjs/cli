@@ -14,8 +14,9 @@ import {
 } from '../../../src/core/external/swagger.handler';
 
 describe.skip('Swagger handler', () => {
-  beforeAll(() => {
+  beforeAll(async () => {
     jest.setTimeout(300000);
+    await resetFixtures();
   });
 
   beforeEach(async () => {

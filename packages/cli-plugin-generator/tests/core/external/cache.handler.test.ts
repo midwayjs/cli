@@ -14,8 +14,9 @@ import {
 } from '../../../src/core/external/cache.handler';
 
 describe.skip('Cache handler', () => {
-  beforeAll(() => {
+  beforeAll(async () => {
     jest.setTimeout(300000);
+    await resetFixtures();
   });
 
   beforeEach(async () => {
