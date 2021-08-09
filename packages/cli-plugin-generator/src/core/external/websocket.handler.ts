@@ -85,6 +85,9 @@ export const mountWebSocketCommand = (): ICommandInstance => {
           lifecycleEvents: ['gen'],
           opts: {
             ...pick(sharedOption, 'dry'),
+            namespace: {
+              usage: 'Import namespace for @midwayjs/ws import',
+            },
           },
         },
         controller: {

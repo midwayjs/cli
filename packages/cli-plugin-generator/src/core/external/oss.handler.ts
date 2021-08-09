@@ -21,17 +21,21 @@ import pick from 'lodash/pick';
 
 export interface OSSOptions extends Pick<GeneratorSharedOptions, 'dry'> {
   /**
-   * @description Import namespace for @midwayjs/swagger import
+   * @description Import namespace for @midwayjs/oss import
    * @value axios
    */
   namespace: string;
 }
 
-const OSS_DEP = ['@midwayjs/oss'];
-const OSS_DEV_DEP = ['@types/ali-oss'];
+export const OSS_DEP = ['@midwayjs/oss'];
+export const OSS_DEV_DEP = ['@types/ali-oss'];
 
 export const mountOSSCommand = (): ICommandInstance => {
-  const writerSharedOptions = {};
+  const writerSharedOptions = {
+    namespace: {
+      usage: 'Import namespace for @midwayjs/oss import',
+    },
+  };
 
   return {
     oss: {

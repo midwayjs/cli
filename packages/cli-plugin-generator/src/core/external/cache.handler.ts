@@ -19,15 +19,25 @@ import {
 } from '../utils';
 import pick from 'lodash/pick';
 
-export interface CacheOptions extends Pick<GeneratorSharedOptions, 'dry'> {}
+export interface CacheOptions extends Pick<GeneratorSharedOptions, 'dry'> {
+  /**
+   * @description Import namespace for @midwayjs/cache import
+   * @value axios
+   */
+  namespace: string;
+}
 
-const CACHE_DEP = ['@midwayjs/cache', 'cache-manager'];
-const CACHE_DEV_DEP = ['@types/cache-manager'];
+export const CACHE_DEP = ['@midwayjs/cache', 'cache-manager'];
+export const CACHE_DEV_DEP = ['@types/cache-manager'];
 
 export const mountCacheCommand = (): ICommandInstance => {
   // TODO: 从接口中直接生成选项
 
-  const writerSharedOptions = {};
+  const writerSharedOptions = {
+    namespace: {
+      usage: 'Import namespace for @midwayjs/cache import ',
+    },
+  };
 
   return {
     cache: {
@@ -48,7 +58,7 @@ async function cacheHandlerCore(
   consola.info(`Project location: ${chalk.green(projectDirPath)}`);
 
   const { dry } = applyDefaultValueToSharedOption(opts);
-  const {} = opts;
+  const { namespace = 'cache' } = opts;
 
   if (dry) {
     consola.success('Executing in `dry run` mode, nothing will happen.');
@@ -85,7 +95,7 @@ async function cacheHandlerCore(
 
     addImportDeclaration(
       configurationSource,
-      'cache',
+      namespace,
       '@midwayjs/cache',
       ImportType.NAMESPACE_IMPORT
     );
@@ -94,7 +104,7 @@ async function cacheHandlerCore(
       configurationSource,
       'Configuration',
       'imports',
-      'cache'
+      namespace
     );
 
     formatTSFile(configurationPath);

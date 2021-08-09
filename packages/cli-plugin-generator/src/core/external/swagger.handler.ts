@@ -40,6 +40,9 @@ export const mountSwaggerCommand = (): ICommandInstance => {
     ui: {
       usage: 'Output Swagger UI in server side.',
     },
+    namespace: {
+      usage: 'Import namespace for @midwayjs/swagger import',
+    },
   };
 
   return {

@@ -32,6 +32,11 @@ import pick from 'lodash/pick';
 
 export interface ORMOptions extends GeneratorSharedOptions {
   /**
+   * @description Import namespace for @midwayjs/orm import
+   * @value axios
+   */
+  namespace: string;
+  /**
    * @description Use Active-Record mode in entity class
    * @value true
    */
@@ -86,6 +91,9 @@ export const mountORMCommand = (): ICommandInstance => {
           opts: {
             // TODO: option: driver / orm config namespac
             ...pick(sharedOption, 'dry'),
+            namespace: {
+              usage: 'Import namespace for @midwayjs/orm import ',
+            },
           },
         },
         entity: {
@@ -166,6 +174,8 @@ async function ormHandlerCore(
 
   switch (type) {
     case TypeORMGeneratorType.SETUP:
+      const { namespace = 'orm' } = opts;
+
       dry
         ? consola.info('`[DryRun]` Skip dependencies installation check.')
         : await ensureDepsInstalled(ORM_DEV, projectDirPath);
@@ -215,7 +225,7 @@ async function ormHandlerCore(
 
         addImportDeclaration(
           configurationSource,
-          'orm',
+          namespace,
           '@midwayjs/orm',
           ImportType.NAMESPACE_IMPORT
         );
@@ -224,7 +234,7 @@ async function ormHandlerCore(
           configurationSource,
           'Configuration',
           'imports',
-          'orm'
+          namespace
         );
 
         formatTSFile(configurationPath);

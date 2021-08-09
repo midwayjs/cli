@@ -7,10 +7,10 @@ import {
   configurationPath,
   packagePath,
   baseDir,
-} from './shared';
-import { AXIOS_DEP } from '../src/core/external/axios.handler';
+} from '../../shared';
+import { AXIOS_DEP } from '../../../src/core/external/axios.handler';
 
-describe.skip('Axios handler', () => {
+describe('Axios handler', () => {
   beforeAll(() => {
     jest.setTimeout(300000);
   });
