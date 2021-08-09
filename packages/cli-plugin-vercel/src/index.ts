@@ -1,5 +1,5 @@
 import { BasePlugin, ICoreInstance, forkNode } from '@midwayjs/command-core';
-import { join } from 'path';
+import { join, dirname } from 'path';
 import * as globby from 'globby';
 import {
   existsSync,
@@ -135,7 +135,7 @@ export class VercelPlugin extends BasePlugin {
     try {
       const vercelPkg = require.resolve('vercel/package.json');
       const vercelPkgJson = JSON.parse(readFileSync(vercelPkg).toString());
-      const vercelBin = join(vercelPkg, vercelPkgJson.bin.vercel);
+      const vercelBin = join(dirname(vercelPkg), vercelPkgJson.bin.vercel);
 
       const args = [`--local-config=${this.vercelJsonFile}`];
       const token = this.options.token || process.env.VERCEL_TOKEN;
@@ -144,7 +144,7 @@ export class VercelPlugin extends BasePlugin {
       }
       this.core.debug('Vercel Bin', vercelBin);
       this.core.debug('Vercel Deploy Args', args);
-      await forkNode(`${vercelBin}}`, args, {
+      await forkNode(`${vercelBin}`, args, {
         cwd: this.midwayBuildPath,
       });
       this.core.cli.log('Deploy success');
