@@ -17,7 +17,7 @@ import {
 } from '../../../src/core/external/websocket.handler';
 import { capitalCase } from 'capital-case';
 
-describe.skip('WebSocket handler (setup)', () => {
+describe('WebSocket handler (setup)', () => {
   beforeAll(() => {
     jest.setTimeout(300000);
   });
@@ -161,6 +161,23 @@ describe.skip('WebSocket handler (setup)', () => {
   });
 });
 
+const expectGenerateValidFile = (
+  generatedPath: string,
+  classIdentifier: string
+) => {
+  expect(fs.existsSync(generatedPath)).toBeTruthy();
+
+  expect(
+    fs.readFileSync(generatedPath, { encoding: 'utf-8' }).length
+  ).toBeGreaterThan(0);
+
+  expect(
+    fs
+      .readFileSync(generatedPath, { encoding: 'utf-8' })
+      .includes(capitalCase(classIdentifier))
+  ).toBeTruthy();
+};
+
 describe('WebSocket handler (controller)', () => {
   beforeAll(() => {
     jest.setTimeout(300000);
@@ -174,10 +191,10 @@ describe('WebSocket handler (controller)', () => {
   const sharedFileName = 'ws-file';
   const sharedDirName = 'ws-dir';
 
-  it.only('should use option passed in (--dot --class `sharedClassIdentifier`)', async () => {
+  it('should use option passed in (--dotFile --class `sharedClassIdentifier`)', async () => {
     const core = await createGeneratorCommand();
     await core.invoke(['gen', 'ws', 'controller'], undefined, {
-      dot: true,
+      dotFile: true,
       class: sharedClassIdentifier,
     });
 
@@ -188,39 +205,30 @@ describe('WebSocket handler (controller)', () => {
       `${sharedClassIdentifier}.controller.ts`
     );
 
-    expect(fs.existsSync(generatedControllerPath)).toBeTruthy();
-
-    expect(fs.readFileSync(generatedControllerPath).length).toBeGreaterThan(0);
-
-    expect(
-      fs
-        .readFileSync(generatedControllerPath)
-        .includes(capitalCase(sharedClassIdentifier))
-    ).toBeTruthy();
+    expectGenerateValidFile(generatedControllerPath, sharedClassIdentifier);
   });
 
-  it('should use option passed in (--dot false --class `sharedClassIdentifier`)', async () => {
+  it('should use option passed in (--dotFile false --class `sharedClassIdentifier`)', async () => {
     const core = await createGeneratorCommand();
     await core.invoke(['gen', 'ws', 'controller'], undefined, {
-      dot: true,
+      dotFile: true,
       class: sharedClassIdentifier,
     });
 
     const generatedControllerPath = path.resolve(
       baseDir,
       'src',
-      `${sharedClassIdentifier}.ts`
+      'controller',
+      `${sharedClassIdentifier}.controller.ts`
     );
 
-    expect(fs.existsSync(generatedControllerPath)).toBeTruthy();
-
-    expect(fs.readFileSync(generatedControllerPath).length).toBeGreaterThan(0);
+    expectGenerateValidFile(generatedControllerPath, sharedClassIdentifier);
   });
 
-  it('should use option passed in (--file `sharedFileName` --dot --class `sharedClassIdentifier`)', async () => {
+  it('should use option passed in (--file `sharedFileName` --dotFile --class `sharedClassIdentifier`)', async () => {
     const core = await createGeneratorCommand();
     await core.invoke(['gen', 'ws', 'controller'], undefined, {
-      dot: true,
+      dotFile: true,
       file: sharedFileName,
       class: sharedClassIdentifier,
     });
@@ -228,75 +236,52 @@ describe('WebSocket handler (controller)', () => {
     const generatedControllerPath = path.resolve(
       baseDir,
       'src',
+      'controller',
       `${sharedFileName}.controller.ts`
     );
-
-    expect(fs.existsSync(generatedControllerPath)).toBeTruthy();
-
-    expect(fs.readFileSync(generatedControllerPath).length).toBeGreaterThan(0);
+    expectGenerateValidFile(generatedControllerPath, sharedClassIdentifier);
   });
 
-  it('should use option passed in (--file `sharedFileName` --dot false --class `sharedClassIdentifier`)', async () => {
+  it('should use option passed in (--file `sharedFileName` --dotFile false --class `sharedClassIdentifier`)', async () => {
     const core = await createGeneratorCommand();
     await core.invoke(['gen', 'ws', 'controller'], undefined, {
-      dot: false,
-      file: sharedClassIdentifier,
+      dotFile: false,
+      file: sharedFileName,
       class: sharedClassIdentifier,
     });
 
     const generatedControllerPath = path.resolve(
       baseDir,
       'src',
+      'controller',
       `${sharedFileName}.ts`
     );
 
-    expect(fs.existsSync(generatedControllerPath)).toBeTruthy();
-
-    expect(fs.readFileSync(generatedControllerPath).length).toBeGreaterThan(0);
+    expectGenerateValidFile(generatedControllerPath, sharedClassIdentifier);
   });
 
-  it('should use option passed in (--dir `sharedDirName` --dot --class `sharedClassIdentifier`)', async () => {
+  it('should use option passed in (--dir `sharedDirName` --dotFile --class `sharedClassIdentifier`)', async () => {
     const core = await createGeneratorCommand();
     await core.invoke(['gen', 'ws', 'controller'], undefined, {
-      dot: true,
+      dotFile: true,
       dir: sharedDirName,
       class: sharedClassIdentifier,
     });
 
     const generatedControllerPath = path.resolve(
       baseDir,
+      'src',
       sharedDirName,
       `${sharedClassIdentifier}.controller.ts`
     );
 
-    expect(fs.existsSync(generatedControllerPath)).toBeTruthy();
-
-    expect(fs.readFileSync(generatedControllerPath).length).toBeGreaterThan(0);
+    expectGenerateValidFile(generatedControllerPath, sharedClassIdentifier);
   });
 
-  it('should use option passed in (--dir `sharedDirName` --dot false --class `sharedClassIdentifier`)', async () => {
+  it('should use option passed in (--file `sharedFileName` --dir `sharedDirName` --dotFile --class `sharedClassIdentifier`)', async () => {
     const core = await createGeneratorCommand();
     await core.invoke(['gen', 'ws', 'controller'], undefined, {
-      dot: false,
-      dir: sharedDirName,
-      class: sharedClassIdentifier,
-    });
-
-    const generatedControllerPath = path.resolve(
-      baseDir,
-      sharedDirName,
-      `${sharedClassIdentifier}.ts`
-    );
-
-    expect(fs.existsSync(generatedControllerPath)).toBeTruthy();
-
-    expect(fs.readFileSync(generatedControllerPath).length).toBeGreaterThan(0);
-  });
-
-  it('should use option passed in (--file `sharedFileName` --dir `sharedDirName` --dot --class `sharedClassIdentifier`)', async () => {
-    const core = await createGeneratorCommand();
-    await core.invoke(['gen', 'ws', 'controller'], undefined, {
-      dot: true,
+      dotFile: true,
       file: sharedFileName,
       dir: sharedDirName,
       class: sharedClassIdentifier,
@@ -304,19 +289,18 @@ describe('WebSocket handler (controller)', () => {
 
     const generatedControllerPath = path.resolve(
       baseDir,
+      'src',
       sharedDirName,
       `${sharedFileName}.controller.ts`
     );
 
-    expect(fs.existsSync(generatedControllerPath)).toBeTruthy();
-
-    expect(fs.readFileSync(generatedControllerPath).length).toBeGreaterThan(0);
+    expectGenerateValidFile(generatedControllerPath, sharedClassIdentifier);
   });
 
-  it('should use option passed in (--file `sharedFileName` --dir `sharedDirName` --dot false --class `sharedClassIdentifier`)', async () => {
+  it('should use option passed in (--file `sharedFileName` --dir `sharedDirName` --dotFile false --class `sharedClassIdentifier`)', async () => {
     const core = await createGeneratorCommand();
     await core.invoke(['gen', 'ws', 'controller'], undefined, {
-      dot: false,
+      dotFile: false,
       file: sharedFileName,
       dir: sharedDirName,
       class: sharedClassIdentifier,
@@ -324,32 +308,29 @@ describe('WebSocket handler (controller)', () => {
 
     const generatedControllerPath = path.resolve(
       baseDir,
+      'src',
       sharedDirName,
       `${sharedFileName}.ts`
     );
 
-    expect(fs.existsSync(generatedControllerPath)).toBeTruthy();
-
-    expect(fs.readFileSync(generatedControllerPath).length).toBeGreaterThan(0);
+    expectGenerateValidFile(generatedControllerPath, sharedClassIdentifier);
   });
 
-  it('should use option passed in (--dir `sharedDirName` --dot false --class `sharedClassIdentifier`)', async () => {
+  it('should use option passed in (--dir `sharedDirName` --dotFile false --class `sharedClassIdentifier`)', async () => {
     const core = await createGeneratorCommand();
     await core.invoke(['gen', 'ws', 'controller'], undefined, {
-      dot: false,
-      file: sharedFileName,
+      dotFile: false,
       dir: sharedDirName,
       class: sharedClassIdentifier,
     });
 
     const generatedControllerPath = path.resolve(
       baseDir,
+      'src',
       sharedDirName,
       `${sharedClassIdentifier}.ts`
     );
 
-    expect(fs.existsSync(generatedControllerPath)).toBeTruthy();
-
-    expect(fs.readFileSync(generatedControllerPath).length).toBeGreaterThan(0);
+    expectGenerateValidFile(generatedControllerPath, sharedClassIdentifier);
   });
 });
