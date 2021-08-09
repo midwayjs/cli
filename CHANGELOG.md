@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.78](https://github.com/midwayjs/bin/compare/v1.2.77...v1.2.78) (2021-08-09)
+
+
+### Bug Fixes
+
+* vercel bin error ([#172](https://github.com/midwayjs/bin/issues/172)) ([23aee2e](https://github.com/midwayjs/bin/commit/23aee2e6dc4e5e9fa66e6344d2f6e8baf0a7df4c))
+
+
+### Features
+
+* support vercel ([#165](https://github.com/midwayjs/bin/issues/165)) ([2a82748](https://github.com/midwayjs/bin/commit/2a82748a0b289e823a9ee6708078f9c66b4d769d))
+* support wechat cloud function ([#153](https://github.com/midwayjs/bin/issues/153)) ([f64744c](https://github.com/midwayjs/bin/commit/f64744c537f4050611705691bbffc240d283ae3c))
+
+
+
+
+
 ## [1.2.77](https://github.com/midwayjs/bin/compare/v1.2.76...v1.2.77) (2021-07-30)
 
 

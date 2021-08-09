@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.78](https://github.com/midwayjs/cli/compare/v1.2.77...v1.2.78) (2021-08-09)
+
+
+### Bug Fixes
+
+* vercel bin error ([#172](https://github.com/midwayjs/cli/issues/172)) ([23aee2e](https://github.com/midwayjs/cli/commit/23aee2e6dc4e5e9fa66e6344d2f6e8baf0a7df4c))
+
+
+### Features
+
+* support vercel ([#165](https://github.com/midwayjs/cli/issues/165)) ([2a82748](https://github.com/midwayjs/cli/commit/2a82748a0b289e823a9ee6708078f9c66b4d769d))
+
+
+
+
+
 ## [1.2.76](https://github.com/midwayjs/cli/compare/v1.2.75...v1.2.76) (2021-07-22)
 
 
