@@ -133,7 +133,7 @@ export class VercelPlugin extends BasePlugin {
       skipInitializer: true,
       starter: '@midwayjs/serverless-vercel-starter',
       entryAppDir: "require('path').join(__dirname, '../')",
-      entryBaseDir: "require('path').join(__dirname, '../dist')",
+      entryBaseDir: "baseDir: require('path').join(__dirname, '../dist')",
     });
   }
 
