@@ -1,0 +1,23 @@
+import { Field, ID, ObjectType } from 'type-graphql';
+<% if (orm) { -%>
+import { EntityModel } from '@midwayjs/orm';
+import { PrimaryGeneratedColumn, Column } from 'typeorm';
+<% } -%>
+
+@ObjectType()
+<% if (orm) { -%>
+@EntityModel()
+<% } -%>
+export class <%=typeName%> {
+  @Field(type => ID)
+  <% if (orm) { -%>
+  @PrimaryGeneratedColumn()
+  <% } -%>
+  id: number;
+
+  @Field()
+  <% if (orm) { -%>
+  @Column()
+  <% } -%>
+  name: string;
+}

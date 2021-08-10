@@ -1,0 +1,26 @@
+import { Provide, Inject, App } from '@midwayjs/decorator';
+import { IMidwayKoaApplication } from '@midwayjs/koa';
+// Choose import according to your framework
+// import { IMidwayWebApplication } from '@midwayjs/web';
+
+import { Resolver, Query, Mutation, FieldResolver, Root } from 'type-graphql';
+
+@Provide()
+@Resolver()
+export default class <%=name%>Resolver {
+  @App()
+  app: IMidwayKoaApplication;
+
+  @Query()
+  async QueryHandler() {}
+
+  @Mutation()
+  async MutationHandler() {}
+
+
+  <% if (field) { -%>
+  @FieldResolver()
+  async FieldResolver(@Root() rootType: unknown) {}
+  <% } -%>
+
+}

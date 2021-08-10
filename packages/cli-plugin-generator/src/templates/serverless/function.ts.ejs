@@ -1,0 +1,77 @@
+import {
+  Provide,
+  Inject,
+  ServerlessTrigger,
+  ServerlessTriggerType,
+  <% if (gateway) { -%>
+  Body,
+  <% } -%>
+  <% if (http) { -%>
+  Query,
+  <% } -%>
+} from '@midwayjs/decorator';
+import { Context,
+  <% if (timer || oss) { -%>
+  FC,
+  <% } -%>
+} from '@midwayjs/faas';
+
+@Provide()
+export class <%= __Function_Name__ %> {
+  @Inject()
+  ctx: Context;
+
+  <% if (http) { -%>
+  @ServerlessTrigger(ServerlessTriggerType.HTTP, {
+    path: '/',
+    method: 'get',
+  })
+  async handleHTTPEvent(@Query() name = 'midwayjs') {
+    return `Hello ${name}`;
+  }
+  <% } -%>
+
+  <% if (event) { -%>
+  @ServerlessTrigger(ServerlessTriggerType.EVENT)
+  async handleEvent(event: any) {
+    return event;
+  }
+  <% } -%>
+
+  <% if (gateway) { -%>
+  @ServerlessTrigger(ServerlessTriggerType.API_GATEWAY, {
+    path: '/api_gateway_aliyun',
+    method: 'post',
+  })
+  async handleAPIGatewayEvent(@Body() name) {
+    return `hello ${name}`;
+  }
+  <% } -%>
+
+  <% if (timer) { -%>
+   @ServerlessTrigger(ServerlessTriggerType.TIMER, {
+    type: 'cron', // or every
+    value: '0 0 4 * * *', // or 1m
+  })
+  async handleTimerEvent(event: FC.TimerEvent) {
+    this.ctx.logger.info(event);
+    return 'hello world';
+  }
+  <% } -%>
+
+  <% if (oss) { -%>
+  @ServerlessTrigger(ServerlessTriggerType.OS, {
+    bucket: 'ossBucketName',
+    events: ['oss:ObjectCreated:*', 'oss:ObjectRemoved:DeleteObject'],
+    filter: {
+      prefix: 'filterdir/',
+      suffix: '.jpg',
+    },
+  })
+  async handleOSSEvent(event: FC.OSSEvent) {
+    this.ctx.logger.info(event);
+    return 'hello world';
+  }
+  <% } -%>
+
+}
