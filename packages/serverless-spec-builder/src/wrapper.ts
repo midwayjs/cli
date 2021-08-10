@@ -21,6 +21,8 @@ export function writeWrapper(options: {
   moreArgs?: boolean; // aggregation more args
   isDefaultFunc?: boolean; // entry is module.export = () => {}
   skipInitializer?: boolean; // skip generate initializer method
+  entryAppDir?: string;
+  entryBaseDir?: string;
 }) {
   const {
     service,
@@ -40,6 +42,8 @@ export function writeWrapper(options: {
     moreArgs,
     isDefaultFunc = false,
     skipInitializer = false,
+    entryAppDir,
+    entryBaseDir,
   } = options;
 
   const files = {};
@@ -169,6 +173,8 @@ export function writeWrapper(options: {
       moreArgs: moreArgs || false,
       isDefaultFunc,
       skipInitializer,
+      entryAppDir,
+      entryBaseDir,
       defaultFunctionHandlerName: files[file].defaultFunctionHandlerName,
       ...layers,
     });

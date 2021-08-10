@@ -9,7 +9,10 @@ import {
   remove,
 } from 'fs-extra';
 import { convertMethods } from './utils';
-import { writeWrapper } from '@midwayjs/serverless-spec-builder';
+import {
+  writeWrapper,
+  filterUserDefinedEnv,
+} from '@midwayjs/serverless-spec-builder';
 // refs: vercel.com/docs/configuration
 export class VercelPlugin extends BasePlugin {
   core: ICoreInstance;
@@ -50,6 +53,13 @@ export class VercelPlugin extends BasePlugin {
     if (existsSync(this.vercelJsonFile)) {
       vercelJson = JSON.parse(readFileSync(this.vercelJsonFile).toString());
     }
+
+    const userDefinedEnv = filterUserDefinedEnv();
+    if (!vercelJson.env) {
+      vercelJson.env = {};
+    }
+    Object.assign(vercelJson.env, userDefinedEnv);
+
     if (!vercelJson.functions) {
       vercelJson.functions = {};
     }
@@ -65,8 +75,12 @@ export class VercelPlugin extends BasePlugin {
       const { funcInfo, entryFileName } = func;
       if (!vercelJson.functions[entryFileName]) {
         vercelJson.functions[entryFileName] = {
-          memory: 128, // 0 - 1024, step 64
-          maxDuration: 10, // 0 - 10
+          memory:
+            funcInfo.memorySize ||
+            this.core.service?.provider?.memorySize ||
+            128, // 0 - 1024, step 64
+          maxDuration:
+            funcInfo.timeout || this.core.service?.provider?.timeout || 10, // 0 - 10
         };
       }
 
@@ -97,6 +111,7 @@ export class VercelPlugin extends BasePlugin {
   async gengerateVercelEntry() {
     this.core.cli.log('Generate entry file...');
     this.setGlobalDependencies('@midwayjs/serverless-vercel-starter');
+    this.setGlobalDependencies('raw-body');
     const apiDir = join(this.midwayBuildPath, 'api');
     await ensureDir(apiDir);
 
@@ -117,6 +132,8 @@ export class VercelPlugin extends BasePlugin {
       isDefaultFunc: true,
       skipInitializer: true,
       starter: '@midwayjs/serverless-vercel-starter',
+      entryAppDir: "require('path').join(__dirname, '../')",
+      entryBaseDir: "require('path').join(__dirname, '../dist')",
     });
   }
 
@@ -130,6 +147,14 @@ export class VercelPlugin extends BasePlugin {
     });
 
     await this.safeRemoveUselessFile();
+
+    // 清理 package.json
+    const pkgJsonFile = join(this.midwayBuildPath, 'package.json');
+    if (existsSync(pkgJsonFile)) {
+      const pkgJson = JSON.parse(readFileSync(pkgJsonFile).toString());
+      delete pkgJson.devDependencies;
+      writeFileSync(pkgJsonFile, JSON.stringify(pkgJson, null, 2));
+    }
 
     this.core.cli.log('Start deploy by vercel/cli');
     try {
