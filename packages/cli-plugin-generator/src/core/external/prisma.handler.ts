@@ -237,69 +237,70 @@ async function prismaHandlerCore(
         shell: true,
       });
       consola.success('Command `npm run prisma:push` succeed...');
-    }
 
-    consola.info('Executing `Prisma Client` related code transform...');
+      consola.info('Executing `Prisma Client` related code transform...');
 
-    const project = new Project();
+      const project = new Project();
 
-    const configurationPath = path.resolve(
-      projectDirPath,
-      './src/configuration.ts'
-    );
-
-    if (!fs.existsSync(configurationPath)) {
-      consola.error(
-        `Cannot find ${chalk.cyan('configuration.ts')} in ${chalk.green(
-          configurationPath
-        )}.`
+      const configurationPath = path.resolve(
+        projectDirPath,
+        './src/configuration.ts'
       );
-      process.exit(0);
+
+      if (!fs.existsSync(configurationPath)) {
+        consola.error(
+          `Cannot find ${chalk.cyan('configuration.ts')} in ${chalk.green(
+            configurationPath
+          )}.`
+        );
+        process.exit(0);
+      }
+
+      consola.info('Adding import statement from `Prisma Client`');
+
+      const configurationSource =
+        project.addSourceFileAtPath(configurationPath);
+
+      addImportDeclaration(
+        configurationSource,
+        ['PrismaClient'],
+        '@prisma/client',
+        ImportType.NAMED_IMPORTS,
+        false
+      );
+
+      appendStatementAfterImports(
+        configurationSource,
+        'const client = new PrismaClient()',
+        false
+      );
+
+      ensureLifeCycleClassPropertyWithMidwayDecorator(
+        configurationSource,
+        'app',
+        'App',
+        false
+      );
+
+      // reverse order of statements to insert
+      unshiftStatementInsideClassMethod(
+        configurationSource,
+        LIFE_CYCLE_CLASS_IDENTIFIER,
+        'onReady',
+        `this.app.getApplicationContext().registerObject('prisma', client);`,
+        false
+      );
+
+      unshiftStatementInsideClassMethod(
+        configurationSource,
+        LIFE_CYCLE_CLASS_IDENTIFIER,
+        'onReady',
+        'client.$connect();',
+        true
+      );
+
+      formatTSFile(configurationPath);
     }
-
-    consola.info('Adding import statement from `Prisma Client`');
-
-    const configurationSource = project.addSourceFileAtPath(configurationPath);
-
-    addImportDeclaration(
-      configurationSource,
-      ['PrismaClient'],
-      '@prisma/client',
-      ImportType.NAMED_IMPORTS,
-      false
-    );
-
-    appendStatementAfterImports(
-      configurationSource,
-      'const client = new PrismaClient()',
-      false
-    );
-
-    ensureLifeCycleClassPropertyWithMidwayDecorator(
-      configurationSource,
-      'app',
-      'App',
-      false
-    );
-
-    // reverse order of statements to insert
-    unshiftStatementInsideClassMethod(
-      configurationSource,
-      LIFE_CYCLE_CLASS_IDENTIFIER,
-      'onReady',
-      `this.app.getApplicationContext().registerObject('prisma', client);`,
-      false
-    );
-
-    unshiftStatementInsideClassMethod(
-      configurationSource,
-      LIFE_CYCLE_CLASS_IDENTIFIER,
-      'onReady',
-      'client.$connect();',
-      true
-    );
-
-    formatTSFile(configurationPath);
   } else {
     consola.info('`[DryRun]` Source code will be transformed.');
   }

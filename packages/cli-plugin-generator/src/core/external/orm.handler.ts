@@ -47,7 +47,7 @@ export interface ORMOptions extends GeneratorSharedOptions {
    */
   relation?: boolean;
   /**
-   * @description Listen to transaction in subscriber ckass
+   * @description Listen to transaction in subscriber class
    * @value true
    */
   transaction?: boolean;
