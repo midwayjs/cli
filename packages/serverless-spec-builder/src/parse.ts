@@ -33,7 +33,7 @@ export const parse = (filePath, contents) => {
 };
 
 export const saveYaml = (filePath, target) => {
-  const text = YAML.safeDump(target, {
+  const text = YAML.dump(target, {
     skipInvalid: true,
   });
   try {
