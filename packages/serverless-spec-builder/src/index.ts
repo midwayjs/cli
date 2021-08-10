@@ -6,6 +6,7 @@ import { SpecBuilder } from './builder';
 export * from './interface';
 export * from './builder';
 export * from './wrapper';
+export { filterUserDefinedEnv } from './utils';
 
 const pattern = /\$\{\s*(\w+\.\w+)\s*\}/g;
 
