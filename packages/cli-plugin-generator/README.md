@@ -23,9 +23,7 @@ midway-bin gen <generator> <sub-generator> --options
 
 - `<generator>`：需要调用的 generator，如 controller / orm / service / sls(serverless) 等。
 - `<sub-generator>`：部分 generator 下存在子命令，如 orm 中，你可以执行 `midway-bin gen orm setup` 来完成 `TypeORM` 相关的依赖安装与导入初始化，或者执行 `midway-bin gen orm entity --class user` 来创建 `entity/user.entity.ts` 文件，其中包含 TypeORM 的 Entity 定义。
-- `--options`，不同的 generator 或者是同一 generator 下的不同 sub-generator 消费的选项可能是不同的，详见最下方的 **Generator 及 API 一览**。
-
-## 基于 Midway CodeMod 定制 Generator
+- `--options`，不同的 generator 或者是同一 generator 下的不同 sub-generator 消费的选项可能是不同的，详见下方的 **Generator 及 API 一览**。
 
 ## 当前可用 Generator 及 API 一览
 
@@ -179,3 +177,65 @@ midway-bin gen <generator> <sub-generator> --options
 - [ ] RabbitMQ
 
 - [ ] MongoDB
+
+## 基于 Midway CodeMod 定制 Generator
+
+> 这一能力仍在开发中，敬请期待。
+
+Generator 使用的大部分 AST 操作 将被提取为一个独立项目：Midway CodeMod。它提供了类似 `@babel/helper` 那样细粒度的 AST 操作，你可以通过多个函数的组合调用，来完成源码的一系列检查、更新操作。
+
+举例来说，在 Prisma Generator （即 `midway-bin gen prisma`）中执行的一系列 AST 操作是这样完成的：
+
+```typescript
+// CodeMod 基于 ts-morph 封装，你可以理解为这里是添加需要被修改的文件
+const configurationSource = project.addSourceFileAtPath(configurationPath);
+
+// 新增 来自 @prisma/client 的具名导入
+// import { PrismaClient } from "@prisma/client";
+addImportDeclaration(
+  configurationSource,
+  ['PrismaClient'],
+  '@prisma/client',
+  ImportType.NAMED_IMPORTS,
+  false
+);
+
+// 在文件中导入语句后另起一行插入语句
+// const client = new PrismaClient();
+appendStatementAfterImports(
+  configurationSource,
+  'const client = new PrismaClient()',
+  false
+);
+
+// 确保配置类 ContainerLifeCycle 中具有被 @App 装饰的属性 app
+ensureLifeCycleClassPropertyWithMidwayDecorator(
+  configurationSource,
+  'app',
+  'App',
+  false
+);
+
+// 在配置类 ContainerLifeCycle 的 onReady 方法中头部新增语句
+unshiftStatementInsideClassMethod(
+  configurationSource,
+  LIFE_CYCLE_CLASS_IDENTIFIER,
+  'onReady',
+  `this.app.getApplicationContext().registerObject('prisma', client);`,
+  false
+);
+
+// 这里的插入会在更上面
+unshiftStatementInsideClassMethod(
+  configurationSource,
+  LIFE_CYCLE_CLASS_IDENTIFIER,
+  'onReady',
+  'client.$connect();',
+  true
+);
+
+// 格式化文件
+formatTSFile(configurationPath);
+```
+
+类似的，在 Midway CodeMod 相关能力完成支持后，你可以很容易的通过这些细粒度的工具函数，组装成符合自己特定需求的 Generator。同时，Midway CLI Generator 后续也将支持快速生成 Generator 模板。
