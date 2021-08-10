@@ -89,27 +89,28 @@ export class CoreBaseCLI {
     return { ...console, error: this.error };
   }
 
-  getUsageInfo(commandsArray: any[], usage, coreInstance, childCommands?) {
+  getUsageInfo(commandsArray: any[], usage, coreInstance, commandInfo?) {
     let commandList: any = {};
     if (commandsArray && commandsArray.length) {
       commandList = {
         header: commandsArray.join(' '),
-        optionList: Object.keys(usage).map(name => {
+        content: commandInfo.usage,
+        optionList: usage? Object.keys(usage).map(name => {
           const usageInfo = usage[name] || {};
           return {
             name,
             description: usageInfo.usage,
             alias: usageInfo.shortcut,
           };
-        }),
-        childCommands: childCommands
-          ? Object.keys(childCommands).map(command => {
-              const childCommandInfo = childCommands[command];
+        }) : [],
+        childCommands: commandInfo?.commands 
+          ? Object.keys(commandInfo?.commands).map(command => {
+              const childCommandInfo = commandInfo?.commands[command];
               return this.getUsageInfo(
                 [command],
                 childCommandInfo.options,
                 coreInstance,
-                childCommandInfo.commands
+                childCommandInfo
               );
             })
           : null,
@@ -143,7 +144,7 @@ export class CoreBaseCLI {
                     [command],
                     childCommandInfo.options,
                     coreInstance,
-                    childCommandInfo.commands
+                    childCommandInfo
                   );
                 })
               : null,
@@ -155,13 +156,13 @@ export class CoreBaseCLI {
   }
 
   // 展示帮助信息
-  displayUsage(commandsArray, usage, coreInstance, childCommands?) {
+  displayUsage(commandsArray, usage, coreInstance, commandInfo?) {
     const log = this.loadLog();
     const commandList = this.getUsageInfo(
       commandsArray,
       usage,
       coreInstance,
-      childCommands
+      commandInfo
     );
     log.log(commandLineUsage(commandList));
   }
