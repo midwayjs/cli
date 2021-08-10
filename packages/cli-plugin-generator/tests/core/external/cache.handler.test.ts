@@ -13,7 +13,7 @@ import {
   CACHE_DEV_DEP,
 } from '../../../src/core/external/cache.handler';
 
-describe.skip('Cache handler', () => {
+describe('Cache handler', () => {
   beforeAll(async () => {
     jest.setTimeout(300000);
     await resetFixtures();

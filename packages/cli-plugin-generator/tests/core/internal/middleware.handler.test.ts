@@ -17,7 +17,7 @@ import { Framework, FrameworkGroup } from '../../../src/core/utils';
 import consola from 'consola';
 import chalk from 'chalk';
 
-describe.only('Middleware handler', () => {
+describe('Middleware handler', () => {
   beforeAll(async () => {
     jest.setTimeout(300000);
     await resetFixtures();

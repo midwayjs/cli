@@ -12,7 +12,7 @@ import {
   expectGenerateValidFile,
 } from '../../shared';
 
-describe.skip('Controller handler', () => {
+describe('Controller handler', () => {
   beforeAll(async () => {
     jest.setTimeout(300000);
     await resetFixtures();

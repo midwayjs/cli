@@ -13,7 +13,7 @@ import {
   SWAGGER_DEV_DEP,
 } from '../../../src/core/external/swagger.handler';
 
-describe.skip('Swagger handler', () => {
+describe('Swagger handler', () => {
   beforeAll(async () => {
     jest.setTimeout(300000);
     await resetFixtures();

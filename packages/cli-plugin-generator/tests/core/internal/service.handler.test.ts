@@ -12,7 +12,7 @@ import {
   expectGenerateValidFile,
 } from '../../shared';
 
-describe.skip('Service handler', () => {
+describe('Service handler', () => {
   beforeAll(async () => {
     jest.setTimeout(300000);
     await resetFixtures();

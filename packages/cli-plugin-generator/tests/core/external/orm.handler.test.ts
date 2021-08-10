@@ -17,7 +17,7 @@ import {
   TypeORMGeneratorType,
 } from '../../../src/core/external/orm.handler';
 
-describe.skip('ORM handler (setup)', () => {
+describe('ORM handler (setup)', () => {
   beforeAll(async () => {
     jest.setTimeout(300000);
     await resetFixtures();
@@ -121,7 +121,7 @@ describe.skip('ORM handler (setup)', () => {
   });
 });
 
-describe.skip('ORM handler (entity)', () => {
+describe('ORM handler (entity)', () => {
   beforeAll(async () => {
     jest.setTimeout(300000);
     await resetFixtures();
@@ -390,7 +390,7 @@ describe.skip('ORM handler (entity)', () => {
   });
 });
 
-describe.skip('ORM handler (subscriber)', () => {
+describe('ORM handler (subscriber)', () => {
   beforeAll(async () => {
     jest.setTimeout(300000);
     await resetFixtures();

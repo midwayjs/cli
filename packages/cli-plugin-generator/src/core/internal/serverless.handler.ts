@@ -100,7 +100,16 @@ async function serverlessHandlerCore(
   consola.info(`Project location: ${chalk.green(projectDirPath)}`);
 
   const { dry, dotFile, override } = applyDefaultValueToSharedOption(opts);
-  const { type = 'faas' } = opts;
+  let { type = 'faas' } = opts;
+
+  if (!(['faas', 'aggr'] as SLSType[]).includes(type)) {
+    consola.warn(
+      `Invalid serverless type, receivec: ${chalk.yellow(
+        type
+      )}. Applying default ${chalk.cyan('faas')}`
+    );
+    type = 'faas';
+  }
 
   const usePlainFaasMode = type === 'faas';
 
@@ -121,7 +130,7 @@ async function serverlessHandlerCore(
   // FIXME: use map for batch handling?
   const http = opts.http
     ? ensureBooleanType(opts.http)
-    : applyFalsyDefaultValue(opts.http);
+    : applyTruthyDefaultValue(opts.http);
 
   const event = opts.event
     ? ensureBooleanType(opts.event)

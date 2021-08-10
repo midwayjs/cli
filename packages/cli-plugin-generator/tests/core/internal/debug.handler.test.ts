@@ -26,7 +26,7 @@ const createConfiguration = (name = 'Midway Local', port = 7777) => ({
   autoAttachChildProcesses: true,
 });
 
-describe.skip('Debug handler', () => {
+describe('Debug handler', () => {
   beforeAll(async () => {
     jest.setTimeout(300000);
     await resetFixtures();

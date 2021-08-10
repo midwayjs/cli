@@ -86,16 +86,16 @@ export function names(origin: string): Names | undefined {
   };
 }
 
-export const updateGitIgnore = (patterns: string[]) => {
+export const updateGitIgnore = (patterns: string[], cwd?: string) => {
   const pathUnderGitControl = findUp.sync(['.git'], {
     type: 'directory',
+    cwd,
   });
 
   const ignoreFilePath = path.resolve(
     path.dirname(pathUnderGitControl),
     '.gitignore'
   );
-  console.log('ignoreFilePath: ', ignoreFilePath);
 
   let originContent = fs.readFileSync(ignoreFilePath, 'utf8');
 

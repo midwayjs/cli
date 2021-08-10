@@ -10,7 +10,7 @@ import {
 } from '../../shared';
 import { OSS_DEP, OSS_DEV_DEP } from '../../../src/core/external/oss.handler';
 
-describe.skip('OSS handler', () => {
+describe('OSS handler', () => {
   beforeAll(async () => {
     jest.setTimeout(300000);
     await resetFixtures();

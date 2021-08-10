@@ -19,7 +19,7 @@ import {
   PRISMA_NPM_SCRIPTS,
 } from '../../../src/core/external/prisma.handler';
 
-describe.skip('Prisma handler', () => {
+describe('Prisma handler', () => {
   beforeAll(async () => {
     jest.setTimeout(300000);
     await resetFixtures();
