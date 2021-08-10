@@ -39,7 +39,11 @@ describe('command-core / cli.test.ts', () => {
     }
     const cli = new TestCli(['', '', '-h']);
     await cli.start();
-    assert(logList.join('\n').indexOf('common command') !== -1);
+    const logStr = logList.join('\n');
+    assert(logStr.includes('common command'));
+    assert(logStr.includes('x xChild'));
+    assert(logStr.includes('--name'));
+    assert(logStr.includes('xChild name option'));
   });
   it('cli auto load plugin success', async () => {
     const logList = [];
