@@ -95,15 +95,17 @@ export class CoreBaseCLI {
       commandList = {
         header: commandsArray.join(' '),
         content: commandInfo.usage,
-        optionList: usage? Object.keys(usage).map(name => {
-          const usageInfo = usage[name] || {};
-          return {
-            name,
-            description: usageInfo.usage,
-            alias: usageInfo.shortcut,
-          };
-        }) : [],
-        childCommands: commandInfo?.commands 
+        optionList: usage
+          ? Object.keys(usage).map(name => {
+              const usageInfo = usage[name] || {};
+              return {
+                name,
+                description: usageInfo.usage,
+                alias: usageInfo.shortcut,
+              };
+            })
+          : [],
+        childCommands: commandInfo?.commands
           ? Object.keys(commandInfo?.commands).map(command => {
               const childCommandInfo = commandInfo?.commands[command];
               return this.getUsageInfo(
