@@ -45,6 +45,28 @@ describe('command-core / cli.test.ts', () => {
     assert(logStr.includes('--name'));
     assert(logStr.includes('xChild name option'));
   });
+  it('cli child help', async () => {
+    const logList = [];
+    class TestCli extends CoreBaseCLI {
+      async loadPlatformPlugin() {
+        this.core.addPlugin(NoCommand);
+        this.core.addPlugin(TestPlugin);
+      }
+      loadLog() {
+        const log = super.loadLog();
+        log.log = (...args) => {
+          logList.push(...args);
+        };
+        return log;
+      }
+    }
+    const cli = new TestCli(['', '', 'x', 'xChild', '-h']);
+    await cli.start();
+    const logStr = logList.join('\n');
+    assert(logStr.includes('x xChild'));
+    assert(logStr.includes('--name'));
+    assert(logStr.includes('super child age'));
+  });
   it('cli auto load plugin success', async () => {
     const logList = [];
     class TestCli extends CoreBaseCLI {
