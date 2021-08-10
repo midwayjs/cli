@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "@midwayjs/faas": "^1.2.1",
-    "@midwayjs/gateway-common-core": "^1.2.76",
+    "@midwayjs/gateway-common-core": "^1.2.79-beta.3",
     "express": "^4.17.1",
     "koa": "^2.11.0",
     "micromatch": "^4.0.2",

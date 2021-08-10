@@ -6,7 +6,7 @@
   "dependencies": {
     "@midwayjs/cli-plugin-dev": "^1.2.79-beta.3",
     "@midwayjs/command-core": "^1.2.79-beta.3",
-    "@midwayjs/gateway-common-core": "^1.2.76",
+    "@midwayjs/gateway-common-core": "^1.2.79-beta.3",
     "@midwayjs/gateway-common-http": "^1.2.79-beta.3",
     "body-parser": "^1.19.0",
     "compose-middleware": "^5.0.1",
