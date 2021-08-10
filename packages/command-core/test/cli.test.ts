@@ -218,7 +218,7 @@ describe('command-core / cli.test.ts', () => {
       'no-provider.ts'
     );
     await cli.start();
-    assert(logList.join('\n').indexOf('NoLifecycleEvents') !== -1);
+    assert(logList.join('\n').indexOf('noLifecycleEvents') !== -1);
   });
   it('cli load relative plugin error', async () => {
     const logList = [];
@@ -234,7 +234,7 @@ describe('command-core / cli.test.ts', () => {
     const cli = new TestCli({ _: [], h: true });
     cli.loadRelativePlugin('./', 'no-provider.ts');
     await cli.start();
-    assert(logList.join('\n').indexOf('NoLifecycleEvents') === -1);
+    assert(logList.join('\n').indexOf('noLifecycleEvents') === -1);
   });
   it('cli verbose', async () => {
     const logList = [];
