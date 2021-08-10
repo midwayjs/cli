@@ -39,7 +39,33 @@ describe('command-core / cli.test.ts', () => {
     }
     const cli = new TestCli(['', '', '-h']);
     await cli.start();
-    assert(logList.join('\n').indexOf('common command') !== -1);
+    const logStr = logList.join('\n');
+    assert(logStr.includes('common command'));
+    assert(logStr.includes('x xChild'));
+    assert(logStr.includes('--name'));
+    assert(logStr.includes('xChild name option'));
+  });
+  it('cli child help', async () => {
+    const logList = [];
+    class TestCli extends CoreBaseCLI {
+      async loadPlatformPlugin() {
+        this.core.addPlugin(NoCommand);
+        this.core.addPlugin(TestPlugin);
+      }
+      loadLog() {
+        const log = super.loadLog();
+        log.log = (...args) => {
+          logList.push(...args);
+        };
+        return log;
+      }
+    }
+    const cli = new TestCli(['', '', 'x', 'xChild', '-h']);
+    await cli.start();
+    const logStr = logList.join('\n');
+    assert(logStr.includes('x xChild'));
+    assert(logStr.includes('--name'));
+    assert(logStr.includes('super child age'));
   });
   it('cli auto load plugin success', async () => {
     const logList = [];
@@ -214,7 +240,7 @@ describe('command-core / cli.test.ts', () => {
       'no-provider.ts'
     );
     await cli.start();
-    assert(logList.join('\n').indexOf('NoLifecycleEvents') !== -1);
+    assert(logList.join('\n').indexOf('noLifecycleEvents') !== -1);
   });
   it('cli load relative plugin error', async () => {
     const logList = [];
@@ -230,7 +256,7 @@ describe('command-core / cli.test.ts', () => {
     const cli = new TestCli({ _: [], h: true });
     cli.loadRelativePlugin('./', 'no-provider.ts');
     await cli.start();
-    assert(logList.join('\n').indexOf('NoLifecycleEvents') === -1);
+    assert(logList.join('\n').indexOf('noLifecycleEvents') === -1);
   });
   it('cli verbose', async () => {
     const logList = [];

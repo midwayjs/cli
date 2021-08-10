@@ -12,6 +12,28 @@ class TestPlugin extends BasePlugin {
       options: {
         project: null,
       },
+      commands: {
+        xChild: {
+          usage: 'xChild usage',
+          lifecycleEvents: ['xx'],
+          options: {
+            name: {
+              usage: 'xChild name option',
+            },
+          },
+          commands: {
+            xChildChild: {
+              usage: 'xChild child usage',
+              lifecycleEvents: ['xx'],
+              options: {
+                age: {
+                  usage: 'super child age',
+                },
+              },
+            },
+          },
+        },
+      },
     },
     noLifecycleEvents: {
       usage: 'noLifecycleEvents',

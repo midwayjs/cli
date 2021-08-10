@@ -89,9 +89,7 @@ export class CoreBaseCLI {
     return { ...console, error: this.error };
   }
 
-  // 展示帮助信息
-  displayUsage(commandsArray, usage, coreInstance) {
-    const log = this.loadLog();
+  getUsageInfo(commandsArray: any[], usage, coreInstance, childCommands?) {
     let commandList: any = {};
     if (commandsArray && commandsArray.length) {
       commandList = {
@@ -104,6 +102,17 @@ export class CoreBaseCLI {
             alias: usageInfo.shortcut,
           };
         }),
+        childCommands: childCommands
+          ? Object.keys(childCommands).map(command => {
+              const childCommandInfo = childCommands[command];
+              return this.getUsageInfo(
+                [command],
+                childCommandInfo.options,
+                coreInstance,
+                childCommandInfo.commands
+              );
+            })
+          : null,
       };
     } else {
       commandList = [];
@@ -127,10 +136,33 @@ export class CoreBaseCLI {
                 alias: usageInfo.shortcut,
               };
             }),
+            childCommands: commandInfo.commands
+              ? Object.keys(commandInfo.commands).map(command => {
+                  const childCommandInfo = commandInfo.commands[command];
+                  return this.getUsageInfo(
+                    [command],
+                    childCommandInfo.options,
+                    coreInstance,
+                    childCommandInfo.commands
+                  );
+                })
+              : null,
           });
         });
       });
     }
+    return commandList;
+  }
+
+  // 展示帮助信息
+  displayUsage(commandsArray, usage, coreInstance, childCommands?) {
+    const log = this.loadLog();
+    const commandList = this.getUsageInfo(
+      commandsArray,
+      usage,
+      coreInstance,
+      childCommands
+    );
     log.log(commandLineUsage(commandList));
   }
 

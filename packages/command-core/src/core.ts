@@ -172,7 +172,11 @@ export class CommandCore implements ICommandCore {
 
     // 展示帮助
     if (displayHelp) {
-      return this.displayHelp(commandsArray, commandInfo.usage);
+      return this.displayHelp(
+        commandsArray,
+        commandInfo.usage,
+        commandInfo.command?.commands
+      );
     }
     await this.execLiftcycle(lifecycleEvents);
   }
@@ -503,9 +507,14 @@ export class CommandCore implements ICommandCore {
     }
   }
 
-  private displayHelp(commandsArray?, usage?) {
+  private displayHelp(commandsArray?, usage?, childCommands?) {
     if (this.options.displayUsage) {
-      this.options.displayUsage(commandsArray || [], usage || {}, this);
+      this.options.displayUsage(
+        commandsArray || [],
+        usage || {},
+        this,
+        childCommands
+      );
     }
   }
 
