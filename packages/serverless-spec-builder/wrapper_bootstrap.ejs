@@ -26,8 +26,8 @@ const initializeMethod = async (initializeContext = {}) => {
         });
         const boot = new BootstrapStarter();
         boot.configure({
-          appDir: <% if (entryAppDir) { %><%=entryAppDir%><% } else { %>__dirname<% }%>,
-          <% if (entryBaseDir) { %><%=entryBaseDir%>,<% } %>
+          appDir: <% if (entryAppDir) { %><%-entryAppDir%><% } else { %>__dirname<% }%>,
+          <% if (entryBaseDir) { %><%-entryBaseDir%>,<% } %>
         }).load(starter);
 
         await boot.init();
