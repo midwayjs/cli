@@ -1,13 +1,5 @@
-import {
-  formatTSFile,
-  readPackageSync,
-  stripIndent,
-  inputPromptStringValue,
-  names,
-  updateGitIgnore,
-} from '../../src/lib/helper';
-import path from 'path';
-import { baseDir, configPath, resetFixtures } from '../shared';
+import { formatTSFile, names } from '../../src/lib/helper';
+import { configPath, resetFixtures } from '../shared';
 import prettier from 'prettier';
 import fs from 'fs-extra';
 

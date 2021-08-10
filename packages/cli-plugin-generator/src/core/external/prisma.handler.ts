@@ -287,7 +287,7 @@ async function prismaHandlerCore(
         configurationSource,
         LIFE_CYCLE_CLASS_IDENTIFIER,
         'onReady',
-        `this.app.getApplicationContext().registerObject('prisma', client);`,
+        "this.app.getApplicationContext().registerObject('prisma', client);",
         false
       );
 

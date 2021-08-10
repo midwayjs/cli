@@ -3,10 +3,8 @@ import jsonfile from 'jsonfile';
 import {
   resetFixtures,
   createGeneratorCommand,
-  configPath,
   configurationPath,
   packagePath,
-  baseDir,
 } from '../../shared';
 import {
   CACHE_DEP,

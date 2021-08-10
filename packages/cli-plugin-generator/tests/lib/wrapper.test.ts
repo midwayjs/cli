@@ -21,8 +21,7 @@ describe.skip('generator wrapper', () => {
     expect(func).toBeCalled();
     expect(func).toBeCalledTimes(1);
 
-    // @ts-ignore
-    const consolaMessages = consola.success.mock.calls.map(c => c[0]);
+    const consolaMessages = (consola.success as any).mock.calls.map(c => c[0]);
     expect(consolaMessages).toEqual(['Generator execution accomplished.']);
   });
 
@@ -34,8 +33,7 @@ describe.skip('generator wrapper', () => {
     expect(func).toBeCalledTimes(1);
     expect(func).toHaveBeenCalledWith('lip!');
 
-    // @ts-ignore
-    const consolaMessages = consola.success.mock.calls.map(c => c[0]);
+    const consolaMessages = (consola.success as any).mock.calls.map(c => c[0]);
     expect(consolaMessages).toEqual(['Generator execution accomplished.']);
   });
 
@@ -47,12 +45,14 @@ describe.skip('generator wrapper', () => {
         throw new Error('xx');
       });
       // FIXME:
-      // @ts-ignore
-      const consolaMessages = consola.fatal.mock.calls.map(c => c[0]);
-      console.log('consolaMessages: ', consolaMessages);
+      const consolaMessages = (consola.success as any).mock.calls.map(
+        c => c[0]
+      );
       expect(consolaMessages).toEqual(['Generator execution accomplished.']);
 
       expect(await generatorInvokeWrapper(func, 'lip!')).toThrowError('xx');
-    } catch (error) {}
+    } catch (error) {
+      void 0;
+    }
   });
 });

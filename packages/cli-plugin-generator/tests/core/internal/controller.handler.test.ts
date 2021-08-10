@@ -1,13 +1,8 @@
 import fs from 'fs-extra';
 import path from 'path';
-import jsonfile from 'jsonfile';
-import { capitalCase } from 'capital-case';
 import {
   resetFixtures,
   createGeneratorCommand,
-  configPath,
-  configurationPath,
-  packagePath,
   baseDir,
   expectGenerateValidFile,
 } from '../../shared';

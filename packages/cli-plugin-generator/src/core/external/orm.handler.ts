@@ -1,3 +1,4 @@
+/*eslint no-case-declarations: 0*/
 import { ICommandInstance, ICoreInstance } from '@midwayjs/command-core';
 
 import path from 'path';

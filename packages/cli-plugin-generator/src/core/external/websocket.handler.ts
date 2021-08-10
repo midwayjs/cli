@@ -1,3 +1,4 @@
+/*eslint no-case-declarations: 0*/
 import { ICommandInstance, ICoreInstance } from '@midwayjs/command-core';
 
 import path from 'path';
@@ -146,7 +147,7 @@ async function webSocketHandlerCore(
 
       const renderedBootStrapTemplate = EJSCompile(
         fs.readFileSync(
-          path.join(__dirname, `../../templates/websocket/bootstrap.js.ejs`),
+          path.join(__dirname, '../../templates/websocket/bootstrap.js.ejs'),
           { encoding: 'utf8' }
         ),
         {}
@@ -162,7 +163,7 @@ async function webSocketHandlerCore(
 
       const generatedBootStrapPath = path.resolve(
         projectDirPath,
-        `ws-bootstrap.js`
+        'ws-bootstrap.js'
       );
 
       if (!dry) {
@@ -249,7 +250,7 @@ async function webSocketHandlerCore(
 
       const renderedControllerTemplate = EJSCompile(
         fs.readFileSync(
-          path.join(__dirname, `../../templates/websocket/controller.ts.ejs`),
+          path.join(__dirname, '../../templates/websocket/controller.ts.ejs'),
           { encoding: 'utf8' }
         ),
         {}

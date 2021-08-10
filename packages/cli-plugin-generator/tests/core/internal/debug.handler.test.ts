@@ -4,7 +4,6 @@ import { resetFixtures, createGeneratorCommand, baseDir } from '../../shared';
 import { DEBUG_CONFIG_PATH } from '../../../src/core/internal/debug.handler';
 
 const generatedFilePath = path.resolve(baseDir, DEBUG_CONFIG_PATH);
-console.log('generatedFilePath: ', generatedFilePath);
 
 const createConfiguration = (name = 'Midway Local', port = 7777) => ({
   name,

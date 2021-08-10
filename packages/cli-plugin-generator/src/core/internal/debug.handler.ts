@@ -85,7 +85,7 @@ async function debugHandlerCore(
     prevContent = {};
   }
 
-  let writeContent: any = {};
+  const writeContent: any = {};
 
   const createDebuggerConfiguration = (updatedName?: string) => ({
     name: updatedName ?? name,

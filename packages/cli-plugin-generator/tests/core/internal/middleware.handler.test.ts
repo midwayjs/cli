@@ -2,18 +2,8 @@ import { frameworkSpecificInfo } from './../../../src/core/internal/middleware.h
 import fs from 'fs-extra';
 import path from 'path';
 import prettier from 'prettier';
-import jsonfile from 'jsonfile';
-import { capitalCase } from 'capital-case';
-import {
-  resetFixtures,
-  createGeneratorCommand,
-  configPath,
-  configurationPath,
-  packagePath,
-  baseDir,
-  expectGenerateValidFile,
-} from '../../shared';
-import { Framework, FrameworkGroup } from '../../../src/core/utils';
+import { resetFixtures, createGeneratorCommand, baseDir } from '../../shared';
+import { FrameworkGroup } from '../../../src/core/utils';
 import consola from 'consola';
 import chalk from 'chalk';
 
@@ -171,8 +161,7 @@ describe('Middleware handler', () => {
     const framework = 'foo';
     const mockExit = jest
       .spyOn(process, 'exit')
-      // @ts-ignore
-      .mockImplementation((code?: number) => {});
+      .mockImplementation(((code?: number) => {}) as any);
 
     await core.invoke(['gen', 'middleware'], undefined, {
       class: sharedClassIdentifier,
@@ -181,8 +170,7 @@ describe('Middleware handler', () => {
 
     expect(mockExit).toHaveBeenCalledWith(0);
 
-    //  @ts-ignore
-    const consolaMessages = consola.error.mock.calls.map(c => c[0]);
+    const consolaMessages = (consola.error as any).mock.calls.map(c => c[0]);
     expect(consolaMessages).toEqual([
       `Unsupported framework: ${framework}, use oneof ${chalk.cyan(
         FrameworkGroup.join(' ')

@@ -201,7 +201,7 @@ export function updateConstExportIdentifier(
 export function addConstExportTypeRef(
   source: SourceFile,
   exportVar: string,
-  typeRef: string = 'unknown',
+  typeRef = 'unknown',
   infer = true,
   apply = true
 ) {
@@ -250,7 +250,7 @@ export function addConstExportTypeRef(
 export function addConstExportTypeAssertion(
   source: SourceFile,
   exportVar: string,
-  typeRef: string = 'unknown',
+  typeRef = 'unknown',
   apply = true
 ) {
   const targetExport = getExportVariableStatements(source, exportVar);

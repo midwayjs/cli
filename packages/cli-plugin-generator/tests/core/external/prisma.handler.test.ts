@@ -5,7 +5,6 @@ import prettier from 'prettier';
 import {
   resetFixtures,
   createGeneratorCommand,
-  configPath,
   configurationPath,
   packagePath,
   baseDir,

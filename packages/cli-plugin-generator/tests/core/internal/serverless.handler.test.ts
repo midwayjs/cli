@@ -1,16 +1,11 @@
 import fs from 'fs-extra';
-import jsonfile from 'jsonfile';
 import path from 'path';
 import {
   resetFixtures,
   createGeneratorCommand,
-  configPath,
-  configurationPath,
-  packagePath,
   baseDir,
   expectGenerateValidFile,
 } from '../../shared';
-import { SLSType } from '../../../src/core/utils';
 
 describe('Serverless handler', () => {
   beforeAll(async () => {

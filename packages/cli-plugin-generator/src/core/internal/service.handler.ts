@@ -88,7 +88,7 @@ async function serviceHandlerCore(
 
   const renderedTemplate = EJSCompile(
     fs.readFileSync(
-      path.join(__dirname, `../../templates/service/service.ts.ejs`),
+      path.join(__dirname, '../../templates/service/service.ts.ejs'),
       { encoding: 'utf8' }
     ),
     {}
