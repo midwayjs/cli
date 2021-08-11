@@ -19,7 +19,7 @@ import {
   addImportDeclaration,
   ImportType,
 } from '../../lib/ast';
-import { generatorInvokeWrapper } from '../../lib/wrapper';
+import { generatorInvokeWrapperExp } from '../../lib/wrapper';
 
 import {
   GeneratorSharedOptions,
@@ -30,6 +30,7 @@ import {
   applyDefaultValueToSharedOption,
 } from '../utils';
 import pick from 'lodash/pick';
+import { GeneratorCoreWrapperArgs } from '../../utils';
 
 export interface ORMOptions extends GeneratorSharedOptions {
   /**
@@ -129,11 +130,11 @@ export const mountORMCommand = (): ICommandInstance => {
   };
 };
 
-async function ormHandlerCore(
-  { cwd: projectDirPath }: ICoreInstance,
-  opts: ORMOptions,
-  type: TypeORMGeneratorType
-) {
+async function ormHandlerCore({
+  core: { cwd: projectDirPath },
+  options: opts,
+  type,
+}: GeneratorCoreWrapperArgs<ORMOptions, TypeORMGeneratorType>) {
   consola.info(`Project location: ${chalk.green(projectDirPath)}`);
 
   if (!type) {
@@ -333,6 +334,10 @@ async function ormHandlerCore(
   }
 }
 
-export default async function ormHandler(...args: unknown[]) {
-  await generatorInvokeWrapper(ormHandlerCore, ...args);
-}
+const ormHandler: (
+  arg: GeneratorCoreWrapperArgs<ORMOptions, TypeORMGeneratorType>
+) => Promise<void> = async arg => {
+  await generatorInvokeWrapperExp(ormHandlerCore, arg);
+};
+
+export default ormHandler;

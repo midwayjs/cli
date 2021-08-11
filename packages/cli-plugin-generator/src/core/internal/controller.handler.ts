@@ -6,7 +6,7 @@ import chalk from 'chalk';
 import path from 'path';
 import fs from 'fs-extra';
 import { compile as EJSCompile } from 'ejs';
-import { generatorInvokeWrapper } from '../../lib/wrapper';
+import { generatorInvokeWrapperExp } from '../../lib/wrapper';
 import {
   GeneratorSharedOptions,
   sharedOption,
@@ -15,6 +15,7 @@ import {
   ensureBooleanType,
   applyDefaultValueToSharedOption,
 } from '../utils';
+import { GeneratorCoreWrapperArgs } from '../../utils';
 
 export interface ControllerOptions extends GeneratorSharedOptions {
   /**
@@ -50,10 +51,10 @@ export const mountControllerCommand = (): ICommandInstance => {
   };
 };
 
-async function controllerHandlerCore(
-  { cwd: projectDirPath }: ICoreInstance,
-  opts: ControllerOptions
-) {
+async function controllerHandlerCore({
+  core: { cwd: projectDirPath },
+  options: opts,
+}: GeneratorCoreWrapperArgs<ControllerOptions>) {
   consola.info(`Project location: ${chalk.green(projectDirPath)}`);
 
   const { dry, dotFile, override } = applyDefaultValueToSharedOption(opts);
@@ -136,6 +137,10 @@ async function controllerHandlerCore(
   }
 }
 
-export default async function controllerHandler(...args: unknown[]) {
-  await generatorInvokeWrapper(controllerHandlerCore, ...args);
-}
+const controllerHandler: (
+  arg: GeneratorCoreWrapperArgs<ControllerOptions>
+) => Promise<void> = async arg => {
+  await generatorInvokeWrapperExp(controllerHandlerCore, arg);
+};
+
+export default controllerHandler;

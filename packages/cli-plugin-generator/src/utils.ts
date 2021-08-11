@@ -1,3 +1,5 @@
+import { ICoreInstance } from '@midwayjs/command-core';
+
 export enum AvailableInternalGenerator {
   Controller = 'Controller',
   Debug = 'Debug',
@@ -15,3 +17,53 @@ export enum AvailableExternalGenerator {
   Swagger = 'Swagger',
   WebSocket = 'WebSocket',
 }
+
+export type GeneratorCoreWrapperArgs<
+  GeneratorOptions = {},
+  ExtraTypeArgs = void
+> = ExtraTypeArgs extends void
+  ? {
+      core: ICoreInstance;
+      options: GeneratorOptions;
+    }
+  : {
+      core: ICoreInstance;
+      options: GeneratorOptions;
+      type: ExtraTypeArgs;
+    };
+
+export type InferFuncUniqueArgType<
+  GeneratorOptions,
+  GeneratorSubType,
+  T extends <
+    A extends GeneratorCoreWrapperArgs<GeneratorOptions, GeneratorSubType>
+  >(
+    args: A
+  ) => Promise<void>
+> = T extends (args: infer R) => Promise<void> ? R : never;
+
+export type RequiredGeneratorCoreFuncStruct<
+  GeneratorOption,
+  GeneratorSubType = void
+> = <A extends GeneratorCoreWrapperArgs<GeneratorOption, GeneratorSubType>>(
+  args: A
+) => Promise<void>;
+
+export type InferCoreFuncArgGenericType<T> = T extends (
+  args: GeneratorCoreWrapperArgs<infer R>
+) => Promise<void>
+  ? R
+  : never;
+
+export type InferWrapperOptionParam<T> = T extends GeneratorCoreWrapperArgs<
+  infer R
+>
+  ? R
+  : void;
+
+export type InferWrapperTypeParam<T> = T extends GeneratorCoreWrapperArgs<
+  unknown,
+  infer R
+>
+  ? R
+  : void;

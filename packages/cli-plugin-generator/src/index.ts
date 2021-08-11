@@ -133,7 +133,10 @@ export class GeneratorPlugin extends BasePlugin {
   ]);
 
   async invokeControllerHandler() {
-    await controllerHandler(this.core, this.options);
+    await controllerHandler({
+      core: this.core,
+      options: this.options,
+    });
   }
 
   async invokeServiceHandler() {
@@ -153,7 +156,11 @@ export class GeneratorPlugin extends BasePlugin {
   }
 
   async invokeORMHandler(type?: TypeORMGeneratorType) {
-    await ormHandler(this.core, this.options, type);
+    await ormHandler({
+      core: this.core,
+      options: this.options,
+      type,
+    });
   }
 
   async invokeAxiosHandler() {
