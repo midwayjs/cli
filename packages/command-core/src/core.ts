@@ -175,7 +175,7 @@ export class CommandCore implements ICommandCore {
       return this.displayHelp(
         commandsArray,
         commandInfo.usage,
-        commandInfo.command?.commands
+        commandInfo.command
       );
     }
     await this.execLiftcycle(lifecycleEvents);
@@ -507,13 +507,13 @@ export class CommandCore implements ICommandCore {
     }
   }
 
-  private displayHelp(commandsArray?, usage?, childCommands?) {
+  private displayHelp(commandsArray?, usage?, commandInfo?) {
     if (this.options.displayUsage) {
       this.options.displayUsage(
         commandsArray || [],
         usage || {},
         this,
-        childCommands
+        commandInfo
       );
     }
   }
