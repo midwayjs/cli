@@ -35,12 +35,12 @@ export const mountControllerCommand = (): ICommandInstance => {
     class: {
       usage: 'Class identifier',
     },
-    light: { usage: 'Use simplest template' },
+    light: { usage: 'Use simple template' },
   };
 
   return {
     controller: {
-      usage: 'controller genrator',
+      usage: 'Generator for MidwayJS Controller',
       lifecycleEvents: ['gen'],
       opts: {
         ...sharedOption,

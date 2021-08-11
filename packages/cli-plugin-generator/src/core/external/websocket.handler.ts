@@ -79,10 +79,11 @@ export const mountWebSocketCommand = (): ICommandInstance => {
 
   return {
     ws: {
-      usage: 'ws genrator',
+      usage: 'Generator for WebSocket setup and controller generation',
       lifecycleEvents: ['gen'],
       commands: {
         setup: {
+          usage: 'Generator for WebSocket setup.',
           lifecycleEvents: ['gen'],
           opts: {
             ...pick(sharedOption, 'dry'),
@@ -92,6 +93,7 @@ export const mountWebSocketCommand = (): ICommandInstance => {
           },
         },
         controller: {
+          usage: 'Generate WebSocket controller',
           lifecycleEvents: ['gen'],
           opts: {
             ...sharedOption,

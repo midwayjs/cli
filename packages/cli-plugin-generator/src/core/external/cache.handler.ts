@@ -35,13 +35,13 @@ export const mountCacheCommand = (): ICommandInstance => {
 
   const writerSharedOptions = {
     namespace: {
-      usage: 'Import namespace for @midwayjs/cache import ',
+      usage: 'Import namespace for @midwayjs/cache import',
     },
   };
 
   return {
     cache: {
-      usage: 'cache genrator',
+      usage: 'Generator for @midwayjs/cache setup',
       lifecycleEvents: ['gen'],
       opts: {
         ...pick(sharedOption, ['dry']),

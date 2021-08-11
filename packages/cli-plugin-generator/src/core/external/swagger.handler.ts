@@ -38,7 +38,7 @@ export const SWAGGER_DEV_DEP = ['swagger-ui-dist'];
 export const mountSwaggerCommand = (): ICommandInstance => {
   const writerSharedOptions = {
     ui: {
-      usage: 'Output Swagger UI in server side.',
+      usage: 'Output Swagger UI in server side',
     },
     namespace: {
       usage: 'Import namespace for @midwayjs/swagger import',
@@ -47,7 +47,7 @@ export const mountSwaggerCommand = (): ICommandInstance => {
 
   return {
     swagger: {
-      usage: 'swagger genrator',
+      usage: 'Generator for @midwayjs/swagger setup',
       lifecycleEvents: ['gen'],
       opts: {
         ...pick(sharedOption, ['dry']),

@@ -84,20 +84,22 @@ export const mountORMCommand = (): ICommandInstance => {
 
   return {
     orm: {
-      usage: 'orm genrator',
+      usage: 'Generator for TypeORM setup or entity / subscriber generation',
       lifecycleEvents: ['gen'],
       commands: {
         setup: {
+          usage: 'Generator for TypeORM setup',
           lifecycleEvents: ['gen'],
           opts: {
             // TODO: option: driver / orm config namespac
             ...pick(sharedOption, 'dry'),
             namespace: {
-              usage: 'Import namespace for @midwayjs/orm import ',
+              usage: 'Import namespace for @midwayjs/orm import',
             },
           },
         },
         entity: {
+          usage: 'Generate TypeORM entity',
           lifecycleEvents: ['gen'],
           opts: {
             ...sharedOption,
@@ -106,17 +108,19 @@ export const mountORMCommand = (): ICommandInstance => {
               usage: 'Use Active-Record mode in entity class',
             },
             relation: {
-              usage: 'Generate relation sample props in entity class',
+              usage:
+                'Generate relation sample props & decorators in entity class',
             },
           },
         },
         subscriber: {
+          usage: 'Generate TypeORM entity subscriber',
           lifecycleEvents: ['gen'],
           opts: {
             ...sharedOption,
             ...writerSharedOptions,
             transaction: {
-              usage: 'Listen to transaction in subscriber ckass',
+              usage: 'Listen to transaction event in subscriber ckass',
             },
           },
         },

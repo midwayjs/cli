@@ -45,7 +45,7 @@ export const mountDebugCommand = (): ICommandInstance => {
 
   return {
     debug: {
-      usage: 'debug genrator',
+      usage: 'Generator for debug configuration file(launch.json)',
       lifecycleEvents: ['gen'],
       opts: {
         ...pick(sharedOption, ['dry']),
