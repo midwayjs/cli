@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.79](https://github.com/midwayjs/bin/compare/v1.2.78...v1.2.79) (2021-08-11)
+
+
+### Bug Fixes
+
+* usage support child commands ([#174](https://github.com/midwayjs/bin/issues/174)) ([b50a49d](https://github.com/midwayjs/bin/commit/b50a49d1ffac39dd72cd439bcc8b01aa728836d7))
+* vercel entry baseDir ([#173](https://github.com/midwayjs/bin/issues/173)) ([fc11e1b](https://github.com/midwayjs/bin/commit/fc11e1bec2bc0d3c252c58d16e1a4d3e8d25ae6b))
+
+
+
+
+
 ## [1.2.78](https://github.com/midwayjs/bin/compare/v1.2.77...v1.2.78) (2021-08-09)
 
 
