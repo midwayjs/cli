@@ -83,7 +83,6 @@ export function appendStatementAfterImports(
   apply = true
 ) {
   const imports = source
-
     .getFirstChildByKind(SyntaxKind.SyntaxList)
     .getChildrenOfKind(SyntaxKind.ImportDeclaration);
 

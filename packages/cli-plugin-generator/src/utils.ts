@@ -19,7 +19,7 @@ export enum AvailableExternalGenerator {
 }
 
 export type GeneratorCoreWrapperArgs<
-  GeneratorOptions = {},
+  GeneratorOptions = Record<string, unknown>,
   ExtraTypeArgs = void
 > = ExtraTypeArgs extends void
   ? {
