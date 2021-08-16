@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.80](https://github.com/midwayjs/bin/compare/v1.2.79...v1.2.80) (2021-08-16)
+
+
+### Features
+
+* support fc authType、 timeout、 initTimeout ([#178](https://github.com/midwayjs/bin/issues/178)) ([baca74c](https://github.com/midwayjs/bin/commit/baca74c971bd916803594c7900769a291dc5cb6f))
+
+
+
+
+
 ## [1.2.79](https://github.com/midwayjs/bin/compare/v1.2.78...v1.2.79) (2021-08-11)
 
 
