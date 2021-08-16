@@ -39,7 +39,7 @@ export const mountOSSCommand = (): ICommandInstance => {
 
   return {
     oss: {
-      usage: 'oss genrator',
+      usage: 'Generator for @midwayjs/oss setup',
       lifecycleEvents: ['gen'],
       opts: {
         ...pick(sharedOption, ['dry']),

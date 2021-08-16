@@ -59,31 +59,31 @@ export interface ServerlessOptions
 export const mountServerlessCommand = (): ICommandInstance => {
   const writerSharedOptions = {
     class: {
-      name: 'Identifier for function class',
+      usage: 'Identifier for function class',
     },
     type: {
-      name: 'Serverless function type',
+      usage: 'Serverless function type',
     },
     http: {
-      name: 'Use http trigger(faas only)',
+      usage: 'Use http trigger(faas only)',
     },
     event: {
-      name: 'Use event trigger(faas only)',
+      usage: 'Use event trigger(faas only)',
     },
     gateway: {
-      name: 'Use gateway trigger(faas only)',
+      usage: 'Use gateway trigger(faas only)',
     },
     timer: {
-      name: 'Use timer trigger(faas only)',
+      usage: 'Use timer trigger(faas only)',
     },
     oss: {
-      name: 'Use oss trigger(faas only)',
+      usage: 'Use oss trigger(faas only)',
     },
   };
 
   return {
     sls: {
-      usage: 'serverless genrator',
+      usage: 'Generator for TypeORM Serverless',
       lifecycleEvents: ['gen'],
       opts: {
         ...omit(sharedOption, 'dotFile'),

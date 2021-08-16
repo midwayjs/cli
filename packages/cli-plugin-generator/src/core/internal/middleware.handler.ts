@@ -45,22 +45,22 @@ export interface MiddlewareOptions
 export const mountMiddlewareCommand = (): ICommandInstance => {
   const writerSharedOptions = {
     class: {
-      name: 'Middleware identifier',
+      usage: 'Middleware identifier',
     },
     external: {
-      name: 'Use external lib for middleware resolver',
+      usage: 'Use external lib for middleware resolver',
     },
     framework: {
-      name: 'Target framework',
+      usage: 'Target framework',
     },
     functional: {
-      name: 'Use functional middleware(EggJS only)',
+      usage: 'Use functional middleware(EggJS only)',
     },
   };
 
   return {
     middleware: {
-      usage: 'middleware genrator',
+      usage: 'Generator for MidwayJS Middleware.',
       lifecycleEvents: ['gen'],
       opts: {
         ...omit(sharedOption, 'dotFile'),

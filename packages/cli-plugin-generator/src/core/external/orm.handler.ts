@@ -19,7 +19,7 @@ import {
   addImportDeclaration,
   ImportType,
 } from '../../lib/ast';
-import { generatorInvokeWrapper } from '../../lib/wrapper';
+import { generatorInvokeWrapperExp } from '../../lib/wrapper';
 
 import {
   GeneratorSharedOptions,
@@ -30,6 +30,7 @@ import {
   applyDefaultValueToSharedOption,
 } from '../utils';
 import pick from 'lodash/pick';
+import { GeneratorCoreWrapperArgs } from '../../utils';
 
 export interface ORMOptions extends GeneratorSharedOptions {
   /**
@@ -84,20 +85,22 @@ export const mountORMCommand = (): ICommandInstance => {
 
   return {
     orm: {
-      usage: 'orm genrator',
+      usage: 'Generator for TypeORM setup or entity / subscriber generation',
       lifecycleEvents: ['gen'],
       commands: {
         setup: {
+          usage: 'Generator for TypeORM setup',
           lifecycleEvents: ['gen'],
           opts: {
             // TODO: option: driver / orm config namespac
             ...pick(sharedOption, 'dry'),
             namespace: {
-              usage: 'Import namespace for @midwayjs/orm import ',
+              usage: 'Import namespace for @midwayjs/orm import',
             },
           },
         },
         entity: {
+          usage: 'Generate TypeORM entity',
           lifecycleEvents: ['gen'],
           opts: {
             ...sharedOption,
@@ -106,17 +109,19 @@ export const mountORMCommand = (): ICommandInstance => {
               usage: 'Use Active-Record mode in entity class',
             },
             relation: {
-              usage: 'Generate relation sample props in entity class',
+              usage:
+                'Generate relation sample props & decorators in entity class',
             },
           },
         },
         subscriber: {
+          usage: 'Generate TypeORM entity subscriber',
           lifecycleEvents: ['gen'],
           opts: {
             ...sharedOption,
             ...writerSharedOptions,
             transaction: {
-              usage: 'Listen to transaction in subscriber ckass',
+              usage: 'Listen to transaction event in subscriber ckass',
             },
           },
         },
@@ -125,11 +130,11 @@ export const mountORMCommand = (): ICommandInstance => {
   };
 };
 
-async function ormHandlerCore(
-  { cwd: projectDirPath }: ICoreInstance,
-  opts: ORMOptions,
-  type: TypeORMGeneratorType
-) {
+async function ormHandlerCore({
+  core: { cwd: projectDirPath },
+  options: opts,
+  type,
+}: GeneratorCoreWrapperArgs<ORMOptions, TypeORMGeneratorType>) {
   consola.info(`Project location: ${chalk.green(projectDirPath)}`);
 
   if (!type) {
@@ -329,6 +334,10 @@ async function ormHandlerCore(
   }
 }
 
-export default async function ormHandler(...args: unknown[]) {
-  await generatorInvokeWrapper(ormHandlerCore, ...args);
-}
+const ormHandler: (
+  arg: GeneratorCoreWrapperArgs<ORMOptions, TypeORMGeneratorType>
+) => Promise<void> = async arg => {
+  await generatorInvokeWrapperExp(ormHandlerCore, arg);
+};
+
+export default ormHandler;

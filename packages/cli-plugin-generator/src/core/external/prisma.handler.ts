@@ -116,13 +116,14 @@ export const mountPrismaCommand = (): ICommandInstance => {
       usage: 'Generate initial prisma schema',
     },
     initClient: {
-      usage: 'Generate initial prisma client & database(sqlite3)',
+      usage:
+        'Generate initial prisma client & database(sqlite3), register instance in Midway container',
     },
   };
 
   return {
     prisma: {
-      usage: 'prisma genrator',
+      usage: '[Experimental] Generator for Prisma setup',
       lifecycleEvents: ['gen'],
       opts: {
         ...pick(sharedOption, ['dry']),

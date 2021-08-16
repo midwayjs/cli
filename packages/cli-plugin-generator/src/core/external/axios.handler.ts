@@ -34,13 +34,13 @@ export const mountAxiosCommand = (): ICommandInstance => {
 
   const writerSharedOptions = {
     namespace: {
-      usage: 'Import namespace for @midwayjs/axios import ',
+      usage: 'Import namespace for @midwayjs/axios import',
     },
   };
 
   return {
     axios: {
-      usage: 'axios genrator',
+      usage: 'Generator for @midwayjs/axios setup',
       lifecycleEvents: ['gen'],
       opts: {
         ...pick(sharedOption, ['dry']),

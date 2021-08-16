@@ -32,7 +32,7 @@ export const mountServiceCommand = (): ICommandInstance => {
 
   return {
     service: {
-      usage: 'service genrator',
+      usage: 'Generator for MidwayJS Service',
       lifecycleEvents: ['gen'],
       opts: {
         ...sharedOption,
