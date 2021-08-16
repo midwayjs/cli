@@ -84,7 +84,8 @@ export class FCSpecBuilder extends SpecBuilder {
           functionTemplate.Events[evt.name || 'http-' + funName] = {
             Type: 'HTTP',
             Properties: {
-              AuthType: 'ANONYMOUS', // 先写死
+              AuthType:
+                funSpec.authType || providerData.authType || 'ANONYMOUS', // 先写死
               Methods: convertMethods(evt.method),
               InvocationRole: evt.role,
               Qualifier: evt.version,

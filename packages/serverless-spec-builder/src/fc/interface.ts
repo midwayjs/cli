@@ -21,6 +21,7 @@ export type FCLogStoreType = 'Aliyun::Serverless::Log::Logstore';
 
 export interface FCProviderStructure extends ProviderStructure {
   initTimeout?: number;
+  authType?: 'ANONYMOUS' | 'FUNCTION';
   vpcConfig?: {
     vpcId: string;
     vSwitchIds: string[];
@@ -241,6 +242,7 @@ export interface FCLogStoreProperties {
 export interface FCFunctionStructure extends FunctionStructure {
   codeUri?: string;
   initializer?: string;
+  authType?: 'ANONYMOUS' | 'FUNCTION';
 }
 
 export interface FCFunctionsStructure extends FunctionsStructure {
