@@ -65,6 +65,14 @@ describe('test/build.test.ts', () => {
       assert(/stringx/.test(e.message));
     }
   });
+  it('ignore error ts', async () => {
+    const errorcwd = join(__dirname, 'fixtures/error-ts-ignore');
+    const dist = join(errorcwd, 'dist');
+    if (existsSync(dist)) {
+      await remove(dist);
+    }
+    await run(errorcwd, 'build', { buildCache: false });
+  });
   it('error no ts config', async () => {
     const errorcwd = join(__dirname, 'fixtures/error-no-tsconfig');
     const dist = join(errorcwd, 'dist');

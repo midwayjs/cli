@@ -8,6 +8,7 @@ import * as ts from 'typescript';
 export class BuildPlugin extends BasePlugin {
   isMidwayHooks = false;
   private midwayBinBuild: { include?: string[] } = {};
+  private midwayCliConfig: any = {};
   commands = {
     build: {
       lifecycleEvents: [
@@ -78,6 +79,7 @@ export class BuildPlugin extends BasePlugin {
     if (existsSync(packageJsonPath)) {
       const pkgJson = JSON.parse(readFileSync(packageJsonPath).toString());
       this.midwayBinBuild = pkgJson['midway-bin-build'] || {};
+      this.midwayCliConfig = pkgJson['midway-cli'] || {};
     }
   }
 
@@ -187,7 +189,9 @@ export class BuildPlugin extends BasePlugin {
       });
       if (error) {
         const errorPath = `(${relative(this.core.cwd, error.file.fileName)})`;
-        throw new Error(`TS Error: ${error.messageText}${errorPath}`);
+        if (!this.midwayCliConfig?.experimentalFeatures?.ignoreTsError) {
+          throw new Error(`TS Error: ${error.messageText}${errorPath}`);
+        }
       }
     }
 

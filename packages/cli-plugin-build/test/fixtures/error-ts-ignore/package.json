@@ -1,0 +1,7 @@
+{
+  "midway-cli": {
+    "experimentalFeatures": {
+      "ignoreTsError": true
+    }
+  }
+}
