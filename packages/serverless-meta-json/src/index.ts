@@ -107,13 +107,24 @@ export const generator = async (options: IOptions) => {
         });
       }
 
-      return {
+      const spec = {
         name,
         archive: (archiveDirPath || './') + archivePath,
         handler,
         trigger,
         ...extra,
       };
+
+      if (funcInfo.concurrency) {
+        spec['concurrency'] = funcInfo.concurrency;
+      }
+      if (funcInfo.timeout) {
+        spec['timeout'] = funcInfo.timeout;
+      }
+      if (funcInfo.initTimeout) {
+        spec['initTimeout'] = funcInfo.initTimeout;
+      }
+      return spec;
     })
     .filter(v => !!v);
 
