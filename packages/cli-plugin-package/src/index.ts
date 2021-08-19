@@ -378,7 +378,7 @@ export class PackagePlugin extends BasePlugin {
       return;
     }
 
-    if (this.midwayVersion === '2') {
+    if (+this.midwayVersion >= 2) {
       this.setGlobalDependencies('@midwayjs/bootstrap');
       this.setGlobalDependencies('path-to-regexp');
     } else {
@@ -500,7 +500,7 @@ export class PackagePlugin extends BasePlugin {
     this.program = new Program(this.compilerHost);
 
     // midway 2版本的装饰器分析由框架提供了
-    if (this.midwayVersion !== '2') {
+    if (+this.midwayVersion < 2) {
       if (this.core.service.functions) {
         return this.core.service.functions;
       }
@@ -581,7 +581,7 @@ export class PackagePlugin extends BasePlugin {
       return;
     }
     // midway 2版本的装饰器分析由框架提供了
-    if (this.midwayVersion === '2') {
+    if (+this.midwayVersion >= 2) {
       if (!this.core.service.functions) {
         this.core.service.functions = {};
       }
