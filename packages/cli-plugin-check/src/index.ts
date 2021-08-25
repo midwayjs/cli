@@ -4,6 +4,9 @@ import { join } from 'path';
 import { existsSync, readFileSync } from 'fs';
 import * as chalk from 'chalk';
 import * as YAML from 'js-yaml';
+import { Locator } from '@midwayjs/locate';
+import { getConfig } from '@midwayjs/hooks-core';
+import { transformToRelative } from './utils';
 
 enum ProjectType {
   FaaS = 'faas',
@@ -23,6 +26,7 @@ type RunnerItem = (runner: Runner) => void;
 export class CheckPlugin extends BasePlugin {
   projectType: ProjectType;
   currentGroup: string;
+  servicePath = this.core.config.servicePath;
 
   errors = [];
 
@@ -61,7 +65,7 @@ export class CheckPlugin extends BasePlugin {
   }
 
   async getRuleList(): Promise<Array<RunnerItem>> {
-    const ruleList: RunnerItem[] = [];
+    const ruleList: RunnerItem[] = [await this.projectStruct()];
     if (this.options.checkRule) {
       const ruleList = [].concat(this.options.checkRule);
       for (const getRule of ruleList) {
@@ -69,16 +73,105 @@ export class CheckPlugin extends BasePlugin {
         ruleList.push(rule);
       }
     }
-
     if (this.projectType === ProjectType.FaaS) {
       ruleList.push(
+        this.ruleTSConfig(),
         await this.ruleFaaSDecorator(),
-        this.ruleFYaml(),
-        this.ruleTSConfig()
+        this.ruleFYaml()
       );
     }
 
     return ruleList;
+  }
+
+  // 校验项目结构
+  async projectStruct(): Promise<RunnerItem> {
+    const locator = new Locator(this.core.config.servicePath);
+    const cwd = this.getCwd();
+
+    // midway hooks 支持
+    const midwayConfig = [
+      join(cwd, 'midway.config.ts'),
+      join(cwd, 'midway.config.js'),
+    ].find(file => existsSync(file));
+    if (midwayConfig) {
+      const config = getConfig();
+      if (config.source) {
+        this.options.sourceDir = config.source;
+      }
+    }
+
+    if (this.options.sourceDir) {
+      this.options.sourceDir = transformToRelative(
+        this.servicePath,
+        this.options.sourceDir
+      );
+    }
+    const codeAnalyzeResult = await locator.run({
+      tsCodeRoot:
+        this.options.sourceDir &&
+        join(this.servicePath, this.options.sourceDir),
+    });
+    let tsCodeRootCheckPassed = true;
+    return runner => {
+      runner
+        .group('project struct check')
+        .check('ts root', () => {
+          if (!codeAnalyzeResult.tsCodeRoot) {
+            tsCodeRootCheckPassed = false;
+            return [false, 'no tsCodeRoot, may be not exist tsconfig.json'];
+          }
+          return [true];
+        })
+        .check('ts root can not same to cwd', () => {
+          if (codeAnalyzeResult.tsCodeRoot === codeAnalyzeResult.cwd) {
+            tsCodeRootCheckPassed = false;
+            return [
+              false,
+              'ts code should in src directory, other directory should exclude in tsconfig.json',
+            ];
+          }
+          return [true];
+        })
+        .check('project type', () => {
+          if (codeAnalyzeResult.projectType === 'unknown') {
+            return [false, 'can not check project type'];
+          }
+          return [true];
+        })
+        .check('config', () => {
+          if (!tsCodeRootCheckPassed) {
+            return [true];
+          }
+          const existsConfig = existsSync(
+            join(codeAnalyzeResult.tsCodeRoot, 'config')
+          );
+          if (!existsConfig) {
+            return [true];
+          }
+
+          const configuration = join(
+            codeAnalyzeResult.tsCodeRoot,
+            'configuration.ts'
+          );
+          if (!existsSync(configuration)) {
+            return [false, 'config need setting in configuration.ts'];
+          }
+
+          const configurationData = readFileSync(configuration).toString();
+          if (!configurationData.includes('importConfigs')) {
+            return [false, 'config need setting in configuration.ts'];
+          }
+
+          if (configurationData.includes('config/config.')) {
+            return [
+              false,
+              "please using join(__dirname, './config/') to import config",
+            ];
+          }
+          return [true];
+        });
+    };
   }
 
   async ruleFaaSDecorator(): Promise<RunnerItem> {
@@ -90,7 +183,7 @@ export class CheckPlugin extends BasePlugin {
   // 校验yaml格式
   ruleFYaml(): RunnerItem {
     // yaml 配置
-    const yamlFile = join(this.core.cwd, 'f.yml');
+    const yamlFile = join(this.getCwd(), 'f.yml');
     let yamlObj;
     let error;
     try {
@@ -199,7 +292,7 @@ export class CheckPlugin extends BasePlugin {
   }
 
   ruleTSConfig(): RunnerItem {
-    const tsConfigFile = join(this.core.cwd, 'tsconfig.json');
+    const tsConfigFile = join(this.getCwd(), 'tsconfig.json');
     const exists = existsSync(tsConfigFile);
     let tsconfig;
     return runner => {
@@ -353,6 +446,10 @@ export class CheckPlugin extends BasePlugin {
   }
 
   private getYamlFilePosition() {
-    return join(this.core.cwd, 'f.yml');
+    return join(this.getCwd(), 'f.yml');
+  }
+
+  private getCwd() {
+    return this.servicePath || this.core.cwd || process.cwd();
   }
 }
