@@ -65,7 +65,10 @@ export class CheckPlugin extends BasePlugin {
   }
 
   async getRuleList(): Promise<Array<RunnerItem>> {
-    const ruleList: RunnerItem[] = [await this.projectStruct()];
+    const ruleList: RunnerItem[] = [
+      await this.projectStruct(),
+      await this.packageJson(),
+    ];
     if (this.options.checkRule) {
       const ruleList = [].concat(this.options.checkRule);
       for (const getRule of ruleList) {
@@ -82,6 +85,65 @@ export class CheckPlugin extends BasePlugin {
     }
 
     return ruleList;
+  }
+
+  // package json 校验
+  async packageJson(): Promise<RunnerItem> {
+    // TODO: deps 里面存在 cli相关需要报错
+    const cwd = this.getCwd();
+    const pkgJsonFile = join(cwd, 'package.json');
+    const pkgExists = existsSync(pkgJsonFile);
+    let pkjJson;
+    if (pkgExists) {
+      pkjJson = JSON.parse(readFileSync(pkgJsonFile).toString());
+    }
+    return runner => {
+      runner
+        .group('package.json check')
+        .check('exists', () => {
+          if (!pkgExists) {
+            return [false, 'not exist package.json'];
+          }
+          return [true];
+        })
+        .check('no cli deps', () => {
+          if (!pkgExists) {
+            return [true];
+          }
+
+          const deps = pkjJson['dependencies'] || {};
+          const cliDeps = Object.keys(deps).filter(name => {
+            if (name === '@midwayjs/cli') {
+              return true;
+            }
+            if (name.includes('/fcli-plugin-')) {
+              return true;
+            }
+            if (name.endsWith('/faas-cli')) {
+              return true;
+            }
+            if (name.endsWith('/faas-fun')) {
+              return true;
+            }
+            if (name.endsWith('/faas-invoke')) {
+              return true;
+            }
+            if (name.includes('@midwayjs/cli-plugin-')) {
+              return true;
+            }
+            return false;
+          });
+
+          if (cliDeps.length) {
+            return [
+              false,
+              'dependencies are not allowed to exist ' + cliDeps.join(', '),
+            ];
+          }
+
+          return [true];
+        });
+    };
   }
 
   // 校验项目结构
@@ -119,16 +181,16 @@ export class CheckPlugin extends BasePlugin {
         .check('ts root', () => {
           if (!codeAnalyzeResult.tsCodeRoot) {
             tsCodeRootCheckPassed = false;
-            return [false, 'no tsCodeRoot, may be not exist tsconfig.json'];
+            return [false, 'no tsCodeRoot, tsconfig.json may not exist'];
           }
           return [true];
         })
-        .check('ts root can not same to cwd', () => {
+        .check('ts root should not be same to cwd', () => {
           if (codeAnalyzeResult.tsCodeRoot === codeAnalyzeResult.cwd) {
             tsCodeRootCheckPassed = false;
             return [
               false,
-              'ts code should in src directory, other directory should exclude in tsconfig.json',
+              'ts file should be in src directory, other ts directory should be configured in tsconfig.json exclude attribute',
             ];
           }
           return [true];
@@ -155,18 +217,18 @@ export class CheckPlugin extends BasePlugin {
             'configuration.ts'
           );
           if (!existsSync(configuration)) {
-            return [false, 'config need setting in configuration.ts'];
+            return [false, 'config need to be set in configuration.ts'];
           }
 
           const configurationData = readFileSync(configuration).toString();
           if (!configurationData.includes('importConfigs')) {
-            return [false, 'config need setting in configuration.ts'];
+            return [false, 'config need to be set in configuration.ts'];
           }
 
           if (configurationData.includes('config/config.')) {
             return [
               false,
-              "please using join(__dirname, './config/') to import config",
+              "please use join(__dirname, './config/') to import config",
             ];
           }
           return [true];
@@ -203,16 +265,19 @@ export class CheckPlugin extends BasePlugin {
         })
         .check('service', () => {
           if (!yamlObj?.service) {
-            return [false, 'need service config'];
+            return [false, 'Yaml should have service config'];
           }
           return [true];
         })
         .check('provider', () => {
           if (!yamlObj?.provider) {
-            return [false, 'need provider config'];
+            return [false, 'Yaml should have provider config'];
           }
           if (!yamlObj?.provider?.name) {
-            return [false, 'need provider name, e.g. aliyun'];
+            return [
+              false,
+              'Yaml should have provider.name config, e.g. aliyun',
+            ];
           }
           return [true];
         })
@@ -229,7 +294,10 @@ export class CheckPlugin extends BasePlugin {
               continue;
             }
             if (!Array.isArray(funcInfo.events)) {
-              return [false, `function '${funcName}' events type need array`];
+              return [
+                false,
+                `function '${funcName}' events type should be Array`,
+              ];
             }
           }
           return [true];
@@ -256,12 +324,15 @@ export class CheckPlugin extends BasePlugin {
             for (const httpTrigger of httpTriggers) {
               const triggerInfo = httpTrigger.http || httpTrigger.apigw;
               if (!triggerInfo.path) {
-                return [false, `function '${funcName}' http trigger need path`];
+                return [
+                  false,
+                  `function '${funcName}' http.trigger need path attribute`,
+                ];
               }
               if (triggerInfo.method && !Array.isArray(triggerInfo.method)) {
                 return [
                   false,
-                  `function '${funcName}' http trigger method type need array`,
+                  `function '${funcName}' http.trigger.method type should be Array`,
                 ];
               }
             }
@@ -277,14 +348,14 @@ export class CheckPlugin extends BasePlugin {
             yamlObj.package.include &&
             !Array.isArray(yamlObj.package.include)
           ) {
-            return [false, 'package include type need array'];
+            return [false, 'YAML package.include type should be Array'];
           }
 
           if (
             yamlObj.package.exclude &&
             !Array.isArray(yamlObj.package.exclude)
           ) {
-            return [false, 'package exclude type need array'];
+            return [false, 'YAML package.exclude type should be Array'];
           }
           return [true];
         });
@@ -339,7 +410,7 @@ export class CheckPlugin extends BasePlugin {
           if (!targetVersion) {
             return [
               false,
-              `tsconfig target version '${targetVersion}' not support`,
+              `tsconfig target version(${targetVersion}) is not supported`,
             ];
           } else if (targetVersion > 9) {
             return [false, 'tsconfig target need ≤ es2018'];
