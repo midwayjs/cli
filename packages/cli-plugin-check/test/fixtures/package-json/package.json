@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@midwayjs/cli-plugin-xxx": "1.0.0",
+    "@midwayjs/fcli-plugin-xxx": "1.0.0",
+    "@midwayjs/cli": "1.0.0",
+    "@midwayjs/faas-cli": "1.0.0",
+    "@xxx/faas-fun": "1.0.0",
+    "@xxx/faas-invoke": "1.0.0",
+    "async": "*"
+  }
+}

@@ -44,6 +44,43 @@ describe('/test/index.test.ts', () => {
     await remove(join(baseDir, 'serverless.zip'));
   });
 
+  it('use custom artifact directory', async () => {
+    const baseDir = join(__dirname, './fixtures/base-fc');
+    process.env.SERVERLESS_DEPLOY_ID = 'test';
+    process.env.SERVERLESS_DEPLOY_AK = 'test';
+    process.env.SERVERLESS_DEPLOY_SECRET = 'test';
+    const logs = [];
+    const core = new CommandCore({
+      config: {
+        servicePath: baseDir,
+      },
+      options: {
+        skipDeploy: true,
+        skipInstallDep: true,
+        resetConfig: true,
+      },
+      commands: ['deploy'],
+      service: loadSpec(baseDir),
+      provider: 'aliyun',
+      log: {
+        log: (...args) => {
+          logs.push(...args);
+        },
+      },
+    });
+    core.addPlugin(DeployPlugin);
+    core.addPlugin(PackagePlugin);
+    core.addPlugin(AliyunFCPlugin);
+    await core.ready();
+    await core.invoke(['deploy']);
+    const logStr = logs.join('\n');
+    assert(logStr.includes('Start deploy by @alicloud/fun'));
+    assert(logStr.includes('Deploy success'));
+    assert(existsSync(join(baseDir, '.serverless/template.yml')));
+    // clean
+    await remove(join(baseDir, '.serverless'));
+  });
+
   it('only build index2', async () => {
     const baseDir = join(__dirname, './fixtures/base-fc');
     const core = new CommandCore({

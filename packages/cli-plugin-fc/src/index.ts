@@ -82,10 +82,12 @@ export class AliyunFCPlugin extends BasePlugin {
       });
       this.core.cli.log('Start deploy by @alicloud/fun');
       try {
-        await AliyunDeploy({
-          template: join(this.midwayBuildPath, 'template.yml'),
-          assumeYes: this.options.yes,
-        });
+        if (!this.options.skipDeploy) {
+          await AliyunDeploy({
+            template: join(this.midwayBuildPath, 'template.yml'),
+            assumeYes: this.options.yes,
+          });
+        }
         this.core.cli.log('Deploy success');
       } catch (e) {
         this.core.cli.log(`Deploy error: ${e.message}`);
@@ -154,9 +156,10 @@ export class AliyunFCPlugin extends BasePlugin {
       for (const fcDeployInputs of functions) {
         Object.assign(fcDeployInputs, this.options.serverlessDev);
         delete fcDeployInputs.access;
-        await fcDeploy.deploy(fcDeployInputs);
+        if (!this.options.skipDeploy) {
+          await fcDeploy.deploy(fcDeployInputs);
+        }
         const funcName = fcDeployInputs.props.function.name;
-
         this.core.cli.log(`Function '${funcName}' deploy success`);
       }
     } catch (e) {
