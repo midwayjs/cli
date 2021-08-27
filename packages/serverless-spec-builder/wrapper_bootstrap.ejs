@@ -10,32 +10,40 @@ try {
 } catch(e) { }
 <% }); %>
 
-let starter;
+let frameworkInstance;
 let runtime;
 let inited = false;
-
-<% if (isUseFileDetector) { %>
-const preLoadMod = [
-<% requireList.forEach(function(requirePath){ %>
-  require('<%=requirePath%>'),
-<% } %>
-];
-<% } %>
 
 const initializeMethod = async (initializeContext = {}) => {
   layers.unshift(engine => {
     engine.addRuntimeExtension({
       async beforeFunctionStart(runtime) {
-        starter = new Framework();
-        starter.configure({
+        let startConfig = {
           initializeContext,
           preloadModules: <%-JSON.stringify(preloadModules, null, 2)%>,
           applicationAdapter: runtime
-        });
+        };
+        <% if (isUseFileDetector) { %>
+        const container = new MdwayContainer();
+        container.setFileDetector(
+          new CustomModuleDetector({
+            modules: [
+            <% requireList.forEach(function(requirePath){ %>
+              require('<%=requirePath%>'),
+            <% } %>
+            ]
+          })
+        );
+        startConfig.applicationContext = container;
+        <% } %>
+
+        frameworkInstance = new Framework();
+        frameworkInstance.configure(startConfig);
         const boot = new BootstrapStarter();
         boot.configure({
-          appDir: __dirname,
-        }).load(starter);
+          appDir: <% if (entryAppDir) { %><%-entryAppDir%><% } else { %>__dirname<% }%>,
+          <% if (entryBaseDir) { %><%-entryBaseDir%>,<% } %>
+        }).load(frameworkInstance);
 
         await boot.init();
         await boot.run();
@@ -55,7 +63,7 @@ const getHandler = (hanlderName, ...originArgs) => {
   <% handlers.forEach(function(handlerData){ %>
     if (hanlderName === '<%=handlerData.name%>') {
       return <% if (handlerData.handler) {
-      %> starter.handleInvokeWrapper('<%=handlerData.handler%>'); <% } else {
+      %> frameworkInstance.handleInvokeWrapper('<%=handlerData.handler%>'); <% } else {
       %> async (ctx<% if (moreArgs) { %>, ...args<% } %>) => {
         const allHandlers = <%-JSON.stringify(handlerData.handlers, null, 2)%>;
         let handler = null;
@@ -81,7 +89,7 @@ const getHandler = (hanlderName, ...originArgs) => {
               req.pathParameters = Object.assign({}, matchRes.params, req.pathParameters);
             }
           }
-          return starter.handleInvokeWrapper(handler.handler)(ctx<% if (moreArgs) { %>, ...args<% } %>);
+          return frameworkInstance.handleInvokeWrapper(handler.handler)(ctx<% if (moreArgs) { %>, ...args<% } %>);
         }
         ctx.status = 404;
         ctx.set('Content-Type', 'text/html');

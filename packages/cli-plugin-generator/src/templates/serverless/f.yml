@@ -1,0 +1,13 @@
+service:
+  name: NAME_PLACE
+
+provider:
+  name: aliyun
+
+# aggregation:
+#   all:
+#     functionsPattern: '*'
+
+custom:
+  customDomain:
+    domainName: auto

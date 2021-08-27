@@ -105,8 +105,8 @@ export class CLI extends CoreBaseCLI {
     }
   }
 
-  displayUsage(commandsArray, usage, coreInstance) {
+  displayUsage(commandsArray, usage, coreInstance, commandInfo?) {
     this.displayVersion();
-    super.displayUsage(commandsArray, usage, coreInstance);
+    super.displayUsage(commandsArray, usage, coreInstance, commandInfo);
   }
 }

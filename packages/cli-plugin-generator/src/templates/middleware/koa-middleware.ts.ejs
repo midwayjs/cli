@@ -1,0 +1,23 @@
+import { Provide } from '@midwayjs/decorator';
+
+<% if (useExternalLib) { -%>
+import { IWebMiddleware } from '@midwayjs/koa';
+import ThirdPartyLib from 'ThirdPartyLib';
+<% } else { -%>
+import {
+  IWebMiddleware,
+  IMidwayKoaContext,
+  IMidwayKoaNext,
+} from '@midwayjs/koa';
+<% } -%>
+
+@Provide('<%=name%>')
+export default class <%=name%> implements IWebMiddleware {
+  resolve() {
+<% if (useExternalLib) { -%>
+    return ThirdPartyLib();
+<% } else { -%>
+  return async (ctx: IMidwayKoaContext, next: IMidwayKoaNext) => {};
+<% } -%>
+  }
+}

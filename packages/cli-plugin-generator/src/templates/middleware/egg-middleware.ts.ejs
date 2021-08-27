@@ -1,0 +1,19 @@
+<% if (functional) { -%>
+import { IWebMiddleware, IMidwayWebNext } from '@midwayjs/web';
+import { Context } from 'egg';
+
+export const <%=name%> = () => {
+  return async function (ctx: Context, next: IMidwayWebNext) {};
+};
+<% } else { -%>
+import { Provide } from '@midwayjs/decorator';
+import { IWebMiddleware, IMidwayWebNext } from '@midwayjs/web';
+import { Context } from 'egg';
+
+@Provide()
+export class <%=name%> implements IWebMiddleware {
+  resolve() {
+    return async (ctx: Context, next: IMidwayWebNext) => {};
+  }
+}
+<% } -%>

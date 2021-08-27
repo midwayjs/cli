@@ -22,6 +22,8 @@ export function writeWrapper(options: {
   isDefaultFunc?: boolean; // entry is module.export = () => {}
   skipInitializer?: boolean; // skip generate initializer method
   requireList?: string[]; // pre require in entry file
+  entryAppDir?: string;
+  entryBaseDir?: string;
 }) {
   const {
     service,
@@ -42,6 +44,8 @@ export function writeWrapper(options: {
     isDefaultFunc = false,
     skipInitializer = false,
     requireList = [],
+    entryAppDir,
+    entryBaseDir,
   } = options;
 
   const files = {};
@@ -178,6 +182,8 @@ export function writeWrapper(options: {
       moreArgs: moreArgs || false,
       isDefaultFunc,
       skipInitializer,
+      entryAppDir,
+      entryBaseDir,
       defaultFunctionHandlerName: files[file].defaultFunctionHandlerName,
       isUseFileDetector,
       requireList,

@@ -1,0 +1,50 @@
+import {
+  Controller,
+  Provide,
+  Inject,
+  Get,
+  Post,
+  All,
+  Query,
+  Param,
+  Body,
+  ALL,
+  HttpCode,
+  SetHeader,
+  ContentType,
+} from '@midwayjs/decorator';
+import { IMidwayContext } from '@midwayjs/core';
+
+
+@Provide()
+@Controller('/')
+export class <%=name%> {
+  @Inject()
+  ctx: IMidwayContext;
+  
+  @Get('/')
+  async GetHandler(@Query(ALL) query: unknown): Promise<string> {
+    return 'Hello Midwayjs!';
+  }
+
+  @Post('/:group/:id')
+  @HttpCode(200)
+  @SetHeader('Content-Type', 'application/json')
+  async PostHandler(
+    @Param(ALL) paramGroup: unknown,
+    @Body(ALL) body: unknown
+  ): Promise<string> {
+    return 'Hello Midwayjs!';
+  }
+
+  @All('/all')
+  async AllHandler(@Query(ALL) query: unknown): Promise<string> {
+    return 'Hello Midwayjs!';
+  }
+
+  @Get('/html')
+  @ContentType('text/html')
+  async HTMLHandler(@Query(ALL) query: unknown): Promise<string> {
+    return '<body><h1>Hello Midwayjs!</h1></body>';
+  }
+}

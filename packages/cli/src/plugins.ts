@@ -10,6 +10,7 @@ export const PluginList: Array<{
   { mod: '@midwayjs/cli-plugin-dev', command: 'dev', installed: true },
   { mod: '@midwayjs/cli-plugin-faas', command: 'deploy' },
   { mod: '@midwayjs/cli-plugin-faas', command: 'package' },
+  { mod: '@midwayjs/cli-plugin-generator', command: 'gen' },
   { mod: '@midwayjs/cli-plugin-test', command: 'test', installed: true },
   { mod: '@midwayjs/cli-plugin-test', command: 'cov', installed: true },
   { mod: '@midwayjs/cli-plugin-clean', command: 'clean', installed: true },

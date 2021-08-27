@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.80](https://github.com/midwayjs/cli/compare/v1.2.79...v1.2.80) (2021-08-16)
+
+
+### Features
+
+* support fc authType、 timeout、 initTimeout ([#178](https://github.com/midwayjs/cli/issues/178)) ([baca74c](https://github.com/midwayjs/cli/commit/baca74c971bd916803594c7900769a291dc5cb6f))
+
+
+
+
+
+## [1.2.79](https://github.com/midwayjs/cli/compare/v1.2.78...v1.2.79) (2021-08-11)
+
+**Note:** Version bump only for package @midwayjs/serverless-meta-json
+
+
+
+
+
 ## [1.2.76](https://github.com/midwayjs/cli/compare/v1.2.75...v1.2.76) (2021-07-22)
 
 

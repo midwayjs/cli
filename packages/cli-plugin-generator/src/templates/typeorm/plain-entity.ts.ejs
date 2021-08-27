@@ -1,0 +1,30 @@
+import { EntityModel } from '@midwayjs/orm';
+import {
+  PrimaryGeneratedColumn,
+  Column,
+  <% if (activeRecord) { -%>
+  BaseEntity,
+  <% } -%>
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+
+
+@EntityModel()
+<% if (activeRecord) { -%>
+export default class <%=entity%> extends BaseEntity {
+<% } else { -%>
+export default class <%=entity%> {
+<% } -%>
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  name: string;
+
+  @CreateDateColumn()
+  createDate: Date;
+
+  @UpdateDateColumn()
+  updateDate: Date;
+}

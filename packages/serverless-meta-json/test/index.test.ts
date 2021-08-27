@@ -12,6 +12,9 @@ describe('/test/index.test.ts', () => {
         a: {
           handler: 'a.handler',
           events: [{ http: { path: '/api/a', method: [] } }],
+          concurrency: 2,
+          timeout: 30,
+          initTimeout: 50,
         },
         b: {
           handler: 'b.handler',
@@ -27,6 +30,9 @@ describe('/test/index.test.ts', () => {
     assert(meta['spec-version'] === '1.0.0');
     assert(meta.functions.length === 2);
     assert(meta.functions[0].name === 'a');
+    assert(meta.functions[0].concurrency === 2);
+    assert(meta.functions[0].timeout === 30);
+    assert(meta.functions[0].initTimeout === 50);
     assert(meta.functions[1].name === 'b');
     assert(
       meta.gateway.paths['/api/a'].ALL['x-gateway-intergration'].url.group ===

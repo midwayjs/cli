@@ -1,0 +1,50 @@
+import {
+  MiddlewareFn,
+  <% if (type==="class") { -%>
+  MiddlewareInterface,
+  ResolverData,
+  <% } -%>
+  NextFn,
+} from 'type-graphql';
+
+export interface IContext {}
+
+<% if (type==="functional") { -%>
+export const <%=mwName%>: MiddlewareFn<IContext> = async (
+  { root, args, context, info },
+  next: NextFn
+) => {
+  await next();
+};
+<% } -%>
+
+<% if (type==="guard") { -%>
+export const <%=mwName%>: MiddlewareFn<IContext> = async (
+  { root, args, context, info },
+  next: NextFn
+) => {
+  throw new Error('Guards Invoked!');
+};
+<% } -%>
+
+<% if (type==="factory") { -%>
+export const <%=mwName%> = (): MiddlewareFn<IContext> => {
+  return async ({ root, args, context, info }, next) => {
+    await next();
+  };
+};
+<% } -%>
+
+<% if (type==="class") { -%>
+export class <%=mwName%> implements MiddlewareInterface<IContext> {
+  constructor() {}
+
+  async use(
+    { root, args, context, info }: ResolverData<IContext>,
+    next: NextFn
+  ) {
+    return next();
+  }
+}
+<% } -%>
+

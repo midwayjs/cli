@@ -22,7 +22,9 @@ export class HelloService {
   }
 
   @ServerlessFunction({
-    concurrency: 2
+    concurrency: 2,
+    timeout: 30,
+    initTimeout: 50,
   })
   @ServerlessTrigger(ServerlessTriggerType.OS, { bucket: 'test', events: 'test', filter: { prefix: '', suffix: ''} })
   async ossTrigger() {

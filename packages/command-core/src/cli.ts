@@ -89,21 +89,33 @@ export class CoreBaseCLI {
     return { ...console, error: this.error };
   }
 
-  // 展示帮助信息
-  displayUsage(commandsArray, usage, coreInstance) {
-    const log = this.loadLog();
+  getUsageInfo(commandsArray: any[], usage, coreInstance, commandInfo?) {
     let commandList: any = {};
     if (commandsArray && commandsArray.length) {
       commandList = {
         header: commandsArray.join(' '),
-        optionList: Object.keys(usage).map(name => {
-          const usageInfo = usage[name] || {};
-          return {
-            name,
-            description: usageInfo.usage,
-            alias: usageInfo.shortcut,
-          };
-        }),
+        content: commandInfo.usage,
+        optionList: usage
+          ? Object.keys(usage).map(name => {
+              const usageInfo = usage[name] || {};
+              return {
+                name,
+                description: usageInfo.usage,
+                alias: usageInfo.shortcut,
+              };
+            })
+          : [],
+        childCommands: commandInfo?.commands
+          ? Object.keys(commandInfo?.commands).map(command => {
+              const childCommandInfo = commandInfo?.commands[command];
+              return this.getUsageInfo(
+                [command],
+                childCommandInfo.options,
+                coreInstance,
+                childCommandInfo
+              );
+            })
+          : null,
       };
     } else {
       commandList = [];
@@ -127,10 +139,33 @@ export class CoreBaseCLI {
                 alias: usageInfo.shortcut,
               };
             }),
+            childCommands: commandInfo.commands
+              ? Object.keys(commandInfo.commands).map(command => {
+                  const childCommandInfo = commandInfo.commands[command];
+                  return this.getUsageInfo(
+                    [command],
+                    childCommandInfo.options,
+                    coreInstance,
+                    childCommandInfo
+                  );
+                })
+              : null,
           });
         });
       });
     }
+    return commandList;
+  }
+
+  // 展示帮助信息
+  displayUsage(commandsArray, usage, coreInstance, commandInfo?) {
+    const log = this.loadLog();
+    const commandList = this.getUsageInfo(
+      commandsArray,
+      usage,
+      coreInstance,
+      commandInfo
+    );
     log.log(commandLineUsage(commandList));
   }
 
