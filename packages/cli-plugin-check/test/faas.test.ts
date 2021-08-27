@@ -13,7 +13,6 @@ describe('test/faas.test.ts', () => {
     assert(logStr.includes('not exist package.json'));
     assert(logStr.includes('Yaml should have service config'));
     assert(logStr.includes('Yaml should have provider config'));
-    assert(logStr.includes('tsconfig parse error'));
   });
   it('passed', async () => {
     const cwd = join(__dirname, 'fixtures/faas-passed');
