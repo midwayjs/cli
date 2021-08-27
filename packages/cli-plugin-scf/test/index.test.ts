@@ -51,5 +51,8 @@ describe('/test/index.test.ts', () => {
     core.addPlugin(TencentSCFPlugin);
     await core.ready();
     await core.invoke(['deploy']);
+    const buildPath = join(baseDir, '.serverless');
+    assert(existsSync(join(baseDir, 'artifact.zip')));
+    assert(existsSync(join(buildPath, 'serverless.yml')));
   });
 });
