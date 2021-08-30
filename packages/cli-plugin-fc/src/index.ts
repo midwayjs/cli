@@ -6,7 +6,6 @@ import { join } from 'path';
 import { homedir } from 'os';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
-import * as globby from 'globby';
 import {
   generateFunctionsSpecFile,
   generateComponentSpec,
