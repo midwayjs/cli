@@ -210,7 +210,7 @@ export class FCSpecBuilder extends SpecBuilder {
         }
       } else if (customDomain !== false) {
         console.log('\n\n\n**************************************\n\n\n');
-        console.log('Midway 将于 2021/05/01 起不再提供默认自动域名配置。');
+        console.log('Midway 于 2021/05/01 起不再提供默认自动域名配置。');
         console.log('\n');
         console.log('若需要使用自动域名，请在 f.yml 文件中加入如下配置：');
         console.log('\n');

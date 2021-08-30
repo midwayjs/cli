@@ -120,10 +120,10 @@ export function writeWrapper(options: {
   }
   process.chdir(cwd);
 
-  let isFaaS2 = false;
+  let isMoreThanFaaS2 = false;
   if (faasPkgFile && existsSync(faasPkgFile)) {
     const { version } = JSON.parse(readFileSync(faasPkgFile).toString());
-    isFaaS2 = /^2\./.test(version);
+    isMoreThanFaaS2 = version[0] && version[0] >= 2;
   }
 
   const tpl = readFileSync(
@@ -133,7 +133,7 @@ export function writeWrapper(options: {
           __dirname,
           isCustomAppType
             ? '../wrapper_app.ejs'
-            : isFaaS2
+            : isMoreThanFaaS2
             ? '../wrapper_bootstrap.ejs'
             : '../wrapper.ejs'
         )

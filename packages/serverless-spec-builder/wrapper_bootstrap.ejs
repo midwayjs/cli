@@ -31,7 +31,9 @@ const initializeMethod = async (initializeContext = {}) => {
             modules: preload.modules
           })
         );
-        container.load(preload.configuration);
+        if (preload.configuration) {
+          container.load(preload.configuration);
+        }
         startConfig.applicationContext = container;
         <% } %>
 
