@@ -21,7 +21,7 @@ export function writeWrapper(options: {
   moreArgs?: boolean; // aggregation more args
   isDefaultFunc?: boolean; // entry is module.export = () => {}
   skipInitializer?: boolean; // skip generate initializer method
-  requireList?: string[]; // pre require in entry file
+  preloadFile?: string; // pre require in entry file
   entryAppDir?: string;
   entryBaseDir?: string;
 }) {
@@ -43,7 +43,7 @@ export function writeWrapper(options: {
     moreArgs,
     isDefaultFunc = false,
     skipInitializer = false,
-    requireList = [],
+    preloadFile,
     entryAppDir,
     entryBaseDir,
   } = options;
@@ -156,10 +156,10 @@ export function writeWrapper(options: {
   }
 
   // 提前加载文件，并将加载的文件传递给midway
-  let isUseFileDetector = false;
+  let isUsePreload = false;
 
-  if (requireList.length) {
-    isUseFileDetector = true;
+  if (preloadFile) {
+    isUsePreload = true;
   }
 
   for (const file in files) {
@@ -185,8 +185,8 @@ export function writeWrapper(options: {
       entryAppDir,
       entryBaseDir,
       defaultFunctionHandlerName: files[file].defaultFunctionHandlerName,
-      isUseFileDetector,
-      requireList,
+      isUsePreload,
+      preloadFile,
       ...layers,
     });
     if (existsSync(fileName)) {

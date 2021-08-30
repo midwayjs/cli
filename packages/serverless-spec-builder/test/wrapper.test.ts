@@ -62,7 +62,7 @@ describe('/test/wrapper.test.ts', () => {
       );
       assert(
         aggreContent.indexOf(
-          'starter.handleInvokeWrapper(handler.handler)(ctx, ...args)'
+          'frameworkInstance.handleInvokeWrapper(handler.handler)(ctx, ...args)'
         ) !== -1
       );
       assert(aggreContent.indexOf('async (ctx, ...args)') !== -1);

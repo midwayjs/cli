@@ -73,6 +73,7 @@ export class PackagePlugin extends BasePlugin {
         'emit', // 编译函数  'package:after:tscompile'
         'analysisCode', // 分析代码
         'copyStaticFile', // 拷贝src中的静态文件到dist目录，例如 html 等
+        'preload', // 预加载用户代码文件
         'checkAggregation', // 检测高密度部署
         'selectFunction', // 选择要发布的函数
         'generateSpec', // 生成对应平台的描述文件，例如 serverless.yml 等
@@ -129,6 +130,7 @@ export class PackagePlugin extends BasePlugin {
     'before:package:copyFile': this.deployTypeBeforeCopyFile.bind(this),
     'package:copyFile': this.copyFile.bind(this),
     'package:compile': this.compile.bind(this),
+    'package:preload': this.preload.bind(this),
     'package:installLayer': this.installLayer.bind(this),
     'package:installDep': this.installDep.bind(this),
     'package:checkAggregation': this.checkAggregation.bind(this),
@@ -186,6 +188,7 @@ export class PackagePlugin extends BasePlugin {
       );
       this.midwayVersion = pkgJson.version[0];
     }
+    this.setStore('midwayVersion', this.midwayVersion, true);
     this.core.debug('midwayVersion', this.midwayVersion);
   }
 
@@ -573,6 +576,39 @@ export class PackagePlugin extends BasePlugin {
     }
 
     this.core.cli.log(' - Build project complete');
+  }
+
+  async preload() {
+    if (this.midwayVersion !== '3') {
+      return;
+    }
+
+    let preloadCode = '';
+    const distDir = join(this.midwayBuildPath, 'dist');
+    const preloadFile = join(distDir, '_midway_preload_modules.js');
+    const requireList = await globby(['**/*.js'], {
+      cwd: distDir,
+    });
+    preloadCode += [
+      'exports.modules = [',
+      ...requireList.map(file => {
+        return `  require('${relative(preloadFile, file)}'),`;
+      }),
+      '];',
+    ].join('\n');
+    const configurationFilePath = join(distDir, 'configuration.js');
+    if (existsSync(configurationFilePath)) {
+      preloadCode += `exports.configuration = require('${relative(
+        preloadFile,
+        configurationFilePath
+      )}');`;
+    }
+    this.setStore(
+      'preloadFile',
+      relative(this.midwayBuildPath, preloadFile),
+      true
+    );
+    writeFileSync(preloadFile, preloadCode);
   }
 
   async analysisCode() {

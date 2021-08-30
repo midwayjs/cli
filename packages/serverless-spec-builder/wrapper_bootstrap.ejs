@@ -23,17 +23,15 @@ const initializeMethod = async (initializeContext = {}) => {
           preloadModules: <%-JSON.stringify(preloadModules, null, 2)%>,
           applicationAdapter: runtime
         };
-        <% if (isUseFileDetector) { %>
+        <% if (isUsePreload) { %>
+        const preload = require('<%-preloadFile %>');
         const container = new MdwayContainer();
         container.setFileDetector(
           new CustomModuleDetector({
-            modules: [
-            <% requireList.forEach(function(requirePath){ %>
-              require('<%=requirePath%>'),
-            <% } %>
-            ]
+            modules: preload.modules
           })
         );
+        container.load(preload.configuration);
         startConfig.applicationContext = container;
         <% } %>
 
