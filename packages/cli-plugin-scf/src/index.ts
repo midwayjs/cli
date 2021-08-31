@@ -48,7 +48,9 @@ export class TencentSCFPlugin extends BasePlugin {
       const tencentDeploy = await this.getTencentServerless(
         this.core.service.package.artifact
       );
-      await tencentDeploy.invoke();
+      if (!this.options.skipDeploy) {
+        await tencentDeploy.invoke();
+      }
     },
   };
 

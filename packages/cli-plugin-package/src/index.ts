@@ -39,10 +39,10 @@ import {
   resolveTsConfigFile,
   Analyzer,
 } from '@midwayjs/mwcc';
-import { exec } from 'child_process';
+import { exec, execSync } from 'child_process';
 import * as JSZip from 'jszip';
 import { AnalyzeResult, Locator } from '@midwayjs/locate';
-import { tmpdir } from 'os';
+import { tmpdir, platform } from 'os';
 
 export class PackagePlugin extends BasePlugin {
   options: any;
@@ -449,6 +449,9 @@ export class PackagePlugin extends BasePlugin {
     await this.npmInstall({
       production: true,
     });
+
+    await this.biggestDep();
+
     for (const localDepName in localDep) {
       const target = join(this.midwayBuildPath, 'node_modules', localDepName);
       await copy(localDep[localDepName], target);
@@ -458,6 +461,56 @@ export class PackagePlugin extends BasePlugin {
 
   public getTsCodeRoot(): string {
     return this.codeAnalyzeResult.tsCodeRoot || join(this.getCwd(), 'src');
+  }
+
+  // dep size anlysis
+  private async biggestDep() {
+    if (platform() === 'win32') {
+      return;
+    }
+    let sizeRes;
+    try {
+      sizeRes = execSync(
+        `cd ${join(this.midwayBuildPath, 'node_modules')};du -hs * | sort -h`
+      ).toString();
+    } catch {
+      // ignore catch
+    }
+
+    if (!sizeRes) {
+      return;
+    }
+
+    const biggestModList = [];
+    sizeRes
+      .split('\n')
+      .slice(-10)
+      .forEach(mod => {
+        if (!mod) {
+          return;
+        }
+        const info = mod.split('\t');
+        const size = info[0];
+        let name = info[1];
+        if (!size) {
+          return;
+        }
+        name = name.replace(/^_|@\d.*$/g, '').replace('_', '/');
+        if (name[0] === '@' && !name.includes('/')) {
+          return;
+        }
+        biggestModList.push({
+          size,
+          name,
+        });
+      });
+    if (!biggestModList.length) {
+      return;
+    }
+    this.core.cli.log(' - Biggest Dependencies list:');
+    biggestModList.slice(-5).forEach(modInfo => {
+      this.core.cli.log(`    ${modInfo.size}\t${modInfo.name}`);
+    });
   }
 
   async compile() {
