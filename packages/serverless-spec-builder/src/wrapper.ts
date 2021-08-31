@@ -155,13 +155,6 @@ export function writeWrapper(options: {
     }
   }
 
-  // 提前加载文件，并将加载的文件传递给midway
-  let isUsePreload = false;
-
-  if (preloadFile) {
-    isUsePreload = true;
-  }
-
   for (const file in files) {
     const fileName = join(distDir, `${file}.js`);
     const layers = getLayers(service.layers, ...files[file].originLayers);
@@ -185,7 +178,6 @@ export function writeWrapper(options: {
       entryAppDir,
       entryBaseDir,
       defaultFunctionHandlerName: files[file].defaultFunctionHandlerName,
-      isUsePreload,
       preloadFile,
       ...layers,
     });

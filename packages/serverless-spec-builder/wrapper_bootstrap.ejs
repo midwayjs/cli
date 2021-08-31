@@ -23,7 +23,7 @@ const initializeMethod = async (initializeContext = {}) => {
           preloadModules: <%-JSON.stringify(preloadModules, null, 2)%>,
           applicationAdapter: runtime
         };
-        <% if (isUsePreload) { %>
+        <% if (preloadFile) { %>
         const preload = require('<%-preloadFile %>');
         const container = new MdwayContainer();
         container.setFileDetector(
