@@ -24,5 +24,6 @@ export const run = async (cwd: string, options = {}) => {
   return {
     close: core.store.get('global:dev:closeApp'),
     port: core.store.get('global:dev:port'),
+    getData: core.store.get('global:dev:getData'),
   };
 };

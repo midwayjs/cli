@@ -2,6 +2,10 @@ const { BootstrapStarter } = require('@midwayjs/bootstrap');
 const { Framework } = require('@midwayjs/faas');
 const { asyncWrapper, start } = require('<%=starter %>');
 const { match } = require('path-to-regexp');
+<% if (preloadFile) { %>
+const { MidwayContainer, CustomModuleDetector } = require('@midwayjs/core');
+const preload = require('./<%-preloadFile %>');
+<% }%>
 const layers = [];
 <% layerDeps.forEach(function(layer){ %>
 try {
@@ -10,7 +14,7 @@ try {
 } catch(e) { }
 <% }); %>
 
-let starter;
+let frameworkInstance;
 let runtime;
 let inited = false;
 
@@ -18,8 +22,27 @@ const initializeMethod = async (initializeContext = {}) => {
   layers.unshift(engine => {
     engine.addRuntimeExtension({
       async beforeFunctionStart(runtime) {
-        starter = new Framework();
-        starter.configure({
+        let startConfig = {
+          initializeContext,
+          preloadModules: <%-JSON.stringify(preloadModules, null, 2)%>,
+          applicationAdapter: runtime
+        };
+        let applicationContext;
+        <% if (preloadFile) { %>
+        const container = new MidwayContainer();
+        container.setFileDetector(
+          new CustomModuleDetector({
+            modules: preload.modules
+          })
+        );
+        if (preload.configuration) {
+          container.load(preload.configuration);
+        }
+        applicationContext = container;
+        <% } %>
+
+        frameworkInstance = new Framework();
+        frameworkInstance.configure({
           initializeContext,
           preloadModules: <%-JSON.stringify(preloadModules, null, 2)%>,
           applicationAdapter: runtime
@@ -28,7 +51,8 @@ const initializeMethod = async (initializeContext = {}) => {
         boot.configure({
           appDir: <% if (entryAppDir) { %><%-entryAppDir%><% } else { %>__dirname<% }%>,
           <% if (entryBaseDir) { %><%-entryBaseDir%>,<% } %>
-        }).load(starter);
+          applicationContext,
+        }).load(frameworkInstance);
 
         await boot.init();
         await boot.run();
@@ -48,7 +72,7 @@ const getHandler = (hanlderName, ...originArgs) => {
   <% handlers.forEach(function(handlerData){ %>
     if (hanlderName === '<%=handlerData.name%>') {
       return <% if (handlerData.handler) {
-      %> starter.handleInvokeWrapper('<%=handlerData.handler%>'); <% } else {
+      %> frameworkInstance.handleInvokeWrapper('<%=handlerData.handler%>'); <% } else {
       %> async (ctx<% if (moreArgs) { %>, ...args<% } %>) => {
         const allHandlers = <%-JSON.stringify(handlerData.handlers, null, 2)%>;
         let handler = null;
@@ -74,7 +98,7 @@ const getHandler = (hanlderName, ...originArgs) => {
               req.pathParameters = Object.assign({}, matchRes.params, req.pathParameters);
             }
           }
-          return starter.handleInvokeWrapper(handler.handler)(ctx<% if (moreArgs) { %>, ...args<% } %>);
+          return frameworkInstance.handleInvokeWrapper(handler.handler)(ctx<% if (moreArgs) { %>, ...args<% } %>);
         }
         ctx.status = 404;
         ctx.set('Content-Type', 'text/html');

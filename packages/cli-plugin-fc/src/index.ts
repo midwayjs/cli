@@ -28,11 +28,15 @@ export class AliyunFCPlugin extends BasePlugin {
     'package:generateEntry': async () => {
       this.core.cli.log('Generate entry file...');
       this.setGlobalDependencies('@midwayjs/serverless-fc-starter');
+
+      const preloadFile = this.getStore('preloadFile', 'global');
+
       writeWrapper({
         baseDir: this.servicePath,
         service: this.core.service,
         distDir: this.midwayBuildPath,
         starter: '@midwayjs/serverless-fc-starter',
+        preloadFile,
       });
     },
     'deploy:deploy': async () => {

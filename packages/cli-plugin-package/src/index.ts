@@ -1,4 +1,4 @@
-import { BasePlugin } from '@midwayjs/command-core';
+import { BasePlugin, forkNode } from '@midwayjs/command-core';
 import { getSpecFile, writeToSpec } from '@midwayjs/serverless-spec-builder';
 import { isAbsolute, join, relative, resolve } from 'path';
 import { getConfig } from '@midwayjs/hooks-core';
@@ -73,12 +73,14 @@ export class PackagePlugin extends BasePlugin {
         'emit', // 编译函数  'package:after:tscompile'
         'analysisCode', // 分析代码
         'copyStaticFile', // 拷贝src中的静态文件到dist目录，例如 html 等
+        'preload', // 预加载用户代码文件
         'checkAggregation', // 检测高密度部署
         'selectFunction', // 选择要发布的函数
         'generateSpec', // 生成对应平台的描述文件，例如 serverless.yml 等
         'generateEntry', // 生成对应平台的入口文件
         'installLayer', // 安装layer
         'installDep', // 安装依赖
+        'bundle', // 打包成bundle，例如ncc
         'package', // 函数打包
         'finalize', // 完成
       ],
@@ -129,6 +131,7 @@ export class PackagePlugin extends BasePlugin {
     'before:package:copyFile': this.deployTypeBeforeCopyFile.bind(this),
     'package:copyFile': this.copyFile.bind(this),
     'package:compile': this.compile.bind(this),
+    'package:preload': this.preload.bind(this),
     'package:installLayer': this.installLayer.bind(this),
     'package:installDep': this.installDep.bind(this),
     'package:checkAggregation': this.checkAggregation.bind(this),
@@ -140,6 +143,7 @@ export class PackagePlugin extends BasePlugin {
     'package:emit': this.emit.bind(this),
     'package:copyStaticFile': this.copyStaticFile.bind(this),
     'package:analysisCode': this.analysisCode.bind(this),
+    'package:bundle': this.bundle.bind(this),
   };
 
   async cleanup() {
@@ -161,6 +165,10 @@ export class PackagePlugin extends BasePlugin {
       this.midwayBuildPath = this.core.config.buildPath;
     }
 
+    if (this.options.bundle) {
+      // bundle 时默认跳过依赖安装
+      this.options.skipInstallDep = this.options.skipInstallDep ?? true;
+    }
     await remove(this.midwayBuildPath);
     await ensureDir(this.midwayBuildPath);
     this.setStore('defaultTmpFaaSOut', this.defaultTmpFaaSOut);
@@ -186,6 +194,7 @@ export class PackagePlugin extends BasePlugin {
       );
       this.midwayVersion = pkgJson.version[0];
     }
+    this.setStore('midwayVersion', this.midwayVersion, true);
     this.core.debug('midwayVersion', this.midwayVersion);
   }
 
@@ -373,10 +382,6 @@ export class PackagePlugin extends BasePlugin {
 
   async installDep() {
     this.core.cli.log('Install production dependencies...');
-    if (this.options.ncc) {
-      this.core.cli.log(' - Production dependencies install skip: using ncc');
-      return;
-    }
 
     if (+this.midwayVersion >= 2) {
       this.setGlobalDependencies('@midwayjs/bootstrap');
@@ -626,6 +631,36 @@ export class PackagePlugin extends BasePlugin {
     }
 
     this.core.cli.log(' - Build project complete');
+  }
+
+  async preload() {
+    if (this.midwayVersion !== '3') {
+      return;
+    }
+
+    let preloadCode = '';
+    const distDir = join(this.midwayBuildPath, 'dist');
+    const preloadFile = join(distDir, '_midway_preload_modules.js');
+    const requireList = await globby(['**/*.js'], {
+      cwd: distDir,
+    });
+    preloadCode += [
+      'exports.modules = [',
+      ...requireList.map(file => {
+        return `  require('./${file}'),`;
+      }),
+      '];',
+    ].join('\n');
+    const configurationFilePath = join(distDir, 'configuration.js');
+    if (existsSync(configurationFilePath)) {
+      preloadCode += "exports.configuration = require('./configuration.js');";
+    }
+    this.setStore(
+      'preloadFile',
+      relative(this.midwayBuildPath, preloadFile),
+      true
+    );
+    writeFileSync(preloadFile, preloadCode);
   }
 
   async analysisCode() {
@@ -1109,6 +1144,51 @@ export class PackagePlugin extends BasePlugin {
       }
     }
     writeToSpec(this.midwayBuildPath, this.core.service);
+  }
+
+  async bundle() {
+    if (!this.options.bundle) {
+      return;
+    }
+    const nccPkgJsonFile = require.resolve('@vercel/ncc/package');
+    const nccPkgJson = JSON.parse(readFileSync(nccPkgJsonFile).toString());
+    const nccCli = join(nccPkgJsonFile, '../', nccPkgJson.bin.ncc);
+
+    const entryList = await globby(['*.js'], {
+      cwd: this.midwayBuildPath,
+    });
+
+    if (!entryList.length) {
+      return;
+    }
+
+    this.core.cli.log('Build bundle...');
+
+    await Promise.all(
+      entryList.map(async entry => {
+        const entryName = entry.slice(0, -3);
+        await forkNode(
+          nccCli,
+          ['build', entry, '-o', 'ncc_build_tmp/' + entryName, '-m'],
+          {
+            cwd: this.midwayBuildPath,
+          }
+        );
+        await remove(join(this.midwayBuildPath, entry));
+        await move(
+          join(
+            this.midwayBuildPath,
+            'ncc_build_tmp/' + entryName + '/index.js'
+          ),
+          join(this.midwayBuildPath, entry)
+        );
+      })
+    );
+
+    await remove(join(this.midwayBuildPath, 'node_modules'));
+    await remove(join(this.midwayBuildPath, 'dist'));
+    await remove(join(this.midwayBuildPath, 'ncc_build_tmp'));
+    await remove(join(this.midwayBuildPath, 'src'));
   }
 
   finalize() {}
