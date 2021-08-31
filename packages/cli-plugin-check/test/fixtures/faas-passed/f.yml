@@ -1,0 +1,20 @@
+service: test
+provider:
+  name: aliyun
+
+
+functions:
+  test:
+    events:
+      - http:
+          path: /
+          method:
+            - get
+  b:
+    handler: a.b
+
+package:
+  include:
+    - a
+  exclude:
+    - b

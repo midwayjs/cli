@@ -1,0 +1,25 @@
+provider:
+  lalal: a
+functions:
+  a:
+    events:
+      - xxx: true
+  b:
+    events:
+      - xxx: true
+  c:
+    events:
+      - http:
+          path: /
+          method: get
+  d:
+    handler: a.b
+  e:
+    events:
+      - http:
+          path: /
+          method:
+            - get
+
+package:
+  exclude: b
