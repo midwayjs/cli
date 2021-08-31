@@ -2,6 +2,10 @@ const { BootstrapStarter } = require('@midwayjs/bootstrap');
 const { Framework } = require('@midwayjs/faas');
 const { asyncWrapper, start } = require('<%=starter %>');
 const { match } = require('path-to-regexp');
+<% if (preloadFile) { %>
+const { MidwayContainer, CustomModuleDetector } = require('@midwayjs/core');
+const preload = require('./<%-preloadFile %>');
+<% }%>
 const layers = [];
 <% layerDeps.forEach(function(layer){ %>
 try {
@@ -23,9 +27,9 @@ const initializeMethod = async (initializeContext = {}) => {
           preloadModules: <%-JSON.stringify(preloadModules, null, 2)%>,
           applicationAdapter: runtime
         };
+        let applicationContext;
         <% if (preloadFile) { %>
-        const preload = require('<%-preloadFile %>');
-        const container = new MdwayContainer();
+        const container = new MidwayContainer();
         container.setFileDetector(
           new CustomModuleDetector({
             modules: preload.modules
@@ -34,15 +38,20 @@ const initializeMethod = async (initializeContext = {}) => {
         if (preload.configuration) {
           container.load(preload.configuration);
         }
-        startConfig.applicationContext = container;
+        applicationContext = container;
         <% } %>
 
         frameworkInstance = new Framework();
-        frameworkInstance.configure(startConfig);
+        frameworkInstance.configure({
+          initializeContext,
+          preloadModules: <%-JSON.stringify(preloadModules, null, 2)%>,
+          applicationAdapter: runtime
+        });
         const boot = new BootstrapStarter();
         boot.configure({
           appDir: <% if (entryAppDir) { %><%-entryAppDir%><% } else { %>__dirname<% }%>,
           <% if (entryBaseDir) { %><%-entryBaseDir%>,<% } %>
+          applicationContext,
         }).load(frameworkInstance);
 
         await boot.init();

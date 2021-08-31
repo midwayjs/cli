@@ -165,6 +165,10 @@ export class PackagePlugin extends BasePlugin {
       this.midwayBuildPath = this.core.config.buildPath;
     }
 
+    if (this.options.bundle) {
+      // bundle 时默认跳过依赖安装
+      this.options.skipInstallDep = this.options.skipInstallDep ?? true;
+    }
     await remove(this.midwayBuildPath);
     await ensureDir(this.midwayBuildPath);
     this.setStore('defaultTmpFaaSOut', this.defaultTmpFaaSOut);
@@ -590,16 +594,13 @@ export class PackagePlugin extends BasePlugin {
     preloadCode += [
       'exports.modules = [',
       ...requireList.map(file => {
-        return `  require('${file}'),`;
+        return `  require('./${file}'),`;
       }),
       '];',
     ].join('\n');
     const configurationFilePath = join(distDir, 'configuration.js');
     if (existsSync(configurationFilePath)) {
-      preloadCode += `exports.configuration = require('${relative(
-        preloadFile,
-        configurationFilePath
-      )}');`;
+      preloadCode += "exports.configuration = require('./configuration.js');";
     }
     this.setStore(
       'preloadFile',
