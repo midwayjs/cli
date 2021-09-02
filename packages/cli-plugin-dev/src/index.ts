@@ -289,6 +289,14 @@ export class DevPlugin extends BasePlugin {
     if (existsSync(fyml)) {
       watcher.add(fyml);
     }
+
+    // loadFiles: require more file on dev process
+    if (this.options.loadFiles && Array.isArray(this.options.loadFiles)) {
+      for (const loadFile of this.options.loadFiles) {
+        watcher.add(loadFile);
+      }
+    }
+
     if (this.options.watchFile) {
       const watchFileList = this.options.watchFile.split(',');
       watchFileList.forEach(file => {

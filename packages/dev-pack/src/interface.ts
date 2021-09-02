@@ -3,6 +3,7 @@ import { DevPackOptions } from '@midwayjs/gateway-common-http';
 export interface IStartOptions {
   sourceDir?: string;
   plugins?: any[];
+  loadFiles?: string;
   slient?: boolean; // default is true
   fast?: boolean; // default is true
   notWatch?: boolean; // default is false
