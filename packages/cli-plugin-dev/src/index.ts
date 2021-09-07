@@ -8,6 +8,7 @@ import { statSync, existsSync, readFileSync, writeFileSync } from 'fs';
 import * as chalk from 'chalk';
 import * as detect from 'detect-port';
 import { parse } from 'json5';
+import * as ts from 'typescript';
 export class DevPlugin extends BasePlugin {
   private child;
   private started = false;
@@ -136,19 +137,15 @@ export class DevPlugin extends BasePlugin {
         this.spin.start();
       }
 
-      let tsNodeFast = {};
-      if (options.fast) {
-        tsNodeFast = {
-          TS_NODE_FILES: 'true',
-          TS_NODE_TRANSPILE_ONLY: 'true',
-        };
-      }
-
       let execArgv = [];
       if (options.ts) {
-        execArgv = ['-r', 'ts-node/register'];
-        if (this.tsconfigJson?.compilerOptions?.baseUrl) {
-          execArgv.push('-r', 'tsconfig-paths/register');
+        if (options.fast) {
+          execArgv = ['-r', 'esbuild-register'];
+        } else {
+          execArgv = ['-r', 'ts-node/register'];
+          if (this.tsconfigJson?.compilerOptions?.baseUrl) {
+            execArgv.push('-r', 'tsconfig-paths/register');
+          }
         }
       }
 
@@ -156,12 +153,16 @@ export class DevPlugin extends BasePlugin {
         cwd: this.core.cwd,
         env: {
           IN_CHILD_PROCESS: 'true',
-          ...tsNodeFast,
           ...process.env,
         },
         silent: true,
         execArgv,
       });
+
+      if (this.options.fast) {
+        this.checkType();
+      }
+
       const dataCache = [];
       this.child.stdout.on('data', data => {
         if (this.restarting) {
@@ -290,13 +291,6 @@ export class DevPlugin extends BasePlugin {
       watcher.add(fyml);
     }
 
-    // loadFiles: require more file on dev process
-    if (this.options.loadFiles && Array.isArray(this.options.loadFiles)) {
-      for (const loadFile of this.options.loadFiles) {
-        watcher.add(loadFile);
-      }
-    }
-
     if (this.options.watchFile) {
       const watchFileList = this.options.watchFile.split(',');
       watchFileList.forEach(file => {
@@ -388,5 +382,38 @@ export class DevPlugin extends BasePlugin {
       this.processMessageMap[id] = resolve;
       this.child.send({ type, data, id });
     });
+  }
+
+  private async checkType() {
+    const cwd = this.core.cwd;
+    const tsconfigPath = ts.findConfigFile(cwd, ts.sys.fileExists);
+    const { config } = ts.readConfigFile(tsconfigPath, ts.sys.readFile);
+    const parsedCommandLine = ts.parseJsonConfigFileContent(
+      config,
+      ts.sys,
+      cwd
+    );
+    const compilerOptions: ts.CompilerOptions = {
+      ...parsedCommandLine.options,
+    };
+    const host = ts.createCompilerHost(compilerOptions, true);
+    const program = ts.createProgram(
+      parsedCommandLine.fileNames,
+      compilerOptions,
+      host
+    );
+    const allDiagnostics = ts.getPreEmitDiagnostics(program);
+    const errors = allDiagnostics.filter(diagnostic => {
+      return diagnostic.category === ts.DiagnosticCategory.Error;
+    });
+    if (!Array.isArray(errors) || !errors.length) {
+      return;
+    }
+    for (const error of errors) {
+      const errorPath = error.file?.fileName
+        ? `(${relative(this.core.cwd, error.file.fileName)})`
+        : '';
+      this.error(`TS Error: ${error.messageText}${errorPath}`);
+    }
   }
 }

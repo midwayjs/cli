@@ -24,12 +24,6 @@ const closeApp = async () => {
 (async () => {
   let startSuccess = false;
   try {
-    if (options.loadFiles && Array.isArray(options.loadFiles)) {
-      for (const file of options.loadFiles) {
-        require(file);
-      }
-    }
-
     if (options.entryFile) {
       bootstrapStarter = await createBootstrap(options.entryFile);
     } else {
