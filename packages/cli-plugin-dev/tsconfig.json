@@ -2,10 +2,12 @@
   "extends": "../../tsconfig.json",
   "compileOnSave": true,
   "compilerOptions": {
+    "allowJs": true,
     "rootDir": "src",
     "outDir": "dist"
   },
   "include": [
-    "./src/**/*.ts"
+    "./src/**/*.ts",
+    "./src/**/*.js"
   ]
 }

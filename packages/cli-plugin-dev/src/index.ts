@@ -8,7 +8,6 @@ import { statSync, existsSync, readFileSync, writeFileSync } from 'fs';
 import * as chalk from 'chalk';
 import * as detect from 'detect-port';
 import { parse } from 'json5';
-import * as ts from 'typescript';
 export class DevPlugin extends BasePlugin {
   private child;
   private started = false;
@@ -386,34 +385,8 @@ export class DevPlugin extends BasePlugin {
 
   private async checkTsType() {
     const cwd = this.core.cwd;
-    const tsconfigPath = ts.findConfigFile(cwd, ts.sys.fileExists);
-    const { config } = ts.readConfigFile(tsconfigPath, ts.sys.readFile);
-    const parsedCommandLine = ts.parseJsonConfigFileContent(
-      config,
-      ts.sys,
-      cwd
-    );
-    const compilerOptions: ts.CompilerOptions = {
-      ...parsedCommandLine.options,
-    };
-    const host = ts.createCompilerHost(compilerOptions, true);
-    const program = ts.createProgram(
-      parsedCommandLine.fileNames,
-      compilerOptions,
-      host
-    );
-    const allDiagnostics = ts.getPreEmitDiagnostics(program);
-    const errors = allDiagnostics.filter(diagnostic => {
-      return diagnostic.category === ts.DiagnosticCategory.Error;
+    fork(require.resolve('./typeCheck'), [JSON.stringify({ cwd })], {
+      cwd,
     });
-    if (!Array.isArray(errors) || !errors.length) {
-      return;
-    }
-    for (const error of errors) {
-      const errorPath = error.file?.fileName
-        ? `(${relative(this.core.cwd, error.file.fileName)})`
-        : '';
-      this.error(`TS Error: ${error.messageText}${errorPath}`);
-    }
   }
 }
