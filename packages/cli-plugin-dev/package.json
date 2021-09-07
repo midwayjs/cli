@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/cli-plugin-dev",
-  "version": "1.2.83-beta.2",
+  "version": "1.2.83-beta.3",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -15,9 +15,9 @@
     "esbuild-register": "^3.0.0",
     "json5": "^2.2.0",
     "koa": "^2.11.0",
-    "typescript": "^4.1.0",
     "light-spinner": "^1.0.1",
-    "tsconfig-paths": "^3.9.0"
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^4.1.0"
   },
   "devDependencies": {
     "@midwayjs/core": "^2.8.0",
