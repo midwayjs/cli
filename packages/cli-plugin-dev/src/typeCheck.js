@@ -28,9 +28,10 @@ const check = () => {
     return;
   }
   for (const error of errors) {
-    const errorPath = error.file?.fileName
-      ? `(${relative(cwd, error.file.fileName)})`
-      : '';
+    const errorPath =
+      error.file && error.file.fileName
+        ? `(${relative(cwd, error.file.fileName)})`
+        : '';
     errorOutput(`TS Error: ${error.messageText}${errorPath}`);
   }
 };
