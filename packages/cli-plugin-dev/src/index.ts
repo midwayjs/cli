@@ -159,8 +159,8 @@ export class DevPlugin extends BasePlugin {
         execArgv,
       });
 
-      if (this.options.fast) {
-        this.checkType();
+      if (this.options.ts && this.options.fast) {
+        this.checkTsType();
       }
 
       const dataCache = [];
@@ -384,7 +384,7 @@ export class DevPlugin extends BasePlugin {
     });
   }
 
-  private async checkType() {
+  private async checkTsType() {
     const cwd = this.core.cwd;
     const tsconfigPath = ts.findConfigFile(cwd, ts.sys.fileExists);
     const { config } = ts.readConfigFile(tsconfigPath, ts.sys.readFile);
