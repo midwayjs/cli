@@ -8,7 +8,6 @@ export class HelloHttpService {
   ctx;
 
   handler() {
-    const a: string = 2;
     return 'hello world,' + this.ctx.query.name;
   }
 }
