@@ -159,6 +159,9 @@ describe('/test/index.test.ts', () => {
     await remove(join(baseDir, '.serverless'));
   });
   it('build by serverless-dev', async () => {
+    if (process.version.includes('v10')) {
+      return;
+    }
     const accessYaml = join(homedir(), '.s/access.yaml');
     const exists = existsSync(accessYaml);
     if (!exists) {

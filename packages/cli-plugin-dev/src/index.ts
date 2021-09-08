@@ -136,9 +136,17 @@ export class DevPlugin extends BasePlugin {
         this.spin.start();
       }
 
+      let tsNodeFast = {};
+      if (options.fast) {
+        tsNodeFast = {
+          TS_NODE_FILES: 'true',
+          TS_NODE_TRANSPILE_ONLY: 'true',
+        };
+      }
+
       let execArgv = [];
       if (options.ts) {
-        if (options.fast) {
+        if (options.fast === 'esbuild') {
           execArgv = ['-r', join(__dirname, '../js/esbuild-register.js')];
         } else {
           execArgv = ['-r', 'ts-node/register'];
@@ -152,13 +160,14 @@ export class DevPlugin extends BasePlugin {
         cwd: this.core.cwd,
         env: {
           IN_CHILD_PROCESS: 'true',
+          ...tsNodeFast,
           ...process.env,
         },
         silent: true,
         execArgv,
       });
 
-      if (this.options.ts && this.options.fast) {
+      if (this.options.ts && this.options.fast === 'esbuild') {
         this.checkTsType();
       }
 
