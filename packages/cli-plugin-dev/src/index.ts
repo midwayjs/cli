@@ -3,7 +3,7 @@ import { fork, execSync } from 'child_process';
 import Spin from 'light-spinner';
 import * as chokidar from 'chokidar';
 import { networkInterfaces, platform } from 'os';
-import { resolve, relative } from 'path';
+import { resolve, relative, join } from 'path';
 import { statSync, existsSync, readFileSync, writeFileSync } from 'fs';
 import * as chalk from 'chalk';
 import * as detect from 'detect-port';
@@ -139,7 +139,7 @@ export class DevPlugin extends BasePlugin {
       let execArgv = [];
       if (options.ts) {
         if (options.fast) {
-          execArgv = ['-r', 'esbuild-register'];
+          execArgv = ['-r', join(__dirname, '../js/esbuild-register.js')];
         } else {
           execArgv = ['-r', 'ts-node/register'];
           if (this.tsconfigJson?.compilerOptions?.baseUrl) {
@@ -385,7 +385,7 @@ export class DevPlugin extends BasePlugin {
 
   private async checkTsType() {
     const cwd = this.core.cwd;
-    fork(require.resolve('./typeCheck'), [JSON.stringify({ cwd })], {
+    fork(require.resolve('../js/typeCheck'), [JSON.stringify({ cwd })], {
       cwd,
     });
   }

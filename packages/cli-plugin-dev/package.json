@@ -32,7 +32,8 @@
   "files": [
     "plugin.json",
     "dist",
-    "src"
+    "src",
+    "js"
   ],
   "scripts": {
     "build": "tsc --build",
