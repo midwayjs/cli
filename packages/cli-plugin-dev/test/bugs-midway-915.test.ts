@@ -6,7 +6,7 @@ import * as assert from 'assert';
 // bugs from https://github.com/midwayjs/midway/issues/915
 describe.skip('/test/bugs-midway-915.test.ts', () => {
   it('get url', async () => {
-    const { close, port } = await run(cwd, { silent: true, fast: true });
+    const { close, port } = await run(cwd, { silent: true, fast: false });
     console.log('port', port);
     const response = await fetch(`http://127.0.0.1:${port}/json`);
     const body = await response.text();

@@ -15,7 +15,7 @@ describe('test/index.test.ts', () => {
     if (existsSync(dist)) {
       await remove(dist);
     }
-    const { close, port } = await run(cwd, { fast: true });
+    const { close, port } = await run(cwd, { fast: false });
     if (existsSync(api)) {
       await remove(api);
     }
