@@ -35,17 +35,20 @@ const closeApp = async () => {
     console.log('');
     process.send({
       type: 'error',
-      message: 'start error: ' + (e?.message || ''),
+      message: 'start error: ' + ((e && e.message) || ''),
     });
     console.log(e);
   }
 
   if (!process.env.MIDWAY_DEV_IS_SERVERLESS) {
     process.on('message', async msg => {
-      if (msg?.type === 'functions') {
+      if (!msg) {
+        return;
+      }
+      if (msg.type === 'functions') {
         const data = await analysisDecorator(options.baseDir || process.cwd());
         process.send({ type: 'dev:' + msg.type, data, id: msg.id });
-      } else if (msg?.type === 'exit') {
+      } else if (msg.type === 'exit') {
         await closeApp();
         process.send({ type: 'dev:' + msg.type, id: msg.id });
         process.exit();

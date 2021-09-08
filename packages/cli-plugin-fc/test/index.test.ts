@@ -4,7 +4,15 @@ import { PackagePlugin } from '@midwayjs/fcli-plugin-package';
 import { DeployPlugin } from '../../cli-plugin-deploy';
 import { AliyunFCPlugin } from '../src';
 import { join } from 'path';
-import { existsSync, remove, readFile, readFileSync } from 'fs-extra';
+import { homedir } from 'os';
+import {
+  existsSync,
+  remove,
+  readFile,
+  readFileSync,
+  ensureFileSync,
+  writeFileSync,
+} from 'fs-extra';
 import * as assert from 'assert';
 import * as JSZip from 'jszip';
 
@@ -150,8 +158,16 @@ describe('/test/index.test.ts', () => {
     // clean
     await remove(join(baseDir, '.serverless'));
   });
-  it.skip('build by serverless-dev', async () => {
-    const baseDir = join(__dirname, './fixtures/base-fc');
+  it('build by serverless-dev', async () => {
+    const accessYaml = join(homedir(), '.s/access.yaml');
+    const exists = existsSync(accessYaml);
+    if (!exists) {
+      ensureFileSync(accessYaml);
+      writeFileSync(accessYaml, '');
+    }
+
+    const baseDir = join(__dirname, './fixtures/serverless-devs');
+    const logs = [];
     const core = new CommandCore({
       config: {
         servicePath: baseDir,
@@ -159,8 +175,15 @@ describe('/test/index.test.ts', () => {
       commands: ['deploy'],
       service: loadSpec(baseDir),
       provider: 'aliyun',
-      log: console,
+      log: {
+        ...console,
+        log: (...logInfo) => {
+          logs.push(...logInfo);
+        },
+      },
       options: {
+        skipDeploy: true,
+        skipInstallDep: true,
         serverlessDev: {
           access: 'default',
         },
@@ -173,5 +196,11 @@ describe('/test/index.test.ts', () => {
     await core.invoke(['deploy']);
     // clean
     await remove(join(baseDir, '.serverless'));
+    const logsStr = logs.join(';');
+    assert(logsStr.includes('Start deploy by serverless-dev'));
+    assert(logsStr.includes('deploy success'));
+    if (!exists) {
+      await remove(accessYaml);
+    }
   });
 });
