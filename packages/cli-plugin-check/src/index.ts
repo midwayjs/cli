@@ -232,6 +232,50 @@ export class CheckPlugin extends BasePlugin {
             ];
           }
           return [true];
+        })
+        .check('config file', () => {
+          if (!tsCodeRootCheckPassed) {
+            return [true];
+          }
+          const existsConfig = existsSync(
+            join(codeAnalyzeResult.tsCodeRoot, 'config')
+          );
+          if (!existsConfig) {
+            return [true];
+          }
+
+          const configLocal = join(
+            codeAnalyzeResult.tsCodeRoot,
+            'config/config.local.ts'
+          );
+          const configDaily = join(
+            codeAnalyzeResult.tsCodeRoot,
+            'config/config.daily.ts'
+          );
+
+          const configProd = join(
+            codeAnalyzeResult.tsCodeRoot,
+            'config/config.prod.ts'
+          );
+
+          const configDefault = join(
+            codeAnalyzeResult.tsCodeRoot,
+            'config/config.default.ts'
+          );
+
+          if (existsSync(configDaily) && !existsSync(configLocal)) {
+            return [false, 'only daily env config, can not run on local env'];
+          }
+
+          if (existsSync(configLocal) && !existsSync(configDaily)) {
+            return [false, 'only local env config, can not run on daily env'];
+          }
+
+          if (!existsSync(configProd) && !existsSync(configDefault)) {
+            return [false, 'no prod or default config'];
+          }
+
+          return [true];
         });
     };
   }
