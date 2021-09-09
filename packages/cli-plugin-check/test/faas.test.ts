@@ -29,4 +29,10 @@ describe('test/faas.test.ts', () => {
     assert(logStr.includes('YAML package.include type should be Array'));
     assert(logStr.includes("function 'test' http.trigger need path attribute"));
   });
+  it('configuration', async () => {
+    const cwd = join(__dirname, 'fixtures/faas-config');
+    const logs = await runCheck(cwd);
+    const logStr = logs.join('\n');
+    assert(logStr.includes('no prod or default config'));
+  });
 });

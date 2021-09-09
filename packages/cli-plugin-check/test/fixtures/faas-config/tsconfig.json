@@ -1,0 +1,11 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "rootDir": "src",
+    "target": "es2020",
+    "outDir": "dist"
+  },
+  "include": [
+    "./src/**/*.ts"
+  ]
+}
