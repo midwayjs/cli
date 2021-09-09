@@ -1,4 +1,4 @@
-import { generateFunctionsSpec } from '../src/fc';
+import { generateComponentSpec, generateFunctionsSpec } from '../src/fc';
 import * as path from 'path';
 import * as assert from 'assert';
 import * as mm from 'mm';
@@ -242,5 +242,15 @@ describe('/test/fc.test.ts', () => {
     assert(convertMethods(['post', 'xxx', 'head']).length === 2);
     assert(convertMethods(['post', 'xxx', 'head'])[0] === 'POST');
     assert(convertMethods(['post', 'xxx', 'head'])[1] === 'HEAD');
+  });
+
+  it('fc component', () => {
+    const spec = generateComponentSpec(
+      path.join(__dirname, './fixtures/fc/f-base-component.yml')
+    );
+    assert(spec.length);
+    assert(spec[0].project.provider);
+    assert(spec[0].props.triggers.length);
+    assert(spec[0].props.customDomains[0].domainName === 'auto');
   });
 });

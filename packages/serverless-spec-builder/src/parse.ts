@@ -1,4 +1,3 @@
-import * as jc from 'json-cycle';
 import * as YAML from 'js-yaml';
 import * as fs from 'fs';
 import * as mkdirp from 'mkdirp';
@@ -18,7 +17,7 @@ const loadYaml = (contents, options) => {
 export const parse = (filePath, contents) => {
   // Auto-parse JSON
   if (filePath.endsWith('.json')) {
-    return jc.parse(contents);
+    return JSON.parse(contents);
   } else if (filePath.endsWith('.yml') || filePath.endsWith('.yaml')) {
     const options = {
       filename: filePath,
