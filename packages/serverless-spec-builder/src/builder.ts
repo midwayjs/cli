@@ -69,6 +69,18 @@ export class SpecBuilder implements Builder {
       };
     }
 
-    return this.originData;
+    return {
+      ...this.originData,
+      service: this.getService(),
+      provider: this.getProvider(),
+      custom: this.getCustom(),
+      functions: this.getFunctions(),
+      resources: this.getResources(),
+      package: this.getPackage(),
+      plugins: this.getPlugins(),
+      layers: this.getLayers(),
+      aggregation: this.getAggregation(),
+      functionsRule: this.getFunctionsRule(),
+    };
   }
 }

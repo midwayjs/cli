@@ -3,7 +3,7 @@ import { fork, execSync } from 'child_process';
 import Spin from 'light-spinner';
 import * as chokidar from 'chokidar';
 import { networkInterfaces, platform } from 'os';
-import { resolve, relative } from 'path';
+import { resolve, relative, join } from 'path';
 import { statSync, existsSync, readFileSync, writeFileSync } from 'fs';
 import * as chalk from 'chalk';
 import * as detect from 'detect-port';
@@ -146,9 +146,13 @@ export class DevPlugin extends BasePlugin {
 
       let execArgv = [];
       if (options.ts) {
-        execArgv = ['-r', 'ts-node/register'];
-        if (this.tsconfigJson?.compilerOptions?.baseUrl) {
-          execArgv.push('-r', 'tsconfig-paths/register');
+        if (options.fast === 'esbuild') {
+          execArgv = ['-r', join(__dirname, '../js/esbuild-register.js')];
+        } else {
+          execArgv = ['-r', 'ts-node/register'];
+          if (this.tsconfigJson?.compilerOptions?.baseUrl) {
+            execArgv.push('-r', 'tsconfig-paths/register');
+          }
         }
       }
 
@@ -162,6 +166,11 @@ export class DevPlugin extends BasePlugin {
         silent: true,
         execArgv,
       });
+
+      if (this.options.ts && this.options.fast === 'esbuild') {
+        this.checkTsType();
+      }
+
       const dataCache = [];
       this.child.stdout.on('data', data => {
         if (this.restarting) {
@@ -289,6 +298,7 @@ export class DevPlugin extends BasePlugin {
     if (existsSync(fyml)) {
       watcher.add(fyml);
     }
+
     if (this.options.watchFile) {
       const watchFileList = this.options.watchFile.split(',');
       watchFileList.forEach(file => {
@@ -379,6 +389,13 @@ export class DevPlugin extends BasePlugin {
       }, 2000);
       this.processMessageMap[id] = resolve;
       this.child.send({ type, data, id });
+    });
+  }
+
+  private async checkTsType() {
+    const cwd = this.core.cwd;
+    fork(require.resolve('../js/typeCheck'), [JSON.stringify({ cwd })], {
+      cwd,
     });
   }
 }

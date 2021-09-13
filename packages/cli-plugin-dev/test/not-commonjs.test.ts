@@ -15,7 +15,7 @@ describe('test/not-commonjs.test.ts', () => {
     await copy(join(cwd, 'tsconfig.json.origin'), tsConfigFile);
     const { close, port, getData } = await run(cwd, {
       silent: true,
-      fast: true,
+      fast: false,
     });
     const response = await fetch(`http://127.0.0.1:${port}/hello?name=midway`);
     const body = await response.text();
