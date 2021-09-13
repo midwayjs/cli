@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/fcli-plugin-fc",
-  "version": "1.2.83-beta.5",
+  "version": "1.2.83",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -8,13 +8,13 @@
     "@midwayjs/command-core": "^1.2.82",
     "@midwayjs/serverless-fc-starter": "^2.8.7",
     "@midwayjs/serverless-fc-trigger": "^2.8.7",
-    "@midwayjs/serverless-spec-builder": "^1.2.82",
+    "@midwayjs/serverless-spec-builder": "^1.2.83",
     "@serverless-devs/core": "*",
     "globby": "^10.0.2",
     "request": "^2.88.2"
   },
   "devDependencies": {
-    "@midwayjs/fcli-plugin-package": "^1.2.82",
+    "@midwayjs/fcli-plugin-package": "^1.2.83",
     "fs-extra": "^8.1.0",
     "jszip": "^3.5.0"
   },

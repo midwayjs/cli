@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/cli-plugin-check",
-  "version": "1.2.83-beta.5",
+  "version": "1.2.83",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
