@@ -2,7 +2,7 @@
 import { runCheck } from './utils';
 import * as assert from 'assert';
 import { join } from 'path';
-describe.skip('test/faas.test.ts', () => {
+describe('test/faas.test.ts', () => {
   it('check', async () => {
     const cwd = join(__dirname, 'fixtures/faas');
     const logs = await runCheck(cwd);

@@ -145,7 +145,10 @@ export class AliyunFCPlugin extends BasePlugin {
 
     const cwd = process.cwd();
     process.chdir(this.midwayBuildPath);
-    const fcDeploy = await loadComponent('fc-deploy');
+    let fcDeploy;
+    if (!this.options.skipDeploy) {
+      fcDeploy = await loadComponent('fc-deploy');
+    }
     if (!this.core.service) {
       this.core.service = {};
     }
