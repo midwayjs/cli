@@ -66,6 +66,7 @@ describe('command-core:npm.test.ts', () => {
   it('findNpm registry by LANG', async () => {
     mm(process.env, 'LANG', 'zh_CN.UTF-8');
     const npmRes = findNpm({ npm: 'npm' });
+    mm(process.env, 'npm_config_registry', '');
     assert(
       npmRes.npm === 'npm' &&
         npmRes.registry === 'https://registry.npm.taobao.org'
