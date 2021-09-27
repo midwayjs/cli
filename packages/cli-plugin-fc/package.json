@@ -11,11 +11,11 @@
     "@midwayjs/serverless-spec-builder": "^1.2.83",
     "@serverless-devs/core": "*",
     "globby": "^10.0.2",
+    "fs-extra": "^8.1.0",
     "request": "^2.88.2"
   },
   "devDependencies": {
     "@midwayjs/fcli-plugin-package": "^1.2.83",
-    "fs-extra": "^8.1.0",
     "jszip": "^3.5.0"
   },
   "engines": {

@@ -4,7 +4,7 @@ import { join } from 'path';
 import { existsSync, readFileSync } from 'fs';
 import * as chalk from 'chalk';
 import * as YAML from 'js-yaml';
-import { Locator } from '@midwayjs/locate';
+import { Locator, AnalyzeResult } from '@midwayjs/locate';
 import { getConfig } from '@midwayjs/hooks-core';
 import { transformToRelative } from './utils';
 
@@ -42,6 +42,13 @@ export class CheckPlugin extends BasePlugin {
     'check:check': this.check.bind(this),
   };
 
+  globalData: {
+    cwd: string;
+    projectType: ProjectType;
+    tsCodeRoot: string;
+    locateResult: AnalyzeResult;
+  };
+
   async start() {
     // check project type
     const fyml = this.getYamlFilePosition();
@@ -51,6 +58,45 @@ export class CheckPlugin extends BasePlugin {
         this.projectType = ProjectType.FaaS;
       }
     }
+    const cwd = this.getCwd();
+    let tsCodeRoot = join(cwd, 'src');
+    let locateResult: AnalyzeResult;
+
+    if (this.projectType === ProjectType.FaaS) {
+      const locator = new Locator(cwd);
+      // midway hooks 支持
+      const midwayConfig = [
+        join(cwd, 'midway.config.ts'),
+        join(cwd, 'midway.config.js'),
+      ].find(file => existsSync(file));
+      if (midwayConfig) {
+        const config = getConfig();
+        if (config.source) {
+          this.options.sourceDir = config.source;
+        }
+      }
+
+      if (this.options.sourceDir) {
+        this.options.sourceDir = transformToRelative(
+          this.servicePath,
+          this.options.sourceDir
+        );
+      }
+      locateResult = await locator.run({
+        tsCodeRoot:
+          this.options.sourceDir &&
+          join(this.servicePath, this.options.sourceDir),
+      });
+      tsCodeRoot = locateResult.tsCodeRoot;
+    }
+
+    this.globalData = {
+      cwd,
+      projectType: this.projectType,
+      tsCodeRoot,
+      locateResult,
+    };
+    this.setStore('checkGlobalData', this.globalData, true);
   }
 
   async check() {
@@ -69,13 +115,7 @@ export class CheckPlugin extends BasePlugin {
       await this.projectStruct(),
       await this.packageJson(),
     ];
-    if (this.options.checkRule) {
-      const ruleList = [].concat(this.options.checkRule);
-      for (const getRule of ruleList) {
-        const rule = await getRule();
-        ruleList.push(rule);
-      }
-    }
+
     if (this.projectType === ProjectType.FaaS) {
       ruleList.push(
         this.ruleTSConfig(),
@@ -84,12 +124,18 @@ export class CheckPlugin extends BasePlugin {
       );
     }
 
+    const moreCheckRules = this.getStore('checkRules', 'global');
+    if (moreCheckRules && Array.isArray(moreCheckRules)) {
+      for (const getRule of moreCheckRules) {
+        const rule = await getRule();
+        ruleList.push(rule);
+      }
+    }
     return ruleList;
   }
 
   // package json 校验
   async packageJson(): Promise<RunnerItem> {
-    // TODO: deps 里面存在 cli相关需要报错
     const cwd = this.getCwd();
     const pkgJsonFile = join(cwd, 'package.json');
     const pkgExists = existsSync(pkgJsonFile);
@@ -148,45 +194,27 @@ export class CheckPlugin extends BasePlugin {
 
   // 校验项目结构
   async projectStruct(): Promise<RunnerItem> {
-    const locator = new Locator(this.core.config.servicePath);
     const cwd = this.getCwd();
-
-    // midway hooks 支持
-    const midwayConfig = [
-      join(cwd, 'midway.config.ts'),
-      join(cwd, 'midway.config.js'),
-    ].find(file => existsSync(file));
-    if (midwayConfig) {
-      const config = getConfig();
-      if (config.source) {
-        this.options.sourceDir = config.source;
-      }
-    }
-
-    if (this.options.sourceDir) {
-      this.options.sourceDir = transformToRelative(
-        this.servicePath,
-        this.options.sourceDir
-      );
-    }
-    const codeAnalyzeResult = await locator.run({
-      tsCodeRoot:
-        this.options.sourceDir &&
-        join(this.servicePath, this.options.sourceDir),
-    });
     let tsCodeRootCheckPassed = true;
     return runner => {
       runner
         .group('project struct check')
+        .check('node version', () => {
+          const v = +process.version.split('.')[0].replace(/[^\d]/g, '');
+          if (v < 12) {
+            return [false, 'Node Version shoule >= Node 12'];
+          }
+          return [true];
+        })
         .check('ts root', () => {
-          if (!codeAnalyzeResult.tsCodeRoot) {
+          if (!this.globalData.tsCodeRoot) {
             tsCodeRootCheckPassed = false;
             return [false, 'no tsCodeRoot, tsconfig.json may not exist'];
           }
           return [true];
         })
         .check('ts root should not be same to cwd', () => {
-          if (codeAnalyzeResult.tsCodeRoot === codeAnalyzeResult.cwd) {
+          if (this.globalData.tsCodeRoot === cwd) {
             tsCodeRootCheckPassed = false;
             return [
               false,
@@ -196,7 +224,7 @@ export class CheckPlugin extends BasePlugin {
           return [true];
         })
         .check('project type', () => {
-          if (codeAnalyzeResult.projectType === 'unknown') {
+          if (this.globalData.locateResult.projectType === 'unknown') {
             return [false, 'can not check project type'];
           }
           return [true];
@@ -206,14 +234,14 @@ export class CheckPlugin extends BasePlugin {
             return [true];
           }
           const existsConfig = existsSync(
-            join(codeAnalyzeResult.tsCodeRoot, 'config')
+            join(this.globalData.tsCodeRoot, 'config')
           );
           if (!existsConfig) {
             return [true];
           }
 
           const configuration = join(
-            codeAnalyzeResult.tsCodeRoot,
+            this.globalData.tsCodeRoot,
             'configuration.ts'
           );
           if (!existsSync(configuration)) {
@@ -238,28 +266,28 @@ export class CheckPlugin extends BasePlugin {
             return [true];
           }
           const existsConfig = existsSync(
-            join(codeAnalyzeResult.tsCodeRoot, 'config')
+            join(this.globalData.tsCodeRoot, 'config')
           );
           if (!existsConfig) {
             return [true];
           }
 
           const configLocal = join(
-            codeAnalyzeResult.tsCodeRoot,
+            this.globalData.tsCodeRoot,
             'config/config.local.ts'
           );
           const configDaily = join(
-            codeAnalyzeResult.tsCodeRoot,
+            this.globalData.tsCodeRoot,
             'config/config.daily.ts'
           );
 
           const configProd = join(
-            codeAnalyzeResult.tsCodeRoot,
+            this.globalData.tsCodeRoot,
             'config/config.prod.ts'
           );
 
           const configDefault = join(
-            codeAnalyzeResult.tsCodeRoot,
+            this.globalData.tsCodeRoot,
             'config/config.default.ts'
           );
 
@@ -275,6 +303,46 @@ export class CheckPlugin extends BasePlugin {
             return [false, 'no prod or default config'];
           }
 
+          return [true];
+        })
+        .check('config export', () => {
+          if (!tsCodeRootCheckPassed) {
+            return [true];
+          }
+          const existsConfig = existsSync(
+            join(this.globalData.tsCodeRoot, 'config')
+          );
+          if (!existsConfig) {
+            return [true];
+          }
+
+          const configWithExportDefaultAndNamed = [
+            'local',
+            'daily',
+            'pre',
+            'prod',
+            'default',
+          ].filter(name => {
+            const configFile = join(
+              this.globalData.tsCodeRoot,
+              `config/config.${name}.ts`
+            );
+            if (!existsSync(configFile)) {
+              return;
+            }
+            const code = readFileSync(configFile).toString();
+            return (
+              code.includes('export const ') && code.includes('export default ')
+            );
+          });
+          if (configWithExportDefaultAndNamed.length) {
+            return [
+              false,
+              `default and named export cannot coexist in ${configWithExportDefaultAndNamed.join(
+                ' and '
+              )} environment config`,
+            ];
+          }
           return [true];
         });
     };

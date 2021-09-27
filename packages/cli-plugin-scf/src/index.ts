@@ -58,9 +58,6 @@ export class TencentSCFPlugin extends BasePlugin {
     const service = this.core.service;
     if (coverOptions) {
       Object.keys(coverOptions).forEach((key: string) => {
-        if (!service[key]) {
-          service[key] = {};
-        }
         Object.assign(service[key], coverOptions[key]);
       });
     }
@@ -68,23 +65,10 @@ export class TencentSCFPlugin extends BasePlugin {
       custom: service.custom,
       service: service.service,
       provider: service.provider,
-      functions: this.getNotIgnoreFunc(),
+      functions: this.core.service.functions,
       resources: service.resources,
       package: service.package,
     };
-  }
-
-  // 获取没有忽略的方法（for 高密度部署）
-  getNotIgnoreFunc() {
-    const func = {};
-    for (const funcName in this.core.service.functions) {
-      const funcConf = this.core.service.functions[funcName];
-      if (funcConf._ignore) {
-        continue;
-      }
-      func[funcName] = funcConf;
-    }
-    return func;
   }
 
   async getTencentServerless(artifact) {

@@ -55,7 +55,6 @@ export function writeWrapper(options: {
   const functions = service.functions || {};
   for (const func in functions) {
     const handlerConf = functions[func];
-
     // for fp
     functionMap = assignToFunctionMap(functionMap, handlerConf);
     // for aggregation fp
@@ -63,10 +62,6 @@ export function writeWrapper(options: {
       handlerConf._handlers.forEach(innerHandlerConf => {
         functionMap = assignToFunctionMap(functionMap, innerHandlerConf);
       });
-    }
-
-    if (handlerConf._ignore) {
-      continue;
     }
     const handlerSplitInfo = handlerConf.handler.split('.');
     let handlerFileName = handlerSplitInfo[0];

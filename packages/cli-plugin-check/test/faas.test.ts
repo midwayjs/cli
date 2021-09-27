@@ -18,7 +18,11 @@ describe('test/faas.test.ts', () => {
     const cwd = join(__dirname, 'fixtures/faas-passed');
     const logs = await runCheck(cwd);
     const logStr = logs.join('\n');
-    assert(logStr.includes('All Check Passed'));
+    if (/v10/.test(process.version)) {
+      assert(logStr.includes('Node Version'));
+    } else {
+      assert(logStr.includes('All Check Passed'));
+    }
   });
   it('configuration', async () => {
     const cwd = join(__dirname, 'fixtures/faas-configuration');

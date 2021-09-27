@@ -391,7 +391,6 @@ export class PackagePlugin extends BasePlugin {
     }
     // globalDependencies
     // pkg.json dependencies
-    // pkg.json localDependencies
     const pkgJsonPath: string = join(this.midwayBuildPath, 'package.json');
     let pkgJson: any = {};
     try {
@@ -402,8 +401,7 @@ export class PackagePlugin extends BasePlugin {
     const allDependencies = Object.assign(
       {},
       this.core.service.globalDependencies,
-      pkgJson.dependencies,
-      pkgJson.localDependencies
+      pkgJson.dependencies
     );
     if (this.core.service.coverDependencies) {
       Object.keys(this.core.service.coverDependencies).forEach(depName => {
@@ -419,20 +417,9 @@ export class PackagePlugin extends BasePlugin {
       });
     }
     pkgJson.dependencies = {};
-    const localDep = {};
     for (const depName in allDependencies) {
       const depVersion = allDependencies[depName];
-      if (/^(\.|\/)/.test(depVersion)) {
-        // local dep
-        const depPath = join(this.servicePath, depVersion);
-        if (existsSync(depPath)) {
-          localDep[depName] = depPath;
-        } else {
-          this.core.cli.log(` - Local dep ${depName}:${depVersion} not exists`);
-        }
-      } else {
-        pkgJson.dependencies[depName] = depVersion;
-      }
+      pkgJson.dependencies[depName] = depVersion;
     }
     pkgJson.resolutions = Object.assign(
       {},
@@ -451,11 +438,6 @@ export class PackagePlugin extends BasePlugin {
     });
 
     await this.biggestDep();
-
-    for (const localDepName in localDep) {
-      const target = join(this.midwayBuildPath, 'node_modules', localDepName);
-      await copy(localDep[localDepName], target);
-    }
     this.core.cli.log(' - Dependencies install complete');
   }
 
@@ -738,9 +720,6 @@ export class PackagePlugin extends BasePlugin {
     const functions = this.core.service.functions || {};
     for (const func in functions) {
       const handlerConf = functions[func];
-      if (handlerConf._ignore) {
-        continue;
-      }
       const [handlerFileName] = handlerConf.handler.split('.');
       const othEnterFile = [
         join(this.defaultTmpFaaSOut, handlerFileName + '.js'),
@@ -1118,27 +1097,12 @@ export class PackagePlugin extends BasePlugin {
 
       switch (deployType) {
         case 'egg':
-          this.core.cli.log(' - create default layer: egg');
-          service.layers['eggLayer'] = {
-            path: 'npm:@midwayjs/egg-layer' + version,
-          };
-          break;
         case 'express':
-          this.core.cli.log(' - create default layer: express');
-          service.layers['expressLayer'] = {
-            path: 'npm:@midwayjs/express-layer' + version,
-          };
-          break;
         case 'koa':
-          this.core.cli.log(' - create default layer: koa');
-          service.layers['koaLayer'] = {
-            path: 'npm:@midwayjs/koa-layer' + version,
-          };
-          break;
         case 'static':
-          this.core.cli.log(' - create default layer: static');
-          service.layers['staticLayer'] = {
-            path: 'npm:@midwayjs/static-layer' + version,
+          this.core.cli.log(` - create default layer: ${deployType}`);
+          service.layers[deployType + 'Layer'] = {
+            path: `npm:@midwayjs/${deployType}-layer${version}`,
           };
           break;
       }

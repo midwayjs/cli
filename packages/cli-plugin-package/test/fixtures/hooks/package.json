@@ -1,0 +1,10 @@
+{
+  "name": "test",
+  "version": "0.1.0",
+  "description": "icejs & midway hooks",
+  "dependencies": {
+    "@midwayjs/faas": "^2.10.14",
+    "@midwayjs/hooks": "^2.2.0",
+    "@midwayjs/serverless-app": "^2.10.15"
+  }
+}

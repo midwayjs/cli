@@ -1,7 +1,8 @@
-import { CommandCore } from '../src';
+import { CommandCore, findNpm } from '../src';
 import { join } from 'path';
 import { existsSync, remove } from 'fs-extra';
 import * as assert from 'assert';
+import * as mm from 'mm';
 describe('command-core:npm.test.ts', () => {
   it('npm plugin', async () => {
     const nm = join(
@@ -30,5 +31,45 @@ describe('command-core:npm.test.ts', () => {
     await core.ready();
     await core.invoke();
     assert(result.find(cmd => !!cmd.clean));
+  });
+
+  it('findNpm npm default', async () => {
+    const npmRes = findNpm({});
+    assert(npmRes.npm);
+  });
+
+  it('findNpm npm registry', async () => {
+    const npmRes = findNpm({
+      npm: 'cnpm',
+      registry: 'test',
+    });
+    assert(npmRes.npm === 'cnpm' && npmRes.registry === 'test');
+  });
+
+  it('findNpm yarn by npm_config_user_agent', async () => {
+    mm(process.env, 'npm_config_user_agent', 'yarn');
+    mm(process.env, 'npm_config_registry', 'test');
+    const npmRes = findNpm({});
+    assert(npmRes.npm === 'yarn' && npmRes.registry === 'test');
+  });
+  it('findNpm yarn by npm_execpath', async () => {
+    mm(process.env, 'npm_execpath', 'yarn');
+    mm(process.env, 'npm_config_registry', 'test');
+    const npmRes = findNpm({});
+    assert(npmRes.npm === 'yarn' && npmRes.registry === 'test');
+  });
+  it('findNpm yarn by yarn_registry', async () => {
+    mm(process.env, 'yarn_registry', 'test');
+    const npmRes = findNpm({});
+    assert(npmRes.npm === 'yarn' && npmRes.registry === 'test');
+  });
+  it('findNpm registry by LANG', async () => {
+    mm(process.env, 'LANG', 'zh_CN.UTF-8');
+    mm(process.env, 'npm_config_registry', '');
+    const npmRes = findNpm({ npm: 'npm' });
+    assert(
+      npmRes.npm === 'npm' &&
+        npmRes.registry === 'https://registry.npm.taobao.org'
+    );
   });
 });

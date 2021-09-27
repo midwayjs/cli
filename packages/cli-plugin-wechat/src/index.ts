@@ -59,9 +59,6 @@ export class WeChatPlugin extends BasePlugin {
       await ensureDir(this.wechatFunctionBuildPath);
       for (const func in functions) {
         const handlerConf = functions[func];
-        if (handlerConf._ignore) {
-          continue;
-        }
         const [originFileName, handlerName] = handlerConf.handler.split('.');
         const cloudFunctionName = func;
         this.core.cli.log('Create function: ' + cloudFunctionName);

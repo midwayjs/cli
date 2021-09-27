@@ -32,6 +32,8 @@ export interface FCProviderStructure extends ProviderStructure {
   logConfig?: {
     project: string;
     logstore: string;
+    enableRequestMetrics?: boolean;
+    enableInstanceMetrics?: boolean;
   };
   nasConfig?:
     | 'auto'
@@ -61,6 +63,8 @@ export interface FCServiceProperties {
   LogConfig?: {
     Project: string;
     Logstore: string;
+    EnableRequestMetrics?: boolean;
+    EnableInstanceMetrics?: boolean;
   };
   NasConfig?: {
     UserId: number;
