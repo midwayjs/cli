@@ -2,7 +2,4 @@ service:
   name: my-egg-demo
 provider:
   name: aliyun
-deployType:
-  type: egg
-  version: latest
-
+deployType: egg

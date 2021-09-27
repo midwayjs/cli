@@ -58,9 +58,6 @@ export class TencentSCFPlugin extends BasePlugin {
     const service = this.core.service;
     if (coverOptions) {
       Object.keys(coverOptions).forEach((key: string) => {
-        if (!service[key]) {
-          service[key] = {};
-        }
         Object.assign(service[key], coverOptions[key]);
       });
     }
