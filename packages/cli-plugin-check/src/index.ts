@@ -304,6 +304,46 @@ export class CheckPlugin extends BasePlugin {
           }
 
           return [true];
+        })
+        .check('config export', () => {
+          if (!tsCodeRootCheckPassed) {
+            return [true];
+          }
+          const existsConfig = existsSync(
+            join(this.globalData.tsCodeRoot, 'config')
+          );
+          if (!existsConfig) {
+            return [true];
+          }
+
+          const configWithExportDefaultAndNamed = [
+            'local',
+            'daily',
+            'pre',
+            'prod',
+            'default',
+          ].filter(name => {
+            const configFile = join(
+              this.globalData.tsCodeRoot,
+              `config/config.${name}.ts`
+            );
+            if (!existsSync(configFile)) {
+              return;
+            }
+            const code = readFileSync(configFile).toString();
+            return (
+              code.includes('export const ') && code.includes('export default ')
+            );
+          });
+          if (configWithExportDefaultAndNamed.length) {
+            return [
+              false,
+              `default and named export cannot coexist in ${configWithExportDefaultAndNamed.join(
+                ' and '
+              )} environment config`,
+            ];
+          }
+          return [true];
         });
     };
   }
