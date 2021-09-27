@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.84](https://github.com/midwayjs/cli/compare/v1.2.83...v1.2.84) (2021-09-27)
+
+
+### Bug Fixes
+
+* opti check ([#201](https://github.com/midwayjs/cli/issues/201)) ([bfffdc6](https://github.com/midwayjs/cli/commit/bfffdc60d22d3732591b868bb863918ec086b7fb))
+
+
+
+
+
 ## [1.2.83](https://github.com/midwayjs/cli/compare/v1.2.82...v1.2.83) (2021-09-13)
 
 **Note:** Version bump only for package @midwayjs/cli-plugin-vercel
