@@ -1,0 +1,13 @@
+service: test-hooks
+
+provider:
+  name: aliyun
+
+aggregation:
+  all:
+    functionsPattern:
+      - '*'
+
+package:
+  include:
+    - abc

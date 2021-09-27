@@ -33,9 +33,6 @@ export class VercelPlugin extends BasePlugin {
     const funcList = [];
     for (const func in functions) {
       const funcConf = functions[func];
-      if (funcConf._ignore) {
-        continue;
-      }
       funcList.push({
         funcName: func,
         funcInfo: funcConf,

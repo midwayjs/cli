@@ -4,7 +4,7 @@ import * as AliyunConfig from '@alicloud/fun/lib/commands/config';
 import { loadComponent, setCredential } from '@serverless-devs/core';
 import { join } from 'path';
 import { homedir } from 'os';
-import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, writeFileSync, ensureDir } from 'fs-extra';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
 import {
   generateFunctionsSpecFile,
@@ -105,35 +105,19 @@ export class AliyunFCPlugin extends BasePlugin {
       custom: service.custom,
       service: service.service,
       provider: service.provider,
-      functions: this.getNotIgnoreFunc(),
+      functions: this.core.service.functions,
       resources: service.resources,
       package: service.package,
     };
   }
 
-  // 获取没有忽略的方法（for 高密度部署）
-  getNotIgnoreFunc() {
-    const func = {};
-    for (const funcName in this.core.service.functions) {
-      const funcConf = this.core.service.functions[funcName];
-      if (funcConf._ignore) {
-        continue;
-      }
-      func[funcName] = funcConf;
-    }
-    return func;
-  }
-
   async deployUseServerlessDev() {
     const profDirPath = join(homedir(), '.s');
-    if (!existsSync(profDirPath)) {
-      mkdirSync(profDirPath);
-    }
+    await ensureDir(profDirPath);
     const profPath = join(profDirPath, 'access.yaml');
     const isExists = existsSync(profPath);
     if (!isExists || this.options.resetConfig) {
       // aliyun config
-      this.core.cli.log('please input serverless-dev config');
       await setCredential();
     }
     // 执行 package 打包

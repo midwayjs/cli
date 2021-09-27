@@ -738,9 +738,6 @@ export class PackagePlugin extends BasePlugin {
     const functions = this.core.service.functions || {};
     for (const func in functions) {
       const handlerConf = functions[func];
-      if (handlerConf._ignore) {
-        continue;
-      }
       const [handlerFileName] = handlerConf.handler.split('.');
       const othEnterFile = [
         join(this.defaultTmpFaaSOut, handlerFileName + '.js'),
