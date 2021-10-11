@@ -45,6 +45,7 @@ export interface FCProviderStructure extends ProviderStructure {
           mountDir: string;
         }>;
       };
+  tracingConfig?: 'Enable' | 'Disable';
 }
 
 export interface FCSpecStructure extends SpecStructure {
@@ -71,6 +72,7 @@ export interface FCServiceProperties {
     GroupId: number;
     MountPoints?: MountPointSpec[];
   };
+  TracingConfig?: string;
   Description?: string;
 }
 
