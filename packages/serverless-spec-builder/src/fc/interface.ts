@@ -45,6 +45,15 @@ export interface FCProviderStructure extends ProviderStructure {
           mountDir: string;
         }>;
       };
+  asyncConfiguration?: {
+    destination: {
+      onSuccess: string;
+      onFailure: string;
+    };
+    maxAsyncEventAgeInSeconds: number;
+    maxAsyncRetryAttempts: number;
+    statefulInvocation: boolean;
+  };
 }
 
 export interface FCSpecStructure extends SpecStructure {

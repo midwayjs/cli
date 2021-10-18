@@ -44,6 +44,9 @@ export class FCSpecBuilder extends SpecBuilder {
             Policies: uppercaseObjectKey(providerData.policies),
             LogConfig: uppercaseObjectKey(providerData.logConfig),
             NasConfig: uppercaseObjectKey(providerData.nasConfig),
+            AsyncConfiguration: uppercaseObjectKey(
+              providerData.asyncConfiguration
+            ),
           },
         },
       },
@@ -319,6 +322,7 @@ export class FCComponentSpecBuilder extends SpecBuilder {
               ...funSpec.environment,
               ...userDefinedEnv,
             },
+            asyncConfiguration: providerData.asyncConfiguration || '',
           },
           triggers: [],
           customDomains: [],
