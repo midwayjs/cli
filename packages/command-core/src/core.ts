@@ -321,6 +321,7 @@ export class CommandCore implements ICommandCore {
           options: {},
           passingCommand: commandInstance.passingCommand,
           origin: [],
+          alias: commandInstance.alias,
           commands: {},
         };
       }
@@ -337,6 +338,7 @@ export class CommandCore implements ICommandCore {
         if (commandInstance.usage) {
           currentCommand.usage = commandInstance.usage;
         }
+        commandsMap[command].alias = commandInstance.alias || '';
       }
 
       // 加载子命令
@@ -408,10 +410,23 @@ export class CommandCore implements ICommandCore {
       if (commandPath.length) {
         parentCommandList.push(commandPath[commandPath.length - 1]);
       }
-      commandPath.push(command);
-      if (!cmdObj || !cmdObj.commands || !cmdObj.commands[command]) {
-        this.error('commandNotFound', { command, commandPath });
+
+      const cmdInfo = cmdObj?.commands?.[command];
+      if (!cmdInfo) {
+        // support command alias alias
+        const aliasCommand = Object.keys(cmdObj?.commands || {}).find(
+          commandName => {
+            return cmdObj.commands[commandName].alias === command;
+          }
+        );
+
+        if (!aliasCommand) {
+          this.error('commandNotFound', { command, commandPath });
+        } else {
+          command = aliasCommand;
+        }
       }
+      commandPath.push(command);
       cmdObj = cmdObj.commands[command];
       if (cmdObj) {
         if (cmdObj.options) {

@@ -372,6 +372,9 @@ export class DevPlugin extends BasePlugin {
     if (!tsconfigJson['ts-node'].compilerOptions) {
       tsconfigJson['ts-node'].compilerOptions = {};
     }
+    if (tsconfigJson['ts-node'].compilerOptions.module === 'commonjs') {
+      return;
+    }
     tsconfigJson['ts-node'].compilerOptions.module = 'commonjs';
     writeFileSync(tsconfig, JSON.stringify(tsconfigJson, null, 2));
   }

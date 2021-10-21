@@ -20,7 +20,7 @@ export class TencentSCFPlugin extends BasePlugin {
       await generateFunctionsSpecFile(
         this.getSpecJson({
           provider: {
-            stage: 'test',
+            stage: this.core.service?.provider?.stage || 'test',
           },
         }),
         join(this.midwayBuildPath, 'serverless.yml')
