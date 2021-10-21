@@ -18,6 +18,16 @@ provider:
     mountPoints:
       - serverAddr: '012194b28f-xxxxx.cn-hangzhou.nas.aliyuncs.com:/'
         mountDir: '/mnt/test'
+  asyncConfiguration:
+    destination:
+      onSuccess: acs:fc:{region}:{uid}:services/{serviceName}.{qualifier}/functions/{functionName}
+      onFailure: acs:fc:{region}:{uid}:services/{serviceName}.{qualifier}/functions/{functionName}
+      # onSuccess: acs:fc:::services/{serviceName}.{qualifier}/functions/{functionName}
+      # onSuccess: acs:mns:::/queues/{queuesName}/messages # mns/queues
+      # onSuccess: acs:mns:::/topics/{topicsName}/messages # mns/topics
+    maxAsyncEventAgeInSeconds: 456
+    maxAsyncRetryAttempts: 3
+    statefulInvocation: true
 
 functions:
   index:

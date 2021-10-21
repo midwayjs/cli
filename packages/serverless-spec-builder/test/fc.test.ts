@@ -41,6 +41,7 @@ describe('/test/fc.test.ts', () => {
     assert(properties['Policies']);
     assert(properties['LogConfig']);
     assert(properties['NasConfig']);
+    assert(properties['AsyncConfiguration']);
   });
 
   it('test http events', () => {
