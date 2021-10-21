@@ -36,5 +36,6 @@
     "type": "git",
     "url": "git@github.com:midwayjs/cli.git"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "gitHead": "61e1928171b9ad9375fc0448cba975c30af81b13"
 }
