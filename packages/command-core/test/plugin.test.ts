@@ -207,4 +207,72 @@ describe('command-core:plugin.test.ts', () => {
     );
     assert(list.length);
   });
+
+  it('plugin command alias', async () => {
+    let testAExeced = false;
+    class TestPlugin extends BasePlugin {
+      commands = {
+        test: {
+          lifecycleEvents: ['a', 'b'],
+          alias: 't',
+        },
+      };
+
+      hooks = {
+        'test:a': async () => {
+          testAExeced = true;
+        },
+      };
+    }
+    const result = [];
+    const core = new CommandCore({
+      commands: ['t'],
+      log: {
+        log: msg => {
+          result.push(msg);
+        },
+      },
+    });
+    core.addPlugin(TestPlugin);
+    await core.ready();
+    await core.invoke();
+    assert(testAExeced);
+  });
+
+  it('plugin child command alias', async () => {
+    let testChildExeced = false;
+    class TestPlugin extends BasePlugin {
+      commands = {
+        test: {
+          lifecycleEvents: ['a', 'b'],
+          alias: 't',
+          commands: {
+            child: {
+              lifecycleEvents: ['c', 'd'],
+              alias: 'c',
+            },
+          },
+        },
+      };
+
+      hooks = {
+        'test:child:c': async () => {
+          testChildExeced = true;
+        },
+      };
+    }
+    const result = [];
+    const core = new CommandCore({
+      commands: ['t', 'c'],
+      log: {
+        log: msg => {
+          result.push(msg);
+        },
+      },
+    });
+    core.addPlugin(TestPlugin);
+    await core.ready();
+    await core.invoke();
+    assert(testChildExeced);
+  });
 });

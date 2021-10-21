@@ -67,6 +67,7 @@ export interface ICommands {
     rank: number;
     options: any;
     origin: ICommandInstance[];
+    alias?: string;
     commands: ICommands;
   };
 }

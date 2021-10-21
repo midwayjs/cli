@@ -18,6 +18,7 @@ export interface ICommandInstance {
   commands?: {
     [command: string]: ICommandInstance;
   };
+  alias?: string;
   [othKey: string]: any;
 }
 
