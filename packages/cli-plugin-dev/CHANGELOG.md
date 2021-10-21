@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.85](https://github.com/midwayjs/cli/compare/v1.2.84...v1.2.85) (2021-10-21)
+
+
+### Features
+
+* dev support entry file port check ([#204](https://github.com/midwayjs/cli/issues/204)) ([7b174e3](https://github.com/midwayjs/cli/commit/7b174e35f6b2d084ac72e8c9b9d2bbbfa6303a95))
+* support command alias ([#218](https://github.com/midwayjs/cli/issues/218)) ([380338c](https://github.com/midwayjs/cli/commit/380338c1b0a92d85874cba16ff37a1711e137027))
+
+
+
+
+
 ## [1.2.84](https://github.com/midwayjs/cli/compare/v1.2.83...v1.2.84) (2021-09-27)
 
 **Note:** Version bump only for package @midwayjs/cli-plugin-dev

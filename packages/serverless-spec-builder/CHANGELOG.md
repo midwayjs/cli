@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.85](https://github.com/midwayjs/cli/compare/v1.2.84...v1.2.85) (2021-10-21)
+
+
+### Features
+
+* f.yml add AsyncConfiguration ([#213](https://github.com/midwayjs/cli/issues/213)) ([30ae12b](https://github.com/midwayjs/cli/commit/30ae12b754fc384d7a9118a154f045da3f6a09e8))
+* more fc config ([#211](https://github.com/midwayjs/cli/issues/211)) ([1f7913d](https://github.com/midwayjs/cli/commit/1f7913df1ba306134fb59e3dcca492f43861ad41))
+
+
+
+
+
 ## [1.2.84](https://github.com/midwayjs/cli/compare/v1.2.83...v1.2.84) (2021-09-27)
 
 

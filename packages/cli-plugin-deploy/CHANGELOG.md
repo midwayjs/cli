@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.85](https://github.com/midwayjs/cli/compare/v1.2.84...v1.2.85) (2021-10-21)
+
+**Note:** Version bump only for package @midwayjs/fcli-plugin-deploy
+
+
+
+
+
 ## [1.2.84](https://github.com/midwayjs/cli/compare/v1.2.83...v1.2.84) (2021-09-27)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-deploy

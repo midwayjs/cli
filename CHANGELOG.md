@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.85](https://github.com/midwayjs/bin/compare/v1.2.84...v1.2.85) (2021-10-21)
+
+
+### Features
+
+* dev support entry file port check ([#204](https://github.com/midwayjs/bin/issues/204)) ([7b174e3](https://github.com/midwayjs/bin/commit/7b174e35f6b2d084ac72e8c9b9d2bbbfa6303a95))
+* f.yml add AsyncConfiguration ([#213](https://github.com/midwayjs/bin/issues/213)) ([30ae12b](https://github.com/midwayjs/bin/commit/30ae12b754fc384d7a9118a154f045da3f6a09e8))
+* more fc config ([#211](https://github.com/midwayjs/bin/issues/211)) ([1f7913d](https://github.com/midwayjs/bin/commit/1f7913df1ba306134fb59e3dcca492f43861ad41))
+* support command alias ([#218](https://github.com/midwayjs/bin/issues/218)) ([380338c](https://github.com/midwayjs/bin/commit/380338c1b0a92d85874cba16ff37a1711e137027))
+
+
+
+
+
 ## [1.2.84](https://github.com/midwayjs/bin/compare/v1.2.83...v1.2.84) (2021-09-27)
 
 
