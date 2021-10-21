@@ -47,6 +47,7 @@ export class FCSpecBuilder extends SpecBuilder {
             AsyncConfiguration: uppercaseObjectKey(
               providerData.asyncConfiguration
             ),
+            TracingConfig: providerData.tracingConfig,
           },
         },
       },
@@ -284,6 +285,7 @@ export class FCComponentSpecBuilder extends SpecBuilder {
       logConfig: lowercaseObjectKey(providerData.logConfig),
       vpc: lowercaseObjectKey(providerData.vpcConfig),
       nas: lowercaseObjectKey(providerData.nasConfig),
+      tracing: providerData.tracingConfig,
     };
     const region = providerData.region;
     const access = (providerData as any).access || 'default';
