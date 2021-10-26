@@ -15,14 +15,17 @@ class TestPlugin extends BasePlugin {
       commands: {
         xChild: {
           usage: 'xChild usage',
+          alias: 'abc',
           lifecycleEvents: ['xx'],
           options: {
             name: {
+              shortcut: 'xn',
               usage: 'xChild name option',
             },
           },
           commands: {
             xChildChild: {
+              alias: 'def',
               usage: 'xChild child usage',
               lifecycleEvents: ['xx'],
               options: {

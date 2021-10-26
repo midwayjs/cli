@@ -41,8 +41,9 @@ describe('command-core / cli.test.ts', () => {
     await cli.start();
     const logStr = logList.join('\n');
     assert(logStr.includes('common command'));
-    assert(logStr.includes('x xChild'));
-    assert(logStr.includes('--name'));
+    assert(logStr.includes('x xChild/abc'));
+    assert(logStr.includes('x xChild/abc xChildChild/def'));
+    assert(logStr.includes('--xn, --name'));
     assert(logStr.includes('xChild name option'));
   });
   it('cli child help', async () => {

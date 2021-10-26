@@ -20,7 +20,7 @@ export const commandLineUsage = (options, prefix?) => {
   let length = 0;
   if (options.optionList) {
     options.optionList.map(info => {
-      const option = `  ${info.alias ? `-${info.alias}, ` : ''}--${info.name}`;
+      const option = `  ${info.alias ? `--${info.alias}, ` : ''}--${info.name}`;
       if (option.length > length) {
         length = option.length + 4;
       }

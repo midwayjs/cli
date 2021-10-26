@@ -93,8 +93,10 @@ export class CoreBaseCLI {
     let commandList: any = {};
     if (commandsArray && commandsArray.length) {
       commandList = {
-        header: commandsArray.join(' '),
-        content: commandInfo.usage,
+        header:
+          commandsArray.join(' ') +
+          (commandInfo?.alias ? `/${commandInfo.alias}` : ''),
+        content: commandInfo?.usage,
         optionList: usage
           ? Object.keys(usage).map(name => {
               const usageInfo = usage[name] || {};
