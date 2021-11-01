@@ -162,6 +162,7 @@ export class DevPlugin extends BasePlugin {
         cwd: this.core.cwd,
         env: {
           IN_CHILD_PROCESS: 'true',
+          TS_NODE_FILES: 'true',
           ...tsNodeFast,
           ...process.env,
         },
