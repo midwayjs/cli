@@ -32,7 +32,10 @@ const check = () => {
       error.file && error.file.fileName
         ? `(${relative(cwd, error.file.fileName)})`
         : '';
-    errorOutput(`TS Error: ${error.messageText}${errorPath}`);
+    const message = error.messageText?.messageText
+      ? error.messageText.messageText
+      : error.messageText;
+    errorOutput(`TS Error: ${message || 'unknown error'}${errorPath}`);
   }
 };
 
