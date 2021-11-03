@@ -79,15 +79,18 @@ export const checkPort = async (port): Promise<boolean> => {
 };
 
 export async function waitDebug(port) {
-  const wssUrl = await getWssUrl(port);
-  return debugWs(wssUrl);
+  const { ws, chrome } = await getWssUrl(port);
+  await debugWs(ws);
+  if (chrome) {
+    console.log(`\n\nYou can use chrome to debug the midway: ${chrome}\n\n`);
+  }
 }
 
 export function getWssUrl(
   port,
   type?: string,
   count?: number
-): Promise<string> {
+): Promise<{ ws: string; chrome: string }> {
   return new Promise((resolve, reject) => {
     count = count || 0;
     if (count > 100) {
@@ -98,13 +101,12 @@ export function getWssUrl(
       fetch('http://127.0.0.1:' + port + '/json/list')
         .then(res => res.json())
         .then(debugInfo => {
-          const url: string =
-            debugInfo[0][type || 'webSocketDebuggerUrl'] || '';
-          const ret = url.replace(
-            'js_app.html?experiments=true&',
-            'inspector.html?'
-          );
-          resolve(ret);
+          const debugInfoItem = debugInfo[0];
+          const ws: string = debugInfoItem['webSocketDebuggerUrl'] || '';
+          const chrome: string =
+            debugInfoItem['devtoolsFrontendUrlCompat'] ||
+            debugInfoItem['devtoolsFrontendUrl'];
+          resolve({ ws, chrome });
         })
         .catch(() => {
           getWssUrl(port, type, count + 1)

@@ -153,18 +153,6 @@ export class DevPlugin extends BasePlugin {
       let execArgv = [];
       let MIDWAY_DEV_IS_DEBUG;
 
-      if (options.debug) {
-        const port = options.debugPort || '9229';
-        const portIsUse: boolean = await checkPort(port);
-        if (portIsUse) {
-          console.log('\n\n');
-          console.log(`Debug port ${port} is in use`);
-          console.log('\n\n');
-        } else {
-          MIDWAY_DEV_IS_DEBUG = port;
-          execArgv.push(`--inspect=${port}`);
-        }
-      }
       if (options.ts) {
         if (options.fast === 'esbuild') {
           execArgv = ['-r', join(__dirname, '../js/esbuild-register.js')];
@@ -173,6 +161,21 @@ export class DevPlugin extends BasePlugin {
           if (this.tsconfigJson?.compilerOptions?.baseUrl) {
             execArgv.push('-r', 'tsconfig-paths/register');
           }
+        }
+      }
+
+      if (options.debug) {
+        const debugStr = options.debug.toString();
+        const port = /^\d+$/.test(debugStr) ? options.debug : '9229';
+        this.core.debug('Debug port:', port);
+        const portIsUse: boolean = await checkPort(port);
+        if (portIsUse) {
+          console.log('\n\n');
+          console.log(`Debug port ${port} is in use`);
+          console.log('\n\n');
+        } else {
+          MIDWAY_DEV_IS_DEBUG = port;
+          execArgv.push(`--inspect=${port}`);
         }
       }
 
