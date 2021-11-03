@@ -80,10 +80,11 @@ export const checkPort = async (port): Promise<boolean> => {
 
 export async function waitDebug(port) {
   const { ws, chrome } = await getWssUrl(port);
-  await debugWs(ws);
+  const send = await debugWs(ws);
   if (chrome) {
     console.log(`\n\nYou can use chrome to debug the midway: ${chrome}\n\n`);
   }
+  return send;
 }
 
 export function getWssUrl(
