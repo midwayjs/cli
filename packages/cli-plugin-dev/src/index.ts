@@ -8,6 +8,7 @@ import { statSync, existsSync, readFileSync, writeFileSync } from 'fs';
 import * as chalk from 'chalk';
 import * as detect from 'detect-port';
 import { parse } from 'json5';
+import { checkPort } from './utils';
 export class DevPlugin extends BasePlugin {
   private child;
   private started = false;
@@ -26,6 +27,9 @@ export class DevPlugin extends BasePlugin {
         port: {
           usage: 'listening port, default to 7001',
           shortcut: 'p',
+        },
+        debug: {
+          usage: 'midway debug',
         },
         framework: {
           usage: 'specify framework that can be absolute path or npm package',
@@ -129,7 +133,7 @@ export class DevPlugin extends BasePlugin {
   }
 
   private start() {
-    return new Promise<void>(resolve => {
+    return new Promise<void>(async resolve => {
       const options = this.getOptions();
       this.spin = new Spin({
         text: this.started ? 'Midway Restarting' : 'Midway Starting',
@@ -147,6 +151,20 @@ export class DevPlugin extends BasePlugin {
       }
 
       let execArgv = [];
+      let MIDWAY_DEV_IS_DEBUG;
+
+      if (options.debug) {
+        const port = options.debugPort || '9229';
+        const portIsUse: boolean = await checkPort(port);
+        if (portIsUse) {
+          console.log('\n\n');
+          console.log(`Debug port ${port} is in use`);
+          console.log('\n\n');
+        } else {
+          MIDWAY_DEV_IS_DEBUG = port;
+          execArgv.push(`--inspect=${port}`);
+        }
+      }
       if (options.ts) {
         if (options.fast === 'esbuild') {
           execArgv = ['-r', join(__dirname, '../js/esbuild-register.js')];
@@ -163,6 +181,7 @@ export class DevPlugin extends BasePlugin {
         env: {
           IN_CHILD_PROCESS: 'true',
           TS_NODE_FILES: 'true',
+          MIDWAY_DEV_IS_DEBUG,
           ...tsNodeFast,
           ...process.env,
         },

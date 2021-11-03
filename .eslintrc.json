@@ -1,6 +1,9 @@
 {
   "extends": "./node_modules/mwts/",
   "ignorePatterns": ["node_modules", "dist", "fixtures"],
+  "rules": {
+    "no-async-promise-executor": "off"
+  },
   "env": {
     "mocha": true
   },
