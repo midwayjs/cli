@@ -13,9 +13,14 @@ describe('test/debug.test.ts', () => {
     if (existsSync(dist)) {
       await remove(dist);
     }
-    const { close, port } = await run(cwd, { fast: true, debug: true });
+    const { close, port, getData } = await run(cwd, {
+      fast: true,
+      debug: true,
+    });
     const response = await fetch(`http://127.0.0.1:${port}/`);
     const body = await response.text();
+    const functions = await getData('functions');
+    assert(functions['homeService.hello']);
     assert(body === 'Hello Midwayjs');
     const send = await waitDebug(9229);
     assert(typeof send === 'function');

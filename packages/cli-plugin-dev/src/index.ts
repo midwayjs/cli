@@ -170,9 +170,7 @@ export class DevPlugin extends BasePlugin {
         this.core.debug('Debug port:', port);
         const portIsUse: boolean = await checkPort(port);
         if (portIsUse) {
-          console.log('\n\n');
-          console.log(`Debug port ${port} is in use`);
-          console.log('\n\n');
+          console.log(`\n\nDebug port ${port} is in use\n\n`);
         } else {
           MIDWAY_DEV_IS_DEBUG = port;
           execArgv.push(`--inspect=${port}`);
