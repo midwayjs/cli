@@ -69,12 +69,12 @@ export class WeChatPlugin extends BasePlugin {
         );
         await copy(this.midwayBuildPath, functionDir);
 
-        await this.saveRemove(join(functionDir, 'src'));
-        await this.saveRemove(join(functionDir, 'f.yml'));
-        await this.saveRemove(join(functionDir, 'f.origin.yml'));
-        await this.saveRemove(join(functionDir, 'tsconfig.json'));
-        await this.saveRemove(join(functionDir, 'dist/midway.build.json'));
-        await this.saveRemove(join(functionDir, 'dist/.mwcc-cache'));
+        await this.safeRemove(join(functionDir, 'src'));
+        await this.safeRemove(join(functionDir, 'f.yml'));
+        await this.safeRemove(join(functionDir, 'f.origin.yml'));
+        await this.safeRemove(join(functionDir, 'tsconfig.json'));
+        await this.safeRemove(join(functionDir, 'dist/midway.build.json'));
+        await this.safeRemove(join(functionDir, 'dist/.mwcc-cache'));
 
         if (originFileName !== 'index') {
           const main = 'index.js';
@@ -101,7 +101,7 @@ export class WeChatPlugin extends BasePlugin {
     },
   };
 
-  async saveRemove(dir: string) {
+  async safeRemove(dir: string) {
     if (!existsSync(dir)) {
       return;
     }

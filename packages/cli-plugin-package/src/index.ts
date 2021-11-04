@@ -490,9 +490,12 @@ export class PackagePlugin extends BasePlugin {
       return;
     }
     this.core.cli.log(' - Biggest Dependencies list:');
-    biggestModList.slice(-5).forEach(modInfo => {
-      this.core.cli.log(`    ${modInfo.size}\t${modInfo.name}`);
-    });
+    biggestModList
+      .slice(-5)
+      .reverse()
+      .forEach(modInfo => {
+        this.core.cli.log(`    ${modInfo.size}\t${modInfo.name}`);
+      });
   }
 
   async compile() {

@@ -131,6 +131,7 @@ export class AliyunFCPlugin extends BasePlugin {
     process.chdir(this.midwayBuildPath);
     let fcDeploy;
     if (!this.options.skipDeploy) {
+      // https://github.com/devsapp/fc-deploy/
       fcDeploy = await loadComponent('fc-deploy');
     }
     if (!this.core.service) {
@@ -147,6 +148,8 @@ export class AliyunFCPlugin extends BasePlugin {
       for (const fcDeployInputs of functions) {
         Object.assign(fcDeployInputs, this.options.serverlessDev);
         delete fcDeployInputs.access;
+        fcDeployInputs.path = { configPath: this.midwayBuildPath };
+        fcDeployInputs.props.function.codeUri = this.midwayBuildPath;
         if (!this.options.skipDeploy) {
           await fcDeploy.deploy(fcDeployInputs);
         }

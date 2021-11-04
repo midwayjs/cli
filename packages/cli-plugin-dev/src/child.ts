@@ -1,5 +1,5 @@
 import { createApp, close, createBootstrap } from '@midwayjs/mock';
-import { analysisDecorator } from './utils';
+import { analysisDecorator, waitDebug } from './utils';
 const options = JSON.parse(process.argv[2]);
 let app;
 let bootstrapStarter;
@@ -22,6 +22,9 @@ const closeApp = async () => {
   exit();
 };
 (async () => {
+  if (process.env.MIDWAY_DEV_IS_DEBUG) {
+    await waitDebug(process.env.MIDWAY_DEV_IS_DEBUG);
+  }
   let startSuccess = false;
   try {
     if (options.entryFile) {

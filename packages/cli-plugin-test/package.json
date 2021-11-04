@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/cli-plugin-test",
-  "version": "1.2.85",
+  "version": "1.2.86-beta.3",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/command-core": "^1.2.85",
+    "@midwayjs/command-core": "^1.2.86-beta.3",
     "globby": "^10.0.1",
     "jest": "^26.4.2",
     "ts-jest": "^26.0.0",
