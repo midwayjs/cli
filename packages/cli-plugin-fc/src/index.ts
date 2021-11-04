@@ -147,6 +147,8 @@ export class AliyunFCPlugin extends BasePlugin {
       for (const fcDeployInputs of functions) {
         Object.assign(fcDeployInputs, this.options.serverlessDev);
         delete fcDeployInputs.access;
+        fcDeployInputs.path = { configPath: this.midwayBuildPath };
+        fcDeployInputs.props.function.codeUri = this.midwayBuildPath;
         if (!this.options.skipDeploy) {
           await fcDeploy.deploy(fcDeployInputs);
         }
