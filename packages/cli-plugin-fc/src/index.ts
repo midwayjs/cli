@@ -131,6 +131,7 @@ export class AliyunFCPlugin extends BasePlugin {
     process.chdir(this.midwayBuildPath);
     let fcDeploy;
     if (!this.options.skipDeploy) {
+      // https://github.com/devsapp/fc-deploy/
       fcDeploy = await loadComponent('fc-deploy');
     }
     if (!this.core.service) {
