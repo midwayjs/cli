@@ -53,6 +53,9 @@ export class DevPlugin extends BasePlugin {
         watchFile: {
           usage: 'watch more file',
         },
+        watchExt: {
+          usage: 'watch more extensions',
+        },
         detectPort: {
           usage: 'when using entryFile, auto detect port',
         },
@@ -300,6 +303,10 @@ export class DevPlugin extends BasePlugin {
   // watch file change
   private startWatch() {
     const sourceDir = this.getSourceDir();
+    const watchAllowExts = (
+      this.options.watchExt ? this.options.watchExt.split(',') : []
+    ).concat('.ts', '.yml', '.json');
+
     const watcher = chokidar.watch(sourceDir, {
       ignored: path => {
         if (path.includes('node_modules')) {
@@ -308,7 +315,10 @@ export class DevPlugin extends BasePlugin {
         if (existsSync(path)) {
           const stat = statSync(path);
           if (stat.isFile()) {
-            if (!path.endsWith('.ts') && !path.endsWith('.yml')) {
+            const matchExts = watchAllowExts.find(ext => {
+              return path.endsWith(ext);
+            });
+            if (!matchExts) {
               return true;
             }
           }
