@@ -176,7 +176,32 @@ export class PackagePlugin extends BasePlugin {
 
   async installDevDep() {
     this.core.cli.log('Install development dependencies...');
-    if (!existsSync(join(this.servicePath, 'node_modules'))) {
+    let isNeedSkipInstallNodeModules = false;
+    if (existsSync(join(this.servicePath, 'node_modules'))) {
+      let originPkgJson: any = {};
+      try {
+        const pkgJsonPath = join(this.servicePath, 'package.json');
+        if (existsSync(pkgJsonPath)) {
+          originPkgJson = JSON.parse(readFileSync(pkgJsonPath).toString());
+        }
+      } catch {
+        //
+      }
+      const allDepMap = Object.assign(
+        {},
+        originPkgJson.dependencies,
+        originPkgJson.devDependencies
+      );
+      const allDepList = Object.keys(allDepMap);
+      const notInstalled = allDepList.find(depName => {
+        return !existsSync(join(this.servicePath, 'node_modules', depName));
+      });
+      if (!notInstalled) {
+        isNeedSkipInstallNodeModules = true;
+      }
+    }
+
+    if (!isNeedSkipInstallNodeModules) {
       await this.npmInstall({
         baseDir: this.servicePath,
       });
