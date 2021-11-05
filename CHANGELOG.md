@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.87](https://github.com/midwayjs/bin/compare/v1.2.86...v1.2.87) (2021-11-05)
+
+
+### Bug Fixes
+
+* watch more file ([#223](https://github.com/midwayjs/bin/issues/223)) ([24180a1](https://github.com/midwayjs/bin/commit/24180a12989473a54c0af18ecfbce469b92599a1))
+
+
+
+
+
 ## [1.2.86](https://github.com/midwayjs/bin/compare/v1.2.85...v1.2.86) (2021-11-04)
 
 **Note:** Version bump only for package midway-bin
