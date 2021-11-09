@@ -1,7 +1,8 @@
 import { join } from 'path';
 import * as globby from 'globby';
-import { unlink, existsSync, stat } from 'fs-extra';
+import { unlink, existsSync, stat, readFileSync } from 'fs-extra';
 import { findNpmModule } from '@midwayjs/command-core';
+import * as semver from 'semver';
 interface Ilayer {
   [extName: string]: {
     path: string;
@@ -217,4 +218,37 @@ export const analysisDecorator = async (cwd: string, currentFunc?) => {
     funcSpec: allFunc,
     applicationContext,
   };
+};
+
+interface ModInfo {
+  name: string;
+  version: string;
+}
+export const copyFromNodeModules = async (
+  moduleInfoList: ModInfo[],
+  fromNodeModulesPath: string,
+  targetNodeModulesPath: string
+) => {
+  for (const moduleInfo of moduleInfoList) {
+    const modulePath = join(fromNodeModulesPath, moduleInfo.name);
+    if (!existsSync(modulePath)) {
+      return;
+    }
+    const pkgJson = safeReadJson(join(modulePath, 'package.json'));
+    if (!pkgJson.version) {
+      return;
+    }
+
+    if (!semver.satisfies(pkgJson.version, moduleInfo.version)) {
+      return;
+    }
+  }
+};
+
+const safeReadJson = (jsonFile: string) => {
+  try {
+    return JSON.parse(readFileSync(jsonFile).toString());
+  } catch {
+    return {};
+  }
 };

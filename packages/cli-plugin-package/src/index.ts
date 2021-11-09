@@ -620,10 +620,14 @@ export class PackagePlugin extends BasePlugin {
     if (errorNecessary.length) {
       console.log('');
       errorNecessary.forEach(error => {
-        const code = error.file.text.slice(0, error.start).split('\n');
-        const errorPath = `(${relative(cwd, error.file.fileName)}:${
-          code.length
-        }:${code[code.length - 1].length})`;
+        let errorPath = '';
+        // tsconfig error, file is undefined
+        if (error?.file?.text) {
+          const code = error.file.text.slice(0, error.start).split('\n');
+          errorPath = `(${relative(cwd, error.file.fileName)}:${code.length}:${
+            code[code.length - 1].length
+          })`;
+        }
         this.outputTsErrorMessage(error, errorPath);
       });
       if (!this.core.service?.experimentalFeatures?.ignoreTsError) {
