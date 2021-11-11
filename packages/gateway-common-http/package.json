@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/gateway-common-http",
-  "version": "1.2.86",
+  "version": "1.2.89-beta.1",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
