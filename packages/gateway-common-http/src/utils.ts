@@ -12,7 +12,15 @@ export function getQuery(req) {
     return req.query;
   }
 
-  if (!req.query && req.url?.includes('?')) {
-    return qs.parse(req.url.replace(/#.*$/, '').replace(/^.*\?/, ''));
+  if (!req.query) {
+    let url;
+    if (req.originalUrl?.includes('?')) {
+      url = req.originalUrl;
+    } else if (req.url?.includes('?')) {
+      url = req.url;
+    }
+    if (url) {
+      return qs.parse(url.replace(/#.*$/, '').replace(/^.*\?/, ''));
+    }
   }
 }

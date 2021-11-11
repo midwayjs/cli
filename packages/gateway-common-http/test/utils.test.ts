@@ -13,5 +13,7 @@ describe('/test/utils.test.ts', () => {
     assert(getQuery({ query: { name: 123 } }).name === 123);
     assert(getQuery({ url: '/?name=aaaa#123' }).name === 'aaaa');
     assert(getQuery({ url: '/#xxx?name=aaaa' }).name === undefined);
+    assert(getQuery({ originalUrl: '/?name=aaaa#123' }).name === 'aaaa');
+    assert(getQuery({ originalUrl: '/#xxx?name=aaaa' }).name === undefined);
   });
 });

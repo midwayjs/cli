@@ -226,15 +226,21 @@ interface ModInfo {
 }
 export const copyFromNodeModules = async (
   moduleInfoList: ModInfo[],
+  baseDir: string,
   fromNodeModulesPath: string,
-  targetNodeModulesPath: string
+  targetNodeModulesPath: string,
+  moduleMap: { [modName: string]: { version: string; path: string } } = {}
 ) => {
   for (const moduleInfo of moduleInfoList) {
-    const modulePath = join(fromNodeModulesPath, moduleInfo.name);
-    if (!existsSync(modulePath)) {
+    const info = getModuleCycleFind(
+      moduleInfo.name,
+      baseDir,
+      fromNodeModulesPath
+    );
+    if (!info) {
       return;
     }
-    const pkgJson = safeReadJson(join(modulePath, 'package.json'));
+    const pkgJson = safeReadJson(join(info.path, 'package.json'));
     if (!pkgJson.version) {
       return;
     }
@@ -242,7 +248,54 @@ export const copyFromNodeModules = async (
     if (!semver.satisfies(pkgJson.version, moduleInfo.version)) {
       return;
     }
+    moduleMap[moduleInfo.name] = {
+      version: pkgJson.version,
+      path: info.path,
+    };
+    const pkgDepsModuleInfoList: ModInfo[] = [];
+    Object.keys(pkgJson.dependencies).map(modName => {
+      const version = pkgJson.dependencies[modName];
+      if (
+        !moduleMap[modName] &&
+        semver.satisfies(moduleMap[modName].version, version)
+      ) {
+        pkgDepsModuleInfoList.push({
+          name: modName,
+          version,
+        });
+      }
+    });
+
+    const childInfo = copyFromNodeModules(
+      pkgDepsModuleInfoList,
+      baseDir,
+      join(info.path, 'node_modules'),
+      targetNodeModulesPath,
+      moduleMap
+    );
+    if (!childInfo) {
+      return;
+    }
   }
+  return moduleMap;
+};
+
+const getModuleCycleFind = (
+  moduleName,
+  baseNodeModuleDir,
+  fromNodeModuleDir
+) => {
+  for (; baseNodeModuleDir !== fromNodeModuleDir; ) {
+    const modulePath = join(fromNodeModuleDir, moduleName);
+    if (existsSync(modulePath)) {
+      return {
+        name: moduleName,
+        path: modulePath,
+      };
+    }
+    fromNodeModuleDir = join(fromNodeModuleDir, '../');
+  }
+  return;
 };
 
 const safeReadJson = (jsonFile: string) => {
