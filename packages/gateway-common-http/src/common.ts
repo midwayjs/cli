@@ -1,6 +1,7 @@
 import { DevPackOptions, InvokeOptions } from './interface';
 import { match } from 'path-to-regexp';
 import * as qs from 'querystring';
+import { getQuery } from './utils';
 const getRawBody = require('raw-body');
 const ignoreWildcardFunctionsWhiteList = [];
 
@@ -148,7 +149,7 @@ export async function parseInvokeOptionsByOriginUrl(
     invokeHTTPData.pathParameters = matchRes.params || {};
     invokeHTTPData.path = currentUrl;
     invokeHTTPData.url = req.url;
-    invokeHTTPData.query = req.query;
+    invokeHTTPData.query = getQuery(req);
     invokeHTTPData.base64Encoded = false;
     invokeOptions.data = [invokeHTTPData];
   }
