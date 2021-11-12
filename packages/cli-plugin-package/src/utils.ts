@@ -226,15 +226,20 @@ interface ModInfo {
 }
 export const copyFromNodeModules = async (
   moduleInfoList: ModInfo[],
-  baseDir: string,
+  baseNodeModuleDir: string,
   fromNodeModulesPath: string,
   targetNodeModulesPath: string,
   moduleMap: { [modName: string]: { version: string; path: string } } = {}
 ) => {
   for (const moduleInfo of moduleInfoList) {
+    const { name, version } = moduleInfo;
+    if (moduleMap[name] && semver.satisfies(moduleMap[name].version, version)) {
+      continue;
+    }
+
     const info = getModuleCycleFind(
       moduleInfo.name,
-      baseDir,
+      baseNodeModuleDir,
       fromNodeModulesPath
     );
     if (!info) {
@@ -244,7 +249,6 @@ export const copyFromNodeModules = async (
     if (!pkgJson.version) {
       return;
     }
-
     if (!semver.satisfies(pkgJson.version, moduleInfo.version)) {
       return;
     }
@@ -253,22 +257,19 @@ export const copyFromNodeModules = async (
       path: info.path,
     };
     const pkgDepsModuleInfoList: ModInfo[] = [];
-    Object.keys(pkgJson.dependencies).map(modName => {
-      const version = pkgJson.dependencies[modName];
-      if (
-        !moduleMap[modName] &&
-        semver.satisfies(moduleMap[modName].version, version)
-      ) {
+    if (pkgJson.dependencies) {
+      Object.keys(pkgJson.dependencies).map(modName => {
+        const version = pkgJson.dependencies[modName];
         pkgDepsModuleInfoList.push({
           name: modName,
           version,
         });
-      }
-    });
+      });
+    }
 
     const childInfo = copyFromNodeModules(
       pkgDepsModuleInfoList,
-      baseDir,
+      baseNodeModuleDir,
       join(info.path, 'node_modules'),
       targetNodeModulesPath,
       moduleMap
@@ -285,7 +286,7 @@ const getModuleCycleFind = (
   baseNodeModuleDir,
   fromNodeModuleDir
 ) => {
-  for (; baseNodeModuleDir !== fromNodeModuleDir; ) {
+  while (true) {
     const modulePath = join(fromNodeModuleDir, moduleName);
     if (existsSync(modulePath)) {
       return {
@@ -293,9 +294,11 @@ const getModuleCycleFind = (
         path: modulePath,
       };
     }
+    if (baseNodeModuleDir !== fromNodeModuleDir) {
+      return;
+    }
     fromNodeModuleDir = join(fromNodeModuleDir, '../');
   }
-  return;
 };
 
 const safeReadJson = (jsonFile: string) => {
