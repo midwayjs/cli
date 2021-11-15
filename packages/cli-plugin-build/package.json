@@ -9,9 +9,6 @@
     "@midwayjs/mwcc": "^0.7.x",
     "fs-extra": "^8.1.0"
   },
-  "peerDependencies": {
-    "@midwayjs/hooks-core": "*"
-  },
   "devDependencies": {
     "typescript": "^4.1.0"
   },
