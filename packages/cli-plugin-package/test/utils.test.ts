@@ -1,17 +1,17 @@
 import { copyFromNodeModules } from '../src/utils';
 import { join } from 'path';
 import * as assert from 'assert';
-// import { execSync } from 'child_process';
-// import { existsSync, remove } from 'fs-extra';
+import { execSync } from 'child_process';
+import { existsSync, remove } from 'fs-extra';
 import { readFileSync } from 'fs';
 const demoDir = join(__dirname, './fixtures/fast-nm-install');
 const nm = join(demoDir, 'node_modules');
 describe('/test/utils.test.ts', () => {
   beforeAll(async () => {
-    // if (existsSync(nm)) {
-    //   await remove(nm);
-    // }
-    // execSync(`cd ${demoDir};cnpm install`);
+    if (existsSync(nm)) {
+      await remove(nm);
+    }
+    execSync(`cd ${demoDir};cnpm install`);
   });
   it('copyFromNodeModules', async () => {
     const deps = JSON.parse(
