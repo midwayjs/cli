@@ -245,10 +245,9 @@ export const copyFromNodeModules = async (
     if (!info) {
       return;
     }
-    const pkgJson = safeReadJson(join(info.path, 'package.json'));
-    if (!pkgJson.version) {
-      return;
-    }
+    const pkgJson = JSON.parse(
+      readFileSync(join(info.path, 'package.json')).toString()
+    );
     if (!semver.satisfies(pkgJson.version, moduleInfo.version)) {
       return;
     }
@@ -298,13 +297,5 @@ const getModuleCycleFind = (
       return;
     }
     fromNodeModuleDir = join(fromNodeModuleDir, '../');
-  }
-};
-
-const safeReadJson = (jsonFile: string) => {
-  try {
-    return JSON.parse(readFileSync(jsonFile).toString());
-  } catch {
-    return {};
   }
 };
