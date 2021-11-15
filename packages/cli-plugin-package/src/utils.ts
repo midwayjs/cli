@@ -285,7 +285,12 @@ const getModuleCycleFind = (
   baseNodeModuleDir,
   fromNodeModuleDir
 ) => {
+  let i = 5;
   while (true) {
+    if (--i < 0) {
+      console.log('too more circle fromNodeModuleDir', fromNodeModuleDir);
+      return;
+    }
     const modulePath = join(fromNodeModuleDir, moduleName);
     if (existsSync(modulePath)) {
       return {
@@ -296,6 +301,14 @@ const getModuleCycleFind = (
     if (baseNodeModuleDir === fromNodeModuleDir) {
       return;
     }
-    fromNodeModuleDir = join(fromNodeModuleDir, '../');
+    const parentDir = join(fromNodeModuleDir, '../');
+    if (parentDir === fromNodeModuleDir) {
+      console.log(
+        'parentDir equal fromNodeModuleDir',
+        parentDir,
+        fromNodeModuleDir
+      );
+      return;
+    }
   }
 };
