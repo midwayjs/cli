@@ -293,7 +293,7 @@ const getModuleCycleFind = (
         path: modulePath,
       };
     }
-    if (baseNodeModuleDir !== fromNodeModuleDir) {
+    if (baseNodeModuleDir === fromNodeModuleDir) {
       return;
     }
     fromNodeModuleDir = join(fromNodeModuleDir, '../');
