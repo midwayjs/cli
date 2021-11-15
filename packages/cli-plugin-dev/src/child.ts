@@ -1,6 +1,6 @@
 import { findNpmModule } from '@midwayjs/command-core';
 import { analysisDecorator, waitDebug } from './utils';
-const options = JSON.parse(process.argv[2]);
+const options: any = JSON.parse(process.argv[2]);
 let app;
 let bootstrapStarter;
 const exit = process.exit;
@@ -51,7 +51,7 @@ const closeApp = async () => {
   }
 
   if (!process.env.MIDWAY_DEV_IS_SERVERLESS) {
-    process.on('message', async msg => {
+    process.on('message', async (msg: any) => {
       if (!msg) {
         return;
       }
