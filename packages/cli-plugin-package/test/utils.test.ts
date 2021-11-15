@@ -6,7 +6,7 @@ import { existsSync, remove } from 'fs-extra';
 import { readFileSync } from 'fs';
 const demoDir = join(__dirname, './fixtures/fast-nm-install');
 const nm = join(demoDir, 'node_modules');
-describe.skip('/test/utils.test.ts', () => {
+describe('/test/utils.test.ts', () => {
   beforeAll(async done => {
     if (existsSync(nm)) {
       await remove(nm);
