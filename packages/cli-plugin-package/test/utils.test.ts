@@ -11,7 +11,7 @@ describe('/test/utils.test.ts', () => {
     if (existsSync(nm)) {
       await remove(nm);
     }
-    execSync(`cd ${demoDir};cnpm install`);
+    execSync(`cd ${demoDir};npm install`);
   });
   it('copyFromNodeModules', async () => {
     const deps = JSON.parse(
