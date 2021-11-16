@@ -4,6 +4,7 @@ import { remove, existsSync } from 'fs-extra';
 import { join } from 'path';
 import { BuildPlugin } from '../src';
 import * as assert from 'assert';
+import { execSync } from 'child_process';
 const run = async (cwd: string, command: string, options = {}) => {
   const core = new CommandCore({
     commands: [command],
@@ -128,5 +129,14 @@ describe('test/build.test.ts', () => {
     } catch (e) {
       assert(/Unexpected token \//.test(e.message));
     }
+  });
+  it('test hooks', async () => {
+    const hooks = join(__dirname, 'fixtures/hooks');
+    const dist = join(hooks, 'dist');
+    if (existsSync(dist)) {
+      await remove(dist);
+    }
+    execSync(`cd ${hooks};npm i`);
+    await run(hooks, 'build');
   });
 });

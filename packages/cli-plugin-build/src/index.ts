@@ -71,7 +71,7 @@ export class BuildPlugin extends BasePlugin {
       const modInfo = findNpmModule(this.core.cwd, '@midwayjs/hooks-core');
       if (modInfo) {
         const { getConfig } = require('@midwayjs/hooks-core');
-        const config = getConfig();
+        const config = getConfig(this.core.cwd);
         if (config.source) {
           this.options.srcDir = config.source;
         }
