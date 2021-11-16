@@ -1,7 +1,8 @@
 import { join } from 'path';
 import * as globby from 'globby';
-import { unlink, existsSync, stat } from 'fs-extra';
+import { unlink, existsSync, stat, readFileSync } from 'fs-extra';
 import { findNpmModule } from '@midwayjs/command-core';
+import * as semver from 'semver';
 interface Ilayer {
   [extName: string]: {
     path: string;
@@ -217,4 +218,88 @@ export const analysisDecorator = async (cwd: string, currentFunc?) => {
     funcSpec: allFunc,
     applicationContext,
   };
+};
+
+interface ModInfo {
+  name: string;
+  version: string;
+}
+export const copyFromNodeModules = async (
+  moduleInfoList: ModInfo[],
+  baseNodeModuleDir: string,
+  fromNodeModulesPath: string,
+  targetNodeModulesPath: string,
+  moduleMap: { [modName: string]: { version: string; path: string } } = {}
+) => {
+  for (const moduleInfo of moduleInfoList) {
+    const { name, version } = moduleInfo;
+    if (moduleMap[name] && semver.satisfies(moduleMap[name].version, version)) {
+      continue;
+    }
+
+    const info = getModuleCycleFind(
+      moduleInfo.name,
+      baseNodeModuleDir,
+      fromNodeModulesPath
+    );
+    if (!info) {
+      return;
+    }
+    const pkgJson = JSON.parse(
+      readFileSync(join(info.path, 'package.json')).toString()
+    );
+    if (!semver.satisfies(pkgJson.version, moduleInfo.version)) {
+      return;
+    }
+    moduleMap[moduleInfo.name] = {
+      version: pkgJson.version,
+      path: info.path,
+    };
+    const pkgDepsModuleInfoList: ModInfo[] = [];
+    if (pkgJson.dependencies) {
+      Object.keys(pkgJson.dependencies).map(modName => {
+        const version = pkgJson.dependencies[modName];
+        pkgDepsModuleInfoList.push({
+          name: modName,
+          version,
+        });
+      });
+    }
+
+    const childInfo = copyFromNodeModules(
+      pkgDepsModuleInfoList,
+      baseNodeModuleDir,
+      join(info.path, 'node_modules'),
+      targetNodeModulesPath,
+      moduleMap
+    );
+    if (!childInfo) {
+      return;
+    }
+  }
+  return moduleMap;
+};
+
+const getModuleCycleFind = (
+  moduleName,
+  baseNodeModuleDir,
+  fromNodeModuleDir
+) => {
+  while (true) {
+    const modulePath = join(fromNodeModuleDir, moduleName);
+    if (existsSync(modulePath)) {
+      return {
+        name: moduleName,
+        path: modulePath,
+      };
+    }
+    if (baseNodeModuleDir === fromNodeModuleDir) {
+      return;
+    }
+    const parentDir = join(fromNodeModuleDir, '../');
+    if (parentDir === fromNodeModuleDir) {
+      return;
+    }
+    fromNodeModuleDir = parentDir;
+  }
 };

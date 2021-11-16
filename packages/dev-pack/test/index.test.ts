@@ -4,6 +4,7 @@ import { getKoaDevPack, getExpressDevPack } from '../src';
 import { join } from 'path';
 import * as request from 'supertest';
 import { remove, pathExists } from 'fs-extra';
+import { execSync } from 'child_process';
 
 describe('/test/index.test.ts', () => {
   beforeEach(async () => {
@@ -19,6 +20,7 @@ describe('/test/index.test.ts', () => {
     it('test buffer result koa in http trigger', async done => {
       const app = new koa();
       const cwd = join(__dirname, './fixtures/base-fn-http');
+      execSync(`cd ${cwd};npm install @midwayjs/mock`);
       const devPack = getKoaDevPack(cwd, {
         notWatch: true,
       });
@@ -40,6 +42,7 @@ describe('/test/index.test.ts', () => {
     it('test buffer result koa in apigw trigger', done => {
       const app = new koa();
       const cwd = join(__dirname, './fixtures/base-fn-apigw');
+      execSync(`cd ${cwd};npm install @midwayjs/mock`);
       const devPack = getKoaDevPack(cwd, {
         notWatch: true,
       });
@@ -61,6 +64,7 @@ describe('/test/index.test.ts', () => {
     it('test buffer result express in http trigger', done => {
       const app = express();
       const cwd = join(__dirname, './fixtures/base-fn-http');
+      execSync(`cd ${cwd};npm install @midwayjs/mock`);
       const devPack = getExpressDevPack(cwd, {
         notWatch: true,
       });
@@ -82,6 +86,7 @@ describe('/test/index.test.ts', () => {
     it('test buffer result express in apigw trigger', done => {
       const app = express();
       const cwd = join(__dirname, './fixtures/base-fn-apigw');
+      execSync(`cd ${cwd};npm install @midwayjs/mock`);
       const devPack = getExpressDevPack(cwd, {
         notWatch: true,
       });

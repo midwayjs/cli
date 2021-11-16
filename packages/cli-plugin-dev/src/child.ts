@@ -1,11 +1,12 @@
-import { createApp, close, createBootstrap } from '@midwayjs/mock';
+import { findNpmModule } from '@midwayjs/command-core';
 import { analysisDecorator, waitDebug } from './utils';
-const options = JSON.parse(process.argv[2]);
+const options: any = JSON.parse(process.argv[2]);
 let app;
 let bootstrapStarter;
 const exit = process.exit;
 
 let isCloseApp = false;
+let closeFun: any = () => {};
 const closeApp = async () => {
   if (isCloseApp) {
     return;
@@ -14,7 +15,7 @@ const closeApp = async () => {
   if (bootstrapStarter) {
     await bootstrapStarter.close();
   } else {
-    await close(app);
+    await closeFun(app);
   }
 };
 (process as any).exit = async () => {
@@ -25,6 +26,12 @@ const closeApp = async () => {
   if (process.env.MIDWAY_DEV_IS_DEBUG) {
     await waitDebug(process.env.MIDWAY_DEV_IS_DEBUG);
   }
+  const modPath = findNpmModule(process.cwd(), '@midwayjs/mock');
+  if (!modPath) {
+    throw new Error('Please add @midwayjs/mock to your devDependencies');
+  }
+  const { createApp, close, createBootstrap } = require(modPath);
+  closeFun = close;
   let startSuccess = false;
   try {
     if (options.entryFile) {
@@ -44,7 +51,7 @@ const closeApp = async () => {
   }
 
   if (!process.env.MIDWAY_DEV_IS_SERVERLESS) {
-    process.on('message', async msg => {
+    process.on('message', async (msg: any) => {
       if (!msg) {
         return;
       }

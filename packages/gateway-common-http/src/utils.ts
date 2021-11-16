@@ -1,5 +1,26 @@
+import * as qs from 'querystring';
 export function getHeaderValue(headers, key) {
-  return Array.isArray(headers[key]) && headers[key].length === 1
-    ? headers[key][0]
-    : headers[key];
+  const value = headers?.[key];
+  return Array.isArray(value) && value.length === 1 ? value[0] : value;
+}
+
+export function getQuery(req) {
+  if (!req) {
+    return;
+  }
+  if (req.query) {
+    return req.query;
+  }
+
+  if (!req.query) {
+    let url;
+    if (req.originalUrl?.includes('?')) {
+      url = req.originalUrl;
+    } else if (req.url?.includes('?')) {
+      url = req.url;
+    }
+    if (url) {
+      return qs.parse(url.replace(/#.*$/, '').replace(/^.*\?/, ''));
+    }
+  }
 }

@@ -1,9 +1,8 @@
-import { BasePlugin } from '@midwayjs/command-core';
+import { BasePlugin, findNpmModule } from '@midwayjs/command-core';
 import { resolve, join, dirname, relative } from 'path';
 import { existsSync, readFileSync, remove } from 'fs-extra';
 import { CompilerHost, Program, resolveTsConfigFile } from '@midwayjs/mwcc';
 import { copyFiles } from '@midwayjs/faas-code-analysis';
-import { getConfig } from '@midwayjs/hooks-core';
 import * as ts from 'typescript';
 export class BuildPlugin extends BasePlugin {
   isMidwayHooks = false;
@@ -69,9 +68,13 @@ export class BuildPlugin extends BasePlugin {
     ].find(file => existsSync(file));
     if (midwayConfig) {
       this.isMidwayHooks = true;
-      const config = getConfig();
-      if (config.source) {
-        this.options.srcDir = config.source;
+      const modInfo = findNpmModule(this.core.cwd, '@midwayjs/hooks-core');
+      if (modInfo) {
+        const { getConfig } = require('@midwayjs/hooks-core');
+        const config = getConfig(this.core.cwd);
+        if (config.source) {
+          this.options.srcDir = config.source;
+        }
       }
     }
 
