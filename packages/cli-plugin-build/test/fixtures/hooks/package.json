@@ -7,6 +7,7 @@
     "react-dom": "^16.4.1",
     "react-json-view": "^1.21.3",
     "@midwayjs/faas": "^2.0.0",
-    "@midwayjs/hooks": "^2.2.0"
+    "@midwayjs/hooks": "^2.2.0",
+    "@midwayjs/hooks-core": "^2.3.0"
   }
 }

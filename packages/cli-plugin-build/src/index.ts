@@ -70,7 +70,7 @@ export class BuildPlugin extends BasePlugin {
       this.isMidwayHooks = true;
       const modInfo = findNpmModule(this.core.cwd, '@midwayjs/hooks-core');
       if (modInfo) {
-        const { getConfig } = require('@midwayjs/hooks-core');
+        const { getConfig } = require(modInfo);
         const config = getConfig(this.core.cwd);
         if (config.source) {
           this.options.srcDir = config.source;

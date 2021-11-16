@@ -5,7 +5,6 @@
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/command-core": "^1.2.86",
-    "@midwayjs/hooks-core": "^2.2.4",
     "@midwayjs/locate": "^1.0.3",
     "@midwayjs/luckyeye": "^1.0.2",
     "chalk": "^4.1.1",
