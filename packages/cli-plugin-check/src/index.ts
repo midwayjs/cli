@@ -69,10 +69,10 @@ export class CheckPlugin extends BasePlugin {
         join(cwd, 'midway.config.js'),
       ].find(file => existsSync(file));
       if (midwayConfig) {
-        const modInfo = findNpmModule(this.core.cwd, '@midwayjs/hooks-core');
+        const modInfo = findNpmModule(cwd, '@midwayjs/hooks-core');
         if (modInfo) {
           const { getConfig } = require(modInfo);
-          const config = getConfig(this.core.cwd);
+          const config = getConfig(cwd);
           if (config.source) {
             this.options.sourceDir = config.source;
           }

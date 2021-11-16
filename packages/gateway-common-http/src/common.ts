@@ -1,7 +1,7 @@
 import { DevPackOptions, InvokeOptions } from './interface';
 import { match } from 'path-to-regexp';
 import * as qs from 'querystring';
-import { getQuery } from './utils';
+import { getPath, getQuery } from './utils';
 const getRawBody = require('raw-body');
 const ignoreWildcardFunctionsWhiteList = [];
 
@@ -14,7 +14,7 @@ export async function parseInvokeOptionsByOriginUrl(
   invokeFun?: any;
 }> {
   const ignorePattern = options.ignorePattern;
-  const currentUrl = req.path || req.url;
+  const currentUrl = getPath(req);
   const currentMethod = req.method.toLowerCase();
   if (ignorePattern) {
     if (typeof ignorePattern === 'function') {

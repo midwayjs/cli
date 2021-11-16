@@ -24,3 +24,14 @@ export function getQuery(req) {
     }
   }
 }
+
+export function getPath(req) {
+  if (!req) {
+    return '';
+  }
+  if (req.path) {
+    return req.path;
+  }
+  const url = req.url || req.originalUrl || '';
+  return url.replace(/(\?|#).*$/, '');
+}
