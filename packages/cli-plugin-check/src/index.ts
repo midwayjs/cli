@@ -1,11 +1,10 @@
-import { BasePlugin } from '@midwayjs/command-core';
+import { BasePlugin, findNpmModule } from '@midwayjs/command-core';
 import { RunnerContainer, Runner } from '@midwayjs/luckyeye';
 import { join } from 'path';
 import { existsSync, readFileSync } from 'fs';
 import * as chalk from 'chalk';
 import * as YAML from 'js-yaml';
 import { Locator, AnalyzeResult } from '@midwayjs/locate';
-import { getConfig } from '@midwayjs/hooks-core';
 import { transformToRelative } from './utils';
 
 enum ProjectType {
@@ -70,9 +69,13 @@ export class CheckPlugin extends BasePlugin {
         join(cwd, 'midway.config.js'),
       ].find(file => existsSync(file));
       if (midwayConfig) {
-        const config = getConfig();
-        if (config.source) {
-          this.options.sourceDir = config.source;
+        const modInfo = findNpmModule(this.core.cwd, '@midwayjs/hooks-core');
+        if (modInfo) {
+          const { getConfig } = require('@midwayjs/hooks-core');
+          const config = getConfig(this.core.cwd);
+          if (config.source) {
+            this.options.sourceDir = config.source;
+          }
         }
       }
 
