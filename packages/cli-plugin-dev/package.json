@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/cli-plugin-dev",
-  "version": "1.2.89-beta.3",
+  "version": "1.2.89",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {

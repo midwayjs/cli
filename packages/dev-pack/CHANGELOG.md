@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.89](https://github.com/midwayjs/cli/compare/v1.2.87...v1.2.89) (2021-11-16)
+
+
+### Bug Fixes
+
+* package check error ignore tsconfig error ([#226](https://github.com/midwayjs/cli/issues/226)) ([5d5468c](https://github.com/midwayjs/cli/commit/5d5468c7ac4fb45c73037fcd2ccc45a3494301b1))
+
+
+
+
+
 ## [1.2.87](https://github.com/midwayjs/cli/compare/v1.2.86...v1.2.87) (2021-11-05)
 
 **Note:** Version bump only for package @midwayjs/serverless-dev-pack
