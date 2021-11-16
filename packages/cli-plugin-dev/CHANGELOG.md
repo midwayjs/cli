@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.90](https://github.com/midwayjs/cli/compare/v1.2.89...v1.2.90) (2021-11-16)
+
+
+### Bug Fixes
+
+* remvoe hooks core ([#228](https://github.com/midwayjs/cli/issues/228)) ([d0c3fcc](https://github.com/midwayjs/cli/commit/d0c3fccbab299b15284f69f7574e84aec5cb7c5e))
+
+
+
+
+
 ## [1.2.89](https://github.com/midwayjs/cli/compare/v1.2.87...v1.2.89) (2021-11-16)
 
 
