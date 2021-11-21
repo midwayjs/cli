@@ -25,6 +25,7 @@ import {
   uselessFilesMatch,
   removeUselessFiles,
   analysisDecorator,
+  copyFromNodeModules,
 } from './utils';
 import { findNpmModule } from '@midwayjs/command-core';
 import {
@@ -461,11 +462,32 @@ export class PackagePlugin extends BasePlugin {
       return;
     }
 
-    await this.npmInstall({
-      production: true,
-    });
+    let skipNpmInstall = false;
+    if (this.core.service?.experimentalFeatures?.fastInstallNodeModules) {
+      this.core.debug('Fast Install Node Modules');
+      const moduleInfoList = Object.keys(pkgJson.dependencies).map(name => {
+        return {
+          name,
+          version: pkgJson.dependencies[name],
+        };
+      });
+      const start = Date.now();
+      const copyResult = await copyFromNodeModules(
+        moduleInfoList,
+        join(this.getCwd(), 'node_modules'),
+        join(this.midwayBuildPath, 'node_modules')
+      );
+      skipNpmInstall = !!copyResult;
+      this.core.debug('skipNpmInstall', skipNpmInstall, Date.now() - start);
+    }
 
-    await this.biggestDep();
+    if (!skipNpmInstall) {
+      await this.npmInstall({
+        production: true,
+      });
+    }
+    // not await
+    this.biggestDep();
     this.core.cli.log(' - Dependencies install complete');
   }
 
