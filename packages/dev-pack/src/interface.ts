@@ -7,6 +7,7 @@ export interface IStartOptions {
   fast?: boolean | string; // default is true
   entryFile?: string; // bootstrap entry file
   notWatch?: boolean; // default is false
+  notAwait?: boolean; // default is false
 }
 
 export interface IDevPack {

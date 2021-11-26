@@ -106,6 +106,8 @@ export class DevPlugin extends BasePlugin {
     await this.start();
     if (!options.notWatch) {
       this.startWatch();
+    }
+    if (!options.notAwait) {
       return new Promise(() => {});
     }
   }
