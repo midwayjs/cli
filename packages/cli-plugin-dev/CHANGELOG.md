@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.91](https://github.com/midwayjs/cli/compare/v1.2.90...v1.2.91) (2021-11-26)
+
+
+### Features
+
+* fast install nm ([#231](https://github.com/midwayjs/cli/issues/231)) ([9974ed5](https://github.com/midwayjs/cli/commit/9974ed5d26dd4eca9627a709c72c2b677c0b49c1))
+
+
+
+
+
 ## [1.2.90](https://github.com/midwayjs/cli/compare/v1.2.89...v1.2.90) (2021-11-16)
 
 
