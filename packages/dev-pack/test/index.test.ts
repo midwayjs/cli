@@ -23,6 +23,7 @@ describe('/test/index.test.ts', () => {
       execSync(`cd ${cwd};npm install @midwayjs/mock`);
       const devPack = getKoaDevPack(cwd, {
         notWatch: true,
+        notAwait: true,
       });
       app.use(
         devPack({
@@ -45,6 +46,7 @@ describe('/test/index.test.ts', () => {
       execSync(`cd ${cwd};npm install @midwayjs/mock`);
       const devPack = getKoaDevPack(cwd, {
         notWatch: true,
+        notAwait: true,
       });
       app.use(
         devPack({
@@ -67,6 +69,7 @@ describe('/test/index.test.ts', () => {
       execSync(`cd ${cwd};npm install @midwayjs/mock`);
       const devPack = getExpressDevPack(cwd, {
         notWatch: true,
+        notAwait: true,
       });
       app.use(
         devPack({
@@ -89,6 +92,7 @@ describe('/test/index.test.ts', () => {
       execSync(`cd ${cwd};npm install @midwayjs/mock`);
       const devPack = getExpressDevPack(cwd, {
         notWatch: true,
+        notAwait: true,
       });
       app.use(
         devPack({

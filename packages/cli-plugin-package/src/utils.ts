@@ -1,6 +1,6 @@
 import { join } from 'path';
 import * as globby from 'globby';
-import { unlink, existsSync, stat, readFileSync } from 'fs-extra';
+import { unlink, existsSync, stat, readFileSync, copy } from 'fs-extra';
 import { findNpmModule } from '@midwayjs/command-core';
 import * as semver from 'semver';
 interface Ilayer {
@@ -224,11 +224,10 @@ interface ModInfo {
   name: string;
   version: string;
 }
-export const copyFromNodeModules = async (
+export const findModuleFromNodeModules = async (
   moduleInfoList: ModInfo[],
   baseNodeModuleDir: string,
   fromNodeModulesPath: string,
-  targetNodeModulesPath: string,
   moduleMap: { [modName: string]: { version: string; path: string } } = {}
 ) => {
   for (const moduleInfo of moduleInfoList) {
@@ -266,11 +265,10 @@ export const copyFromNodeModules = async (
       });
     }
 
-    const childInfo = copyFromNodeModules(
+    const childInfo = findModuleFromNodeModules(
       pkgDepsModuleInfoList,
       baseNodeModuleDir,
       join(info.path, 'node_modules'),
-      targetNodeModulesPath,
       moduleMap
     );
     if (!childInfo) {
@@ -302,4 +300,37 @@ const getModuleCycleFind = (
     }
     fromNodeModuleDir = parentDir;
   }
+};
+
+export const copyFromNodeModules = async (
+  moduleInfoList: ModInfo[],
+  fromNodeModulesPath: string,
+  targetNodeModulesPath: string
+) => {
+  const moduleMap = await findModuleFromNodeModules(
+    moduleInfoList,
+    fromNodeModulesPath,
+    fromNodeModulesPath
+  );
+  if (!moduleMap) {
+    return;
+  }
+  const moduleNames = Object.keys(moduleMap);
+  const result = await Promise.all(
+    moduleNames.map(async name => {
+      const { path } = moduleMap[name];
+      const target = join(targetNodeModulesPath, name);
+      await copy(path, target, {
+        dereference: true,
+        filter: src => {
+          if (src.endsWith('/node_modules')) {
+            return false;
+          }
+          return true;
+        },
+      });
+      return name;
+    })
+  );
+  return result;
 };

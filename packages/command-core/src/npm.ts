@@ -1,6 +1,7 @@
 import { join } from 'path';
 import { existsSync, writeFileSync } from 'fs';
-import { exec, execSync } from 'child_process';
+import { exec } from './utils/exec';
+import { execSync } from 'child_process';
 import * as assert from 'assert';
 import { platform } from 'os';
 export const getCoreBaseDir = () => {
@@ -34,8 +35,8 @@ async function getNpmPath(
   await installNpm({
     baseDir,
     register: npmRegistry,
-    npmName,
-    mode: 'production --no-save',
+    moduleName: npmName,
+    mode: ['production', 'no-save'],
   });
   return join(baseDir, `node_modules/${npmName}`);
 }
@@ -45,8 +46,8 @@ interface INpmInstallOptions {
   register?: string;
   installCmd?: string;
   registerPath?: string;
-  npmName: string;
-  mode?: string;
+  moduleName?: string;
+  mode?: string[];
   slience?: boolean;
   isLerna?: boolean;
 }
@@ -55,50 +56,14 @@ interface INpmInstallOptions {
 // yarn + lerna: yarn add mod --ignore-workspace-root-check
 // npm + lerna: npm i mod --no-save
 export async function installNpm(options: INpmInstallOptions) {
-  const {
+  const { baseDir, slience } = options;
+  const cmd = formatInstallNpmCommand(options);
+  return exec({
+    cmd,
     baseDir,
-    register = 'npm',
-    npmName,
     slience,
-    registerPath,
-    isLerna,
-  } = options;
-  let { installCmd = 'i', mode } = options;
-  if (/yarn/.test(register)) {
-    if (!options.installCmd) {
-      // yarn add
-      installCmd = 'add';
-    }
-    if (mode === undefined) {
-      mode = isLerna ? 'ignore-workspace-root-check' : 'dev';
-    }
-  } else {
-    if (mode === undefined) {
-      mode = 'no-save';
-    }
-  }
-  const cmd = `${register} ${installCmd} ${npmName}${mode ? ` --${mode}` : ''}${
-    registerPath ? ` --registry=${registerPath}` : ''
-  }`;
-
-  return new Promise((resolved, rejected) => {
-    const execProcess = exec(
-      cmd,
-      {
-        cwd: baseDir,
-      },
-      (err, result) => {
-        if (err) {
-          return rejected(err);
-        }
-        resolved(result.replace(/\n$/, '').replace(/^\s*|\s*$/, ''));
-      }
-    );
-    execProcess.stdout.on('data', data => {
-      if (!slience) {
-        console.log(data);
-      }
-    });
+  }).then((result: string) => {
+    return result.replace(/\n$/, '').replace(/^\s*|\s*$/, '');
   });
 }
 
@@ -130,6 +95,7 @@ export const findNpmModule = (cwd, modName) => {
   }
 };
 
+// 从本地检索npm包
 export const findNpm = (argv?) => {
   let npm = 'npm';
   let registry = '';
@@ -149,7 +115,7 @@ export const findNpm = (argv?) => {
   } else if (process.env.yarn_registry) {
     npm = 'yarn';
   } else {
-    const npmList = ['cnpm'];
+    const npmList = ['pnpm', 'cnpm'];
     const currentPlatform = platform();
     const cmd = npmList.find(cmd => {
       if (currentPlatform === 'win32') {
@@ -200,4 +166,57 @@ export const findNpm = (argv?) => {
     npm,
     registry,
   };
+};
+
+// 转换npm安装命令
+export const formatInstallNpmCommand = (options: INpmInstallOptions) => {
+  const { register = 'npm', moduleName, registerPath, isLerna } = options;
+  let { installCmd = 'i', mode } = options;
+  if (!mode?.length) {
+    mode = ['no-save'];
+  }
+  if (/yarn/.test(register)) {
+    if (!options.installCmd) {
+      // yarn add
+      installCmd = 'add';
+    }
+    if (!mode?.length) {
+      mode = [isLerna ? 'ignore-workspace-root-check' : 'dev'];
+    }
+  } else if (/^pnpm/.test(register)) {
+    if (!moduleName) {
+      installCmd = 'install';
+      mode = mode.map(modeItem => {
+        if (modeItem === 'production') {
+          return 'prod';
+        }
+        return '';
+      });
+    } else {
+      installCmd = 'add';
+      mode = mode.map(modeItem => {
+        if (modeItem === 'no-save') {
+          return 'save-optional';
+        }
+        return '';
+      });
+    }
+  } else {
+    // npm
+    const isProduction = mode.find(modeItem => {
+      return modeItem === 'production';
+    });
+    if (!isProduction) {
+      mode.push('legacy-peer-deps');
+    }
+  }
+  const cmd = `${register} ${installCmd}${
+    moduleName ? ` ${moduleName}` : ''
+  }${mode
+    .map(modeItem => {
+      if (!modeItem) return '';
+      return ` --${modeItem}`;
+    })
+    .join('')}${registerPath ? ` --registry=${registerPath}` : ''}`;
+  return cmd;
 };

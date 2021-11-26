@@ -1,9 +1,8 @@
-import { BasePlugin, findNpm } from '@midwayjs/command-core';
+import { BasePlugin, findNpm, installNpm } from '@midwayjs/command-core';
 import * as enquirer from 'enquirer';
 import { join, relative } from 'path';
 import { existsSync, remove, readJSONSync } from 'fs-extra';
 import * as chalk from 'chalk';
-import { exec } from 'child_process';
 import { CategorySelect } from './categorySelect';
 import { LightGenerator } from 'light-generator';
 import Spin from 'light-spinner';
@@ -164,23 +163,23 @@ export class AddPlugin extends BasePlugin {
       });
       spin.start();
       this.checkDepInstalled(baseDir, spin, allDeps);
-      exec(
-        `${this.options.npm || 'npm'} install --legacy-peer-deps`,
-        { cwd: installDirectory },
-        err => {
-          if (err) {
-            const errmsg = (err && err.message) || err;
-            this.core.cli.log(` - npm install err ${errmsg}`);
-            clearTimeout(this.checkDepInstallTimeout);
-            spin.stop();
-            reject(errmsg);
-          } else {
-            clearTimeout(this.checkDepInstallTimeout);
-            spin.stop();
-            resolve(true);
-          }
-        }
-      );
+      installNpm({
+        baseDir: installDirectory,
+        register: this.options.npm,
+        slience: true,
+      })
+        .then(() => {
+          clearTimeout(this.checkDepInstallTimeout);
+          spin.stop();
+          resolve(true);
+        })
+        .catch(err => {
+          const errmsg = (err && err.message) || err;
+          this.core.cli.log(` - npm install err ${errmsg}`);
+          clearTimeout(this.checkDepInstallTimeout);
+          spin.stop();
+          reject(errmsg);
+        });
     });
   }
 

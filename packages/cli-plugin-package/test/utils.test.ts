@@ -1,4 +1,4 @@
-import { copyFromNodeModules } from '../src/utils';
+import { findModuleFromNodeModules, copyFromNodeModules } from '../src/utils';
 import { join } from 'path';
 import * as assert from 'assert';
 import { execSync } from 'child_process';
@@ -14,6 +14,19 @@ describe('/test/utils.test.ts', () => {
     execSync(`cd ${demoDir};npm install`);
     done();
   });
+  it('findModuleFromNodeModules', async () => {
+    const deps = JSON.parse(
+      readFileSync(join(demoDir, 'package.json')).toString()
+    ).dependencies;
+    const moduleInfoList = Object.keys(deps).map(name => {
+      return {
+        name,
+        version: deps[name],
+      };
+    });
+    const copyResult = await findModuleFromNodeModules(moduleInfoList, nm, nm);
+    assert(Object.keys(copyResult).length > 1);
+  });
   it('copyFromNodeModules', async () => {
     const deps = JSON.parse(
       readFileSync(join(demoDir, 'package.json')).toString()
@@ -24,20 +37,21 @@ describe('/test/utils.test.ts', () => {
         version: deps[name],
       };
     });
-    const copyResult = await copyFromNodeModules(
-      moduleInfoList,
-      nm,
-      nm,
-      join(demoDir, 'node_modules2')
-    );
-    assert(Object.keys(copyResult).length > 1);
+    const target = join(demoDir, 'node_modules2');
+    if (existsSync(target)) {
+      await remove(target);
+    }
+    const start = Date.now();
+    const copyResult = await copyFromNodeModules(moduleInfoList, nm, target);
+    const useTime = Date.now() - start;
+    console.log('useTime', useTime);
+    assert(copyResult.length);
   });
   it('not exists', async () => {
-    const copyResult = await copyFromNodeModules(
+    const copyResult = await findModuleFromNodeModules(
       [{ name: 'xxx', version: '*' }],
       nm,
-      nm,
-      join(demoDir, 'node_modules2')
+      nm
     );
     assert(!copyResult);
   });
@@ -51,12 +65,7 @@ describe('/test/utils.test.ts', () => {
         version: '^100',
       };
     });
-    const copyResult = await copyFromNodeModules(
-      moduleInfoList,
-      nm,
-      nm,
-      join(demoDir, 'node_modules2')
-    );
+    const copyResult = await findModuleFromNodeModules(moduleInfoList, nm, nm);
     assert(!copyResult);
   });
 });

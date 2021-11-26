@@ -1,4 +1,4 @@
-import { BasePlugin, forkNode } from '@midwayjs/command-core';
+import { BasePlugin, forkNode, installNpm } from '@midwayjs/command-core';
 import { getSpecFile, writeToSpec } from '@midwayjs/serverless-spec-builder';
 import { isAbsolute, join, relative, resolve } from 'path';
 import {
@@ -25,8 +25,9 @@ import {
   uselessFilesMatch,
   removeUselessFiles,
   analysisDecorator,
+  copyFromNodeModules,
 } from './utils';
-import { findNpmModule } from '@midwayjs/command-core';
+import { findNpmModule, exec } from '@midwayjs/command-core';
 import {
   analysisResultToSpec,
   copyFiles,
@@ -38,7 +39,6 @@ import {
   resolveTsConfigFile,
   Analyzer,
 } from '@midwayjs/mwcc';
-import { exec, execSync } from 'child_process';
 import * as JSZip from 'jszip';
 import { AnalyzeResult, Locator } from '@midwayjs/locate';
 import { tmpdir, platform } from 'os';
@@ -461,11 +461,32 @@ export class PackagePlugin extends BasePlugin {
       return;
     }
 
-    await this.npmInstall({
-      production: true,
-    });
+    let skipNpmInstall = false;
+    if (this.core.service?.experimentalFeatures?.fastInstallNodeModules) {
+      this.core.debug('Fast Install Node Modules');
+      const moduleInfoList = Object.keys(pkgJson.dependencies).map(name => {
+        return {
+          name,
+          version: pkgJson.dependencies[name],
+        };
+      });
+      const start = Date.now();
+      const copyResult = await copyFromNodeModules(
+        moduleInfoList,
+        join(this.getCwd(), 'node_modules'),
+        join(this.midwayBuildPath, 'node_modules')
+      );
+      skipNpmInstall = !!copyResult;
+      this.core.debug('skipNpmInstall', skipNpmInstall, Date.now() - start);
+    }
 
-    await this.biggestDep();
+    if (!skipNpmInstall) {
+      await this.npmInstall({
+        production: true,
+      });
+    }
+    // not await
+    this.biggestDep();
     this.core.cli.log(' - Dependencies install complete');
   }
 
@@ -480,9 +501,10 @@ export class PackagePlugin extends BasePlugin {
     }
     let sizeRes;
     try {
-      sizeRes = execSync(
-        `cd ${join(this.midwayBuildPath, 'node_modules')};du -hs * | sort -h`
-      ).toString();
+      sizeRes = await exec({
+        cmd: 'du -hs * | sort -h',
+        baseDir: join(this.midwayBuildPath, 'node_modules'),
+      });
     } catch {
       // ignore catch
     }
@@ -889,28 +911,20 @@ export class PackagePlugin extends BasePlugin {
       if (!existsSync(pkgJson)) {
         writeFileSync(pkgJson, '{}');
       }
-      const registry = this.options.registry
-        ? ` --registry=${this.options.registry}`
-        : '';
-      exec(
-        `${process.env.NPM_CLIENT || this.options.npm || 'npm'} install ${
-          options.npmList
-            ? `${options.npmList.join(' ')}`
-            : options.production
-            ? '--production'
-            : ''
-        }${registry}`,
-        { cwd: installDirectory },
-        err => {
-          if (err) {
-            const errmsg = (err && err.message) || err;
-            this.core.cli.log(` - npm install err ${errmsg}`);
-            reject(errmsg);
-          } else {
-            resolve(true);
-          }
-        }
-      );
+      installNpm({
+        baseDir: installDirectory,
+        moduleName: options.npmList ? `${options.npmList.join(' ')}` : '',
+        mode: options.production ? ['production'] : [],
+        register: process.env.NPM_CLIENT || this.options.npm,
+        registerPath: this.options.registry,
+        slience: true,
+      })
+        .then(resolve)
+        .catch(err => {
+          const errmsg = (err && err.message) || err;
+          this.core.cli.log(` - npm install err ${errmsg}`);
+          reject(errmsg);
+        });
     });
   }
 
