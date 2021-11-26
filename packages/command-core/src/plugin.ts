@@ -163,7 +163,7 @@ const autoInstallMod = async (
   spin.start();
   try {
     await installNpm({
-      npmName: modName,
+      moduleName: modName,
       register: options.npm,
       baseDir: options.cwd,
       slience: true,

@@ -1,4 +1,4 @@
-import { CommandCore, findNpm } from '../src';
+import { CommandCore, findNpm, formatInstallNpmCommand } from '../src';
 import { join } from 'path';
 import { existsSync, remove } from 'fs-extra';
 import * as assert from 'assert';
@@ -71,5 +71,20 @@ describe('command-core:npm.test.ts', () => {
       npmRes.npm === 'npm' &&
         npmRes.registry === 'https://registry.npm.taobao.org'
     );
+  });
+  it('pnpm install module', async () => {
+    const cmd = formatInstallNpmCommand({
+      register: 'pnpm',
+      moduleName: '@midwayjs/core',
+      mode: ['no-save'],
+    });
+    assert(cmd === 'pnpm add @midwayjs/core --save-optional');
+  });
+  it('pnpm install project production', async () => {
+    const cmd = formatInstallNpmCommand({
+      register: 'pnpm',
+      mode: ['production'],
+    });
+    assert(cmd === 'pnpm install --prod');
   });
 });

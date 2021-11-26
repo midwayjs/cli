@@ -1,4 +1,4 @@
-import { BasePlugin, forkNode } from '@midwayjs/command-core';
+import { BasePlugin, forkNode, installNpm } from '@midwayjs/command-core';
 import { getSpecFile, writeToSpec } from '@midwayjs/serverless-spec-builder';
 import { isAbsolute, join, relative, resolve } from 'path';
 import {
@@ -39,7 +39,7 @@ import {
   resolveTsConfigFile,
   Analyzer,
 } from '@midwayjs/mwcc';
-import { exec, execSync } from 'child_process';
+import { execSync } from 'child_process';
 import * as JSZip from 'jszip';
 import { AnalyzeResult, Locator } from '@midwayjs/locate';
 import { tmpdir, platform } from 'os';
@@ -911,28 +911,20 @@ export class PackagePlugin extends BasePlugin {
       if (!existsSync(pkgJson)) {
         writeFileSync(pkgJson, '{}');
       }
-      const registry = this.options.registry
-        ? ` --registry=${this.options.registry}`
-        : '';
-      exec(
-        `${process.env.NPM_CLIENT || this.options.npm || 'npm'} install ${
-          options.npmList
-            ? `${options.npmList.join(' ')}`
-            : options.production
-            ? '--production'
-            : ''
-        }${registry}`,
-        { cwd: installDirectory },
-        err => {
-          if (err) {
-            const errmsg = (err && err.message) || err;
-            this.core.cli.log(` - npm install err ${errmsg}`);
-            reject(errmsg);
-          } else {
-            resolve(true);
-          }
-        }
-      );
+      installNpm({
+        baseDir: installDirectory,
+        moduleName: options.npmList ? `${options.npmList.join(' ')}` : '',
+        mode: options.production ? ['production'] : [],
+        register: process.env.NPM_CLIENT || this.options.npm,
+        registerPath: this.options.registry,
+        slience: true,
+      })
+        .then(resolve)
+        .catch(err => {
+          const errmsg = (err && err.message) || err;
+          this.core.cli.log(` - npm install err ${errmsg}`);
+          reject(errmsg);
+        });
     });
   }
 

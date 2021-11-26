@@ -44,7 +44,7 @@ export const postinstall = async (baseDir: string) => {
     await installNpm({
       baseDir,
       register: npm,
-      npmName: name,
+      moduleName: name,
       slience: true,
       isLerna,
     });
