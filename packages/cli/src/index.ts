@@ -9,6 +9,7 @@ import { PluginList } from './plugins';
 export * from './utils';
 const enquirer = require('enquirer');
 
+export { findNpm } from '@midwayjs/command-core';
 export class CLI extends CoreBaseCLI {
   async loadDefaultPlugin() {
     const command = this.commands && this.commands[0];

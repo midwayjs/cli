@@ -504,6 +504,7 @@ export class PackagePlugin extends BasePlugin {
       sizeRes = await exec({
         cmd: 'du -hs * | sort -h',
         baseDir: join(this.midwayBuildPath, 'node_modules'),
+        slience: true,
       });
     } catch {
       // ignore catch
