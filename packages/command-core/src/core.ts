@@ -1,6 +1,6 @@
 // 内核，用于加载并按照生命周期执行插件逻辑
 import { resolve } from 'path';
-import { exec } from 'child_process';
+import { exec } from './utils/exec';
 import { readFileSync, existsSync } from 'fs';
 import Spin from 'light-spinner';
 
@@ -189,7 +189,11 @@ export class CommandCore implements ICommandCore {
         const spin = new Spin({ text: `Executing: ${userCmd}` });
         spin.start();
         try {
-          await this.execCommand(userCmd);
+          await exec({
+            cmd: userCmd,
+            baseDir: this.cwd,
+            log: this.getLog().log,
+          });
         } catch (e) {
           spin.stop();
           this.debug('User Lifecycle Hook Error', userCmd, e);
@@ -603,26 +607,5 @@ export class CommandCore implements ICommandCore {
       path: matchResult[2],
       line: matchResult[3],
     };
-  }
-
-  async execCommand(command: string) {
-    return new Promise<void>((resolve, reject) => {
-      const execProcess = exec(
-        command,
-        {
-          cwd: this.cwd,
-        },
-        error => {
-          if (error) {
-            reject(error);
-            return;
-          }
-          resolve();
-        }
-      );
-      execProcess.stdout.on('data', data => {
-        this.getLog().log(data);
-      });
-    });
   }
 }

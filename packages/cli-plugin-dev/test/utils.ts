@@ -1,13 +1,15 @@
-import { CommandCore } from '@midwayjs/command-core';
+import { CommandCore, exec } from '@midwayjs/command-core';
 import { DevPlugin } from '../src';
-import { execSync } from 'child_process';
 export const wait = (time?) => {
   return new Promise(resolve => {
     setTimeout(resolve, time || 20000);
   });
 };
 export const run = async (cwd: string, options = {}) => {
-  execSync(`cd ${cwd};npm install @midwayjs/mock`);
+  await exec({
+    baseDir: cwd,
+    cmd: 'npm install @midwayjs/mock',
+  });
   const core = new CommandCore({
     commands: ['dev'],
     options,

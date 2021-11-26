@@ -1,6 +1,7 @@
 import { join } from 'path';
 import { existsSync, writeFileSync } from 'fs';
-import { exec, execSync } from 'child_process';
+import { exec } from './utils/exec';
+import { execSync } from 'child_process';
 import * as assert from 'assert';
 import { platform } from 'os';
 export const getCoreBaseDir = () => {
@@ -57,25 +58,12 @@ interface INpmInstallOptions {
 export async function installNpm(options: INpmInstallOptions) {
   const { baseDir, slience } = options;
   const cmd = formatInstallNpmCommand(options);
-
-  return new Promise((resolved, rejected) => {
-    const execProcess = exec(
-      cmd,
-      {
-        cwd: baseDir,
-      },
-      (err, result) => {
-        if (err) {
-          return rejected(err);
-        }
-        resolved(result.replace(/\n$/, '').replace(/^\s*|\s*$/, ''));
-      }
-    );
-    execProcess.stdout.on('data', data => {
-      if (!slience) {
-        console.log(data);
-      }
-    });
+  return exec({
+    cmd,
+    baseDir,
+    slience,
+  }).then((result: string) => {
+    return result.replace(/\n$/, '').replace(/^\s*|\s*$/, '');
   });
 }
 

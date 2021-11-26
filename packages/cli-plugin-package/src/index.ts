@@ -27,7 +27,7 @@ import {
   analysisDecorator,
   copyFromNodeModules,
 } from './utils';
-import { findNpmModule } from '@midwayjs/command-core';
+import { findNpmModule, exec } from '@midwayjs/command-core';
 import {
   analysisResultToSpec,
   copyFiles,
@@ -39,7 +39,6 @@ import {
   resolveTsConfigFile,
   Analyzer,
 } from '@midwayjs/mwcc';
-import { execSync } from 'child_process';
 import * as JSZip from 'jszip';
 import { AnalyzeResult, Locator } from '@midwayjs/locate';
 import { tmpdir, platform } from 'os';
@@ -502,9 +501,10 @@ export class PackagePlugin extends BasePlugin {
     }
     let sizeRes;
     try {
-      sizeRes = execSync(
-        `cd ${join(this.midwayBuildPath, 'node_modules')};du -hs * | sort -h`
-      ).toString();
+      sizeRes = await exec({
+        cmd: 'du -hs * | sort -h',
+        baseDir: join(this.midwayBuildPath, 'node_modules'),
+      });
     } catch {
       // ignore catch
     }
