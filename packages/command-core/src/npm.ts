@@ -157,7 +157,7 @@ export const findNpm = (argv?) => {
   } else {
     // language is zh_CN
     if (process.env.LANG === 'zh_CN.UTF-8') {
-      registry = 'https://registry.npm.taobao.org';
+      registry = 'https://registry.npmmirror.com';
     }
   }
 
