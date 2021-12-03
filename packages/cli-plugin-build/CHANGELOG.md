@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.92](https://github.com/midwayjs/cli/compare/v1.2.91...v1.2.92) (2021-12-03)
+
+
+### Bug Fixes
+
+* using https://registry.npmmirror.com instead https://registry.np… ([#237](https://github.com/midwayjs/cli/issues/237)) ([56ce275](https://github.com/midwayjs/cli/commit/56ce275d98db601944892229e0645fcbf2bdb602))
+
+
+
+
+
 ## [1.2.91](https://github.com/midwayjs/cli/compare/v1.2.90...v1.2.91) (2021-11-26)
 
 **Note:** Version bump only for package @midwayjs/cli-plugin-build
