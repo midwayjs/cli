@@ -37,6 +37,7 @@ async function getNpmPath(
     register: npmRegistry,
     moduleName: npmName,
     mode: ['production', 'no-save'],
+    debugLog: scope.coreInstance.debug,
   });
   return join(baseDir, `node_modules/${npmName}`);
 }
@@ -50,14 +51,18 @@ interface INpmInstallOptions {
   mode?: string[];
   slience?: boolean;
   isLerna?: boolean;
+  debugLog?: (...args: any[]) => void;
 }
 // yarn: yarn add mod --dev
 // npm: npm i mod --no-save
 // yarn + lerna: yarn add mod --ignore-workspace-root-check
 // npm + lerna: npm i mod --no-save
 export async function installNpm(options: INpmInstallOptions) {
-  const { baseDir, slience } = options;
+  const { baseDir, slience, debugLog } = options;
   const cmd = formatInstallNpmCommand(options);
+  if (debugLog) {
+    debugLog('Install npm cmd', cmd);
+  }
   return exec({
     cmd,
     baseDir,
@@ -157,7 +162,7 @@ export const findNpm = (argv?) => {
   } else {
     // language is zh_CN
     if (process.env.LANG === 'zh_CN.UTF-8') {
-      registry = 'https://registry.npm.taobao.org';
+      registry = 'https://registry.npmmirror.com';
     }
   }
 

@@ -69,7 +69,7 @@ describe('command-core:npm.test.ts', () => {
     const npmRes = findNpm({ npm: 'npm' });
     assert(
       npmRes.npm === 'npm' &&
-        npmRes.registry === 'https://registry.npm.taobao.org'
+        npmRes.registry === 'https://registry.npmmirror.com'
     );
   });
   it('pnpm install module', async () => {

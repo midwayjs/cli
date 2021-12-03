@@ -1,0 +1,8 @@
+{
+  "name": "test-bundle",
+  "version": "1.0.3",
+  "description": "icejs & midway hooks",
+  "dependencies": {
+    "@midwayjs/decorator": "^2.0.0"
+  }
+}

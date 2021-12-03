@@ -167,6 +167,7 @@ export class AddPlugin extends BasePlugin {
         baseDir: installDirectory,
         register: this.options.npm,
         slience: true,
+        debugLog: this.core.debug,
       })
         .then(() => {
           clearTimeout(this.checkDepInstallTimeout);
