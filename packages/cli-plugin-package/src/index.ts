@@ -919,6 +919,7 @@ export class PackagePlugin extends BasePlugin {
         register: process.env.NPM_CLIENT || this.options.npm,
         registerPath: this.options.registry,
         slience: true,
+        debugLog: this.core.debug,
       })
         .then(resolve)
         .catch(err => {
