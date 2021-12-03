@@ -139,4 +139,14 @@ describe('test/build.test.ts', () => {
     execSync(`cd ${hooks};npm i`);
     await run(hooks, 'build');
   });
+  it('bundle', async () => {
+    const bundle = join(__dirname, 'fixtures/bundle');
+    const dist = join(bundle, 'dist');
+    if (existsSync(dist)) {
+      await remove(dist);
+    }
+    execSync(`cd ${bundle};npm i`);
+    await run(bundle, 'build', { bundle: true });
+    assert(existsSync(join(bundle, 'dist/bundle.js')));
+  });
 });

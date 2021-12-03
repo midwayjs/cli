@@ -1,9 +1,17 @@
-import { BasePlugin, findNpmModule } from '@midwayjs/command-core';
+import { BasePlugin, findNpmModule, forkNode } from '@midwayjs/command-core';
 import { resolve, join, dirname, relative } from 'path';
-import { existsSync, readFileSync, remove } from 'fs-extra';
+import {
+  existsSync,
+  move,
+  readFileSync,
+  remove,
+  writeFileSync,
+} from 'fs-extra';
 import { CompilerHost, Program, resolveTsConfigFile } from '@midwayjs/mwcc';
 import { copyFiles } from '@midwayjs/faas-code-analysis';
+import * as globby from 'globby';
 import * as ts from 'typescript';
+import { tmpdir } from 'os';
 export class BuildPlugin extends BasePlugin {
   isMidwayHooks = false;
   private midwayBinBuild: { include?: string[] } = {};
@@ -16,6 +24,7 @@ export class BuildPlugin extends BasePlugin {
         'copyFile',
         'compile',
         'emit',
+        'bundle',
         'complete',
       ],
       options: {
@@ -45,6 +54,9 @@ export class BuildPlugin extends BasePlugin {
         include: {
           usage: 'copy file include',
         },
+        bundle: {
+          usage: 'bundle to one file',
+        },
       },
     },
   };
@@ -55,6 +67,7 @@ export class BuildPlugin extends BasePlugin {
     'build:copyFile': this.copyFile.bind(this),
     'build:compile': this.compile.bind(this),
     'build:emit': this.emit.bind(this),
+    'build:bundle': this.bundle.bind(this),
     'build:complete': this.complete.bind(this),
   };
 
@@ -276,6 +289,67 @@ export class BuildPlugin extends BasePlugin {
       }
     }
     return tsConfigResult;
+  }
+
+  async bundle() {
+    if (!this.options.bundle) {
+      return;
+    }
+    const nccPkgJsonFile = require.resolve('@vercel/ncc/package');
+    const nccPkgJson = JSON.parse(readFileSync(nccPkgJsonFile).toString());
+    const nccCli = join(nccPkgJsonFile, '../', nccPkgJson.bin.ncc);
+    const outDir = join(this.core.cwd, this.getOutDir());
+
+    let preloadCode = '// midway bundle';
+    const preloadFile = 'midway_bundle_entry.js';
+    const requireList = await globby(['**/*.js'], {
+      cwd: outDir,
+    });
+
+    preloadCode += requireList
+      .map((file, index) => {
+        return `require('./${file}');`;
+      })
+      .join('\n');
+
+    const configurationFilePath = join(outDir, 'configuration.js');
+    if (existsSync(configurationFilePath)) {
+      preloadCode += `
+      const configuration = require('./configuration.js');
+      if (typeof configuration === 'object') {
+        const configurationKey = Object.keys(configuration).find(key => typeof configuration[key] === 'function');
+        if (configurationKey) {
+          exports.configuration = configuration[configurationKey];
+        }
+      } else {
+        exports.configuration = configuration;
+      }
+      `;
+    }
+    writeFileSync(join(outDir, preloadFile), preloadCode);
+
+    this.core.cli.log('Build bundle...');
+    await forkNode(
+      nccCli,
+      ['build', preloadFile, '-o', 'ncc_build_tmp', '-m'],
+      {
+        cwd: outDir,
+      }
+    );
+    const tmpFile = join(tmpdir(), `midway_bundle_${Date.now()}.js`);
+    await move(join(outDir, 'ncc_build_tmp/index.js'), tmpFile);
+    await remove(outDir);
+    await move(tmpFile, join(outDir, 'bundle.js'));
+    await remove(tmpFile);
+    this.core.cli.log(
+      `Success compile to ${relative(
+        process.cwd(),
+        join(outDir, 'bundle.js')
+      )}.`
+    );
+    this.core.cli.log(
+      'You can use it through the configurationModule parameter in the bootstrap file.'
+    );
   }
 
   async complete() {

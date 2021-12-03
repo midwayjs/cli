@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig2.json",
+  "compilerOptions": {
+    "allowJs": false
+  }
+}
