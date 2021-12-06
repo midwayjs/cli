@@ -48,6 +48,8 @@ export class CheckPlugin extends BasePlugin {
     locateResult: AnalyzeResult;
   };
 
+  isHooks = false;
+
   async start() {
     // check project type
     const fyml = this.getYamlFilePosition();
@@ -69,6 +71,7 @@ export class CheckPlugin extends BasePlugin {
         join(cwd, 'midway.config.js'),
       ].find(file => existsSync(file));
       if (midwayConfig) {
+        this.isHooks = true;
         const modInfo = findNpmModule(cwd, '@midwayjs/hooks-core');
         if (modInfo) {
           const { getConfig } = require(modInfo);
@@ -345,6 +348,23 @@ export class CheckPlugin extends BasePlugin {
                 ' and '
               )} environment config`,
             ];
+          }
+          return [true];
+        })
+        .check('hooks import', () => {
+          if (!this.isHooks) {
+            return [true];
+          }
+          const configurationFile = join(
+            this.globalData.tsCodeRoot,
+            'configuration.ts'
+          );
+          if (!existsSync(configurationFile)) {
+            return [false, 'midway hooks need configutation.ts'];
+          }
+          const configurationData = readFileSync(configurationFile).toString();
+          if (!configurationData.includes('hooks(')) {
+            return [false, 'Need add hooks() to configutation.ts imports list'];
           }
           return [true];
         });
