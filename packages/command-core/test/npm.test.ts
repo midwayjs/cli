@@ -87,4 +87,19 @@ describe('command-core:npm.test.ts', () => {
     });
     assert(cmd === 'pnpm install --prod');
   });
+  it('yarn install module', async () => {
+    const cmd = formatInstallNpmCommand({
+      register: 'yarn',
+      moduleName: '@midwayjs/core',
+      mode: ['no-save'],
+    });
+    assert(cmd === 'yarn add @midwayjs/core --optional');
+  });
+  it('yarn install project production', async () => {
+    const cmd = formatInstallNpmCommand({
+      register: 'yarn',
+      mode: ['production'],
+    });
+    assert(cmd === 'yarn install --production --no-lockfile');
+  });
 });

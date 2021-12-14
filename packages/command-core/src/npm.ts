@@ -181,13 +181,22 @@ export const formatInstallNpmCommand = (options: INpmInstallOptions) => {
     mode = ['no-save'];
   }
   if (/yarn/.test(register)) {
-    if (!options.installCmd) {
-      // yarn add
+    // yarn add
+    if (!moduleName) {
+      installCmd = 'install';
+      mode.push('no-lockfile');
+    } else {
       installCmd = 'add';
     }
     if (!mode?.length) {
       mode = [isLerna ? 'ignore-workspace-root-check' : 'dev'];
     }
+    mode = mode.map(modeItem => {
+      if (modeItem === 'no-save') {
+        return 'optional';
+      }
+      return modeItem;
+    });
   } else if (/^pnpm/.test(register)) {
     if (!moduleName) {
       installCmd = 'install';
