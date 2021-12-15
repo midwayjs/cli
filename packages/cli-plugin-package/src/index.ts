@@ -317,7 +317,9 @@ export class PackagePlugin extends BasePlugin {
     }
     const exclude = [].concat(packageObj.exclude || []);
     if (!packageObj.lockFile) {
+      exclude.push('yarn.lock');
       exclude.push('package-lock.json');
+      exclude.push('pnpm-lock.yaml');
     }
     await copyFiles({
       sourceDir: this.servicePath,
