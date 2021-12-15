@@ -75,6 +75,17 @@ export async function invokeByDev(getDevCore) {
         })
         .join('&');
       delete params.query;
+      params.headers = Object.entries(params.headers).reduce(
+        (headers, [key, value]) => {
+          // Filter out HTTP/2 pseudo-headers
+          if (key.charAt(0) === ':') {
+            return headers;
+          }
+
+          return { ...headers, [key]: value };
+        },
+        {}
+      );
       params.redirect = 'manual';
       const result = await fetch(
         `http://127.0.0.1:${port}${params.path || '/'}${
