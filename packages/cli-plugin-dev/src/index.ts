@@ -71,7 +71,7 @@ export class DevPlugin extends BasePlugin {
   async checkEnv() {
     this.setStore('dev:getData', this.getData.bind(this), true);
     // 仅当不指定entry file的时候才处理端口
-    this.port = this.options.port || 7001;
+    this.port = process.env.MIDWAY_HTTP_PORT || this.options.port || 7001;
     if (!this.options.entryFile || this.options.detectPort) {
       const port = await detect(this.port);
       if (port !== this.port) {
@@ -83,7 +83,9 @@ export class DevPlugin extends BasePlugin {
         this.port = port;
       }
     }
-    process.env.MIDWAY_LOCAL_DEV_PORT = String(this.port);
+    process.env.MIDWAY_HTTP_PORT = process.env.MIDWAY_LOCAL_DEV_PORT = String(
+      this.port
+    );
     this.setStore('dev:port', this.port, true);
     const cwd = this.core.cwd;
     if (this.options.ts === undefined) {
