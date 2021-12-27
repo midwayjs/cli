@@ -19,7 +19,7 @@ export class DevPlugin extends BasePlugin {
   private tsconfigJson;
   commands = {
     dev: {
-      lifecycleEvents: ['checkEnv', 'run'],
+      lifecycleEvents: ['init', 'checkEnv', 'run'],
       options: {
         baseDir: {
           usage: 'directory of application, default to `process.cwd()`',
