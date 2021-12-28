@@ -24,6 +24,7 @@ export function writeWrapper(options: {
   preloadFile?: string; // pre require in entry file
   entryAppDir?: string;
   entryBaseDir?: string;
+  moreTemplateVariables?: { [name: string]: any };
 }) {
   const {
     service,
@@ -46,6 +47,7 @@ export function writeWrapper(options: {
     preloadFile,
     entryAppDir,
     entryBaseDir,
+    moreTemplateVariables = {},
   } = options;
 
   const files = {};
@@ -175,6 +177,7 @@ export function writeWrapper(options: {
       defaultFunctionHandlerName: files[file].defaultFunctionHandlerName,
       preloadFile,
       ...layers,
+      ...moreTemplateVariables,
     });
     if (existsSync(fileName)) {
       const oldContent = readFileSync(fileName).toString();
