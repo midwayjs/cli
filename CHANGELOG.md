@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.93](https://github.com/midwayjs/bin/compare/v1.2.92...v1.2.93) (2021-12-29)
+
+
+### Bug Fixes
+
+* **dev-pack:** fix illegal header error ([#242](https://github.com/midwayjs/bin/issues/242)) ([58a0a2a](https://github.com/midwayjs/bin/commit/58a0a2af58a7dbedbca9bd9ed8a887256812dbd7))
+
+
+### Features
+
+* auto hooks import ([#239](https://github.com/midwayjs/bin/issues/239)) ([a4557f9](https://github.com/midwayjs/bin/commit/a4557f9e1b9f54e42af08ba503a47f7d11a3d59d))
+* check ios class ([#251](https://github.com/midwayjs/bin/issues/251)) ([5970eab](https://github.com/midwayjs/bin/commit/5970eab2c8251206291bb333e025e1712ef63580))
+
+
+
+
+
 ## [1.2.92](https://github.com/midwayjs/bin/compare/v1.2.91...v1.2.92) (2021-12-03)
 
 

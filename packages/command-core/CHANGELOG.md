@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.93](https://github.com/midwayjs/cli/compare/v1.2.92...v1.2.93) (2021-12-29)
+
+
+### Features
+
+* auto hooks import ([#239](https://github.com/midwayjs/cli/issues/239)) ([a4557f9](https://github.com/midwayjs/cli/commit/a4557f9e1b9f54e42af08ba503a47f7d11a3d59d))
+
+
+
+
+
 ## [1.2.92](https://github.com/midwayjs/cli/compare/v1.2.91...v1.2.92) (2021-12-03)
 
 
