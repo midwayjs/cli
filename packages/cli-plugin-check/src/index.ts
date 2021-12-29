@@ -6,6 +6,7 @@ import * as chalk from 'chalk';
 import * as YAML from 'js-yaml';
 import { Locator, AnalyzeResult } from '@midwayjs/locate';
 import { transformToRelative } from './utils';
+import * as globby from 'globby';
 
 enum ProjectType {
   FaaS = 'faas',
@@ -120,6 +121,7 @@ export class CheckPlugin extends BasePlugin {
     const ruleList: RunnerItem[] = [
       await this.projectStruct(),
       await this.packageJson(),
+      await this.ruleIoc(),
     ];
 
     if (this.projectType === ProjectType.FaaS) {
@@ -374,7 +376,7 @@ export class CheckPlugin extends BasePlugin {
   async ruleFaaSDecorator(): Promise<RunnerItem> {
     // 校验是否存在 decorator 重名
     // 校验 @Logger 装饰器所在class是否被继承
-    return runner => {};
+    return () => {};
   }
 
   // 校验yaml格式
@@ -552,6 +554,57 @@ export class CheckPlugin extends BasePlugin {
           }
           return [true];
         });
+    };
+  }
+
+  async ruleIoc() {
+    return runner => {
+      runner.group('ioc check').check('class define', async () => {
+        const { tsCodeRoot } = this.globalData;
+        if (!existsSync(tsCodeRoot)) {
+          return [CHECK_SKIP];
+        }
+
+        const tsSourceFileList = await globby(['**/*.ts'], {
+          cwd: tsCodeRoot,
+        });
+        const classNameMap = {};
+        for (const tsSourceFile of tsSourceFileList) {
+          const file = join(tsCodeRoot, tsSourceFile);
+          const code = readFileSync(file).toString();
+          // @Provider() export default class xxx extends xxx {}
+          const reg =
+            /@(?:provider|controller)\([^)]*\)(?:\n|\s)*(export)?(\s+default\s+)?\s*class\s+(.*?)\s+/gi;
+          let execRes;
+          while ((execRes = reg.exec(code))) {
+            const className = execRes[3];
+            // export
+            if (!execRes[1]) {
+              return [
+                false,
+                `class ${className} need export in ${tsSourceFile}`,
+              ];
+            }
+
+            // export default
+            if (execRes[2]) {
+              return [
+                false,
+                `class ${className} can not export "default" in ${tsSourceFile}`,
+              ];
+            }
+
+            if (classNameMap[className]) {
+              return [
+                false,
+                `there is a duplicate class name(${className}) in ${classNameMap[className]} and ${tsSourceFile}`,
+              ];
+            }
+            classNameMap[className] = tsSourceFile;
+          }
+        }
+        return [true];
+      });
     };
   }
 

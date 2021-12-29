@@ -13,4 +13,10 @@ describe('test/config-export.test.ts', () => {
       )
     );
   });
+  it('export class', async () => {
+    const cwd = join(__dirname, 'fixtures/config-export');
+    const logs = await runCheck(cwd);
+    const logStr = logs.join('\n');
+    assert(logStr.includes('class A need export in index.ts'));
+  });
 });
