@@ -185,6 +185,9 @@ export const formatInstallNpmCommand = (options: INpmInstallOptions) => {
     if (!moduleName) {
       installCmd = 'install';
       mode.push('no-lockfile');
+      if (mode.includes('production')) {
+        mode.push('ignore-optional');
+      }
     } else {
       installCmd = 'add';
     }
@@ -200,12 +203,9 @@ export const formatInstallNpmCommand = (options: INpmInstallOptions) => {
   } else if (/^pnpm/.test(register)) {
     if (!moduleName) {
       installCmd = 'install';
-      mode = mode.map(modeItem => {
-        if (modeItem === 'production') {
-          return 'prod';
-        }
-        return '';
-      });
+      if (mode.includes('production')) {
+        mode = ['prod', 'no-optional'];
+      }
     } else {
       installCmd = 'add';
       mode = mode.map(modeItem => {
