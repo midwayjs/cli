@@ -30,12 +30,19 @@ const closeApp = async () => {
   if (!modPath) {
     throw new Error('Please add @midwayjs/mock to your devDependencies');
   }
-  const { createApp, close, createBootstrap } = require(modPath);
+  const {
+    createApp,
+    close,
+    createFunctionApp,
+    createBootstrap,
+  } = require(modPath);
   closeFun = close;
   let startSuccess = false;
   try {
     if (options.entryFile) {
       bootstrapStarter = await createBootstrap(options.entryFile);
+    } else if (process.env.MIDWAY_DEV_IS_SERVERLESS === 'true') {
+      app = await createFunctionApp(process.cwd(), options);
     } else {
       app = await createApp(process.cwd(), options, options.framework);
     }
