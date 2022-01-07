@@ -7,6 +7,7 @@
     "@midwayjs/command-core": "^1.2.94-beta.1",
     "globby": "^10.0.1",
     "jest": "^26.4.2",
+    "typescript": "^4.1.0",
     "ts-jest": "^26.0.0",
     "ts-node": "^9.0.0"
   },
