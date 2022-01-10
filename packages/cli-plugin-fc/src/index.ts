@@ -98,7 +98,6 @@ export class AliyunFCPlugin extends BasePlugin {
       this.core.cli.log('Start deploy by @alicloud/fun');
       try {
         if (!this.options.skipDeploy) {
-          const AliyunDeploy = require('@alicloud/fun/lib/commands/deploy');
           await AliyunDeploy({
             template: join(this.midwayBuildPath, 'template.yml'),
             assumeYes: this.options.yes,
