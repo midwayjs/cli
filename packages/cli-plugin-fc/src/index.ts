@@ -49,8 +49,10 @@ export class AliyunFCPlugin extends BasePlugin {
       try {
         AliyunDeploy = require('@alicloud/fun/lib/commands/deploy');
       } catch {
-        console.error(`阿里云 FC 发布默认使用 @serverless/devs，若要继续使用 funcraft 发布，请手动安装 @alicloud/fun 依赖`);
-        throw new Error(`-- 请手动安装 @alicloud/fun 依赖 --`);
+        console.error(
+          '阿里云 FC 发布默认使用 @serverless/devs，若要继续使用 funcraft 发布，请手动安装 @alicloud/fun 依赖'
+        );
+        throw new Error('-- 请手动安装 @alicloud/fun 依赖 --');
       }
 
       const profPath = join(homedir(), '.fcli/config.yaml');
