@@ -246,7 +246,7 @@ export class AliyunFCPlugin extends BasePlugin {
                     router.serviceName
                   }.${akId}.${region}.fc.devsapp.net/${(
                     router.path || ''
-                  ).replace(/^\/|\*+$/, '')}`
+                  ).replace(/^\/|\*+$/g, '')}`
                 );
               }
             }
