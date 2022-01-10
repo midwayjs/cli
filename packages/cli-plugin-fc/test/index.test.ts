@@ -127,9 +127,6 @@ describe('/test/index.test.ts', () => {
   });
 
   it('build eaas function', async () => {
-    if (process.version.includes('v10')) {
-      return;
-    }
     const baseDir = join(__dirname, './fixtures/eaas');
     const core = new CommandCore({
       config: {

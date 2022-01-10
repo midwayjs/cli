@@ -134,12 +134,24 @@ export class AliyunFCPlugin extends BasePlugin {
     await ensureDir(profDirPath);
     const profPath = join(profDirPath, 'access.yaml');
     let isExists = existsSync(profPath);
-    let defaultRegion = 'cn-hangzhou';
+    let defaultRegion = process.env.SERVERLESS_DEPLOY_ENDPOINT || 'cn-hangzhou';
     let sDefaultYaml;
     let access = this.options.access || 'default';
 
     const funcraftConfigPath = join(homedir(), '.fcli/config.yaml');
-    if (existsSync(funcraftConfigPath)) {
+
+    if (
+      process.env.SERVERLESS_DEPLOY_ID &&
+      process.env.SERVERLESS_DEPLOY_AK &&
+      process.env.SERVERLESS_DEPLOY_SECRET
+    ) {
+      sDefaultYaml = {
+        AccountID: this.encode(process.env.SERVERLESS_DEPLOY_ID),
+        AccessKeyID: this.encode(process.env.SERVERLESS_DEPLOY_AK),
+        AccessKeySecret: this.encode(process.env.SERVERLESS_DEPLOY_SECRET),
+      };
+      isExists = false;
+    } else if (existsSync(funcraftConfigPath)) {
       const yamlContent = readFileSync(funcraftConfigPath).toString();
       const yaml: any = YAML.load(yamlContent);
       const endpointInfo = yaml.endpoint
