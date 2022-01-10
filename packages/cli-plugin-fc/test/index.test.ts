@@ -80,7 +80,7 @@ describe('/test/index.test.ts', () => {
     await core.ready();
     await core.invoke(['deploy']);
     const logStr = logs.join('\n');
-    assert(logStr.includes('Deploy success'));
+    assert(logStr.includes('success'));
     // clean
     await remove(join(baseDir, '.serverless'));
   });
@@ -191,7 +191,7 @@ describe('/test/index.test.ts', () => {
     // clean
     await remove(join(baseDir, '.serverless'));
     const logsStr = logs.join(';');
-    assert(logsStr.includes('Start deploy by serverless-dev'));
+    assert(logsStr.includes('@serverless-devs'));
     assert(logsStr.includes('deploy success'));
     if (!exists) {
       await remove(accessYaml);
