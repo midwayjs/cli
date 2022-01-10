@@ -17,9 +17,6 @@ import * as assert from 'assert';
 import * as JSZip from 'jszip';
 
 describe('/test/index.test.ts', () => {
-  if (process.version.includes('v10')) {
-    return;
-  }
   it('use custom artifact directory', async () => {
     const baseDir = join(__dirname, './fixtures/base-fc');
     const core = new CommandCore({
@@ -55,6 +52,9 @@ describe('/test/index.test.ts', () => {
   });
 
   it('use custom artifact directory', async () => {
+    if (process.version.includes('v10')) {
+      return;
+    }
     const baseDir = join(__dirname, './fixtures/base-fc');
     process.env.SERVERLESS_DEPLOY_ID = 'test';
     process.env.SERVERLESS_DEPLOY_AK = 'test';
@@ -127,6 +127,9 @@ describe('/test/index.test.ts', () => {
   });
 
   it('build eaas function', async () => {
+    if (process.version.includes('v10')) {
+      return;
+    }
     const baseDir = join(__dirname, './fixtures/eaas');
     const core = new CommandCore({
       config: {
@@ -156,6 +159,9 @@ describe('/test/index.test.ts', () => {
     await remove(join(baseDir, '.serverless'));
   });
   it('build by serverless-dev', async () => {
+    if (process.version.includes('v10')) {
+      return;
+    }
     const accessYaml = join(homedir(), '.s/access.yaml');
     const exists = existsSync(accessYaml);
     if (!exists) {
