@@ -39,7 +39,6 @@ describe('/test/index.test.ts', () => {
     assert(existsSync(join(buildPath, 'index.js')));
     assert(existsSync(join(buildPath, 'package.json')));
     assert(existsSync(join(buildPath, 'tsconfig.json')));
-    assert(existsSync(join(buildPath, 'template.yml')));
     assert(existsSync(join(baseDir, 'serverless.zip')));
 
     const zip = new JSZip();
@@ -65,7 +64,6 @@ describe('/test/index.test.ts', () => {
       options: {
         skipDeploy: true,
         skipInstallDep: true,
-        resetConfig: true,
       },
       commands: ['deploy'],
       service: loadSpec(baseDir),
@@ -82,9 +80,7 @@ describe('/test/index.test.ts', () => {
     await core.ready();
     await core.invoke(['deploy']);
     const logStr = logs.join('\n');
-    assert(logStr.includes('Start deploy by @alicloud/fun'));
     assert(logStr.includes('Deploy success'));
-    assert(existsSync(join(baseDir, '.serverless/template.yml')));
     // clean
     await remove(join(baseDir, '.serverless'));
   });
@@ -111,7 +107,6 @@ describe('/test/index.test.ts', () => {
     assert(existsSync(join(buildPath, 'index.js')));
     assert(existsSync(join(buildPath, 'package.json')));
     assert(existsSync(join(buildPath, 'tsconfig.json')));
-    assert(existsSync(join(buildPath, 'template.yml')));
     assert(existsSync(join(baseDir, 'serverless.zip')));
 
     const entryData = readFileSync(join(buildPath, 'index.js')).toString();
@@ -152,7 +147,6 @@ describe('/test/index.test.ts', () => {
     assert(existsSync(join(buildPath, 'app.js')));
     assert(existsSync(join(buildPath, 'agent.js')));
     assert(existsSync(join(buildPath, 'index.js')));
-    assert(existsSync(join(buildPath, 'template.yml')));
     assert(existsSync(join(baseDir, 'serverless.zip')));
 
     // clean
@@ -187,9 +181,6 @@ describe('/test/index.test.ts', () => {
       options: {
         skipDeploy: true,
         skipInstallDep: true,
-        serverlessDev: {
-          access: 'default',
-        },
       },
     });
     core.addPlugin(PackagePlugin);
