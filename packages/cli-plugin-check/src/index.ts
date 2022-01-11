@@ -10,6 +10,7 @@ import * as globby from 'globby';
 
 enum ProjectType {
   FaaS = 'faas',
+  MigrateToFaaS = 'migrateToFaaS',
 }
 
 const CHECK_SKIP = 'check_skip';
@@ -49,6 +50,8 @@ export class CheckPlugin extends BasePlugin {
     locateResult: AnalyzeResult;
   };
 
+  pkg: any = {};
+
   isHooks = false;
 
   async start() {
@@ -58,6 +61,9 @@ export class CheckPlugin extends BasePlugin {
       const yamlData = readFileSync(fyml).toString();
       if (!/deployType/.test(yamlData)) {
         this.projectType = ProjectType.FaaS;
+      } else {
+        // koa/express/egg 迁移
+        this.projectType = ProjectType.MigrateToFaaS;
       }
     }
     const cwd = this.getCwd();
@@ -94,7 +100,12 @@ export class CheckPlugin extends BasePlugin {
           this.options.sourceDir &&
           join(this.servicePath, this.options.sourceDir),
       });
-      tsCodeRoot = locateResult.tsCodeRoot;
+      tsCodeRoot = locateResult?.tsCodeRoot;
+    }
+
+    const pkgJsonFile = join(cwd, 'package.json');
+    if (existsSync(pkgJsonFile)) {
+      this.pkg = JSON.parse(readFileSync(pkgJsonFile).toString());
     }
 
     this.globalData = {
@@ -125,11 +136,14 @@ export class CheckPlugin extends BasePlugin {
     ];
 
     if (this.projectType === ProjectType.FaaS) {
-      ruleList.push(
-        this.ruleTSConfig(),
-        await this.ruleFaaSDecorator(),
-        this.ruleFYaml()
-      );
+      ruleList.push(this.ruleTSConfig(), await this.ruleFaaSDecorator());
+    }
+
+    if (
+      this.projectType === ProjectType.FaaS ||
+      this.projectType === ProjectType.MigrateToFaaS
+    ) {
+      ruleList.push(this.ruleFYaml());
     }
 
     const moreCheckRules = this.getStore('checkRules', 'global');
@@ -144,13 +158,8 @@ export class CheckPlugin extends BasePlugin {
 
   // package json 校验
   async packageJson(): Promise<RunnerItem> {
-    const cwd = this.getCwd();
-    const pkgJsonFile = join(cwd, 'package.json');
-    const pkgExists = existsSync(pkgJsonFile);
-    let pkjJson;
-    if (pkgExists) {
-      pkjJson = JSON.parse(readFileSync(pkgJsonFile).toString());
-    }
+    const pkjJson = this.pkg;
+    const pkgExists = !!Object.keys(this.pkg).length;
     return runner => {
       runner
         .group('package.json check')
@@ -185,6 +194,22 @@ export class CheckPlugin extends BasePlugin {
             if (name.includes('@midwayjs/cli-plugin-')) {
               return true;
             }
+            if (name === '@midwayjs/serverless-app') {
+              return true;
+            }
+
+            if (name === '@midwayjs/serverless-app') {
+              return true;
+            }
+
+            if (name.startsWith('@serverless-devs/')) {
+              return true;
+            }
+
+            if (name === '@alicloud/fun') {
+              return true;
+            }
+
             return false;
           });
 
@@ -232,7 +257,10 @@ export class CheckPlugin extends BasePlugin {
           return [true];
         })
         .check('project type', () => {
-          if (this.globalData.locateResult.projectType === 'unknown') {
+          if (
+            !this.globalData.locateResult?.projectType ||
+            this.globalData.locateResult.projectType === 'unknown'
+          ) {
             return [false, 'can not check project type'];
           }
           return [true];
@@ -494,6 +522,49 @@ export class CheckPlugin extends BasePlugin {
           ) {
             return [false, 'YAML package.exclude type should be Array'];
           }
+          return [true];
+        })
+        .check('deployType', () => {
+          const deps = this.pkg.dependencies || {};
+
+          const deployType =
+            typeof yamlObj.deployType === 'string'
+              ? yamlObj.deployType
+              : yamlObj.deployType?.type;
+
+          if (deps['@midwayjs/faas'] || deps['@ali/midway-faas']) {
+            if (deployType) {
+              return [
+                false,
+                'faas does not allow the deployType to be configured in the f.yml file',
+              ];
+            }
+          }
+
+          if ((deps['@midwayjs/koa'] || deps['koa']) && deployType !== 'koa') {
+            return [
+              false,
+              'Deploying koa as FAAS requires configuring the deployType as koa in the f.yml file',
+            ];
+          }
+
+          if (
+            (deps['@midwayjs/express'] || deps['express']) &&
+            deployType !== 'express'
+          ) {
+            return [
+              false,
+              'Deploying express as FAAS requires configuring the deployType as express in the f.yml file',
+            ];
+          }
+
+          if ((deps['@midwayjs/web'] || deps['egg']) && deployType !== 'egg') {
+            return [
+              false,
+              'Deploying egg as FAAS requires configuring the deployType as egg in the f.yml file',
+            ];
+          }
+
           return [true];
         });
     };

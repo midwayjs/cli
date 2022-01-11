@@ -85,7 +85,7 @@ describe('command-core:npm.test.ts', () => {
       register: 'pnpm',
       mode: ['production'],
     });
-    assert(cmd === 'pnpm install --prod');
+    assert(cmd === 'pnpm install --prod --no-optional');
   });
   it('yarn install module', async () => {
     const cmd = formatInstallNpmCommand({
@@ -100,6 +100,6 @@ describe('command-core:npm.test.ts', () => {
       register: 'yarn',
       mode: ['production'],
     });
-    assert(cmd === 'yarn install --production --no-lockfile');
+    assert(cmd === 'yarn install --production --no-lockfile --ignore-optional');
   });
 });

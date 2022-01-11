@@ -2,6 +2,7 @@ import { BasePlugin, forkNode } from '@midwayjs/command-core';
 import { existsSync } from 'fs';
 import * as globby from 'globby';
 import { join } from 'path';
+import { typeCheck } from './typeCheck';
 const mochaBin = 'mocha/bin/_mocha';
 export class TestPlugin extends BasePlugin {
   commands = {
@@ -29,6 +30,9 @@ export class TestPlugin extends BasePlugin {
         },
         mocha: {
           usage: 'using mocha test',
+        },
+        ignoreTypeCheck: {
+          usage: 'ignore type check',
         },
       },
     },
@@ -116,6 +120,7 @@ export class TestPlugin extends BasePlugin {
       return;
     }
     this.core.debug('Test Info', binFile, args, opt);
+    this.runTypeCheck();
     return forkNode(binFile, args, opt);
   }
 
@@ -252,5 +257,13 @@ export class TestPlugin extends BasePlugin {
       args.unshift(setupFile);
     }
     return argsPre.concat(args);
+  }
+
+  // ts-jest diagnostics bug
+  runTypeCheck() {
+    if (this.options.ignoreTypeCheck) {
+      return;
+    }
+    typeCheck(this.core.cwd);
   }
 }
