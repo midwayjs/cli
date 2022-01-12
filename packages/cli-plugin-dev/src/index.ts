@@ -13,7 +13,7 @@ export class DevPlugin extends BasePlugin {
   private child;
   private started = false;
   private restarting = false;
-  private port: string | number = 7001;
+  private port: string | number;
   private processMessageMap = {};
   private spin;
   private tsconfigJson;
