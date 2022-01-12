@@ -1,4 +1,9 @@
 import { CommandCore, exec } from '@midwayjs/command-core';
+const sleep = time => {
+  return new Promise(resolve => {
+    setTimeout(resolve, time);
+  });
+};
 import { DevPlugin } from '../src';
 export const wait = (time?) => {
   return new Promise(resolve => {
@@ -24,10 +29,16 @@ export const run = async (cwd: string, options = {}) => {
     ts: true,
     ...options,
   });
-  await wait();
+  let i = 0;
+  let port;
+  while (!port && i < 10) {
+    i++;
+    port = core.store.get('global:dev:port');
+    await sleep(1000);
+  }
   return {
     close: core.store.get('global:dev:closeApp'),
-    port: core.store.get('global:dev:port'),
+    port,
     getData: core.store.get('global:dev:getData'),
   };
 };
