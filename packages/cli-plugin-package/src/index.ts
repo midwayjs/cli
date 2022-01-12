@@ -1,6 +1,6 @@
 import { BasePlugin, forkNode, installNpm } from '@midwayjs/command-core';
 import { getSpecFile, writeToSpec } from '@midwayjs/serverless-spec-builder';
-import { isAbsolute, join, relative, resolve } from 'path';
+import { dirname, isAbsolute, join, relative, resolve } from 'path';
 import {
   copy,
   ensureDir,
@@ -842,6 +842,7 @@ export class PackagePlugin extends BasePlugin {
       }
     }
 
+    this.setStore('artifactFile', file, true);
     this.core.cli.log(` - Artifact file ${relative(this.servicePath, file)}`);
 
     // 保证文件存在，然后删了文件，只留目录
@@ -872,13 +873,18 @@ export class PackagePlugin extends BasePlugin {
       ignore,
     });
     const zip = new JSZip();
+    const isWindows = platform() === 'win32';
     for (const fileName of fileList) {
       const absPath = join(sourceDirection, fileName);
       const stats = await lstat(absPath);
       if (stats.isDirectory()) {
         zip.folder(fileName);
       } else if (stats.isSymbolicLink()) {
-        zip.file(fileName, readlink(absPath), {
+        let link = await readlink(absPath);
+        if (isWindows) {
+          link = relative(dirname(absPath), link).replace(/\\/g, '/');
+        }
+        zip.file(fileName, link, {
           binary: false,
           createFolders: true,
           unixPermissions: stats.mode,

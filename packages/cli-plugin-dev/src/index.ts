@@ -13,7 +13,7 @@ export class DevPlugin extends BasePlugin {
   private child;
   private started = false;
   private restarting = false;
-  private port = 7001;
+  private port: string | number = 7001;
   private processMessageMap = {};
   private spin;
   private tsconfigJson;
@@ -70,23 +70,10 @@ export class DevPlugin extends BasePlugin {
 
   async checkEnv() {
     this.setStore('dev:getData', this.getData.bind(this), true);
-    // 仅当不指定entry file的时候才处理端口
-    this.port = process.env.MIDWAY_HTTP_PORT || this.options.port || 7001;
-    if (!this.options.entryFile || this.options.detectPort) {
-      const port = await detect(this.port);
-      if (port !== this.port) {
-        if (!this.options.silent) {
-          this.log(
-            `Server port ${this.port} is in use, now using port ${port}`
-          );
-        }
-        this.port = port;
-      }
+    process.env.MIDWAY_HTTP_PORT = this.port = this.options.port;
+    if (!this.port && (!this.options.entryFile || this.options.detectPort)) {
+      this.port = await detect(7001);
     }
-    process.env.MIDWAY_HTTP_PORT = process.env.MIDWAY_LOCAL_DEV_PORT = String(
-      this.port
-    );
-    this.setStore('dev:port', this.port, true);
     const cwd = this.core.cwd;
     if (this.options.ts === undefined) {
       if (existsSync(resolve(cwd, 'tsconfig.json'))) {
@@ -362,19 +349,27 @@ export class DevPlugin extends BasePlugin {
   }
 
   private displayStartTips(options) {
+    if (process.env.MIDWAY_HTTP_PORT) {
+      this.port = process.env.MIDWAY_HTTP_PORT;
+    }
+    process.env.MIDWAY_HTTP_PORT = process.env.MIDWAY_LOCAL_DEV_PORT = String(
+      this.port
+    );
+    this.setStore('dev:port', this.port, true);
     if (options.silent || options.entryFile || options.notStartLog) {
       return;
     }
+
     const protocol = options.ssl ? 'https' : 'http';
     this.log(
       'Start Server at ',
-      chalk.hex('#9999ff').underline(`${protocol}://127.0.0.1:${options.port}`)
+      chalk.hex('#9999ff').underline(`${protocol}://127.0.0.1:${this.port}`)
     );
     const lanIp = this.getIp();
     if (lanIp) {
       this.log(
         'Start on LAN',
-        chalk.hex('#9999ff').underline(`${protocol}://${lanIp}:${options.port}`)
+        chalk.hex('#9999ff').underline(`${protocol}://${lanIp}:${this.port}`)
       );
     }
     this.core.cli.log('');
