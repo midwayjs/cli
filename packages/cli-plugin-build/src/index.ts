@@ -81,7 +81,9 @@ export class BuildPlugin extends BasePlugin {
     ].find(file => existsSync(file));
     if (midwayConfig) {
       this.isMidwayHooks = true;
-      const modInfo = findNpmModule(this.core.cwd, '@midwayjs/hooks/internal') || findNpmModule(this.core.cwd, '@midwayjs/hooks-core');
+      const modInfo =
+        findNpmModule(this.core.cwd, '@midwayjs/hooks/internal') ||
+        findNpmModule(this.core.cwd, '@midwayjs/hooks-core');
       if (modInfo) {
         const { getConfig } = require(modInfo);
         const config = getConfig(this.core.cwd);
