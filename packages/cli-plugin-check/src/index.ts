@@ -79,7 +79,7 @@ export class CheckPlugin extends BasePlugin {
       ].find(file => existsSync(file));
       if (midwayConfig) {
         this.isHooks = true;
-        const modInfo = findNpmModule(cwd, '@midwayjs/hooks-core');
+        const modInfo = findNpmModule(cwd, '@midwayjs/hooks/internal') || findNpmModule(cwd, '@midwayjs/hooks-core');
         if (modInfo) {
           const { getConfig } = require(modInfo);
           const config = getConfig(cwd);
