@@ -232,8 +232,8 @@ export class PackagePlugin extends BasePlugin {
     ].find(file => existsSync(file));
     if (midwayConfig) {
       const modInfo =
-        findNpmModule(this.core.cwd, '@midwayjs/hooks/internal') ||
-        findNpmModule(this.core.cwd, '@midwayjs/hooks-core');
+        findNpmModule(cwd, '@midwayjs/hooks/internal') ||
+        findNpmModule(cwd, '@midwayjs/hooks-core');
       if (modInfo) {
         const { getConfig } = require(modInfo);
         const config = getConfig(cwd);
