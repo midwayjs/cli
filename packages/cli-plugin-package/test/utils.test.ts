@@ -61,7 +61,7 @@ describe('/test/utils.test.ts', () => {
     ).dependencies;
     const moduleInfoList = Object.keys(deps).map(name => {
       return {
-        name,
+        name: name + 'x',
         version: '^100',
       };
     });
