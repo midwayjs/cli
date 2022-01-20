@@ -685,7 +685,7 @@ export class PackagePlugin extends BasePlugin {
   }
 
   async preload() {
-    if (this.midwayVersion !== '3') {
+    if (this.midwayVersion !== '3' || !this.options.bundle) {
       return;
     }
 
