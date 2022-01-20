@@ -1,12 +1,10 @@
 {
   "name": "@midwayjs/fcli-plugin-fc",
-  "version": "1.2.95-beta.1",
+  "version": "1.2.95-beta.12",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/command-core": "^1.2.94",
-    "@midwayjs/serverless-fc-starter": "^2.8.7",
-    "@midwayjs/serverless-fc-trigger": "^2.8.7",
+    "@midwayjs/command-core": "^1.2.95-beta.12",
     "@midwayjs/serverless-spec-builder": "^1.2.93",
     "@serverless-devs/core": "^0.1.27",
     "crypto-js": "^4.1.1",
@@ -16,13 +14,14 @@
     "request": "^2.88.2"
   },
   "devDependencies": {
-    "@midwayjs/fcli-plugin-package": "^1.2.95-beta.1",
+    "@midwayjs/fcli-plugin-package": "^1.2.95-beta.12",
     "jszip": "^3.5.0"
   },
   "engines": {
     "node": ">= 10"
   },
   "files": [
+    "postinstall.js",
     "plugin.json",
     "src",
     "dist"
@@ -33,7 +32,8 @@
     "build": "tsc --build",
     "cov": "../../node_modules/.bin/jest --coverage",
     "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
-    "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov"
+    "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov",
+    "postinstall": "node ./postinstall"
   },
   "repository": {
     "type": "git",

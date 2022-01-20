@@ -1,13 +1,12 @@
 {
   "name": "@midwayjs/cli-plugin-faas",
-  "version": "1.2.95-beta.1",
+  "version": "1.2.95-beta.12",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/command-core": "^1.2.94",
-    "@midwayjs/fcli-plugin-deploy": "^1.2.94",
-    "@midwayjs/fcli-plugin-package": "^1.2.95-beta.1",
-    "@midwayjs/serverless-app": "^2.8.9",
+    "@midwayjs/command-core": "^1.2.95-beta.12",
+    "@midwayjs/fcli-plugin-deploy": "^1.2.95-beta.12",
+    "@midwayjs/fcli-plugin-package": "^1.2.95-beta.12",
     "@midwayjs/serverless-spec-builder": "^1.2.93"
   },
   "devDependencies": {
@@ -17,6 +16,7 @@
     "node": ">= 10"
   },
   "files": [
+    "postinstall.js",
     "plugin.json",
     "dist",
     "src"
@@ -25,7 +25,8 @@
     "build": "tsc --build",
     "lint": "../../node_modules/.bin/eslint .",
     "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
-    "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov"
+    "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov",
+    "postinstall": "node ./postinstall"
   },
   "repository": {
     "type": "git",

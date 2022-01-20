@@ -1,4 +1,9 @@
-import { BasePlugin, forkNode, installNpm } from '@midwayjs/command-core';
+import {
+  BasePlugin,
+  findMidwayVersion,
+  forkNode,
+  installNpm,
+} from '@midwayjs/command-core';
 import { getSpecFile, writeToSpec } from '@midwayjs/serverless-spec-builder';
 import { dirname, isAbsolute, join, relative, resolve } from 'path';
 import {
@@ -14,8 +19,9 @@ import {
   writeJSON,
   readlink,
   lstat,
+  readFile,
+  createWriteStream,
 } from 'fs-extra';
-import { createReadStream, createWriteStream } from 'fs';
 import * as ts from 'typescript';
 import * as globby from 'globby';
 import * as micromatch from 'micromatch';
@@ -416,7 +422,8 @@ export class PackagePlugin extends BasePlugin {
     this.core.cli.log('Install production dependencies...');
 
     if (+this.midwayVersion >= 2) {
-      this.setGlobalDependencies('@midwayjs/bootstrap');
+      const { version } = findMidwayVersion(this.servicePath);
+      this.setGlobalDependencies('@midwayjs/bootstrap', version.major || '*');
       this.setGlobalDependencies('path-to-regexp');
     } else {
       this.setGlobalDependencies('picomatch');
@@ -678,7 +685,7 @@ export class PackagePlugin extends BasePlugin {
   }
 
   async preload() {
-    if (this.midwayVersion !== '3') {
+    if (this.midwayVersion !== '3' || !this.options.bundle) {
       return;
     }
 
@@ -892,7 +899,8 @@ export class PackagePlugin extends BasePlugin {
           unixPermissions: stats.mode,
         });
       } else if (stats.isFile()) {
-        zip.file(fileName, createReadStream(absPath), {
+        const fileData = await readFile(absPath);
+        zip.file(fileName, fileData, {
           binary: true,
           createFolders: true,
           unixPermissions: stats.mode,

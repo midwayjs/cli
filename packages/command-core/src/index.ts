@@ -9,3 +9,4 @@ export * from './utils/commandLineUsage';
 export * from './utils/fork';
 export * from './utils/exec';
 export * from './lock';
+export * from './utils/postInstall';
