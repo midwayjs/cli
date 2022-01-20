@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { existsSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { exec } from './utils/exec';
 import { execSync } from 'child_process';
 import * as assert from 'assert';
@@ -256,5 +256,29 @@ export const formatModuleVersion = (version?) => {
     major,
     minor,
     patch,
+  };
+};
+
+export const findMidwayVersion = cwd => {
+  let pkg: any = {};
+  try {
+    const pkgJsonPath = join(cwd, 'package.json');
+    if (existsSync(pkgJsonPath)) {
+      pkg = JSON.parse(readFileSync(pkgJsonPath).toString());
+    }
+  } catch {
+    //
+  }
+  const deps = Object.assign({}, pkg.dependencies, pkg.devDependencies);
+  const modules = [
+    '@midwayjs/faas',
+    '@midwayjs/koa',
+    '@midwayjs/express',
+    '@midwayjs/web',
+  ];
+  const module = modules.find(module => deps[module]);
+  return {
+    module,
+    version: formatModuleVersion(module) || {},
   };
 };

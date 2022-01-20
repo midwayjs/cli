@@ -1,4 +1,9 @@
-import { BasePlugin, forkNode, installNpm } from '@midwayjs/command-core';
+import {
+  BasePlugin,
+  findMidwayVersion,
+  forkNode,
+  installNpm,
+} from '@midwayjs/command-core';
 import { getSpecFile, writeToSpec } from '@midwayjs/serverless-spec-builder';
 import { dirname, isAbsolute, join, relative, resolve } from 'path';
 import {
@@ -417,7 +422,8 @@ export class PackagePlugin extends BasePlugin {
     this.core.cli.log('Install production dependencies...');
 
     if (+this.midwayVersion >= 2) {
-      this.setGlobalDependencies('@midwayjs/bootstrap');
+      const { version } = findMidwayVersion(this.servicePath);
+      this.setGlobalDependencies('@midwayjs/bootstrap', version.major || '*');
       this.setGlobalDependencies('path-to-regexp');
     } else {
       this.setGlobalDependencies('picomatch');

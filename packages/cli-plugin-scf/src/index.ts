@@ -2,7 +2,7 @@ import {
   BasePlugin,
   ICoreInstance,
   CommandCore,
-  formatModuleVersion,
+  findMidwayVersion,
 } from '@midwayjs/command-core';
 import { join } from 'path';
 import * as Tencent from 'serverless-tencent-scf';
@@ -11,7 +11,6 @@ import {
   generateFunctionsSpec,
   generateFunctionsSpecFile,
 } from '@midwayjs/serverless-spec-builder/scf';
-import { existsSync, readFileSync } from 'fs-extra';
 
 export class TencentSCFPlugin extends BasePlugin {
   core: ICoreInstance;
@@ -34,19 +33,11 @@ export class TencentSCFPlugin extends BasePlugin {
     },
     'package:generateEntry': async () => {
       this.core.cli.log('Generate entry file...');
-
-      let pkg: any = {};
-      try {
-        const pkgJsonPath = join(this.servicePath, 'package.json');
-        if (existsSync(pkgJsonPath)) {
-          pkg = JSON.parse(readFileSync(pkgJsonPath).toString());
-        }
-      } catch {
-        //
-      }
-      const deps = Object.assign({}, pkg.dependencies, pkg.devDependencies);
-      const version = formatModuleVersion(deps['@midwayjs/faas']).major || '*';
-      this.setGlobalDependencies('@midwayjs/serverless-scf-starter', version);
+      const { version } = findMidwayVersion(this.servicePath);
+      this.setGlobalDependencies(
+        '@midwayjs/serverless-scf-starter',
+        version.major || '*'
+      );
       writeWrapper({
         baseDir: this.servicePath,
         service: this.core.service,
