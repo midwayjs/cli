@@ -259,7 +259,7 @@ export const formatModuleVersion = (version?) => {
   };
 };
 
-export const findMidwayVersion = cwd => {
+export const findMidwayVersion = (cwd): any => {
   let pkg: any = {};
   try {
     const pkgJsonPath = join(cwd, 'package.json');
