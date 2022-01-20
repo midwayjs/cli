@@ -1,11 +1,11 @@
 {
   "name": "@midwayjs/cli-plugin-dev",
-  "version": "1.2.95-beta.10",
+  "version": "1.2.95-beta.11",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@koa/router": "^10.0.0",
-    "@midwayjs/command-core": "^1.2.95-beta.10",
+    "@midwayjs/command-core": "^1.2.95-beta.11",
     "@midwayjs/debugger": "^1.0.x",
     "chalk": "^4.1.0",
     "chokidar": "^3.4.2",
