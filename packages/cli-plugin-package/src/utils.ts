@@ -236,19 +236,30 @@ export const findModuleFromNodeModules = async (
       continue;
     }
 
-    const info = getModuleCycleFind(
-      moduleInfo.name,
-      baseNodeModuleDir,
-      fromNodeModulesPath
-    );
-    if (!info) {
-      return;
-    }
-    const pkgJson = JSON.parse(
-      readFileSync(join(info.path, 'package.json')).toString()
-    );
-    if (!semver.satisfies(pkgJson.version, moduleInfo.version)) {
-      return;
+    const modulePath = join(fromNodeModulesPath, moduleInfo.name);
+    let info = {
+      path: modulePath,
+    };
+    let pkgJson: any = {};
+    if (existsSync(modulePath)) {
+      pkgJson = JSON.parse(
+        readFileSync(join(info.path, 'package.json')).toString()
+      );
+    } else {
+      info = getModuleCycleFind(
+        moduleInfo.name,
+        baseNodeModuleDir,
+        fromNodeModulesPath
+      );
+      if (!info) {
+        return;
+      }
+      pkgJson = JSON.parse(
+        readFileSync(join(info.path, 'package.json')).toString()
+      );
+      if (!semver.satisfies(pkgJson.version, moduleInfo.version)) {
+        return;
+      }
     }
     moduleMap[moduleInfo.name] = {
       version: pkgJson.version,
@@ -265,7 +276,7 @@ export const findModuleFromNodeModules = async (
       });
     }
 
-    const childInfo = findModuleFromNodeModules(
+    const childInfo = await findModuleFromNodeModules(
       pkgDepsModuleInfoList,
       baseNodeModuleDir,
       join(info.path, 'node_modules'),

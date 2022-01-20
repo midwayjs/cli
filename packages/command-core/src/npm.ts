@@ -126,7 +126,7 @@ export const findNpm = (argv?) => {
       if (currentPlatform === 'win32') {
         // for windows
         try {
-          const find = execSync(`where ${cmd}`).toString();
+          const find = execSync(`where ${cmd}`, { stdio: 'ignore' }).toString();
           // windows的命令路径至少会有 C/D/E:\ 前缀
           if (find.indexOf(':\\') !== -1) {
             return cmd;

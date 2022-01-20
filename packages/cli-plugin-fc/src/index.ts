@@ -190,8 +190,11 @@ export class AliyunFCPlugin extends BasePlugin {
     // 执行 package 打包
     await this.core.invoke(['package'], true, {
       ...this.options,
-      skipZip: true, // 跳过压缩成zip
     });
+
+    const artifactFile =
+      this.getStore('artifactFile', 'global') ||
+      join(this.servicePath, 'serverless.zip');
     this.core.cli.log('');
     this.core.cli.log('Start deploy by @serverless-devs');
     this.core.cli.log('');
@@ -227,7 +230,7 @@ export class AliyunFCPlugin extends BasePlugin {
         Object.assign(fcDeployInputs, this.options.serverlessDev);
         delete fcDeployInputs.access;
         fcDeployInputs.path = { configPath: this.midwayBuildPath };
-        fcDeployInputs.props.function.codeUri = this.midwayBuildPath;
+        fcDeployInputs.props.function.codeUri = artifactFile;
         if (!this.options.skipDeploy) {
           const args = [];
           if (!this.options.useRemoteConfig) {
