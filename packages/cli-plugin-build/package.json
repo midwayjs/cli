@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/cli-plugin-build",
-  "version": "1.2.95-beta.9",
+  "version": "1.2.95-beta.10",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/command-core": "^1.2.95-beta.9",
+    "@midwayjs/command-core": "^1.2.95-beta.10",
     "@midwayjs/faas-code-analysis": "^1.2.93",
     "@midwayjs/mwcc": "^0.7.x",
     "@vercel/ncc": "^0.30.0",
