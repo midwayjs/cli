@@ -45,10 +45,7 @@ export class TencentSCFPlugin extends BasePlugin {
         //
       }
       const deps = Object.assign({}, pkg.dependencies, pkg.devDependencies);
-      const version =
-        formatModuleVersion(
-          deps['@midwayjs/serverless-scf-starter'] || deps['@midwayjs/faas']
-        ).major || '*';
+      const version = formatModuleVersion(deps['@midwayjs/faas']).major || '*';
       this.setGlobalDependencies('@midwayjs/serverless-scf-starter', version);
       writeWrapper({
         baseDir: this.servicePath,

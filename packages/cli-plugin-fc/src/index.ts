@@ -42,10 +42,7 @@ export class AliyunFCPlugin extends BasePlugin {
         //
       }
       const deps = Object.assign({}, pkg.dependencies, pkg.devDependencies);
-      const version =
-        formatModuleVersion(
-          deps['@midwayjs/serverless-fc-starter'] || deps['@midwayjs/faas']
-        ).major || '*';
+      const version = formatModuleVersion(deps['@midwayjs/faas']).major || '*';
       this.setGlobalDependencies('@midwayjs/serverless-fc-starter', version);
       const preloadFile = this.getStore('preloadFile', 'global');
 

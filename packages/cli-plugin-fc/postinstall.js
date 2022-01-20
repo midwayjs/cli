@@ -17,5 +17,7 @@ try {
       { name: '@midwayjs/serverless-fc-starter', version },
       { name: '@midwayjs/serverless-fc-trigger', version },
     ]);
-  })();  
-} catch (e) {}
+  })();
+} catch (e) {
+  //
+}

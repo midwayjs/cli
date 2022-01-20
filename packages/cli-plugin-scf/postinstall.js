@@ -18,4 +18,6 @@ try {
       { name: '@midwayjs/serverless-scf-trigger', version },
     ]);
   })();
-} catch (e) {}
+} catch (e) {
+  //
+}

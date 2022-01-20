@@ -14,4 +14,6 @@ try {
     }
     await postInstallModule([{ name: '@midwayjs/serverless-app', version }]);
   })();
-} catch (e) {}
+} catch (e) {
+  //
+}
