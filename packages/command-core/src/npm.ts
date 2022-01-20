@@ -234,3 +234,24 @@ export const formatInstallNpmCommand = (options: INpmInstallOptions) => {
     .join('')}${registerPath ? ` --registry=${registerPath}` : ''}`;
   return cmd;
 };
+
+export const formatModuleVersion = (version?) => {
+  let major = '',
+    minor = '',
+    patch = '';
+  if (typeof version === 'string') {
+    if (['beta', 'latest', 'alpha'].includes(version)) {
+      major = version;
+    } else if (/^(\^)?(\d+)(\.|$)/.test(version)) {
+      const versionList = version.replace(/^\^/, '').split('.');
+      major = versionList[0];
+      minor = versionList[1] || '';
+      patch = versionList[2] || '';
+    }
+  }
+  return {
+    major,
+    minor,
+    patch,
+  };
+};
