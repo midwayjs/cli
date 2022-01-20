@@ -14,8 +14,9 @@ import {
   writeJSON,
   readlink,
   lstat,
+  readFile,
+  createWriteStream,
 } from 'fs-extra';
-import { createReadStream, createWriteStream } from 'fs';
 import * as ts from 'typescript';
 import * as globby from 'globby';
 import * as micromatch from 'micromatch';
@@ -892,7 +893,8 @@ export class PackagePlugin extends BasePlugin {
           unixPermissions: stats.mode,
         });
       } else if (stats.isFile()) {
-        zip.file(fileName, createReadStream(absPath), {
+        const fileData = await readFile(absPath);
+        zip.file(fileName, fileData, {
           binary: true,
           createFolders: true,
           unixPermissions: stats.mode,

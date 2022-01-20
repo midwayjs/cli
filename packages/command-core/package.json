@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/command-core",
   "version": "1.2.95-beta.8",
-  "main": "dist/index",
+  "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "light-spinner": "^1.0.0",

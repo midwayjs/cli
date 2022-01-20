@@ -1,4 +1,8 @@
-import { BasePlugin, ICoreInstance } from '@midwayjs/command-core';
+import {
+  BasePlugin,
+  ICoreInstance,
+  formatModuleVersion,
+} from '@midwayjs/command-core';
 import { loadComponent, setCredential } from '@serverless-devs/core';
 import { join } from 'path';
 import { homedir } from 'os';
@@ -28,8 +32,21 @@ export class AliyunFCPlugin extends BasePlugin {
     },
     'package:generateEntry': async () => {
       this.core.cli.log('Generate entry file...');
-      this.setGlobalDependencies('@midwayjs/serverless-fc-starter');
-
+      let pkg: any = {};
+      try {
+        const pkgJsonPath = join(this.servicePath, 'package.json');
+        if (existsSync(pkgJsonPath)) {
+          pkg = JSON.parse(readFileSync(pkgJsonPath).toString());
+        }
+      } catch {
+        //
+      }
+      const deps = Object.assign({}, pkg.dependencies, pkg.devDependencies);
+      const version =
+        formatModuleVersion(
+          deps['@midwayjs/serverless-fc-starter'] || deps['@midwayjs/faas']
+        ).major || '*';
+      this.setGlobalDependencies('@midwayjs/serverless-fc-starter', version);
       const preloadFile = this.getStore('preloadFile', 'global');
 
       writeWrapper({

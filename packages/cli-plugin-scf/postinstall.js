@@ -13,7 +13,7 @@ const {
   }
   await postInstallModule([
     { name: '@midwayjs/serverless-app', version },
-    { name: '@midwayjs/serverless-fc-starter', version },
-    { name: '@midwayjs/serverless-fc-trigger', version },
+    { name: '@midwayjs/serverless-scf-starter', version },
+    { name: '@midwayjs/serverless-scf-trigger', version },
   ]);
 })();
