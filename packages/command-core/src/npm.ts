@@ -279,6 +279,6 @@ export const findMidwayVersion = (cwd): any => {
   const module = modules.find(module => deps[module]);
   return {
     module,
-    version: formatModuleVersion(module) || {},
+    version: formatModuleVersion(deps[module]) || {},
   };
 };
