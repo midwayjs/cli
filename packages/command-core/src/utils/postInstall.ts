@@ -30,7 +30,7 @@ export const postInstallModule = async (
     return;
   }
   const { cwd, pkg } = info;
-  const npm = findNpm().cmd;
+  const { registry, npm } = findNpm();
   for (const { name, version } of moduleList) {
     if (pkg?.dependencies?.[name] || pkg?.devDependencies?.[name]) {
       continue;
@@ -38,7 +38,9 @@ export const postInstallModule = async (
     console.log('[midway] auto install', name);
     await installNpm({
       baseDir: cwd,
-      register: npm,
+      mode: ['save-dev'],
+      register: npm === 'yarn' ? 'npm' : npm,
+      registerPath: registry,
       moduleName: name + '@' + version,
       slience: true,
     });

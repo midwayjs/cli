@@ -198,6 +198,9 @@ export const formatInstallNpmCommand = (options: INpmInstallOptions) => {
       if (modeItem === 'no-save') {
         return 'optional';
       }
+      if (modeItem === 'save-dev') {
+        return 'dev';
+      }
       return modeItem;
     });
   } else if (/^pnpm/.test(register)) {
