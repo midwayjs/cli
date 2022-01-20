@@ -1,4 +1,4 @@
-import { join } from 'path';
+import { dirname, join } from 'path';
 import { existsSync, writeFileSync } from 'fs';
 import { exec } from './utils/exec';
 import { execSync } from 'child_process';
@@ -13,7 +13,8 @@ async function getNpmPath(
   npmName: string,
   npmRegistry?: string
 ): Promise<string> {
-  const findNmResult = findNpmModule(scope.cwd || process.cwd(), npmName);
+  const cwd = scope.cwd || process.cwd();
+  const findNmResult = findNpmModule(cwd, npmName);
   if (findNmResult) {
     return findNmResult;
   }
@@ -39,7 +40,7 @@ async function getNpmPath(
     mode: ['production', 'no-save'],
     debugLog: scope.coreInstance.debug,
   });
-  return join(baseDir, `node_modules/${npmName}`);
+  return findNpmModule(cwd, npmName);
 }
 
 interface INpmInstallOptions {
@@ -89,7 +90,21 @@ export async function loadNpm(
   }
 }
 
+const findNpmModuleByResolve = (cwd, modName) => {
+  try {
+    return dirname(
+      require.resolve(`${modName}/package.json`, { paths: [cwd] })
+    );
+  } catch (e) {
+    return;
+  }
+};
+
 export const findNpmModule = (cwd, modName) => {
+  if ('pnp' in process.versions) {
+    return findNpmModuleByResolve(cwd, modName);
+  }
+
   const modPath = join(cwd, 'node_modules', modName);
   if (existsSync(modPath)) {
     return modPath;
