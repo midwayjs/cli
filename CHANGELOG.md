@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.96](https://github.com/midwayjs/bin/compare/v1.2.95...v1.2.96) (2022-01-21)
+
+
+### Bug Fixes
+
+* fix findNpmModule with pnp ([#256](https://github.com/midwayjs/bin/issues/256)) ([6a0f423](https://github.com/midwayjs/bin/commit/6a0f423af4646250bd7073bdb105699fe296a72b))
+* install exec ([#257](https://github.com/midwayjs/bin/issues/257)) ([1d59d23](https://github.com/midwayjs/bin/commit/1d59d23a8f6dfcd544c8b9e195b7edcbbe25df8b))
+
+
+
+
+
 ## [1.2.95](https://github.com/midwayjs/bin/compare/v1.2.94...v1.2.95) (2022-01-20)
 
 
