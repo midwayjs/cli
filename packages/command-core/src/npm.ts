@@ -117,7 +117,7 @@ export const findNpmModule = (cwd, modName) => {
 
 // 从本地检索npm包
 export const findNpm = (argv?) => {
-  let npm = 'npm';
+  let npm = '';
   let registry = '';
   let ignoreRegistry = false;
   // 先找npm客户端
@@ -128,17 +128,21 @@ export const findNpm = (argv?) => {
     /yarn/.test(process.env.npm_config_user_agent)
   ) {
     npm = 'yarn';
-  } else if (
-    process.env.npm_execpath &&
-    /yarn/.test(process.env.npm_execpath)
-  ) {
-    npm = 'yarn';
-  } else if (process.env.yarn_registry) {
-    npm = 'yarn';
   } else if (process.env.npm_execpath) {
-    npm = process.env.npm_execpath;
-    ignoreRegistry = true;
-  } else {
+    if (process.env.npm_execpath.includes('yarn')) {
+      npm = 'yarn';
+    } else {
+      const npmClient = ['tnpm', 'cnpm'].find(npm =>
+        process.env.npm_execpath.includes(npm)
+      );
+      if (npmClient) {
+        npm = npmClient;
+        ignoreRegistry = true;
+      }
+    }
+  }
+
+  if (!npm) {
     const npmList = ['pnpm', 'cnpm'];
     const currentPlatform = platform();
     const cmd = npmList.find(cmd => {
@@ -169,6 +173,10 @@ export const findNpm = (argv?) => {
     if (cmd) {
       npm = cmd;
     }
+  }
+
+  if (!npm) {
+    npm = 'npm';
   }
 
   // registry
