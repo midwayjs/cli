@@ -58,10 +58,25 @@ describe('command-core:npm.test.ts', () => {
     const npmRes = findNpm({});
     assert(npmRes.npm === 'yarn' && npmRes.registry === 'test');
   });
-  it('findNpm yarn by yarn_registry', async () => {
-    mm(process.env, 'yarn_registry', 'test');
+  it('findNpm cnpm by npm_execpath', async () => {
+    mm(
+      process.env,
+      'npm_execpath',
+      '/usr/local/lib/node_modules/cnpm/node_modules/npm/bin/npm-cli.js'
+    );
+    mm(process.env, 'npm_config_registry', 'test');
     const npmRes = findNpm({});
-    assert(npmRes.npm === 'yarn' && npmRes.registry === 'test');
+    assert(npmRes.npm === 'cnpm' && npmRes.registry === '');
+  });
+  it('findNpm tnpm by npm_execpath', async () => {
+    mm(
+      process.env,
+      'npm_execpath',
+      '/usr/local/lib/node_modules/tnpm/lib/npm_child_process.js'
+    );
+    mm(process.env, 'npm_config_registry', 'test');
+    const npmRes = findNpm({});
+    assert(npmRes.npm === 'tnpm' && npmRes.registry === '');
   });
   it('findNpm registry by LANG', async () => {
     mm(process.env, 'LANG', 'zh_CN.UTF-8');

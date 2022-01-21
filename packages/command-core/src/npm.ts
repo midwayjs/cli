@@ -198,7 +198,7 @@ export const findNpm = (argv?) => {
       !ignoreRegistry && registry ? ` --registry=${registry}` : ''
     }`,
     npm,
-    registry,
+    registry: !ignoreRegistry ? registry : '',
   };
 };
 
