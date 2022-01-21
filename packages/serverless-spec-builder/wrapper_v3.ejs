@@ -1,0 +1,126 @@
+const { Bootstrap } = require('@midwayjs/bootstrap');
+const { Framework } = require('@midwayjs/faas');
+const { asyncWrapper, start } = require('<%=starter %>');
+const { match } = require('path-to-regexp');
+let preload;
+<% if (preloadFile) { %>
+preload = require('./<%-preloadFile %>');
+<% }%>
+const layers = [];
+<% layerDeps.forEach(function(layer){ %>
+try {
+  const <%=layer.name%> = require('<%=layer.path%>');
+  layers.push(<%=layer.name%>);
+} catch(e) { }
+<% }); %>
+
+let frameworkInstance;
+let runtime;
+let inited = false;
+
+const initializeMethod = async (initializeContext = {}) => {
+  layers.unshift(engine => {
+    engine.addRuntimeExtension({
+      async beforeFunctionStart(runtime) {
+        Bootstrap.configure({
+          appDir: __dirname,
+          preloadModules: <%-JSON.stringify(preloadModules, null, 2)%>,
+          imports: preload && preload.modules,
+          globalConfig: {
+            defalut: {
+              faas: {
+                initializeContext,
+                applicationAdapter: runtime
+              }
+            }
+          }
+        });
+        await Bootstrap.run();
+        const applicationContext = Bootstrap.getApplicationContext();
+        frameworkInstance = await applicationContext.getAsync(Framework);
+      }
+    });
+  })
+  runtime = await start({
+    layers: layers,
+    initContext: initializeContext,
+    runtimeConfig: <%-JSON.stringify(runtimeConfig)%>,
+  });
+
+  inited = true;
+};
+
+const getHandler = (hanlderName, ...originArgs) => {
+  <% handlers.forEach(function(handlerData){ %>
+    if (hanlderName === '<%=handlerData.name%>') {
+      return <% if (handlerData.handler) {
+      %> frameworkInstance.handleInvokeWrapper('<%=handlerData.handler%>'); <% } else {
+      %> async (ctx<% if (moreArgs) { %>, ...args<% } %>) => {
+        const allHandlers = <%-JSON.stringify(handlerData.handlers, null, 2)%>;
+        let handler = null;
+        let ctxPath = ctx && ctx.path || '';
+        let currentMethod = (ctx && ctx.method || '').toLowerCase();
+        let matchRes;
+        if (ctxPath) {
+          handler = allHandlers.find(handler => {
+            matchRes = match(handler.regRouter)(ctxPath);
+            if (matchRes) {
+              if (handler.method && handler.method.length && handler.method.indexOf(currentMethod) === -1) {
+                return false;
+              }
+            }
+            return matchRes;
+          });
+        }
+
+        if (handler) {
+          if (matchRes && matchRes.params) {
+            const req = originArgs && originArgs[0];
+            if (req) {
+              req.pathParameters = Object.assign({}, matchRes.params, req.pathParameters);
+            }
+          }
+          return frameworkInstance.handleInvokeWrapper(handler.handler)(ctx<% if (moreArgs) { %>, ...args<% } %>);
+        }
+        ctx.status = 404;
+        ctx.set('Content-Type', 'text/html');
+        return '<h1>404 Page Not Found</h1>';
+      }; <% } %>
+    }
+  <% }); %>
+}
+
+
+<% if (skipInitializer) { %>
+// initializer skip
+<% } else { %> 
+exports.<%=initializer%> = asyncWrapper(async (...args) => {
+  if (!inited) {
+    await initializeMethod(...args);
+  }
+});
+<% } %>
+
+<% if (isDefaultFunc) { %>
+module.exports = asyncWrapper(async (...args) => {
+  if (!inited) {
+    await initializeMethod();
+  }
+
+  const handler = getHandler('<%=defaultFunctionHandlerName%>', ...args);
+  return runtime.asyncEvent(handler)(...args);
+});
+<% } else { %> 
+
+<% handlers.forEach(function(handlerData){ %>
+exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
+  if (!inited) {
+    await initializeMethod();
+  }
+
+  const handler = getHandler('<%=handlerData.name%>', ...args);
+  return runtime.asyncEvent(handler)(...args);
+});
+<% }); %>
+<% } %>
+

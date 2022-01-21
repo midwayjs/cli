@@ -117,23 +117,27 @@ export function writeWrapper(options: {
   }
   process.chdir(cwd);
 
-  let isMoreThanFaaS2 = false;
+  let faasVersion = 1;
   if (faasPkgFile && existsSync(faasPkgFile)) {
     const { version } = JSON.parse(readFileSync(faasPkgFile).toString());
-    isMoreThanFaaS2 = version[0] && version[0] >= 2;
+    if (version[0]) {
+      faasVersion = +version[0];
+    }
+  }
+
+  let entryWrapper = '../wrapper.ejs';
+  if (isCustomAppType) {
+    entryWrapper = '../wrapper_app.ejs';
+  } else {
+    if (faasVersion === 2) {
+      entryWrapper = '../wrapper_bootstrap.ejs';
+    } else if (faasVersion === 3) {
+      entryWrapper = '../wrapper_v3.ejs';
+    }
   }
 
   const tpl = readFileSync(
-    templatePath
-      ? templatePath
-      : resolve(
-          __dirname,
-          isCustomAppType
-            ? '../wrapper_app.ejs'
-            : isMoreThanFaaS2
-            ? '../wrapper_bootstrap.ejs'
-            : '../wrapper.ejs'
-        )
+    templatePath ? templatePath : resolve(__dirname, entryWrapper)
   ).toString();
 
   if (functionMap?.functionList?.length) {

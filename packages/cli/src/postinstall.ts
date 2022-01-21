@@ -2,8 +2,7 @@ import { join } from 'path';
 import { readFileSync, existsSync } from 'fs';
 import { execSync } from 'child_process';
 import { PluginList } from './plugins';
-import { findNpm } from '@midwayjs/command-core';
-import { installNpm } from '@midwayjs/command-core';
+import { findNpm, installNpm } from '@midwayjs/command-core';
 const matchReg = /(?:^|\s)(?:midway-bin|mw)\s+([a-z]+?)(?:\s|$)/i;
 export const postinstall = async (baseDir: string) => {
   const pkgJson = getPkgJson(baseDir);

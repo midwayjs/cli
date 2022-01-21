@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.95](https://github.com/midwayjs/bin/compare/v1.2.94...v1.2.95) (2022-01-20)
+
+
+### Bug Fixes
+
+* serverless devs cnpm ([#253](https://github.com/midwayjs/bin/issues/253)) ([93641a8](https://github.com/midwayjs/bin/commit/93641a8d76066ffe0016f297814070974b0f728a))
+
+
+### Features
+
+* support hooks 3.0 ([#254](https://github.com/midwayjs/bin/issues/254)) ([eb50b72](https://github.com/midwayjs/bin/commit/eb50b7287734cf965e744466ea725dde78525e3d))
+
+
+
+
+
 ## [1.2.94](https://github.com/midwayjs/bin/compare/v1.2.93...v1.2.94) (2022-01-11)
 
 

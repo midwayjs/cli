@@ -1,5 +1,5 @@
 import { dirname, join } from 'path';
-import { existsSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { exec } from './utils/exec';
 import { execSync } from 'child_process';
 import * as assert from 'assert';
@@ -213,6 +213,9 @@ export const formatInstallNpmCommand = (options: INpmInstallOptions) => {
       if (modeItem === 'no-save') {
         return 'optional';
       }
+      if (modeItem === 'save-dev') {
+        return 'dev';
+      }
       return modeItem;
     });
   } else if (/^pnpm/.test(register)) {
@@ -248,4 +251,49 @@ export const formatInstallNpmCommand = (options: INpmInstallOptions) => {
     })
     .join('')}${registerPath ? ` --registry=${registerPath}` : ''}`;
   return cmd;
+};
+
+export const formatModuleVersion = (version?) => {
+  let major = '',
+    minor = '',
+    patch = '';
+  if (typeof version === 'string') {
+    if (['beta', 'latest', 'alpha'].includes(version)) {
+      major = version;
+    } else if (/^(\^)?(\d+)(\.|$)/.test(version)) {
+      const versionList = version.replace(/^\^/, '').split('.');
+      major = versionList[0];
+      minor = versionList[1] || '';
+      patch = versionList[2] || '';
+    }
+  }
+  return {
+    major,
+    minor,
+    patch,
+  };
+};
+
+export const findMidwayVersion = (cwd): any => {
+  let pkg: any = {};
+  try {
+    const pkgJsonPath = join(cwd, 'package.json');
+    if (existsSync(pkgJsonPath)) {
+      pkg = JSON.parse(readFileSync(pkgJsonPath).toString());
+    }
+  } catch {
+    //
+  }
+  const deps = Object.assign({}, pkg.dependencies, pkg.devDependencies);
+  const modules = [
+    '@midwayjs/faas',
+    '@midwayjs/koa',
+    '@midwayjs/express',
+    '@midwayjs/web',
+  ];
+  const module = modules.find(module => deps[module]);
+  return {
+    module,
+    version: formatModuleVersion(deps[module]) || {},
+  };
 };
