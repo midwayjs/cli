@@ -104,6 +104,7 @@ export const findNpmModule = (cwd, modName) => {
 export const findNpm = (argv?) => {
   let npm = 'npm';
   let registry = '';
+  let ignoreRegistry = false;
   // 先找npm客户端
   if (argv?.npm) {
     npm = argv.npm;
@@ -119,6 +120,9 @@ export const findNpm = (argv?) => {
     npm = 'yarn';
   } else if (process.env.yarn_registry) {
     npm = 'yarn';
+  } else if (process.env.npm_execpath) {
+    npm = process.env.npm_execpath;
+    ignoreRegistry = true;
   } else {
     const npmList = ['pnpm', 'cnpm'];
     const currentPlatform = platform();
@@ -167,7 +171,9 @@ export const findNpm = (argv?) => {
   }
 
   return {
-    cmd: `${npm}${registry ? ` --registry=${registry}` : ''}`,
+    cmd: `${npm}${
+      !ignoreRegistry && registry ? ` --registry=${registry}` : ''
+    }`,
     npm,
     registry,
   };
