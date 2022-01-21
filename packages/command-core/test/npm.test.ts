@@ -59,6 +59,7 @@ describe('command-core:npm.test.ts', () => {
     assert(npmRes.npm === 'yarn' && npmRes.registry === 'test');
   });
   it('findNpm cnpm by npm_execpath', async () => {
+    mm(process.env, 'npm_config_user_agent', '');
     mm(
       process.env,
       'npm_execpath',
@@ -69,6 +70,7 @@ describe('command-core:npm.test.ts', () => {
     assert(npmRes.npm === 'cnpm' && npmRes.registry === '');
   });
   it('findNpm tnpm by npm_execpath', async () => {
+    mm(process.env, 'npm_config_user_agent', '');
     mm(
       process.env,
       'npm_execpath',
