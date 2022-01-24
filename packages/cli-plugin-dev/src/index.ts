@@ -71,12 +71,12 @@ export class DevPlugin extends BasePlugin {
 
   async checkEnv() {
     this.setStore('dev:getData', this.getData.bind(this), true);
-    this.port = this.options.port;
-    if (this.port) {
-      process.env.MIDWAY_HTTP_PORT = `${this.port}`;
-    }
+    this.port = process.env.MIDWAY_HTTP_PORT || this.options.port;
     if (!this.port && (!this.options.entryFile || this.options.detectPort)) {
       this.port = await detect(7001);
+    }
+    if (this.port) {
+      process.env.MIDWAY_HTTP_PORT = `${this.port}`;
     }
     const cwd = this.core.cwd;
     if (this.options.ts === undefined) {
