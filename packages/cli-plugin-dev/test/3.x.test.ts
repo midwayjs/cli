@@ -17,7 +17,8 @@ describe('test/3.x.test.ts', () => {
       silent: true,
       fast: false,
     });
-    assert(port === '12081');
+    console.log('port', port);
+    expect(port).toEqual('12081');
     const response = await fetch(`http://127.0.0.1:${port}/`);
     const body = await response.text();
     await close();
