@@ -39,7 +39,7 @@ export const postInstallModule = async (
     await installNpm({
       baseDir: cwd,
       mode: ['save-dev'],
-      register: npm === 'yarn' ? 'npm' : npm,
+      register: ['yarn', 'pnpm'].includes(npm) ? 'npm' : npm,
       registerPath: registry,
       moduleName: name + '@' + version,
       slience: true,

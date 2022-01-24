@@ -57,7 +57,12 @@ export class AddPlugin extends BasePlugin {
     }
 
     if (!this.options.npm) {
-      this.options.npm = findNpm().cmd;
+      const { cmd, npm, registry } = findNpm();
+      if (['yarn', 'pnpm'].includes(npm)) {
+        this.options.npm = 'npm' + (registry ? ` --registry=${registry}` : '');
+      } else {
+        this.options.npm = cmd;
+      }
     }
 
     const { commands } = this.core.coreOptions;
