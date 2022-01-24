@@ -10,11 +10,13 @@ export const wait = (time?) => {
     setTimeout(resolve, time || 20000);
   });
 };
-export const run = async (cwd: string, options = {}) => {
-  await exec({
-    baseDir: cwd,
-    cmd: 'npm install @midwayjs/mock',
-  });
+export const run = async (cwd: string, options: any = {}) => {
+  if (!options?.ignoreMock) {
+    await exec({
+      baseDir: cwd,
+      cmd: 'npm install @midwayjs/mock',
+    });
+  }
   const core = new CommandCore({
     commands: ['dev'],
     options,
