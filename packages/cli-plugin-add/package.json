@@ -1,11 +1,11 @@
 {
   "name": "@midwayjs/cli-plugin-add",
-  "version": "1.2.96-beta.16",
+  "version": "1.2.97",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/boilerplate-list": "^1.0.0",
-    "@midwayjs/command-core": "^1.2.96-beta.16",
+    "@midwayjs/command-core": "^1.2.97",
     "chalk": "^4.1.0",
     "enquirer": "^2.3.6",
     "fs-extra": "^8.1.0",

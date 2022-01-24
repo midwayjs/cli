@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.97](https://github.com/midwayjs/cli/compare/v1.2.96...v1.2.97) (2022-01-24)
+
+
+### Bug Fixes
+
+* auto select npm ([#258](https://github.com/midwayjs/cli/issues/258)) ([f6e497c](https://github.com/midwayjs/cli/commit/f6e497c331af2f51855f98fa880bccc8acbbdb4e))
+
+
+
+
+
 ## [1.2.96](https://github.com/midwayjs/cli/compare/v1.2.95...v1.2.96) (2022-01-21)
 
 
