@@ -3,15 +3,15 @@ const fetch = require('node-fetch');
 import { join } from 'path';
 import { run } from './utils';
 import * as assert from 'assert';
-// import { exec } from '@midwayjs/command-core';
+import { exec } from '@midwayjs/command-core';
 
 const cwd = join(__dirname, 'fixtures/koa-3.x');
 describe('test/3.x.test.ts', () => {
   it('koa port', async () => {
-    // await exec({
-    //   baseDir: cwd,
-    //   cmd: 'npm install',
-    // });
+    await exec({
+      baseDir: cwd,
+      cmd: 'npm install',
+    });
     const { close, port } = await run(cwd, {
       ignoreMock: true,
       silent: true,
