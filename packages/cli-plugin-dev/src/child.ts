@@ -73,5 +73,9 @@ const closeApp = async () => {
     });
   }
 
-  process.send({ type: 'started', startSuccess });
+  process.send({
+    type: 'started',
+    startSuccess,
+    port: process.env.MIDWAY_HTTP_PORT,
+  });
 })();

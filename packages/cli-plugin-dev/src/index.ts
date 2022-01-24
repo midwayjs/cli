@@ -17,6 +17,7 @@ export class DevPlugin extends BasePlugin {
   private processMessageMap = {};
   private spin;
   private tsconfigJson;
+  private childProcesslistenedPort; // child process listen port
   commands = {
     dev: {
       lifecycleEvents: ['checkEnv', 'run'],
@@ -71,9 +72,11 @@ export class DevPlugin extends BasePlugin {
   async checkEnv() {
     this.setStore('dev:getData', this.getData.bind(this), true);
     this.port = this.options.port;
+    // 如果用户通过 --port 传了，就赋值到 MIDWAY_HTTP_PORT 环境变量上面去，此处为兼容 3.x 写法
     if (this.port) {
       process.env.MIDWAY_HTTP_PORT = `${this.port}`;
     }
+    // 此处为兼容 2.x 写法，在 2.x 的情况下，没有传递 port 则自动选择一个
     if (!this.port && (!this.options.entryFile || this.options.detectPort)) {
       this.port = await detect(7001);
     }
@@ -204,6 +207,8 @@ export class DevPlugin extends BasePlugin {
       });
       this.child.on('message', msg => {
         if (msg.type === 'started') {
+          this.childProcesslistenedPort = msg.port;
+
           this.spin.stop();
           while (dataCache.length) {
             process.stdout.write(dataCache.shift());
@@ -352,12 +357,9 @@ export class DevPlugin extends BasePlugin {
   }
 
   private displayStartTips(options) {
-    if (process.env.MIDWAY_HTTP_PORT) {
-      this.port = process.env.MIDWAY_HTTP_PORT;
-    }
-    process.env.MIDWAY_HTTP_PORT = process.env.MIDWAY_LOCAL_DEV_PORT = String(
-      this.port
-    );
+    this.port = this.childProcesslistenedPort || this.port;
+    process.env.MIDWAY_LOCAL_DEV_PORT = String(this.port);
+
     this.setStore('dev:port', this.port, true);
     if (options.silent || options.entryFile || options.notStartLog) {
       return;
