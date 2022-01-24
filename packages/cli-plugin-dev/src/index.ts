@@ -17,6 +17,7 @@ export class DevPlugin extends BasePlugin {
   private processMessageMap = {};
   private spin;
   private tsconfigJson;
+  private childProcesslistenedPort; // child process listen port
   commands = {
     dev: {
       lifecycleEvents: ['checkEnv', 'run'],
@@ -204,6 +205,8 @@ export class DevPlugin extends BasePlugin {
       });
       this.child.on('message', msg => {
         if (msg.type === 'started') {
+          this.childProcesslistenedPort = msg.port;
+
           this.spin.stop();
           while (dataCache.length) {
             process.stdout.write(dataCache.shift());
@@ -352,12 +355,9 @@ export class DevPlugin extends BasePlugin {
   }
 
   private displayStartTips(options) {
-    if (process.env.MIDWAY_HTTP_PORT) {
-      this.port = process.env.MIDWAY_HTTP_PORT;
-    }
-    process.env.MIDWAY_HTTP_PORT = process.env.MIDWAY_LOCAL_DEV_PORT = String(
-      this.port
-    );
+    this.port = this.childProcesslistenedPort || this.port;
+    process.env.MIDWAY_LOCAL_DEV_PORT = String(this.port);
+
     this.setStore('dev:port', this.port, true);
     if (options.silent || options.entryFile || options.notStartLog) {
       return;
