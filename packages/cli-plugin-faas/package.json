@@ -16,7 +16,6 @@
     "node": ">= 10"
   },
   "files": [
-    "postinstall.js",
     "plugin.json",
     "dist",
     "src"
@@ -25,8 +24,7 @@
     "build": "tsc --build",
     "lint": "../../node_modules/.bin/eslint .",
     "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
-    "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov",
-    "postinstall": "node ./postinstall"
+    "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov"
   },
   "repository": {
     "type": "git",
