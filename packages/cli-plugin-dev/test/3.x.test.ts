@@ -8,6 +8,10 @@ import { exec } from '@midwayjs/command-core';
 const cwd = join(__dirname, 'fixtures/koa-3.x');
 describe('test/3.x.test.ts', () => {
   it('koa port', async () => {
+    // 3.x not support nodejs 10
+    if (process.version.includes('v10')) {
+      return;
+    }
     await exec({
       baseDir: cwd,
       cmd: 'npm install',
