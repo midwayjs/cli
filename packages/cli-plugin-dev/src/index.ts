@@ -71,12 +71,14 @@ export class DevPlugin extends BasePlugin {
 
   async checkEnv() {
     this.setStore('dev:getData', this.getData.bind(this), true);
-    this.port = process.env.MIDWAY_HTTP_PORT || this.options.port;
-    if (!this.port && (!this.options.entryFile || this.options.detectPort)) {
-      this.port = await detect(7001);
-    }
+    this.port = this.options.port;
+    // 如果用户通过 --port 传了，就赋值到 MIDWAY_HTTP_PORT 环境变量上面去，此处为兼容 3.x 写法
     if (this.port) {
       process.env.MIDWAY_HTTP_PORT = `${this.port}`;
+    }
+    // 此处为兼容 2.x 写法，在 2.x 的情况下，没有传递 port 则自动选择一个
+    if (!this.port && (!this.options.entryFile || this.options.detectPort)) {
+      this.port = await detect(7001);
     }
     const cwd = this.core.cwd;
     if (this.options.ts === undefined) {

@@ -28,25 +28,4 @@ describe('test/3.x.test.ts', () => {
     await close();
     assert(body === 'Hello Midwayjs!');
   });
-  it('no port', async () => {
-    // 3.x not support nodejs 10
-    if (process.version.includes('v10')) {
-      return;
-    }
-    const cwd = join(__dirname, 'fixtures/no-port-3.x');
-    await exec({
-      baseDir: cwd,
-      cmd: 'npm install',
-    });
-    const { close, port } = await run(cwd, {
-      ignoreMock: true,
-      silent: true,
-      fast: false,
-    });
-    assert(port);
-    const response = await fetch(`http://127.0.0.1:${port}/`);
-    const body = await response.text();
-    await close();
-    assert(body === 'Hello Midwayjs!');
-  });
 });
