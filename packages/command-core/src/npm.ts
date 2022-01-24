@@ -132,7 +132,7 @@ export const findNpm = (argv?) => {
     if (process.env.npm_execpath.includes('yarn')) {
       npm = 'yarn';
     } else {
-      const npmClient = ['tnpm', 'cnpm'].find(npm =>
+      const npmClient = ['tnpm', 'cnpm', 'pnpm'].find(npm =>
         process.env.npm_execpath.includes(npm)
       );
       if (npmClient) {
@@ -243,6 +243,9 @@ export const formatInstallNpmCommand = (options: INpmInstallOptions) => {
       mode = mode.map(modeItem => {
         if (modeItem === 'no-save') {
           return 'save-optional';
+        }
+        if (modeItem === 'save-dev') {
+          return modeItem;
         }
         return '';
       });

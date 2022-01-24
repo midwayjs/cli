@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'fs-extra';
+import { existsSync, readFileSync, ensureFile, writeFile } from 'fs-extra';
 import { join } from 'path';
 import { findNpm, installNpm } from '../npm';
 
@@ -31,20 +31,37 @@ export const postInstallModule = async (
   }
   const { cwd, pkg } = info;
   const { registry, npm } = findNpm();
+  const modules = [];
   for (const { name, version } of moduleList) {
     if (pkg?.dependencies?.[name] || pkg?.devDependencies?.[name]) {
       continue;
     }
     console.log('[midway] auto install', name);
-    await installNpm({
-      baseDir: cwd,
-      mode: ['save-dev'],
-      register: ['yarn', 'pnpm'].includes(npm) ? 'npm' : npm,
-      registerPath: registry,
-      moduleName: name + '@' + version,
-      slience: true,
-    });
+    modules.push(name + '@' + version);
   }
+
+  if (!modules.length) {
+    return;
+  }
+  const installingLock = join(
+    cwd,
+    `node_modules/.midwayjs-cli/postInstallLock/${modules
+      .join('_')
+      .replace(/\//g, '_')}.lock`
+  );
+  if (existsSync(installingLock)) {
+    return;
+  }
+  await ensureFile(installingLock);
+  await writeFile(installingLock, JSON.stringify({ cwd, npm, registry }));
+  await installNpm({
+    baseDir: cwd,
+    mode: ['save-dev'],
+    register: ['yarn'].includes(npm) ? 'npm' : npm,
+    registerPath: registry,
+    moduleName: modules.join(' '),
+    slience: true,
+  });
   console.log('[midway] auto install complete');
   return;
 };
