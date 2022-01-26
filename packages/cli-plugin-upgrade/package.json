@@ -1,0 +1,37 @@
+{
+  "name": "@midwayjs/cli-plugin-upgrade",
+  "version": "1.2.97",
+  "main": "dist/index",
+  "typings": "dist/index.d.ts",
+  "dependencies": {
+    "@midwayjs/command-core": "^1.2.97",
+    "@midwayjs/serverless-spec-builder": "^1.2.95",
+    "fs-extra": "^8.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.1.0"
+  },
+  "engines": {
+    "node": ">= 10"
+  },
+  "files": [
+    "plugin.json",
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc --build",
+    "lint": "../../node_modules/.bin/eslint .",
+    "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
+    "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:midwayjs/cli.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
+  "gitHead": "61e1928171b9ad9375fc0448cba975c30af81b13"
+}
