@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.98-beta.2](https://github.com/midwayjs/cli/compare/v1.2.98-beta.1...v1.2.98-beta.2) (2022-02-10)
+
+**Note:** Version bump only for package @midwayjs/fcli-plugin-fc
+
+
+
+
+
+## [1.2.98-beta.1](https://github.com/midwayjs/cli/compare/v1.2.97...v1.2.98-beta.1) (2022-02-09)
+
+
+### Bug Fixes
+
+* fc serverless devs deploy domain ([6ae54c8](https://github.com/midwayjs/cli/commit/6ae54c8abf5628363895348954a7131536e71ca4))
+
+
+
+
+
 ## [1.2.97](https://github.com/midwayjs/cli/compare/v1.2.96...v1.2.97) (2022-01-24)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-fc

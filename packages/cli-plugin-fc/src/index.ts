@@ -263,10 +263,13 @@ export class AliyunFCPlugin extends BasePlugin {
               functionDomainInfo.routeConfigs?.length
             ) {
               for (const router of functionDomainInfo.routeConfigs) {
+                const name =
+                  `${router.functionName}.${router.serviceName}`.replace(
+                    /_/g,
+                    '-'
+                  );
                 this.core.cli.log(
-                  `Auto Domain: http://${router.functionName}.${
-                    router.serviceName
-                  }.${akId}.${region}.fc.devsapp.net/${(
+                  `Auto Domain: http://${name}.${akId}.${region}.fc.devsapp.net/${(
                     router.path || ''
                   ).replace(/^\/|\*+$/g, '')}`
                 );
