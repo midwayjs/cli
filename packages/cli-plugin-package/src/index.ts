@@ -880,6 +880,7 @@ export class PackagePlugin extends BasePlugin {
       followSymbolicLinks: false,
       cwd: sourceDirection,
       ignore,
+      dot:true
     });
     const zip = new JSZip();
     const isWindows = platform() === 'win32';
