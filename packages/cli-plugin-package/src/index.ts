@@ -182,7 +182,10 @@ export class PackagePlugin extends BasePlugin {
   async installDevDep() {
     this.core.cli.log('Install development dependencies...');
     let isNeedSkipInstallNodeModules = false;
-    if (existsSync(join(this.servicePath, 'node_modules'))) {
+    if (
+      'pnp' in process.versions ||
+      existsSync(join(this.servicePath, 'node_modules'))
+    ) {
       let originPkgJson: any = {};
       try {
         const pkgJsonPath = join(this.servicePath, 'package.json');
@@ -198,12 +201,9 @@ export class PackagePlugin extends BasePlugin {
         originPkgJson.devDependencies
       );
       const allDepList = Object.keys(allDepMap);
-      const notInstalled = allDepList.find(depName => {
-        return !existsSync(join(this.servicePath, 'node_modules', depName));
-      });
-      if (!notInstalled) {
-        isNeedSkipInstallNodeModules = true;
-      }
+      isNeedSkipInstallNodeModules = allDepList.every(depName =>
+        findNpmModule(this.servicePath, depName)
+      );
     }
 
     if (!isNeedSkipInstallNodeModules) {
@@ -474,21 +474,25 @@ export class PackagePlugin extends BasePlugin {
 
     let skipNpmInstall = false;
     if (this.core.service?.experimentalFeatures?.fastInstallNodeModules) {
-      this.core.debug('Fast Install Node Modules');
-      const moduleInfoList = Object.keys(pkgJson.dependencies).map(name => {
-        return {
-          name,
-          version: pkgJson.dependencies[name],
-        };
-      });
-      const start = Date.now();
-      const copyResult = await copyFromNodeModules(
-        moduleInfoList,
-        join(this.getCwd(), 'node_modules'),
-        join(this.midwayBuildPath, 'node_modules')
-      );
-      skipNpmInstall = !!copyResult;
-      this.core.debug('skipNpmInstall', skipNpmInstall, Date.now() - start);
+      if ('pnp' in process.versions) {
+        this.core.debug('PnP detected. Skip fast install node modules');
+      } else {
+        this.core.debug('Fast Install Node Modules');
+        const moduleInfoList = Object.keys(pkgJson.dependencies).map(name => {
+          return {
+            name,
+            version: pkgJson.dependencies[name],
+          };
+        });
+        const start = Date.now();
+        const copyResult = await copyFromNodeModules(
+          moduleInfoList,
+          join(this.getCwd(), 'node_modules'),
+          join(this.midwayBuildPath, 'node_modules')
+        );
+        skipNpmInstall = !!copyResult;
+        this.core.debug('skipNpmInstall', skipNpmInstall, Date.now() - start);
+      }
     }
 
     if (!skipNpmInstall) {

@@ -2,6 +2,7 @@ import * as minimist from 'minimist';
 import { join } from 'path';
 import { commandLineUsage } from './utils/commandLineUsage';
 import { CommandCore } from './core';
+import { findNpmModule } from './npm';
 import { existsSync, readFileSync } from 'fs';
 
 export class CoreBaseCLI {
@@ -53,12 +54,11 @@ export class CoreBaseCLI {
     const packageJson = JSON.parse(readFileSync(packageJsonFile).toString());
     const deps = packageJson?.['midway-cli']?.plugins || [];
     this.core.debug('mw plugin', deps);
-    const currentNodeModules = join(cwd, 'node_modules');
     deps.forEach(dep => {
-      const npmPath = join(currentNodeModules, dep);
+      const npmPath = findNpmModule(cwd, dep);
       if (!existsSync(npmPath)) {
         throw new Error(
-          `Auto load mw plugin error: '${dep}' not install in '${currentNodeModules}'`
+          `Auto load mw plugin error: '${dep}' not install in '${cwd}'`
         );
       }
       try {
