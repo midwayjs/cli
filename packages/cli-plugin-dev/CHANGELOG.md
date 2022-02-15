@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.99-beta.1](https://github.com/midwayjs/cli/compare/v1.2.98...v1.2.99-beta.1) (2022-02-15)
+
+
+### Bug Fixes
+
+* fast dev ([60407ac](https://github.com/midwayjs/cli/commit/60407acca89d4495173c64458687e5a6b03a8411))
+* remove esbuild ([6bdfc7c](https://github.com/midwayjs/cli/commit/6bdfc7c3abdf94e1f5c3cb2f0f3fbc600be0a00f))
+
+
+### Features
+
+* swc ([3b0ab58](https://github.com/midwayjs/cli/commit/3b0ab580d8d030a3969495ecb650346710657af7))
+
+
+
+
+
 ## [1.2.98](https://github.com/midwayjs/cli/compare/v1.2.97...v1.2.98) (2022-02-10)
 
 **Note:** Version bump only for package @midwayjs/cli-plugin-dev

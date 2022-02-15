@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/cli-plugin-swc",
-  "version": "1.2.98",
+  "version": "1.2.99-beta.1",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
