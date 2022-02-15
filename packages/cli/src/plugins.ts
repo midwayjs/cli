@@ -15,10 +15,4 @@ export const PluginList: Array<{
   { mod: '@midwayjs/cli-plugin-test', command: 'cov', installed: true },
   { mod: '@midwayjs/cli-plugin-clean', command: 'clean', installed: true },
   { mod: '@midwayjs/cli-plugin-check', command: 'check', installed: true },
-  {
-    mod: '@midwayjs/cli-plugin-add',
-    command: 'new',
-    name: 'AddPlugin',
-    installed: true,
-  },
 ];

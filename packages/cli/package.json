@@ -20,7 +20,6 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@midwayjs/cli-plugin-add": "^1.2.97",
     "@midwayjs/cli-plugin-build": "^1.2.97",
     "@midwayjs/cli-plugin-check": "^1.2.97",
     "@midwayjs/cli-plugin-clean": "^1.2.97",
