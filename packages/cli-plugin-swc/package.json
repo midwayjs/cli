@@ -1,0 +1,24 @@
+{
+  "name": "@midwayjs/cli-plugin-swc",
+  "version": "1.2.98",
+  "main": "dist/index",
+  "typings": "dist/index.d.ts",
+  "dependencies": {
+    "@swc-node/register": "^1.4.2"
+  },
+  "engines": {
+    "node": ">= 10"
+  },
+  "files": [
+    "js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:midwayjs/cli.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
+  "gitHead": "61e1928171b9ad9375fc0448cba975c30af81b13"
+}

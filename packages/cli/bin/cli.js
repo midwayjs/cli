@@ -1,7 +1,9 @@
 'use strict';
+const { findNpm } = require('@midwayjs/command-core');
 const cli = async argv => {
   require('source-map-support/register');
-  const { CLI, checkUpdate, findNpm } = require('../dist');
+
+  const { CLI, checkUpdate } = require('../dist');
   if (!argv.npm) {
     argv.npm = findNpm(argv).cmd;
   }

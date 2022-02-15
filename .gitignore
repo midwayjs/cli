@@ -11,6 +11,7 @@ coverage
 package-lock.json
 .DS_*
 .nyc*
+ncc
 !**/fixtures/app/node_modules/hello/*
 run/
 package-lock.json

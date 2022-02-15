@@ -25,6 +25,7 @@
     "@midwayjs/core": "^2.8.0",
     "@midwayjs/serverless-app": "^2.8.9",
     "@midwayjs/cli-plugin-esbuild": "^1.2.98",
+    "@midwayjs/cli-plugin-swc": "^1.2.98",
     "@midwayjs/web": "^2.8.0",
     "fs-extra": "^8.1.0",
     "node-fetch": "^2.6.1"
