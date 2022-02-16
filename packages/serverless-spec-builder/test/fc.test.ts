@@ -15,7 +15,7 @@ describe('/test/fc.test.ts', () => {
     assert(funResult['Properties']['Initializer'] === 'index.initializer');
     assert(funResult['Properties']['InitializationTimeout'] === 10);
     assert(funResult['Properties']['Handler'] === 'index.handler');
-    assert(funResult['Properties']['Runtime'] === 'nodejs12');
+    assert(funResult['Properties']['Runtime'] === 'nodejs14');
     assert(funResult['Properties']['InstanceConcurrency'] === 2);
     assert(
       funResult['Properties']['EnvironmentVariables']['NODE_ENV'] === 'prod'
