@@ -283,9 +283,9 @@ export class FCComponentSpecBuilder extends SpecBuilder {
       internetAccess: providerData.internetAccess,
       role: providerData.role,
       logConfig: lowercaseObjectKey(providerData.logConfig),
-      vpc: lowercaseObjectKey(providerData.vpcConfig),
-      nas: lowercaseObjectKey(providerData.nasConfig),
-      tracing: providerData.tracingConfig,
+      vpcConfig: lowercaseObjectKey(providerData.vpcConfig),
+      nasConfig: lowercaseObjectKey(providerData.nasConfig),
+      tracingConfig: providerData.tracingConfig,
     };
     const region = providerData.region;
     const access = (providerData as any).access || 'default';
