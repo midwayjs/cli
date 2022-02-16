@@ -27,11 +27,9 @@ const initializeMethod = async (initializeContext = {}) => {
           preloadModules: <%-JSON.stringify(preloadModules, null, 2)%>,
           imports: preload && preload.modules,
           globalConfig: {
-            default: {
-              faas: {
-                initializeContext,
-                applicationAdapter: runtime
-              }
+            faas: {
+              initializeContext,
+              applicationAdapter: runtime
             }
           }
         });
