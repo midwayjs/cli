@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/cli-plugin-dev",
-  "version": "1.2.99-beta.2",
+  "version": "1.2.99",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -22,8 +22,8 @@
     "@midwayjs/mock": "*"
   },
   "devDependencies": {
-    "@midwayjs/cli-plugin-esbuild": "^1.2.99-beta.2",
-    "@midwayjs/cli-plugin-swc": "^1.2.99-beta.2",
+    "@midwayjs/cli-plugin-esbuild": "^1.2.99",
+    "@midwayjs/cli-plugin-swc": "^1.2.99",
     "@midwayjs/core": "^2.8.0",
     "@midwayjs/serverless-app": "^2.8.9",
     "@midwayjs/web": "^2.8.0",

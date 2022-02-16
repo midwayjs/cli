@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/cli-plugin-esbuild",
-  "version": "1.2.99-beta.2",
+  "version": "1.2.99",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
