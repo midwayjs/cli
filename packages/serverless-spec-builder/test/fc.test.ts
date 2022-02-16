@@ -33,7 +33,7 @@ describe('/test/fc.test.ts', () => {
     assert(funResult['Properties']['Initializer'] === 'index.initializer');
     assert(funResult['Properties']['InitializationTimeout'] === 3);
     assert(funResult['Properties']['Handler'] === 'index.handler');
-    assert(funResult['Properties']['Runtime'] === 'nodejs12');
+    assert(funResult['Properties']['Runtime'] === 'nodejs14');
     assert.deepStrictEqual(funResult['Events'], undefined);
     const properties =
       result['Resources']['serverless-hello-world']['Properties'];
@@ -52,7 +52,7 @@ describe('/test/fc.test.ts', () => {
     assert(funResult['Type'] === 'Aliyun::Serverless::Function');
     assert(funResult['Properties']['Initializer'] === 'index.initializer');
     assert(funResult['Properties']['Handler'] === 'index.handler');
-    assert(funResult['Properties']['Runtime'] === 'nodejs12');
+    assert(funResult['Properties']['Runtime'] === 'nodejs14');
     assert.deepStrictEqual(funResult['Events'], {
       'http-index': {
         Properties: {
@@ -68,7 +68,7 @@ describe('/test/fc.test.ts', () => {
     assert(funResult2['Type'] === 'Aliyun::Serverless::Function');
     assert(funResult2['Properties']['Initializer'] === 'index.initializer');
     assert(funResult2['Properties']['Handler'] === 'index.handler');
-    assert(funResult2['Properties']['Runtime'] === 'nodejs12');
+    assert(funResult2['Properties']['Runtime'] === 'nodejs14');
 
     assert.deepStrictEqual(funResult2['Events'], {
       'http-index2': {
@@ -87,7 +87,7 @@ describe('/test/fc.test.ts', () => {
     assert(funResult3['Type'] === 'Aliyun::Serverless::Function');
     assert(funResult3['Properties']['Initializer'] === 'index.initializer');
     assert(funResult3['Properties']['Handler'] === 'index.handler');
-    assert(funResult3['Properties']['Runtime'] === 'nodejs12');
+    assert(funResult3['Properties']['Runtime'] === 'nodejs14');
 
     assert.deepStrictEqual(funResult3['Events'], {
       'http-index3': {
@@ -108,7 +108,7 @@ describe('/test/fc.test.ts', () => {
     assert(funResult['Type'] === 'Aliyun::Serverless::Function');
     assert(funResult['Properties']['Initializer'] === 'index.initializer');
     assert(funResult['Properties']['Handler'] === 'index.handler');
-    assert(funResult['Properties']['Runtime'] === 'nodejs12');
+    assert(funResult['Properties']['Runtime'] === 'nodejs14');
     assert.deepStrictEqual(funResult['Events'], {
       'http-index': {
         Properties: {
@@ -128,7 +128,7 @@ describe('/test/fc.test.ts', () => {
     assert(funResult['Type'] === 'Aliyun::Serverless::Function');
     assert(funResult['Properties']['Initializer'] === 'index.initializer');
     assert(funResult['Properties']['Handler'] === 'index.handler');
-    assert(funResult['Properties']['Runtime'] === 'nodejs12');
+    assert(funResult['Properties']['Runtime'] === 'nodejs14');
     assert.deepStrictEqual(funResult['Events'], undefined);
   });
 
@@ -139,7 +139,7 @@ describe('/test/fc.test.ts', () => {
     const funResult = result['Resources']['serverless-hello-world']['index'];
     assert(funResult['Type'] === 'Aliyun::Serverless::Function');
     assert(funResult['Properties']['Handler'] === 'index.handler');
-    assert(funResult['Properties']['Runtime'] === 'nodejs12');
+    assert(funResult['Properties']['Runtime'] === 'nodejs14');
     assert(funResult['Properties']['EnvironmentVariables']['GLOBAL_PASS']);
     assert(!funResult['Properties']['EnvironmentVariables']['MYSQL_USER']);
     assert(!funResult['Properties']['EnvironmentVariables']['MYSQL_PASS']);
@@ -157,7 +157,7 @@ describe('/test/fc.test.ts', () => {
     const funResult = result['Resources']['serverless-hello-world']['index'];
     assert(funResult['Type'] === 'Aliyun::Serverless::Function');
     assert(funResult['Properties']['Handler'] === 'index.handler');
-    assert(funResult['Properties']['Runtime'] === 'nodejs12');
+    assert(funResult['Properties']['Runtime'] === 'nodejs14');
 
     assert.deepStrictEqual(funResult['Events'], {
       oss: {
@@ -186,7 +186,7 @@ describe('/test/fc.test.ts', () => {
     const funResult = result['Resources']['serverless-hello-world']['index'];
     assert(funResult['Type'] === 'Aliyun::Serverless::Function');
     assert(funResult['Properties']['Handler'] === 'index.handler');
-    assert(funResult['Properties']['Runtime'] === 'nodejs12');
+    assert(funResult['Properties']['Runtime'] === 'nodejs14');
 
     assert.deepStrictEqual(funResult['Events'], {
       mq: {
@@ -208,7 +208,7 @@ describe('/test/fc.test.ts', () => {
     const funResult = result['Resources']['serverless-hello-world']['index'];
     assert(funResult['Type'] === 'Aliyun::Serverless::Function');
     assert(funResult['Properties']['Handler'] === 'index.handler');
-    assert(funResult['Properties']['Runtime'] === 'nodejs12');
+    assert(funResult['Properties']['Runtime'] === 'nodejs14');
 
     assert.deepStrictEqual(funResult['Events'], {
       timer: {
