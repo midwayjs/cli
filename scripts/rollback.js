@@ -12,9 +12,15 @@ let versionBase;
   await Promise.all(data.map(item => {
     console.log('---->', item.name);
     if (item.private === false) {
-      const version = execSync(
-        `npm --registry=https://r.npm.taobao.org show ${item.name} version`
-      ).toString().replace('\n', '');
+      let version;
+      try {
+        version = execSync(
+          `npm --registry=https://r.npm.taobao.org show ${item.name} version`
+        ).toString().replace('\n', '');
+      } catch {
+        return;
+      }
+      
       arr.push(
         `npm dist-tag add ${item.name}@${version} latest\n`
       );

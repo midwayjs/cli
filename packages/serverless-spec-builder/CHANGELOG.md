@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.99-beta.2](https://github.com/midwayjs/cli/compare/v1.2.99-beta.1...v1.2.99-beta.2) (2022-02-16)
+
+
+### Bug Fixes
+
+* aliyun fc default runtime version upgrade to nodejs.14 ([e8d226b](https://github.com/midwayjs/cli/commit/e8d226b1b3a6be2ec2a8cb5164cd56a45642d204))
+* faas initializeContext ([aa6c480](https://github.com/midwayjs/cli/commit/aa6c4806ad1dd81983edeef66acf95923e7459d7))
+* serverlessdevs spec transform ([defb788](https://github.com/midwayjs/cli/commit/defb7888ac42d1945142163d46d5772de01456e1))
+* v3 global config default ([d22ffb7](https://github.com/midwayjs/cli/commit/d22ffb7c316eb09ace242e131d7ac70047da90e4))
+
+
+
+
+
 ## [1.2.95](https://github.com/midwayjs/cli/compare/v1.2.94...v1.2.95) (2022-01-20)
 
 **Note:** Version bump only for package @midwayjs/serverless-spec-builder

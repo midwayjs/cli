@@ -3,6 +3,37 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.99-beta.2](https://github.com/midwayjs/bin/compare/v1.2.99-beta.1...v1.2.99-beta.2) (2022-02-16)
+
+
+### Bug Fixes
+
+* aliyun fc default runtime version upgrade to nodejs.14 ([e8d226b](https://github.com/midwayjs/bin/commit/e8d226b1b3a6be2ec2a8cb5164cd56a45642d204))
+* faas initializeContext ([aa6c480](https://github.com/midwayjs/bin/commit/aa6c4806ad1dd81983edeef66acf95923e7459d7))
+* serverlessdevs spec transform ([defb788](https://github.com/midwayjs/bin/commit/defb7888ac42d1945142163d46d5772de01456e1))
+* v3 global config default ([d22ffb7](https://github.com/midwayjs/bin/commit/d22ffb7c316eb09ace242e131d7ac70047da90e4))
+
+
+
+
+
+## [1.2.99-beta.1](https://github.com/midwayjs/bin/compare/v1.2.98...v1.2.99-beta.1) (2022-02-15)
+
+
+### Bug Fixes
+
+* fast dev ([60407ac](https://github.com/midwayjs/bin/commit/60407acca89d4495173c64458687e5a6b03a8411))
+* remove esbuild ([6bdfc7c](https://github.com/midwayjs/bin/commit/6bdfc7c3abdf94e1f5c3cb2f0f3fbc600be0a00f))
+
+
+### Features
+
+* swc ([3b0ab58](https://github.com/midwayjs/bin/commit/3b0ab580d8d030a3969495ecb650346710657af7))
+
+
+
+
+
 ## [1.2.98](https://github.com/midwayjs/bin/compare/v1.2.97...v1.2.98) (2022-02-10)
 
 **Note:** Version bump only for package midway-bin

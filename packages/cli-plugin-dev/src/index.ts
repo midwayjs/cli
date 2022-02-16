@@ -154,9 +154,28 @@ export class DevPlugin extends BasePlugin {
       let MIDWAY_DEV_IS_DEBUG;
 
       if (options.ts) {
-        if (options.fast === 'esbuild') {
-          execArgv = ['-r', join(__dirname, '../js/esbuild-register.js')];
-        } else {
+        let fastRegister;
+        if (typeof options.fast === 'string' && options.fast !== 'true') {
+          const pluginName = `@midwayjs/cli-plugin-${options.fast}`;
+          this.core.debug('faster pluginName', pluginName);
+          try {
+            const pkg = require.resolve(`${pluginName}/package.json`);
+            fastRegister = join(pkg, `../js/${options.fast}-register.js`);
+            this.core.debug('fastRegister', fastRegister);
+            if (!existsSync(fastRegister)) {
+              fastRegister = '';
+            }
+          } catch {
+            this.core.cli.log(
+              `please install @midwayjs/cli-plugin-${options.fast} to using fast mode '${options.fast}'`
+            );
+          }
+          if (fastRegister) {
+            execArgv = ['-r', fastRegister];
+          }
+        }
+
+        if (!fastRegister) {
           execArgv = ['-r', 'ts-node/register'];
           if (this.tsconfigJson?.compilerOptions?.baseUrl) {
             execArgv.push('-r', 'tsconfig-paths/register');
