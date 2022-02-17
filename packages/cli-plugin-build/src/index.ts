@@ -115,6 +115,9 @@ export class BuildPlugin extends BasePlugin {
     if (this.options.outDir) {
       return this.options.outDir;
     }
+    return this.getCompilerOptionsOutDir()
+  }
+  getCompilerOptionsOutDir() {
     const tsConfig = this.getTsConfig();
     this.core.debug('TSConfig', tsConfig);
     const projectFile = this.getProjectFile();
@@ -216,7 +219,7 @@ export class BuildPlugin extends BasePlugin {
     // clear build cache
     if (!this.options.buildCache) {
       const { cwd } = this.core;
-      const outDir = this.getOutDir();
+      const outDir = this.getCompilerOptionsOutDir();
       const cacheList = [
         join(cwd, outDir, '.mwcc-cache'),
         join(cwd, outDir, 'midway.build.json'),
