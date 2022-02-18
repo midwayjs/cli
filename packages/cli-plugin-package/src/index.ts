@@ -909,7 +909,13 @@ export class PackagePlugin extends BasePlugin {
     }
     await new Promise((res, rej) => {
       zip
-        .generateNodeStream({ platform: 'UNIX' })
+        .generateNodeStream({
+          platform: 'UNIX',
+          compression: 'DEFLATE',
+          compressionOptions: {
+            level: 6,
+          },
+        })
         .pipe(createWriteStream(targetFileName))
         .once('finish', res)
         .once('error', rej);
