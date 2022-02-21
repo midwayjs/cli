@@ -325,7 +325,7 @@ export class FCComponentSpecBuilder extends SpecBuilder {
               ...userDefinedEnv,
             },
             asyncConfiguration: providerData.asyncConfiguration || '',
-            layers: providerData.layers || '',
+            layers: providerData.layers || [],
           },
           triggers: [],
           customDomains: [],
