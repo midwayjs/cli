@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0-beta.1](https://github.com/midwayjs/cli/compare/v1.2.99...v1.3.0-beta.1) (2022-02-21)
+
+
+### Features
+
+* zip compression ([f4129f5](https://github.com/midwayjs/cli/commit/f4129f546b57c947d833ec03bed4a5d80c3a74b1))
+
+
+
+
+
 ## [1.2.99](https://github.com/midwayjs/cli/compare/v1.2.98...v1.2.99) (2022-02-16)
 
 
