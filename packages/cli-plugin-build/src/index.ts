@@ -115,7 +115,7 @@ export class BuildPlugin extends BasePlugin {
     if (this.options.outDir) {
       return this.options.outDir;
     }
-    return this.getCompilerOptionsOutDir()
+    return this.getCompilerOptionsOutDir();
   }
   getCompilerOptionsOutDir() {
     const tsConfig = this.getTsConfig();
