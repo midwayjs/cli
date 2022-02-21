@@ -1,60 +1,34 @@
-import { join } from 'path';
-import { existsSync, writeFileSync, readFileSync } from 'fs';
-import { execSync } from 'child_process';
-import { tmpdir } from 'os';
-import { findNpm } from '@midwayjs/command-core';
-export const checkUpdate = (npm?: string) => {
-  const startTime = Date.now();
-  const lockFile = join(tmpdir(), 'faascliupdate.lock');
-  if (existsSync(lockFile)) {
-    const content = +readFileSync(lockFile).toString();
-    // 更新提示 24 小时
-    if (startTime - content < 24 * 3600000) {
-      return;
-    }
-  }
-  writeFileSync(lockFile, `${startTime}`);
-  const { registry } = findNpm({ npm });
+import mi from 'mod-info';
+export const checkUpdate = async (npm?: string) => {
   try {
-    const data = execSync(
-      `npm ${
-        registry ? `--registry=${registry}` : ''
-      } view @midwayjs/cli dist-tags --json`,
-      {
-        cwd: process.env.HOME,
-      }
-    ).toString();
-    const remoteVersion = JSON.parse(data)['latest'];
-    const remoteVersionNumber = versionToNumber(remoteVersion);
-    const currentVersion = require('../package.json').version;
-    const currentVersionNumber = versionToNumber(currentVersion);
-    if (remoteVersionNumber > currentVersionNumber) {
+    const pkg = require('../package.json');
+    const info = await mi(pkg.name, pkg.version, {
+      level: ['minor', 'patch'],
+    });
+    if (info.update) {
       console.log();
       console.log('*********************************************************');
       console.log();
       console.log('   find new version:');
-      console.log(`   ${currentVersion} ==> ${remoteVersion}`);
+      console.log(`   ${pkg.version} ==> ${info.version}`);
       console.log();
       console.log('   please reinstall @midwayjs/cli module to update.');
       console.log();
       console.log('   npm i @midwayjs/cli -g');
       console.log();
       console.log('*********************************************************');
+      if (info.tips?.length) {
+        console.log(' Some tips:');
+        for (const tip of info.tips) {
+          console.log(`  ${tip}`);
+        }
+        console.log(
+          '*********************************************************'
+        );
+      }
       console.log();
     }
   } catch (err) {
     console.log('[ Midway ] check update error and skip', err.message);
   }
-};
-
-const versionToNumber = version => {
-  if (!version) {
-    return;
-  }
-  const versionList = version.split('.');
-  return (
-    (versionList[0] || 0) * 10e6 +
-    (versionList[1] || 0) * 10e3 +
-    (versionList[2] || 0) * 1
-  );
 };
