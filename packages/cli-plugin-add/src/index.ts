@@ -24,7 +24,7 @@ export class AddPlugin extends BasePlugin {
       options: {
         template: {
           usage: 'new template',
-          alias: 't',
+          shortcut: 't',
         },
         target: {
           usage: 'new project target directory',
@@ -34,6 +34,10 @@ export class AddPlugin extends BasePlugin {
         },
         npm: {
           usage: 'npm registry',
+        },
+        all: {
+          usage: 'show all built-in template',
+          shortcut: 'a',
         },
       },
       passingCommand: true,
@@ -134,6 +138,13 @@ export class AddPlugin extends BasePlugin {
 
   // 用户选择模板
   async userSelectTemplate() {
+    if (!this.options.all) {
+      for (const key of Object.keys(templateList)) {
+        if (templateList[key]['hidden'] === true) {
+          delete templateList[key];
+        }
+      }
+    }
     const prompt = new CategorySelect({
       name: 'templateName',
       message: 'Hello, traveller.\n  Which template do you like?',
