@@ -24,7 +24,7 @@ export class AddPlugin extends BasePlugin {
       options: {
         template: {
           usage: 'new template',
-          alias: 't',
+          shortcut: 't',
         },
         target: {
           usage: 'new project target directory',
@@ -37,8 +37,8 @@ export class AddPlugin extends BasePlugin {
         },
         all: {
           usage: 'show all built-in template',
-          alias: 'a',
-        }
+          shortcut: 'a',
+        },
       },
       passingCommand: true,
     },
