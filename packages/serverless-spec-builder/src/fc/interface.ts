@@ -55,6 +55,7 @@ export interface FCProviderStructure extends ProviderStructure {
     statefulInvocation: boolean;
   };
   tracingConfig?: 'Enable' | 'Disable';
+  layers?: string[];
 }
 
 export interface FCSpecStructure extends SpecStructure {

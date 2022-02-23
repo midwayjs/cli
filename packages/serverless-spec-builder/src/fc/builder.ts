@@ -1,26 +1,26 @@
+import { SpecBuilder } from '../builder';
+import {
+  HTTPEvent,
+  LogEvent,
+  MQEvent,
+  OSEvent,
+  TimerEvent,
+} from '../interface';
+import {
+  filterUserDefinedEnv,
+  lowercaseObjectKey,
+  removeObjectEmptyAttributes,
+  uppercaseObjectKey,
+} from '../utils';
 import {
   FCCustomDomainSpec,
   FCFunctionSpec,
   FCFunctionsStructure,
   FCFunctionStructure,
+  FCProviderStructure,
   FCSpec,
   HTTPEventType,
-  FCProviderStructure,
 } from './interface';
-import { SpecBuilder } from '../builder';
-import {
-  HTTPEvent,
-  TimerEvent,
-  LogEvent,
-  OSEvent,
-  MQEvent,
-} from '../interface';
-import {
-  uppercaseObjectKey,
-  removeObjectEmptyAttributes,
-  filterUserDefinedEnv,
-  lowercaseObjectKey,
-} from '../utils';
 
 export class FCSpecBuilder extends SpecBuilder {
   toJSON() {
@@ -325,6 +325,7 @@ export class FCComponentSpecBuilder extends SpecBuilder {
               ...userDefinedEnv,
             },
             asyncConfiguration: providerData.asyncConfiguration || '',
+            layers: providerData.layers || [],
           },
           triggers: [],
           customDomains: [],
