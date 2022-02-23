@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/midwayjs/cli/compare/v1.2.99...v1.3.0) (2022-02-23)
+
+
+### Features
+
+* add aliyun FC layers configuration ([#267](https://github.com/midwayjs/cli/issues/267)) ([4caacd2](https://github.com/midwayjs/cli/commit/4caacd255297f2b2b08a5bc30b94c278d3588cf8))
+* zip compression ([#265](https://github.com/midwayjs/cli/issues/265)) ([0f83ac5](https://github.com/midwayjs/cli/commit/0f83ac5fba0a2764dd0454f666d285d2b2c6b084))
+
+
+
+
+
 # [1.3.0-beta.1](https://github.com/midwayjs/cli/compare/v1.2.99...v1.3.0-beta.1) (2022-02-21)
 
 
