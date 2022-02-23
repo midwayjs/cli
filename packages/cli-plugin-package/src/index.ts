@@ -355,11 +355,15 @@ export class PackagePlugin extends BasePlugin {
       } catch {
         //
       }
+      let originDependencies = originPkgJson.dependencies || {}
       await writeJSON(join(this.midwayBuildPath, 'package.json'), {
         ...originPkgJson,
         name: this.codeAnalyzeResult.projectType,
         version: '1.0.0',
-        dependencies: this.codeAnalyzeResult.usingDependenciesVersion.valid,
+        dependencies: {
+          ...originDependencies,
+          ...this.codeAnalyzeResult.usingDependenciesVersion.valid,
+        },
       });
     }
     if (this.options.sharedDir) {
