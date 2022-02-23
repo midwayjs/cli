@@ -8,7 +8,7 @@ const cli = async argv => {
     argv.npm = findNpm(argv).cmd;
   }
   // 检查更新
-  checkUpdate(argv.npm);
+  await checkUpdate();
   const cli = new CLI(argv);
   cli
     .start()

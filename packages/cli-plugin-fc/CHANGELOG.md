@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0-beta.1](https://github.com/midwayjs/cli/compare/v1.2.99...v1.3.0-beta.1) (2022-02-21)
+
+
+### Bug Fixes
+
+* fc deploy domain ([735f183](https://github.com/midwayjs/cli/commit/735f18361e9d029ae688402c64059e578183b35b))
+
+
+
+
+
 ## [1.2.99](https://github.com/midwayjs/cli/compare/v1.2.98...v1.2.99) (2022-02-16)
 
 

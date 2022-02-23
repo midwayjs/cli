@@ -289,9 +289,9 @@ export class FCComponentSpecBuilder extends SpecBuilder {
     };
     const region = providerData.region;
     const access = (providerData as any).access || 'default';
-    let httpEventRouters;
 
     for (const funName in functionsData) {
+      let httpEventRouters;
       const funSpec: FCFunctionStructure = functionsData[funName];
       const handler = funSpec.handler || 'index.handler';
       const newSpec = {

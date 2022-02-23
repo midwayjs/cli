@@ -14,8 +14,8 @@ export function useExpressDevPack(options: DevPackOptions) {
     return invokeByDev(options.dev);
   };
   return expressCompose([
-    expressBodyParser.urlencoded({ extended: false }),
-    expressBodyParser.json(),
+    expressBodyParser.urlencoded({ extended: false, limit: '6mb' }),
+    expressBodyParser.json({ limit: '6mb' }),
     async (req: Request, res: Response, next: NextFunction) => {
       const { createExpressGateway } = require('@midwayjs/gateway-common-http');
       const gateway = createExpressGateway(options);

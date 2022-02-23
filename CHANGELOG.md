@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0-beta.1](https://github.com/midwayjs/bin/compare/v1.2.99...v1.3.0-beta.1) (2022-02-21)
+
+
+### Bug Fixes
+
+* check update ([bf19ed7](https://github.com/midwayjs/bin/commit/bf19ed73b686270986b01617a2bfc7848fb71edd))
+* fc deploy domain ([735f183](https://github.com/midwayjs/bin/commit/735f18361e9d029ae688402c64059e578183b35b))
+
+
+### Features
+
+* zip compression ([f4129f5](https://github.com/midwayjs/bin/commit/f4129f546b57c947d833ec03bed4a5d80c3a74b1))
+
+
+
+
+
 ## [1.2.99](https://github.com/midwayjs/bin/compare/v1.2.98...v1.2.99) (2022-02-16)
 
 

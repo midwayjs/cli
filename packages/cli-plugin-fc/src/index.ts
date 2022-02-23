@@ -202,9 +202,17 @@ export class AliyunFCPlugin extends BasePlugin {
     const artifactFile =
       this.getStore('artifactFile', 'global') ||
       join(this.servicePath, 'serverless.zip');
+
+    const akId = Crypto.AES.decrypt(
+      syaml[access].AccountID,
+      'SecretKey123'
+    ).toString(Crypto.enc.Utf8);
     this.core.cli.log('');
     this.core.cli.log('Start deploy by @serverless-devs');
-    this.core.cli.log('');
+    this.core.cli.log(` - access: ${access}`);
+    this.core.cli.log(
+      ` - access key id: ${akId.slice(0, 4) + '*********' + akId.slice(-4)}`
+    );
 
     const cwd = process.cwd();
     process.chdir(this.midwayBuildPath);
@@ -232,6 +240,7 @@ export class AliyunFCPlugin extends BasePlugin {
       Object.assign(this.core.service.provider, this.options.serverlessDev);
     }
     const functions = generateComponentSpec(this.core.service);
+
     try {
       for (const fcDeployInputs of functions) {
         Object.assign(fcDeployInputs, this.options.serverlessDev);
@@ -252,10 +261,6 @@ export class AliyunFCPlugin extends BasePlugin {
         const funcName = fcDeployInputs.props.function.name;
 
         if (fcDeployInputs?.props?.customDomains?.[0]?.domainName === 'auto') {
-          const akId = Crypto.AES.decrypt(
-            syaml[access].AccountID,
-            'SecretKey123'
-          ).toString(Crypto.enc.Utf8);
           this.core.cli.log('');
           for (const functionDomainInfo of fcDeployInputs.props.customDomains) {
             if (
