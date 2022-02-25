@@ -14,7 +14,7 @@ export const run = async (cwd: string, options: any = {}) => {
   if (!options?.ignoreMock) {
     await exec({
       baseDir: cwd,
-      cmd: 'npm install @midwayjs/mock',
+      cmd: 'npm install @midwayjs/mock@2',
     });
   }
   const core = new CommandCore({
