@@ -626,6 +626,14 @@ export class CheckPlugin extends BasePlugin {
             return [false, 'tsconfig target need ≤ es2018'];
           }
           return [true];
+        })
+        .check('emitDecoratorMetadata', () => {
+          const emitDecoratorMetadata =
+            tsconfig?.compilerOptions?.emitDecoratorMetadata;
+          if (!emitDecoratorMetadata) {
+            return [false, 'tsconfig emitDecoratorMetadata need true'];
+          }
+          return [true];
         });
     };
   }
