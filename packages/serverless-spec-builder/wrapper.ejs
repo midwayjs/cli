@@ -33,6 +33,7 @@ try {
 let starter;
 let runtime;
 let inited = false;
+let initError;
 <% if (advancePreventMultiInit) { %>
 let isInitialing = false;
 <% } %>
@@ -112,15 +113,28 @@ const waitInitial = () => {
 
 
 exports.<%=initializer%> = asyncWrapper(async (...args) => {
-  if (!inited) {
-    await initializeMethod(...args);
+  try {
+    if (!inited) {
+      await initializeMethod(...args);
+    }
+  } catch (e) {
+    initError = e;
+    throw e;
   }
 });
 
 <% handlers.forEach(function(handlerData){ %>
 exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
-  if (!inited) {
-    await initializeMethod();
+  try {
+    if (!inited) {
+      await initializeMethod();
+    }
+  } catch (e) {
+    initError = e;
+    throw e;
+  }
+  if (initError) {
+    throw initError;
   }
   <% if (advancePreventMultiInit) { %>
   if (isInitialing) {
