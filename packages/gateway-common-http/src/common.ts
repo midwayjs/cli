@@ -136,11 +136,10 @@ export async function parseInvokeOptionsByOriginUrl(
           req.body = await getRawBody(req);
         }
         invokeHTTPData.body = req.body;
-      } else if (
-        contentType.startsWith('application/json') ||
-        typeof req.body !== 'string'
-      ) {
+      } else if (contentType.startsWith('application/json')) {
         invokeHTTPData.body = JSON.stringify(req.body);
+      } else {
+        invokeHTTPData.body = `${req.body}`;
       }
     } else {
       invokeHTTPData.body = undefined;
