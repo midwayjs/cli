@@ -1,6 +1,6 @@
 {
   "name": "ali-demo",
   "dependencies": {
-    "@midwayjs/web": "*"
+    "@midwayjs/web": "2"
   }
 }
