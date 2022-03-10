@@ -1,4 +1,8 @@
-import { BasePlugin, findNpmModule, forkNode } from '@midwayjs/command-core';
+import {
+  BasePlugin,
+  forkNode,
+  resolveMidwayConfig,
+} from '@midwayjs/command-core';
 import { resolve, join, dirname, relative } from 'path';
 import {
   existsSync,
@@ -75,22 +79,10 @@ export class BuildPlugin extends BasePlugin {
   private program: Program;
 
   async formatOptions() {
-    const midwayConfig = [
-      join(this.core.cwd, 'midway.config.ts'),
-      join(this.core.cwd, 'midway.config.js'),
-    ].find(file => existsSync(file));
-    if (midwayConfig) {
+    const config = resolveMidwayConfig(this.core.cwd);
+    if (config.exist) {
       this.isMidwayHooks = true;
-      const modInfo =
-        findNpmModule(this.core.cwd, '@midwayjs/hooks/internal') ||
-        findNpmModule(this.core.cwd, '@midwayjs/hooks-core');
-      if (modInfo) {
-        const { getConfig } = require(modInfo);
-        const config = getConfig(this.core.cwd);
-        if (config.source) {
-          this.options.srcDir = config.source;
-        }
-      }
+      this.options.srcDir = config.source;
     }
 
     const packageJsonPath = join(this.core.cwd, 'package.json');

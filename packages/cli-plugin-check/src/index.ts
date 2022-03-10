@@ -1,4 +1,4 @@
-import { BasePlugin, findNpmModule } from '@midwayjs/command-core';
+import { BasePlugin, resolveMidwayConfig } from '@midwayjs/command-core';
 import { RunnerContainer, Runner } from '@midwayjs/luckyeye';
 import { join } from 'path';
 import { existsSync, readFileSync } from 'fs';
@@ -73,22 +73,10 @@ export class CheckPlugin extends BasePlugin {
     if (this.projectType === ProjectType.FaaS) {
       const locator = new Locator(cwd);
       // midway hooks 支持
-      const midwayConfig = [
-        join(cwd, 'midway.config.ts'),
-        join(cwd, 'midway.config.js'),
-      ].find(file => existsSync(file));
-      if (midwayConfig) {
+      const config = resolveMidwayConfig(cwd);
+      if (config.exist) {
         this.isHooks = true;
-        const modInfo =
-          findNpmModule(cwd, '@midwayjs/hooks/internal') ||
-          findNpmModule(cwd, '@midwayjs/hooks-core');
-        if (modInfo) {
-          const { getConfig } = require(modInfo);
-          const config = getConfig(cwd);
-          if (config.source) {
-            this.options.sourceDir = config.source;
-          }
-        }
+        this.options.sourceDir = config.source;
       }
 
       if (this.options.sourceDir) {
