@@ -3,7 +3,8 @@
   "compilerOptions": {
     "rootDir": "src",
     "target": "es2017",
-    "outDir": "dist"
+    "outDir": "dist",
+    "emitDecoratorMetadata": true
   },
   "include": [
     "./src/**/*.ts"

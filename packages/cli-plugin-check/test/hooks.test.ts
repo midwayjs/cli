@@ -13,5 +13,6 @@ describe('test/hooks.test.ts', () => {
     const logs = await runCheck(cwd);
     const logStr = logs.join('\n');
     assert(logStr.includes('Need add hooks()'));
+    assert(logStr.includes('config directory is required'));
   });
 });

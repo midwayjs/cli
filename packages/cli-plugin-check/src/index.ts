@@ -274,19 +274,30 @@ export class CheckPlugin extends BasePlugin {
           const existsConfig = existsSync(
             join(this.globalData.tsCodeRoot, 'config')
           );
-          if (!existsConfig) {
-            return [true];
-          }
 
           const configuration = join(
             this.globalData.tsCodeRoot,
             'configuration.ts'
           );
-          if (!existsSync(configuration)) {
+          let configurationData;
+
+          if (existsSync(configuration)) {
+            configurationData = readFileSync(configuration).toString();
+          }
+          if (!existsConfig) {
+            if (configurationData) {
+              if (configurationData.includes('importConfigs')) {
+                return [false, 'config directory is required'];
+              }
+            }
+
+            return [true];
+          }
+
+          if (!configurationData) {
             return [false, 'config need to be set in configuration.ts'];
           }
 
-          const configurationData = readFileSync(configuration).toString();
           if (!configurationData.includes('importConfigs')) {
             return [false, 'config need to be set in configuration.ts'];
           }
@@ -624,6 +635,14 @@ export class CheckPlugin extends BasePlugin {
             ];
           } else if (targetVersion > 9) {
             return [false, 'tsconfig target need ≤ es2018'];
+          }
+          return [true];
+        })
+        .check('emitDecoratorMetadata', () => {
+          const emitDecoratorMetadata =
+            tsconfig?.compilerOptions?.emitDecoratorMetadata;
+          if (!emitDecoratorMetadata) {
+            return [false, 'tsconfig emitDecoratorMetadata need true'];
           }
           return [true];
         });

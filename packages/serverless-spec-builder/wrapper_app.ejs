@@ -11,6 +11,7 @@ try {
 
 let runtime;
 let inited = false;
+let initError;
 
 const initializeMethod = async (initializeContext = {}) => {
   return lock.sureOnce(async () => {
@@ -26,9 +27,14 @@ const initializeMethod = async (initializeContext = {}) => {
 // initializer skip
 <% } else { %> 
 exports.<%=initializer%> = asyncWrapper(async (...args) => {
-  if (!inited) {
-    inited = true;
-    await initializeMethod();
+  try {
+    if (!inited) {
+      inited = true;
+      await initializeMethod();
+    }
+  } catch (e) {
+    initError = e;
+    throw e;
   }
 });
 <% } %>
@@ -36,18 +42,33 @@ exports.<%=initializer%> = asyncWrapper(async (...args) => {
 
 <% if (isDefaultFunc) { %>
 module.exports = asyncWrapper(async (...args) => {
-  if (!inited) {
-    await initializeMethod();
+  try {
+    if (!inited) {
+      await initializeMethod();
+    }
+  } catch (e) {
+    initError = e;
+    throw e;
+  }
+  if (initError) {
+    throw initError;
   }
   return runtime.asyncEvent()(...args);
 });
 <% } else { %> 
 <% handlers.forEach(function(handlerData){ %>
   exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
-    if (!inited) {
-      await initializeMethod();
+    try {
+      if (!inited) {
+        await initializeMethod();
+      }
+    } catch (e) {
+      initError = e;
+      throw e;
     }
-
+    if (initError) {
+      throw initError;
+    }
     return runtime.asyncEvent()(...args);
   });
 <% }); %>
