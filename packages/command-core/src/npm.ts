@@ -119,7 +119,7 @@ export const resolveMidwayConfig = (cwd: string) => {
   const midwayConfig = [
     join(cwd, 'midway.config.ts'),
     join(cwd, 'midway.config.js'),
-  ].some((file) => existsSync(file));
+  ].some(file => existsSync(file));
 
   const result = {
     exist: midwayConfig,

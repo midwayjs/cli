@@ -1,4 +1,4 @@
-import { BasePlugin, findNpmModule, resolveMidwayConfig } from '@midwayjs/command-core';
+import { BasePlugin, resolveMidwayConfig } from '@midwayjs/command-core';
 import { RunnerContainer, Runner } from '@midwayjs/luckyeye';
 import { join } from 'path';
 import { existsSync, readFileSync } from 'fs';

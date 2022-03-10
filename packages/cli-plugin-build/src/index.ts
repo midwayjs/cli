@@ -1,4 +1,8 @@
-import { BasePlugin, findNpmModule, forkNode, resolveMidwayConfig } from '@midwayjs/command-core';
+import {
+  BasePlugin,
+  forkNode,
+  resolveMidwayConfig,
+} from '@midwayjs/command-core';
 import { resolve, join, dirname, relative } from 'path';
 import {
   existsSync,

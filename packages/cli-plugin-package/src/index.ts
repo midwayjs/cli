@@ -3,7 +3,7 @@ import {
   findMidwayVersion,
   forkNode,
   installNpm,
-  resolveMidwayConfig
+  resolveMidwayConfig,
 } from '@midwayjs/command-core';
 import { getSpecFile, writeToSpec } from '@midwayjs/serverless-spec-builder';
 import { dirname, isAbsolute, join, relative, resolve } from 'path';
@@ -235,7 +235,6 @@ export class PackagePlugin extends BasePlugin {
     // midway hooks 支持
     const config = resolveMidwayConfig(cwd);
     if (config.exist) this.options.sourceDir = config.source;
-
 
     if (this.options.sourceDir) {
       this.options.sourceDir = this.transformToRelative(
