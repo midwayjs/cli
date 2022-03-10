@@ -115,6 +115,34 @@ export const findNpmModule = (cwd, modName) => {
   }
 };
 
+export const resolveMidwayConfig = (cwd: string) => {
+  const midwayConfig = [
+    join(cwd, 'midway.config.ts'),
+    join(cwd, 'midway.config.js'),
+  ].some((file) => existsSync(file));
+
+  const result = {
+    exist: midwayConfig,
+    source: '',
+  };
+
+  if (midwayConfig) {
+    const modInfo =
+      findNpmModule(cwd, '@midwayjs/hooks/internal') ||
+      findNpmModule(cwd, '@midwayjs/hooks-core');
+
+    if (modInfo) {
+      const { getConfig } = require(modInfo);
+      const config = getConfig(cwd);
+      if (config.source) {
+        result.source = config.source;
+      }
+    }
+  }
+
+  return result;
+};
+
 // 从本地检索npm包
 export const findNpm = (argv?) => {
   let npm = '';
