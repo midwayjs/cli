@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.1-beta.1](https://github.com/midwayjs/bin/compare/v1.3.0...v1.3.1-beta.1) (2022-03-10)
+
+
+### Bug Fixes
+
+* emitDecoratorMetadata ([#269](https://github.com/midwayjs/bin/issues/269)) ([b08e6c6](https://github.com/midwayjs/bin/commit/b08e6c6ec581e5dfb1231962384afc035db516d6))
+
+
+
+
+
 # [1.3.0](https://github.com/midwayjs/bin/compare/v1.2.99...v1.3.0) (2022-02-23)
 
 
