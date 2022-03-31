@@ -110,19 +110,19 @@ async function debugHandlerCore(
   if (
     !prevExist ||
     !Object.keys(prevContent).length ||
-    !prevContent.configuration.length
+    !prevContent.configurations.length
   ) {
     writeContent.version = '0.2.0';
-    writeContent.configuration = [createDebuggerConfiguration()];
-  } else if (prevContent.configuration.length) {
-    const sameNameList = (prevContent.configuration as any[]).filter(
+    writeContent.configurations = [createDebuggerConfiguration()];
+  } else if (prevContent.configurations.length) {
+    const sameNameList = (prevContent.configurations as any[]).filter(
       config => config.name === name
     );
 
     // Configuration with same name exists
     if (sameNameList.length) {
-      writeContent.configuration = prevContent.configuration;
-      writeContent.configuration.push(
+      writeContent.configurations = prevContent.configurations;
+      writeContent.configurations.push(
         createDebuggerConfiguration(`${name} ${Date.now()}`)
       );
     }
