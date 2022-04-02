@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.2-beta.1](https://github.com/midwayjs/bin/compare/v1.3.1...v1.3.2-beta.1) (2022-04-02)
+
+
+### Bug Fixes
+
+* hooks core 2 ([6b7079c](https://github.com/midwayjs/bin/commit/6b7079c24cb833c4d67eab14fb831f0479ed3d05))
+
+
+### Features
+
+* support pnpm ([3330f2f](https://github.com/midwayjs/bin/commit/3330f2f097715ffffaed0915694981dc0d22046f))
+
+
+
+
+
 ## [1.3.1](https://github.com/midwayjs/bin/compare/v1.3.1-beta.1...v1.3.1) (2022-03-10)
 
 **Note:** Version bump only for package midway-bin
