@@ -225,7 +225,7 @@ export class CheckPlugin extends BasePlugin {
         .check('node version', () => {
           const v = +process.version.split('.')[0].replace(/[^\d]/g, '');
           if (v < 12) {
-            return [false, 'Node Version shoule >= Node 12'];
+            return [false, 'Node.js Version should >= 12'];
           }
           return [true];
         })
