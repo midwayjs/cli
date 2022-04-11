@@ -18,7 +18,7 @@ describe('/test/package-hooks.test.ts', () => {
 
     process.env.MIDWAY_TS_MODE = 'false';
     process.env.NODE_ENV = 'dev';
-    execSync(`cd ${baseDir};npm install @midwayjs/hooks-core`);
+    execSync(`cd ${baseDir};npm install @midwayjs/hooks-core@2`);
     const core = new CommandCore({
       config: {
         servicePath: baseDir,

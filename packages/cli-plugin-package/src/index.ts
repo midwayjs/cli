@@ -452,6 +452,16 @@ export class PackagePlugin extends BasePlugin {
       pkgJson.resolutions,
       this.core.service.resolutions
     );
+
+    // 避免因为在 devDeps 里面和 deps 都写了，导致有些npm 客户端忽略安装
+    if (pkgJson.devDependencies) {
+      Object.keys(pkgJson.devDependencies).forEach(devDep => {
+        if (pkgJson.dependencies[devDep]) {
+          delete pkgJson.devDependencies[devDep];
+        }
+      });
+    }
+
     writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, null, 2));
 
     if (this.options.skipInstallDep) {
@@ -862,7 +872,12 @@ export class PackagePlugin extends BasePlugin {
       this.core.cli.log(' - Experimental Feature RemoveUselessFiles');
       ignore = uselessFilesMatch;
     }
-    const fileList = await globby(['**'], {
+    const globbyMatched = ['**'];
+    const npmClient = this.getNPMClient();
+    if (npmClient?.startsWith('pnpm')) {
+      globbyMatched.push('**/.pnpm/**');
+    }
+    const fileList = await globby(globbyMatched, {
       onlyFiles: false,
       followSymbolicLinks: false,
       cwd: sourceDirection,
@@ -909,6 +924,10 @@ export class PackagePlugin extends BasePlugin {
     });
   }
 
+  private getNPMClient() {
+    return process.env.NPM_CLIENT || this.options.npm;
+  }
+
   // 安装npm到构建文件夹
   private async npmInstall(
     options: {
@@ -927,7 +946,7 @@ export class PackagePlugin extends BasePlugin {
         baseDir: installDirectory,
         moduleName: options.npmList ? `${options.npmList.join(' ')}` : '',
         mode: options.production ? ['production'] : [],
-        register: process.env.NPM_CLIENT || this.options.npm,
+        register: this.getNPMClient(),
         registerPath: this.options.registry,
         slience: true,
         debugLog: this.core.debug,
