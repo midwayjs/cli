@@ -28,6 +28,7 @@ export class CheckPlugin extends BasePlugin {
   projectType: ProjectType;
   currentGroup: string;
   servicePath = this.core.config.servicePath;
+  sourcesInfo: { code: string; file: string; tsSourceFile: string }[] = [];
 
   errors = [];
 
@@ -104,6 +105,26 @@ export class CheckPlugin extends BasePlugin {
       tsCodeRoot,
       locateResult,
     };
+
+    if (!existsSync(tsCodeRoot)) {
+      return [CHECK_SKIP];
+    }
+
+    if (existsSync(tsCodeRoot)) {
+      const tsSourceFileList = await globby(['**/*.ts'], {
+        cwd: tsCodeRoot,
+      });
+      this.sourcesInfo = tsSourceFileList.map(tsSourceFile => {
+        const file = join(tsCodeRoot, tsSourceFile);
+        const code = readFileSync(file).toString();
+        return {
+          tsSourceFile,
+          file,
+          code,
+        };
+      });
+    }
+
     this.setStore('checkGlobalData', this.globalData, true);
   }
 
@@ -382,6 +403,54 @@ export class CheckPlugin extends BasePlugin {
           }
           return [true];
         })
+        .check('config inject', () => {
+          if (!tsCodeRootCheckPassed) {
+            return [true];
+          }
+          // 注入的 config 检测
+          const configInjectReg =
+            /@config\(\s*(?:['"](\w+)['"])?\s*\)(?:\n|\s)*(\w+)(:|;|\n|\s)/gi;
+          let execRes;
+          const requiredConfigMap = {};
+          for (const { code, tsSourceFile } of this.sourcesInfo) {
+            while ((execRes = configInjectReg.exec(code))) {
+              const configName = execRes[1] || execRes[2];
+              if (configName) {
+                requiredConfigMap[configName] = tsSourceFile;
+              }
+            }
+          }
+          const allConfigKey = Object.keys(requiredConfigMap);
+          const allConfigContent = [
+            'local',
+            'daily',
+            'pre',
+            'prod',
+            'default',
+          ].map(env => {
+            const configFile = join(
+              this.globalData.tsCodeRoot,
+              `config/config.${env}.ts`
+            );
+            if (!existsSync(configFile)) {
+              return '';
+            }
+            return readFileSync(configFile).toString();
+          });
+          const notFindConfig = allConfigKey.filter(config => {
+            const reg = new RegExp(`\\s${config}\\s*[=:]|\\.${config}\\s*[=:]`);
+            return !allConfigContent.find(code => reg.test(code));
+          });
+          if (!notFindConfig.length) {
+            return [true];
+          }
+          return [
+            false,
+            `config ${notFindConfig.join(
+              ', '
+            )} was been injected, but not define in config/config.$env.ts`,
+          ];
+        })
         .check('hooks import', () => {
           if (!this.isHooks) {
             return [true];
@@ -640,21 +709,12 @@ export class CheckPlugin extends BasePlugin {
   async ruleIoc() {
     return runner => {
       runner.group('ioc check').check('class define', async () => {
-        const { tsCodeRoot } = this.globalData;
-        if (!existsSync(tsCodeRoot)) {
-          return [CHECK_SKIP];
-        }
-
-        const tsSourceFileList = await globby(['**/*.ts'], {
-          cwd: tsCodeRoot,
-        });
         const classNameMap = {};
-        for (const tsSourceFile of tsSourceFileList) {
-          const file = join(tsCodeRoot, tsSourceFile);
-          const code = readFileSync(file).toString();
+        for (const { code, tsSourceFile } of this.sourcesInfo) {
           // @Provider() export default class xxx extends xxx {}
           const reg =
             /@(?:provider|controller)\([^)]*\)(?:\n|\s)*(export)?(\s+default\s+)?\s*class\s+(.*?)\s+/gi;
+
           let execRes;
           while ((execRes = reg.exec(code))) {
             const className = execRes[3];

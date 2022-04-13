@@ -47,6 +47,14 @@ describe('test/faas.test.ts', () => {
         'there is a duplicate class name(A) in index.ts and index2.ts'
       )
     );
+    assert(
+      logStr.includes('configNotA') &&
+        logStr.includes('configNotB') &&
+        !logStr.includes('configA') &&
+        !logStr.includes('configB') &&
+        !logStr.includes('configC') &&
+        !logStr.includes('configD')
+    );
   });
 
   it('migrate to faas', async () => {
