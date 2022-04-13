@@ -106,10 +106,6 @@ export class CheckPlugin extends BasePlugin {
       locateResult,
     };
 
-    if (!existsSync(tsCodeRoot)) {
-      return [CHECK_SKIP];
-    }
-
     if (existsSync(tsCodeRoot)) {
       const tsSourceFileList = await globby(['**/*.ts'], {
         cwd: tsCodeRoot,
