@@ -1,4 +1,13 @@
-import { Provider } from "@midwayjs/decorator";
+import { Provider, Config } from "@midwayjs/decorator";
 
 @Provider()
-export class A {}
+export class A {
+  @Config('configA')
+  configA;
+
+  @Config()
+  configB;
+
+  @Config('configNotA')
+  configNotA;
+}
