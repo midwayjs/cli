@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.2](https://github.com/midwayjs/bin/compare/v1.3.1...v1.3.2) (2022-04-14)
+
+
+### Features
+
+* config  inejcted but not define ([#275](https://github.com/midwayjs/bin/issues/275)) ([d131465](https://github.com/midwayjs/bin/commit/d1314655b808d1992952ccbb90d9ee8c3f4f3973))
+* support pnpm ([#271](https://github.com/midwayjs/bin/issues/271)) ([81c3f49](https://github.com/midwayjs/bin/commit/81c3f49c6176bfcdc55825eec2856607bdd3213d))
+
+
+
+
+
 ## [1.3.2-beta.1](https://github.com/midwayjs/bin/compare/v1.3.1...v1.3.2-beta.1) (2022-04-02)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/cli-plugin-generator",
-  "version": "1.3.2-beta.1",
+  "version": "1.3.2",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
