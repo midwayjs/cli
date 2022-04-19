@@ -857,6 +857,7 @@ export class PackagePlugin extends BasePlugin {
 
     await this.makeZip(this.midwayBuildPath, file);
     const stat = statSync(file);
+    this.setStore('zipSize', stat.size, true);
     this.core.cli.log(
       ` - Zip size ${Number(stat.size / (1024 * 1024)).toFixed(2)}MB`
     );

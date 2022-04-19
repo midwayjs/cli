@@ -35,8 +35,9 @@ export class CommandCore implements ICommandCore {
   private preDebugTime: number;
   private stopLifecycles: string[] = [];
   private loadNpm = loadNpm.bind(null, this);
+  private timeTicks = [];
 
-  store = new Map();
+  public store = new Map();
 
   constructor(options: IOptions) {
     this.options = options;
@@ -178,11 +179,13 @@ export class CommandCore implements ICommandCore {
         commandInfo.command
       );
     }
-    await this.execLiftcycle(lifecycleEvents);
+    await this.execLifecycle(lifecycleEvents);
   }
 
-  private async execLiftcycle(lifecycleEvents) {
+  private async execLifecycle(lifecycleEvents: string[]) {
     for (const lifecycle of lifecycleEvents) {
+      const hooks = this.hooks[lifecycle] || [];
+      const tick = this.tickTime(lifecycle, { hooks: hooks.length });
       if (this.userLifecycle && this.userLifecycle[lifecycle]) {
         const userCmd = this.userLifecycle[lifecycle];
         this.debug('User Lifecycle', lifecycle);
@@ -197,21 +200,45 @@ export class CommandCore implements ICommandCore {
         } catch (e) {
           spin.stop();
           this.debug('User Lifecycle Hook Error', userCmd, e);
+          tick(e);
           throw e;
         }
         spin.stop();
       }
-      const hooks = this.hooks[lifecycle] || [];
+
       this.debug('Core Lifecycle', lifecycle, hooks.length);
       for (const hook of hooks) {
         try {
           await hook();
         } catch (e) {
           this.debug('Core Lifecycle Hook Error', e);
+          tick(e);
           throw e;
         }
       }
+      tick();
     }
+  }
+
+  private tickTime(type, info: any = {}) {
+    const start = Date.now();
+    const time: {
+      type: string;
+      usage: number;
+      error?: string;
+    } = {
+      type,
+      usage: 0,
+      ...info,
+    };
+    this.timeTicks.push(time);
+    return (error?) => {
+      time.usage = Date.now() - start;
+      if (error) {
+        time.error =
+          typeof error === 'string' ? error : error?.message || 'unknown';
+      }
+    };
   }
 
   // resume stop licycle execute
@@ -219,7 +246,7 @@ export class CommandCore implements ICommandCore {
     if (options) {
       Object.assign(this.options.options, options);
     }
-    await this.execLiftcycle(this.stopLifecycles);
+    await this.execLifecycle(this.stopLifecycles);
   }
 
   // spawn('aliyun:invoke')
@@ -250,6 +277,10 @@ export class CommandCore implements ICommandCore {
         this.addPlugin(plugin);
       });
     }
+  }
+
+  public getTimeTicks() {
+    return this.timeTicks;
   }
 
   // 获取核心instance
