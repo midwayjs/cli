@@ -14,7 +14,7 @@ export const checkUpdate = async (npm?: string) => {
       console.log();
       console.log('   please reinstall @midwayjs/cli module to update.');
       console.log();
-      console.log('   npm i @midwayjs/cli -g');
+      console.log('   npm i @midwayjs/cli');
       console.log();
       console.log('*********************************************************');
       if (info.tips?.length) {
