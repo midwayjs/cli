@@ -166,7 +166,7 @@ export class DevPlugin extends BasePlugin {
               fastRegister = '';
             }
           } catch {
-            this.core.cli.log(
+            throw new Error(
               `please install @midwayjs/cli-plugin-${options.fast} to using fast mode '${options.fast}'`
             );
           }

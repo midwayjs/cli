@@ -71,9 +71,9 @@ describe('command-core', () => {
     const testData = readFileSync(txt).toString();
     const times = core.getTimeTicks();
     assert(testData === 'user');
-    assert(times.length === 6);
-    assert(times[0].type === 'before:invoke:one');
-    assert(times[5].type === 'after:invoke:two');
+    assert(times.length === 7);
+    assert(times[1].type === 'before:invoke:one');
+    assert(times[6].type === 'after:invoke:two');
   });
   it('hook error', async () => {
     const core = new CommandCore({});

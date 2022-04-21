@@ -185,8 +185,11 @@ export class CommandCore implements ICommandCore {
   private async execLifecycle(lifecycleEvents: string[]) {
     for (const lifecycle of lifecycleEvents) {
       const hooks = this.hooks[lifecycle] || [];
-      const tick = this.tickTime(lifecycle, { hooks: hooks.length });
+
       if (this.userLifecycle && this.userLifecycle[lifecycle]) {
+        const tickUser = this.tickTime(`user:${lifecycle}`, {
+          hooks: this.userLifecycle[lifecycle].length,
+        });
         const userCmd = this.userLifecycle[lifecycle];
         this.debug('User Lifecycle', lifecycle);
         const spin = new Spin({ text: `Executing: ${userCmd}` });
@@ -200,12 +203,13 @@ export class CommandCore implements ICommandCore {
         } catch (e) {
           spin.stop();
           this.debug('User Lifecycle Hook Error', userCmd, e);
-          tick(e);
+          tickUser(e);
           throw e;
         }
+        tickUser();
         spin.stop();
       }
-
+      const tick = this.tickTime(lifecycle, { hooks: hooks.length });
       this.debug('Core Lifecycle', lifecycle, hooks.length);
       for (const hook of hooks) {
         try {
