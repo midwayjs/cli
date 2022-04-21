@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.4-beta.1](https://github.com/midwayjs/cli/compare/v1.3.3...v1.3.4-beta.1) (2022-04-21)
+
+
+### Bug Fixes
+
+* cli time tick ([ca21feb](https://github.com/midwayjs/cli/commit/ca21feb39bb64e7f3af274a3ba6ae36143f113ab))
+
+
+
+
+
 ## [1.3.3](https://github.com/midwayjs/cli/compare/v1.3.2...v1.3.3) (2022-04-20)
 
 **Note:** Version bump only for package @midwayjs/cli-plugin-dev
