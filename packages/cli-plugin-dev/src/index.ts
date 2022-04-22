@@ -343,6 +343,7 @@ export class DevPlugin extends BasePlugin {
         }
       }, // ignore dotfiles
       persistent: true,
+      cwd: this.core.cwd,
       ignoreInitial: true,
     });
     const fyml = resolve(this.core.cwd, 'f.yml');
@@ -354,9 +355,12 @@ export class DevPlugin extends BasePlugin {
       const watchFileList = this.options.watchFile.split(',');
       watchFileList.forEach(file => {
         const filePath = resolve(this.core.cwd, file);
-        this.core.debug('other watch file', filePath);
         if (existsSync(filePath)) {
+          this.core.debug('other watch file', filePath);
           watcher.add(filePath);
+        } else {
+          this.core.debug('other watch picomatch rule', file);
+          watcher.add(file);
         }
       });
     }
