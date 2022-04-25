@@ -49,6 +49,21 @@ export const copyFiles = async (options: ICopyOptions) => {
   await docopy(sourceDir, targetDir, paths, log);
 };
 
+export const copyStaticFiles = async ({ sourceDir, targetDir }) => {
+  if (!sourceDir || !targetDir) {
+    return;
+  }
+  const paths = globby.sync(['**/*.*'], {
+    cwd: sourceDir,
+    followSymbolicLinks: false,
+    ignore: [
+      '**/*.ts',
+      '**/node_modules/**', // 模块依赖目录
+    ],
+  });
+  return docopy(sourceDir, targetDir, paths);
+};
+
 const docopy = async (
   sourceDir: string,
   targetDir: string,

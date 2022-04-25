@@ -22,6 +22,7 @@ import { isAbsolute, join, relative, resolve } from 'path';
 import {
   analysisDecorator,
   copyFiles,
+  copyStaticFiles,
   DefaultLockFiles,
   exists,
   removeUselessFiles,
@@ -127,6 +128,10 @@ export class PackagePlugin extends BasePlugin {
       cmd: 'tsc --build',
       baseDir: this.midwayBuildPath,
     });
+    await copyStaticFiles({
+      sourceDir: this.tsCodeRoot,
+      targetDir: join(this.midwayBuildPath, 'dist'),
+    });
   }
 
   // 函数处理
@@ -212,7 +217,7 @@ export class PackagePlugin extends BasePlugin {
       }
     }
 
-    writeToSpec(this.servicePath, this.core.service, this.core.config.specFile);
+    writeToSpec(this.midwayBuildPath, this.core.service, this.core.config.specFile);
   }
 
   // 生产时期依赖处理
