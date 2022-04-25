@@ -1,114 +1,85 @@
-import { join } from 'path';
-import * as globby from 'globby';
-import { unlink, existsSync, stat, readFileSync, copy } from 'fs-extra';
 import { findNpmModule } from '@midwayjs/command-core';
-import * as semver from 'semver';
-interface Ilayer {
-  [extName: string]: {
-    path: string;
-  };
-}
-
-export function formatLayers(...multiLayers: Ilayer[]) {
-  const layerTypeList = { npm: {}, oss: {} };
-  multiLayers.forEach((layer: Ilayer) => {
-    Object.keys(layer || {}).forEach(layerName => {
-      if (!layer[layerName] || !layer[layerName].path) {
-        return;
-      }
-      const [type, path] = layer[layerName].path.split(':');
-      if (!layerTypeList[type]) {
-        return;
-      }
-      layerTypeList[type][layerName] = path;
-    });
-  });
-  return layerTypeList;
-}
-
-function commonPrefixUtil(str1: string, str2: string): string {
-  let result = '';
-  const n1 = str1.length;
-  const n2 = str2.length;
-
-  for (let i = 0, j = 0; i <= n1 - 1 && j <= n2 - 1; i++, j++) {
-    if (str1[i] !== str2[j]) {
-      break;
+import { access, stat, copy, unlink } from 'fs-extra';
+import * as globby from 'globby';
+import * as plimit from 'p-limit';
+import { isAbsolute, join, relative } from 'path';
+import { ICopyOptions } from './interface';
+export const transformPathToRelative = (baseDir: string, targetDir: string) => {
+  if (targetDir) {
+    if (isAbsolute(targetDir)) {
+      return relative(baseDir, targetDir);
     }
-    result += str1[i];
+    return targetDir;
   }
-  return result;
-}
+};
 
-export function commonPrefix(arr: string[]): string {
-  let prefix: string = (arr && arr[0]) || '';
-  const n = (arr && arr.length) || 0;
-  for (let i = 1; i <= n - 1; i++) {
-    prefix = commonPrefixUtil(prefix, arr[i]);
+export const exists = async (path: string) => {
+  try {
+    return await access(path);
+  } catch {
+    return false;
   }
-  if (!prefix || prefix === '/') {
-    return '';
-  }
-  const result = prefix.replace(/\/[^/]*$/gi, '') || '/';
-  if (result && !/^\//.test(result)) {
-    return '/' + result;
-  }
-  if (result === '/') {
-    return '';
-  }
-  return result;
-}
+};
 
-export const uselessFilesMatch = [
-  '**/*.md',
-  '**/*.markdown',
-  '**/LICENSE',
-  '**/license',
-  '**/LICENSE.txt',
-  '**/MIT-LICENSE.txt',
-  '**/LICENSE-MIT.txt',
-  '**/*.d.ts',
-  '**/*.ts.map',
-  '**/*.js.map',
-  '**/*.test.js',
-  '**/*.test.ts',
-  '**/travis.yml',
-  '**/.travis.yml',
-  '**/src/**/*.ts',
-  '**/test/',
-  '**/tests/',
-  '**/coverage/',
-  '**/.github/',
-  '**/.coveralls.yml',
-  '**/.npmignore',
-  '**/AUTHORS',
-  '**/HISTORY',
-  '**/Makefile',
-  '**/.jshintrc',
-  '**/.eslintrc',
-  '**/.eslintrc.json',
-  '**/@types/',
-  '**/.mwcc-cache/',
+export const DefaultLockFiles = [
+  'yarn.lock',
+  'package-lock.json',
+  'pnpm-lock.yaml',
 ];
 
-export const removeUselessFiles = async (target: string) => {
-  const nm = join(target, 'node_modules');
-  const list = await globby(uselessFilesMatch, {
-    cwd: nm,
-    deep: 10,
-  });
-  console.log('  - Useless files Count', list.length);
-  let size = 0;
-  for (const file of list) {
-    const path = join(nm, file);
-    if (existsSync(path)) {
-      const stats = await stat(path);
-      size += stats.size;
-      await unlink(path);
+export const copyFiles = async (options: ICopyOptions) => {
+  const { defaultInclude, include, exclude, sourceDir, targetDir, log } =
+    options;
+  const paths = await globby(
+    (
+      defaultInclude || ['*.yml', '*.js', '*.ts', '*.json', 'app', 'config']
+    ).concat(include || []),
+    {
+      cwd: sourceDir,
+      followSymbolicLinks: false,
+      ignore: [
+        '**/node_modules/**', // 模块依赖目录
+        '**/test/**', // 测试目录
+        '**/run/**', // egg 运行调试目录
+        '**/.serverless/**', // faas 构建目录
+        '**/.faas_debug_tmp/**', // faas 调试临时目录
+      ].concat(exclude || []),
     }
-  }
-  console.log(
-    `  - Remove Useless file ${Number(size / (2 << 19)).toFixed(2)} MB`
+  );
+  await docopy(sourceDir, targetDir, paths, log);
+};
+
+const docopy = async (
+  sourceDir: string,
+  targetDir: string,
+  paths: string[],
+  log?
+) => {
+  const limit = plimit(20);
+  await Promise.all(
+    paths.map((path: string) => {
+      return limit(async () => {
+        const source = join(sourceDir, path);
+        const target = join(targetDir, path);
+        if (await exists(target)) {
+          const sourceStat = await stat(source);
+          const targetStat = await stat(target);
+          // source 修改时间小于目标文件 修改时间，则不拷贝
+          if (sourceStat.mtimeMs <= targetStat.mtimeMs) {
+            return;
+          }
+        }
+        if (log) {
+          log(path);
+        }
+
+        return copy(source, target).catch(e => {
+          if (log) {
+            log(`Error!!! From '${source}' to '${target}'`, e);
+          }
+        });
+      });
+    })
   );
 };
 
@@ -220,128 +191,55 @@ export const analysisDecorator = async (cwd: string, currentFunc?) => {
   };
 };
 
-interface ModInfo {
-  name: string;
-  version: string;
-}
-export const findModuleFromNodeModules = async (
-  moduleInfoList: ModInfo[],
-  baseNodeModuleDir: string,
-  fromNodeModulesPath: string,
-  moduleMap: { [modName: string]: { version: string; path: string } } = {}
-) => {
-  for (const moduleInfo of moduleInfoList) {
-    const { name, version } = moduleInfo;
-    if (moduleMap[name] && semver.satisfies(moduleMap[name].version, version)) {
-      continue;
-    }
+export const uselessFilesMatch = [
+  '**/*.md',
+  '**/*.markdown',
+  '**/LICENSE',
+  '**/license',
+  '**/LICENSE.txt',
+  '**/MIT-LICENSE.txt',
+  '**/LICENSE-MIT.txt',
+  '**/*.d.ts',
+  '**/*.ts.map',
+  '**/*.js.map',
+  '**/*.test.js',
+  '**/*.test.ts',
+  '**/travis.yml',
+  '**/.travis.yml',
+  '**/src/**/*.ts',
+  '**/test/',
+  '**/tests/',
+  '**/coverage/',
+  '**/.github/',
+  '**/.coveralls.yml',
+  '**/.npmignore',
+  '**/AUTHORS',
+  '**/HISTORY',
+  '**/Makefile',
+  '**/.jshintrc',
+  '**/.eslintrc',
+  '**/.eslintrc.json',
+  '**/@types/',
+  '**/.mwcc-cache/',
+];
 
-    const modulePath = join(fromNodeModulesPath, moduleInfo.name);
-    let info = {
-      path: modulePath,
-    };
-    let pkgJson: any = {};
-    if (existsSync(modulePath)) {
-      pkgJson = JSON.parse(
-        readFileSync(join(info.path, 'package.json')).toString()
-      );
-    } else {
-      info = getModuleCycleFind(
-        moduleInfo.name,
-        baseNodeModuleDir,
-        fromNodeModulesPath
-      );
-      if (!info) {
-        return;
-      }
-      pkgJson = JSON.parse(
-        readFileSync(join(info.path, 'package.json')).toString()
-      );
-      if (!semver.satisfies(pkgJson.version, moduleInfo.version)) {
-        return;
-      }
-    }
-    moduleMap[moduleInfo.name] = {
-      version: pkgJson.version,
-      path: info.path,
-    };
-    const pkgDepsModuleInfoList: ModInfo[] = [];
-    if (pkgJson.dependencies) {
-      Object.keys(pkgJson.dependencies).map(modName => {
-        const version = pkgJson.dependencies[modName];
-        pkgDepsModuleInfoList.push({
-          name: modName,
-          version,
-        });
-      });
-    }
-
-    const childInfo = await findModuleFromNodeModules(
-      pkgDepsModuleInfoList,
-      baseNodeModuleDir,
-      join(info.path, 'node_modules'),
-      moduleMap
-    );
-    if (!childInfo) {
-      return;
+export const removeUselessFiles = async (target: string) => {
+  const nm = join(target, 'node_modules');
+  const list = await globby(uselessFilesMatch, {
+    cwd: nm,
+    deep: 10,
+  });
+  console.log('  - Useless files Count', list.length);
+  let size = 0;
+  for (const file of list) {
+    const path = join(nm, file);
+    if (await exists(path)) {
+      const stats = await stat(path);
+      size += stats.size;
+      await unlink(path);
     }
   }
-  return moduleMap;
-};
-
-const getModuleCycleFind = (
-  moduleName,
-  baseNodeModuleDir,
-  fromNodeModuleDir
-) => {
-  while (true) {
-    const modulePath = join(fromNodeModuleDir, moduleName);
-    if (existsSync(modulePath)) {
-      return {
-        name: moduleName,
-        path: modulePath,
-      };
-    }
-    if (baseNodeModuleDir === fromNodeModuleDir) {
-      return;
-    }
-    const parentDir = join(fromNodeModuleDir, '../');
-    if (parentDir === fromNodeModuleDir) {
-      return;
-    }
-    fromNodeModuleDir = parentDir;
-  }
-};
-
-export const copyFromNodeModules = async (
-  moduleInfoList: ModInfo[],
-  fromNodeModulesPath: string,
-  targetNodeModulesPath: string
-) => {
-  const moduleMap = await findModuleFromNodeModules(
-    moduleInfoList,
-    fromNodeModulesPath,
-    fromNodeModulesPath
+  console.log(
+    `  - Remove Useless file ${Number(size / (2 << 19)).toFixed(2)} MB`
   );
-  if (!moduleMap) {
-    return;
-  }
-  const moduleNames = Object.keys(moduleMap);
-  const result = await Promise.all(
-    moduleNames.map(async name => {
-      const { path } = moduleMap[name];
-      const target = join(targetNodeModulesPath, name);
-      await copy(path, target, {
-        dereference: true,
-        filter: src => {
-          if (src.endsWith('/node_modules')) {
-            return false;
-          }
-          return true;
-        },
-      });
-      return name;
-    })
-  );
-  return result;
 };
