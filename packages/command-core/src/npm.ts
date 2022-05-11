@@ -101,7 +101,7 @@ const findNpmModuleByResolve = (cwd, modName) => {
 };
 
 export const findNpmModule = (cwd, modName) => {
-  if ('pnp' in process.versions) {
+  if ('pnp' in process.versions || process.env.npm_execpath?.includes('pnpm')) {
     return findNpmModuleByResolve(cwd, modName);
   }
 
