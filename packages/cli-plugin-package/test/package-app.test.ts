@@ -55,10 +55,10 @@ describe('/test/package-app.test.ts', () => {
     afterEach(async () => {
       await remove(join(baseDir, 'serverless.zip'));
       await remove(join(baseDir, 'package-lock.json'));
-      await remove(join(baseDir, '.serverless'));
+      // await remove(join(baseDir, '.serverless'));
       await remove(join(baseDir, 'node_modules'));
     });
-    it('base package', async () => {
+    it('base package2', async () => {
       const core = new CommandCore({
         config: {
           servicePath: baseDir,
@@ -76,7 +76,7 @@ describe('/test/package-app.test.ts', () => {
       assert(existsSync(join(buildPath, 'f.yml')));
       assert(existsSync(join(buildPath, 'app')));
       assert(existsSync(join(buildPath, 'config')));
-      assert(existsSync(join(buildPath, 'index.js')));
+      assert(!existsSync(join(buildPath, 'index.js')));
       assert(
         /npm:@midwayjs\/egg-layer/.test(
           readFileSync(join(buildPath, 'f.yml')).toString('utf8')

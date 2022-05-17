@@ -4,7 +4,6 @@ import { PackagePlugin } from '../src/index';
 import { resolve, join } from 'path';
 import { existsSync, remove } from 'fs-extra';
 import * as assert from 'assert';
-import { execSync } from 'child_process';
 
 describe('/test/package-hooks.test.ts', () => {
   const baseDir = resolve(__dirname, './fixtures/hooks');
@@ -18,7 +17,6 @@ describe('/test/package-hooks.test.ts', () => {
 
     process.env.MIDWAY_TS_MODE = 'false';
     process.env.NODE_ENV = 'dev';
-    execSync(`cd ${baseDir};npm install @midwayjs/hooks-core@2`);
     const core = new CommandCore({
       config: {
         servicePath: baseDir,

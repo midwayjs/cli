@@ -12,7 +12,6 @@ import {
   ensureFile,
   existsSync,
   move,
-  readFileSync,
   remove,
   statSync,
   writeFileSync,
@@ -25,7 +24,10 @@ import {
   copyStaticFiles,
   DefaultLockFiles,
   exists,
+  formatTsConfig,
+  readJson,
   removeUselessFiles,
+  transformPathToAbsolute,
   transformPathToRelative,
 } from './utils';
 
@@ -45,6 +47,8 @@ export class PackagePlugin extends BasePlugin {
   // 项目的 package.json 内容
   pkgJson: any = {};
   tsCodeRoot = 'src';
+
+  private _skipTsBuild = false;
   commands = {
     package: {
       usage: 'Packages a Serverless service',
@@ -108,10 +112,7 @@ export class PackagePlugin extends BasePlugin {
     }
     await ensureDir(this.midwayBuildPath);
 
-    const pkgJsonPath = join(this.servicePath, 'package.json');
-    if (await exists(pkgJsonPath)) {
-      this.pkgJson = JSON.parse(readFileSync(pkgJsonPath).toString());
-    }
+    this.pkgJson = await readJson(join(this.servicePath, 'package.json'));
     // 定位项目结构
     await this.prepareLocate();
     await Promise.all([
@@ -124,6 +125,11 @@ export class PackagePlugin extends BasePlugin {
 
   // 编译 ts 代码
   async compile() {
+    if (this._skipTsBuild) {
+      return;
+    }
+    // 处理 tsconfig.json
+    await formatTsConfig(join(this.midwayBuildPath, 'tsconfig.json'));
     await exec({
       cmd: 'tsc --build',
       baseDir: this.midwayBuildPath,
@@ -146,7 +152,6 @@ export class PackagePlugin extends BasePlugin {
     // 添加分析后引用 container
     this.setStore('MIDWAY_APPLICATION_CONTEXT', applicationContext, true);
     this.core.debug('funcSpec', funcSpec);
-
     // 高密度部署
     if (this.core.service.aggregation) {
       const { funcMap, logs } = aggregation(
@@ -217,11 +222,7 @@ export class PackagePlugin extends BasePlugin {
       }
     }
 
-    writeToSpec(
-      this.midwayBuildPath,
-      this.core.service,
-      this.core.config.specFile
-    );
+    writeToSpec(this.midwayBuildPath, this.core.service);
   }
 
   // 生产时期依赖处理
@@ -464,7 +465,10 @@ export class PackagePlugin extends BasePlugin {
     if (!specPackageConfig.include) {
       specPackageConfig.include = [];
     }
-    specPackageConfig.include.push('src');
+    if (this.tsCodeRoot) {
+      specPackageConfig.include.push(this.tsCodeRoot);
+    }
+
     if (this.core.config.specFile.path) {
       // backup original yml file
       await copy(
@@ -486,23 +490,28 @@ export class PackagePlugin extends BasePlugin {
         specPackageConfig.include.push('dist');
       }
     }
-
+    exclude.push('**/src/**');
     await copyFiles({
       sourceDir: this.servicePath,
       targetDir: this.midwayBuildPath,
-      include: this.options.skipBuild
-        ? [].concat(specPackageConfig.include)
-        : [this.options.sourceDir || 'src'].concat(specPackageConfig.include),
+      include: [].concat(specPackageConfig.include),
       exclude,
     });
 
+    const tsSourceDir = join(this.servicePath, this.tsCodeRoot);
+    if (await exists(tsSourceDir)) {
+      await copy(tsSourceDir, join(this.midwayBuildPath, 'src'));
+    } else {
+      this._skipTsBuild = true;
+    }
+
     if (this.options.sharedDir) {
       this.options.sharedTargetDir = this.options.sharedTargetDir || 'static';
-      this.options.sharedDir = transformPathToRelative(
+      this.options.sharedDir = transformPathToAbsolute(
         this.servicePath,
         this.options.sharedDir
       );
-      this.options.sharedTargetDir = transformPathToRelative(
+      this.options.sharedTargetDir = transformPathToAbsolute(
         this.midwayBuildPath,
         this.options.sharedTargetDir
       );

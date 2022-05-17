@@ -5,6 +5,7 @@
   "dependencies": {
     "@midwayjs/faas": "^2.10.14",
     "@midwayjs/hooks": "^2.2.0",
+    "@midwayjs/hooks-core": "^2.3.2",
     "@midwayjs/serverless-app": "^2.10.15"
   }
 }

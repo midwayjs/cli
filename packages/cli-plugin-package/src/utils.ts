@@ -1,5 +1,5 @@
 import { findNpmModule } from '@midwayjs/command-core';
-import { access, stat, copy, unlink } from 'fs-extra';
+import { access, stat, copy, unlink, readFile, writeFile } from 'fs-extra';
 import * as globby from 'globby';
 import * as plimit from 'p-limit';
 import { isAbsolute, join, relative } from 'path';
@@ -13,9 +13,19 @@ export const transformPathToRelative = (baseDir: string, targetDir: string) => {
   }
 };
 
+export const transformPathToAbsolute = (baseDir: string, targetDir: string) => {
+  if (targetDir) {
+    if (isAbsolute(targetDir)) {
+      return targetDir;
+    }
+    return join(baseDir, targetDir);
+  }
+};
+
 export const exists = async (path: string) => {
   try {
-    return await access(path);
+    await access(path);
+    return true;
   } catch {
     return false;
   }
@@ -257,4 +267,31 @@ export const removeUselessFiles = async (target: string) => {
   console.log(
     `  - Remove Useless file ${Number(size / (2 << 19)).toFixed(2)} MB`
   );
+};
+
+export const readJson = async (path: string) => {
+  if (await exists(path)) {
+    return JSON.parse(await readFile(path, 'utf-8'));
+  }
+  return {};
+};
+
+// 格式化 ts 配置文件
+export const formatTsConfig = async (tsconfigJsonFile: string) => {
+  const tsconfigJson = await readJson(tsconfigJsonFile);
+  if (!tsconfigJson.compilerOptions) {
+    tsconfigJson.compilerOptions = {};
+  }
+  Object.assign(tsconfigJson.compilerOptions, {
+    target: 'es2018',
+    module: 'commonjs',
+    outDir: './dist',
+    rootDir: 'src',
+    experimentalDecorators: true,
+  });
+  if (!tsconfigJson.include?.length) {
+    tsconfigJson.include = ['src'];
+  }
+  await writeFile(tsconfigJsonFile, JSON.stringify(tsconfigJson, null, 2));
+  return tsconfigJson;
 };
