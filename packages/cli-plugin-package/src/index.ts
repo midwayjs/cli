@@ -217,7 +217,11 @@ export class PackagePlugin extends BasePlugin {
       }
     }
 
-    writeToSpec(this.midwayBuildPath, this.core.service, this.core.config.specFile);
+    writeToSpec(
+      this.midwayBuildPath,
+      this.core.service,
+      this.core.config.specFile
+    );
   }
 
   // 生产时期依赖处理

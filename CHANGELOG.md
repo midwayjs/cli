@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.4](https://github.com/midwayjs/bin/compare/v1.3.3...v1.3.4) (2022-05-11)
+
+
+### Bug Fixes
+
+* cli time tick ([#278](https://github.com/midwayjs/bin/issues/278)) ([b80a15b](https://github.com/midwayjs/bin/commit/b80a15b62d826359ae4b36dc3b6cfc21f2e4ba18))
+* midwayjs/hooks[#322](https://github.com/midwayjs/bin/issues/322) ([#280](https://github.com/midwayjs/bin/issues/280)) ([1966928](https://github.com/midwayjs/bin/commit/196692895f68fa95000f16d49ec8bba9eb68f5e9))
+
+
+
+
+
+## [1.3.4-beta.1](https://github.com/midwayjs/bin/compare/v1.3.3...v1.3.4-beta.1) (2022-04-21)
+
+
+### Bug Fixes
+
+* cli time tick ([ca21feb](https://github.com/midwayjs/bin/commit/ca21feb39bb64e7f3af274a3ba6ae36143f113ab))
+* rooback ([91000f9](https://github.com/midwayjs/bin/commit/91000f905932db88e7879aef7b9208746c122fd3))
+
+
+
+
+
 ## [1.3.3](https://github.com/midwayjs/bin/compare/v1.3.2...v1.3.3) (2022-04-20)
 
 **Note:** Version bump only for package midway-bin
