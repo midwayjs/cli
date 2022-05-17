@@ -2,6 +2,8 @@ import {
   BasePlugin,
   forkNode,
   resolveMidwayConfig,
+  copyFiles,
+  exec,
 } from '@midwayjs/command-core';
 import { resolve, join, dirname, relative } from 'path';
 import {
@@ -11,10 +13,7 @@ import {
   remove,
   writeFileSync,
 } from 'fs-extra';
-import { CompilerHost, Program, resolveTsConfigFile } from '@midwayjs/mwcc';
-import { copyFiles } from '@midwayjs/faas-code-analysis';
 import * as globby from 'globby';
-import * as ts from 'typescript';
 import { tmpdir } from 'os';
 export class BuildPlugin extends BasePlugin {
   isMidwayHooks = false;
@@ -70,13 +69,9 @@ export class BuildPlugin extends BasePlugin {
     'build:clean': this.clean.bind(this),
     'build:copyFile': this.copyFile.bind(this),
     'build:compile': this.compile.bind(this),
-    'build:emit': this.emit.bind(this),
     'build:bundle': this.bundle.bind(this),
     'build:complete': this.complete.bind(this),
   };
-
-  private compilerHost: CompilerHost;
-  private program: Program;
 
   async formatOptions() {
     const config = resolveMidwayConfig(this.core.cwd);
@@ -161,68 +156,27 @@ export class BuildPlugin extends BasePlugin {
   }
 
   async compile() {
-    const rootDir = this.getTsCodeRoot();
-    this.core.debug('rootDir', rootDir);
     const outDir = this.getOutDir();
     this.core.debug('outDir', outDir);
     const { cwd } = this.core;
-    const { config } = resolveTsConfigFile(
-      cwd,
-      undefined,
-      this.options.tsConfig,
-      this.getStore('mwccHintConfig', 'global'),
-      this.isMidwayHooks
-        ? {
-            compilerOptions: {
-              sourceRoot: rootDir,
-              rootDir,
-              outDir,
-            },
-            include: [rootDir],
+    let errors = [];
+    try {
+      await exec({
+        cmd: 'tsc --build',
+        baseDir: cwd,
+        log: (...msg) => {
+          if (typeof msg[0] === 'string' && msg[0].includes(' error ')) {
+            errors.push(msg[0]);
           }
-        : {
-            compilerOptions: {
-              sourceRoot: rootDir,
-            },
-          }
-    );
-    this.core.debug('Compile TSConfig', config);
-    this.compilerHost = new CompilerHost(cwd, config);
-    this.program = new Program(this.compilerHost);
-  }
-
-  async emit() {
-    const { diagnostics } = await this.program.emit();
-    if (diagnostics?.length) {
-      const error = diagnostics.find(diagnostic => {
-        return diagnostic.category === ts.DiagnosticCategory.Error;
+          this.core.cli.log(...msg);
+        }
       });
-      if (error) {
-        const errorPath = `(${relative(this.core.cwd, error.file.fileName)})`;
-        if (!this.midwayCliConfig?.experimentalFeatures?.ignoreTsError) {
-          throw new Error(`TS Error: ${error.messageText}${errorPath}`);
-        }
-      }
+    } catch (e) {
+      errors.push(e.message);
     }
-
-    // clear build cache
-    if (!this.options.buildCache) {
-      const { cwd } = this.core;
-      const outDir = this.getOutDir();
-      const cacheList = [
-        join(cwd, outDir, '.mwcc-cache'),
-        join(cwd, outDir, 'midway.build.json'),
-      ];
-      for (const cacheFile of cacheList) {
-        if (existsSync(cacheFile)) {
-          await remove(cacheFile);
-        }
-      }
+    if (errors.length && !this.midwayCliConfig?.experimentalFeatures?.ignoreTsError) {
+      throw new Error(errors.join('\n'));
     }
-  }
-
-  private getTsCodeRoot(): string {
-    return resolve(this.core.cwd, this.options.srcDir || 'src');
   }
 
   private getCompilerOptions(tsConfig, optionKeyPath, projectDir) {

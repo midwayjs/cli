@@ -1,4 +1,0 @@
-service:
-  name: test
-provider:
-  name: aliyun
