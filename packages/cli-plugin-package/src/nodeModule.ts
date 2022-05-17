@@ -1,10 +1,9 @@
-import { exec } from '@midwayjs/command-core';
+import { exec, exists } from '@midwayjs/command-core';
 import { copy, readFile } from 'fs-extra';
 import { platform } from 'os';
 import { join } from 'path';
 import * as semver from 'semver';
 import { ModInfo } from './interface';
-import { exists } from './utils';
 
 export const copyFromNodeModules = async (
   moduleInfoList: ModInfo[],

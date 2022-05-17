@@ -1,9 +1,7 @@
-import { findNpmModule } from '@midwayjs/command-core';
-import { access, stat, copy, unlink, readFile, writeFile } from 'fs-extra';
+import { findNpmModule, exists } from '@midwayjs/command-core';
+import { stat, unlink, readFile, writeFile } from 'fs-extra';
 import * as globby from 'globby';
-import * as plimit from 'p-limit';
 import { isAbsolute, join, relative } from 'path';
-import { ICopyOptions } from './interface';
 export const transformPathToRelative = (baseDir: string, targetDir: string) => {
   if (targetDir) {
     if (isAbsolute(targetDir)) {
@@ -22,91 +20,11 @@ export const transformPathToAbsolute = (baseDir: string, targetDir: string) => {
   }
 };
 
-export const exists = async (path: string) => {
-  try {
-    await access(path);
-    return true;
-  } catch {
-    return false;
-  }
-};
-
 export const DefaultLockFiles = [
   'yarn.lock',
   'package-lock.json',
   'pnpm-lock.yaml',
 ];
-
-export const copyFiles = async (options: ICopyOptions) => {
-  const { defaultInclude, include, exclude, sourceDir, targetDir, log } =
-    options;
-  const paths = await globby(
-    (
-      defaultInclude || ['*.yml', '*.js', '*.ts', '*.json', 'app', 'config']
-    ).concat(include || []),
-    {
-      cwd: sourceDir,
-      followSymbolicLinks: false,
-      ignore: [
-        '**/node_modules/**', // 模块依赖目录
-        '**/test/**', // 测试目录
-        '**/run/**', // egg 运行调试目录
-        '**/.serverless/**', // faas 构建目录
-        '**/.faas_debug_tmp/**', // faas 调试临时目录
-      ].concat(exclude || []),
-    }
-  );
-  await docopy(sourceDir, targetDir, paths, log);
-};
-
-export const copyStaticFiles = async ({ sourceDir, targetDir }) => {
-  if (!sourceDir || !targetDir) {
-    return;
-  }
-  const paths = globby.sync(['**/*.*'], {
-    cwd: sourceDir,
-    followSymbolicLinks: false,
-    ignore: [
-      '**/*.ts',
-      '**/node_modules/**', // 模块依赖目录
-    ],
-  });
-  return docopy(sourceDir, targetDir, paths);
-};
-
-const docopy = async (
-  sourceDir: string,
-  targetDir: string,
-  paths: string[],
-  log?
-) => {
-  const limit = plimit(20);
-  await Promise.all(
-    paths.map((path: string) => {
-      return limit(async () => {
-        const source = join(sourceDir, path);
-        const target = join(targetDir, path);
-        if (await exists(target)) {
-          const sourceStat = await stat(source);
-          const targetStat = await stat(target);
-          // source 修改时间小于目标文件 修改时间，则不拷贝
-          if (sourceStat.mtimeMs <= targetStat.mtimeMs) {
-            return;
-          }
-        }
-        if (log) {
-          log(path);
-        }
-
-        return copy(source, target).catch(e => {
-          if (log) {
-            log(`Error!!! From '${source}' to '${target}'`, e);
-          }
-        });
-      });
-    })
-  );
-};
 
 // 分析装饰器上面的函数信息
 export const analysisDecorator = async (cwd: string, currentFunc?) => {

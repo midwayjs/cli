@@ -1,4 +1,0 @@
-service: midway-wechat-test
-
-provider:
-  name: wechat

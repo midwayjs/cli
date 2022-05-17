@@ -4,6 +4,9 @@ import {
   findMidwayVersion,
   installNpm,
   resolveMidwayConfig,
+  copyFiles,
+  copyStaticFiles,
+  exists,
 } from '@midwayjs/command-core';
 import { getSpecFile, writeToSpec } from '@midwayjs/serverless-spec-builder';
 import {
@@ -20,10 +23,7 @@ import { AnalyzeResult, Locator } from '@midwayjs/locate';
 import { isAbsolute, join, relative, resolve } from 'path';
 import {
   analysisDecorator,
-  copyFiles,
-  copyStaticFiles,
   DefaultLockFiles,
-  exists,
   formatTsConfig,
   readJson,
   removeUselessFiles,

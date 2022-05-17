@@ -4,6 +4,8 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "dependencies": {
+    "p-limit": "^3.1.0",
+    "globby": "^10.0.1",
     "light-spinner": "^1.0.0",
     "minimist": "^1.2.5"
   },

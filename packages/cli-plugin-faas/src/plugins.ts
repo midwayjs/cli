@@ -34,22 +34,4 @@ export const PluginList: Array<{
     platform: 'tencent',
     command: ['deploy', 'package'],
   },
-  {
-    mod: '@midwayjs/fcli-plugin-wechat',
-    name: 'WeChatPlugin',
-    platform: 'wechat',
-    command: ['package'],
-  },
-  {
-    mod: '@midwayjs/fcli-plugin-aws',
-    name: 'AWSLambdaPlugin',
-    platform: 'aws',
-    command: ['deploy', 'package'],
-  },
-  {
-    mod: '@midwayjs/cli-plugin-vercel',
-    name: 'VercelPlugin',
-    platform: 'vercel',
-    command: ['deploy', 'package'],
-  },
 ];

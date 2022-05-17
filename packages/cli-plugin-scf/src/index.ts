@@ -20,7 +20,7 @@ export class TencentSCFPlugin extends BasePlugin {
   midwayBuildPath = join(this.servicePath, '.serverless');
 
   hooks = {
-    'package:generateSpec': async () => {
+    'package:platform': async () => {
       this.core.cli.log('Generate spec file...');
       await generateFunctionsSpecFile(
         this.getSpecJson({
@@ -30,8 +30,7 @@ export class TencentSCFPlugin extends BasePlugin {
         }),
         join(this.midwayBuildPath, 'serverless.yml')
       );
-    },
-    'package:generateEntry': async () => {
+
       this.core.cli.log('Generate entry file...');
       const { version } = findMidwayVersion(this.servicePath);
       this.setGlobalDependencies(

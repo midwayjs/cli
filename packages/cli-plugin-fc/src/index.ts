@@ -23,14 +23,13 @@ export class AliyunFCPlugin extends BasePlugin {
   midwayBuildPath = join(this.servicePath, '.serverless');
 
   hooks = {
-    'package:generateSpec': async () => {
+    'package:platform': async () => {
       this.core.cli.log('Generate spec file...');
       await generateFunctionsSpecFile(
         this.getSpecJson(),
         join(this.midwayBuildPath, 'template.yml')
       );
-    },
-    'package:generateEntry': async () => {
+
       this.core.cli.log('Generate entry file...');
       const { version } = findMidwayVersion(this.servicePath);
       this.setGlobalDependencies(
