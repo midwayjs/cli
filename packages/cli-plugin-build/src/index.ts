@@ -3,7 +3,7 @@ import {
   forkNode,
   resolveMidwayConfig,
   copyFiles,
-  exec,
+  compileTypeScript,
 } from '@midwayjs/command-core';
 import { resolve, join, dirname, relative } from 'path';
 import {
@@ -157,26 +157,9 @@ export class BuildPlugin extends BasePlugin {
 
   async compile() {
     const outDir = this.getOutDir();
-    this.core.debug('outDir', outDir);
+    this.core.debug('outDir', outDir, this.midwayCliConfig);
     const { cwd } = this.core;
-    let errors = [];
-    try {
-      await exec({
-        cmd: 'tsc --build',
-        baseDir: cwd,
-        log: (...msg) => {
-          if (typeof msg[0] === 'string' && msg[0].includes(' error ')) {
-            errors.push(msg[0]);
-          }
-          this.core.cli.log(...msg);
-        }
-      });
-    } catch (e) {
-      errors.push(e.message);
-    }
-    if (errors.length && !this.midwayCliConfig?.experimentalFeatures?.ignoreTsError) {
-      throw new Error(errors.join('\n'));
-    }
+    await compileTypeScript(cwd, this.getTsConfig());
   }
 
   private getCompilerOptions(tsConfig, optionKeyPath, projectDir) {

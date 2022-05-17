@@ -11,3 +11,4 @@ export * from './utils/exec';
 export * from './lock';
 export * from './utils/postInstall';
 export * from './utils/copy';
+export * from './utils/compileTypeScript';

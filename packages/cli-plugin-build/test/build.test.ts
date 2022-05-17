@@ -23,7 +23,7 @@ const run = async (cwd: string, command: string, options = {}) => {
 };
 const cwd = join(__dirname, 'fixtures/base');
 describe('test/build.test.ts', () => {
-  it('build', async () => {
+  it.only('build', async () => {
     const dist = join(cwd, 'dist');
     if (existsSync(dist)) {
       await remove(dist);
