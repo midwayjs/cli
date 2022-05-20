@@ -1,12 +1,13 @@
 import {
   BasePlugin,
-  exec,
   findMidwayVersion,
   installNpm,
   resolveMidwayConfig,
   copyFiles,
   copyStaticFiles,
   exists,
+  readJson,
+  compileTypeScript,
 } from '@midwayjs/command-core';
 import { getSpecFile, writeToSpec } from '@midwayjs/serverless-spec-builder';
 import {
@@ -24,8 +25,6 @@ import { isAbsolute, join, relative, resolve } from 'path';
 import {
   analysisDecorator,
   DefaultLockFiles,
-  formatTsConfig,
-  readJson,
   removeUselessFiles,
   transformPathToAbsolute,
   transformPathToRelative,
@@ -128,12 +127,23 @@ export class PackagePlugin extends BasePlugin {
     if (this._skipTsBuild) {
       return;
     }
-    // 处理 tsconfig.json
-    await formatTsConfig(join(this.midwayBuildPath, 'tsconfig.json'));
-    await exec({
-      cmd: 'tsc --build',
-      baseDir: this.midwayBuildPath,
+    const { errors, necessaryErrors } = await compileTypeScript(this.midwayBuildPath, null, {
+      target: 'es2018',
+      module: 'commonjs',
+      outDir: './dist',
+      rootDir: this.tsCodeRoot,
+      experimentalDecorators: true,
     });
+    if (errors.length) {
+      for(const error of errors) {
+        this.core.cli.error(`\n[TS Error] ${error.message} (${error.path})`);
+      }
+      if (necessaryErrors.length && !this.core.service?.experimentalFeatures?.ignoreTsError) {
+        throw new Error(
+          `Error: ${necessaryErrors.length} ts error that must be fixed!`
+        );
+      }
+    }
     await copyStaticFiles({
       sourceDir: this.tsCodeRoot,
       targetDir: join(this.midwayBuildPath, 'dist'),

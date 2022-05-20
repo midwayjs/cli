@@ -573,7 +573,10 @@ export class CommandCore implements ICommandCore {
   }
 
   private getLog() {
-    return this.options.log || console;
+    return {
+      ...console,
+      ...this.options.log
+    };
   }
 
   error<T>(type: string, info?: T) {

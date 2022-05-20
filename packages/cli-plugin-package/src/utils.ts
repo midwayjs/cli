@@ -1,5 +1,5 @@
 import { findNpmModule, exists } from '@midwayjs/command-core';
-import { stat, unlink, readFile, writeFile } from 'fs-extra';
+import { stat, unlink, } from 'fs-extra';
 import * as globby from 'globby';
 import { isAbsolute, join, relative } from 'path';
 export const transformPathToRelative = (baseDir: string, targetDir: string) => {
@@ -185,31 +185,4 @@ export const removeUselessFiles = async (target: string) => {
   console.log(
     `  - Remove Useless file ${Number(size / (2 << 19)).toFixed(2)} MB`
   );
-};
-
-export const readJson = async (path: string) => {
-  if (await exists(path)) {
-    return JSON.parse(await readFile(path, 'utf-8'));
-  }
-  return {};
-};
-
-// 格式化 ts 配置文件
-export const formatTsConfig = async (tsconfigJsonFile: string) => {
-  const tsconfigJson = await readJson(tsconfigJsonFile);
-  if (!tsconfigJson.compilerOptions) {
-    tsconfigJson.compilerOptions = {};
-  }
-  Object.assign(tsconfigJson.compilerOptions, {
-    target: 'es2018',
-    module: 'commonjs',
-    outDir: './dist',
-    rootDir: 'src',
-    experimentalDecorators: true,
-  });
-  if (!tsconfigJson.include?.length) {
-    tsconfigJson.include = ['src'];
-  }
-  await writeFile(tsconfigJsonFile, JSON.stringify(tsconfigJson, null, 2));
-  return tsconfigJson;
 };
