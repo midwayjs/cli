@@ -1,4 +1,4 @@
-import { CommandCore } from '@midwayjs/command-core';
+import { CommandCore, exec } from '@midwayjs/command-core';
 import { loadSpec } from '@midwayjs/serverless-spec-builder';
 import { PackagePlugin } from '../src/index';
 import { AliyunFCPlugin } from '../../cli-plugin-fc/src/index';
@@ -35,6 +35,10 @@ describe('/test/aggregation.test.ts', () => {
       const baseDir = resolve(__dirname, './fixtures/aggregation-fp');
       const buildDir = resolve(baseDir, './.serverless');
       await remove(buildDir);
+      await exec({
+        baseDir: baseDir,
+        cmd: 'npm install',
+      });
       const core = new CommandCore({
         config: {
           servicePath: baseDir,
@@ -61,6 +65,10 @@ describe('/test/aggregation.test.ts', () => {
     const baseDir = resolve(__dirname, './fixtures/aggregation-event');
     const buildDir = resolve(baseDir, './.serverless');
     await remove(buildDir);
+    await exec({
+      baseDir: baseDir,
+      cmd: 'npm install',
+    });
     const core = new CommandCore({
       config: {
         servicePath: baseDir,
