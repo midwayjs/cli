@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "@midwayjs/faas": "alpha"
+    "@midwayjs/faas": "3"
   }
 }
