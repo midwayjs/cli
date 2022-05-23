@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@midwayjs/faas": "3"
+    "@midwayjs/faas": "3",
+    "@midwayjs/decorator": "3"
   }
 }
