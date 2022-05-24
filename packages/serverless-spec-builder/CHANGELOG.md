@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.5-beta.1](https://github.com/midwayjs/cli/compare/v1.3.4...v1.3.5-beta.1) (2022-05-24)
+
+
+### Features
+
+* support event trigger aggregation ([80a91a3](https://github.com/midwayjs/cli/commit/80a91a394bb30c883f448be24b35dbec03ed76d4))
+
+
+
+
+
 ## [1.3.1](https://github.com/midwayjs/cli/compare/v1.3.1-beta.1...v1.3.1) (2022-03-10)
 
 **Note:** Version bump only for package @midwayjs/serverless-spec-builder
