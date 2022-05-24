@@ -209,14 +209,14 @@ describe('/test/wrapper.test.ts', () => {
   });
   it('formetAggregationHandlers', async () => {
     const formatResult = formetAggregationHandlers([
-      { path: '/api/1' },
-      { path: '/api/' },
-      { path: '/' },
-      { path: '/api/*' },
-      { path: '/api2' },
-      { path: '/api/2' },
-      { path: '/api' },
-      { path: '/*' },
+      { path: '/api/1', eventType: 'http' },
+      { path: '/api/', eventType: 'http' },
+      { path: '/', eventType: 'http' },
+      { path: '/api/*', eventType: 'http' },
+      { path: '/api2', eventType: 'http' },
+      { path: '/api/2', eventType: 'http' },
+      { path: '/api', eventType: 'http' },
+      { path: '/*', eventType: 'http' },
     ]);
     assert(formatResult[2].router === '/api/');
     assert(formatResult[3].router === '/api/**');

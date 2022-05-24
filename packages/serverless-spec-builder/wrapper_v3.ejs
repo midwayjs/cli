@@ -54,8 +54,18 @@ const getHandler = (hanlderName, ...originArgs) => {
     if (hanlderName === '<%=handlerData.name%>') {
       return <% if (handlerData.handler) {
       %> frameworkInstance.handleInvokeWrapper('<%=handlerData.handler%>'); <% } else {
-      %> async (ctx<% if (moreArgs) { %>, ...args<% } %>) => {
+      %> async (ctx, ...args) => {
         const allHandlers = <%-JSON.stringify(handlerData.handlers, null, 2)%>;
+        if (args[0] && args[0].func && (!ctx || !ctx.path)) {
+          const handlerInfo = allHandlers.find(handler => {
+            return handler.functionName === args[0].func;
+          });
+          if (handlerInfo) {
+            return frameworkInstance.handleInvokeWrapper(handlerInfo.handler)(ctx, args[0].event);
+          }
+          return { error: `function not found`, args };
+        }
+        
         let handler = null;
         let ctxPath = ctx && ctx.path || '';
         let currentMethod = (ctx && ctx.method || '').toLowerCase();
@@ -79,7 +89,7 @@ const getHandler = (hanlderName, ...originArgs) => {
               req.pathParameters = Object.assign({}, matchRes.params, req.pathParameters);
             }
           }
-          return frameworkInstance.handleInvokeWrapper(handler.handler)(ctx<% if (moreArgs) { %>, ...args<% } %>);
+          return frameworkInstance.handleInvokeWrapper(handler.handler)(ctx, ...args);
         }
         ctx.status = 404;
         ctx.set('Content-Type', 'text/html');

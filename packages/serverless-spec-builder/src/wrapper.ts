@@ -125,12 +125,12 @@ export function writeWrapper(options: {
     }
   }
 
-  let entryWrapper = '../wrapper.ejs';
+  let entryWrapper = '../wrapper_v1.ejs';
   if (isCustomAppType) {
     entryWrapper = '../wrapper_app.ejs';
   } else {
     if (faasVersion === 2) {
-      entryWrapper = '../wrapper_bootstrap.ejs';
+      entryWrapper = '../wrapper_v2.ejs';
     } else if (faasVersion === 3) {
       entryWrapper = '../wrapper_v3.ejs';
     }
@@ -214,7 +214,13 @@ export function formetAggregationHandlers(handlers) {
   }
   return handlers
     .map(handler => {
-      const { path = '' } = handler;
+      const { path = '', eventType } = handler;
+      if (eventType !== 'http') {
+        return {
+          ...handler,
+          level: -1,
+        };
+      }
       return {
         ...handler,
         method: (handler.method ? [].concat(handler.method) : []).map(
@@ -232,6 +238,9 @@ export function formetAggregationHandlers(handlers) {
     })
     .sort((handlerA, handlerB) => {
       if (handlerA.level === handlerB.level) {
+        if (handlerA.level < 0) {
+          return -1;
+        }
         if (handlerB.pureRouter === handlerA.pureRouter) {
           return handlerA.router.length - handlerB.router.length;
         }

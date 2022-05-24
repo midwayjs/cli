@@ -1023,8 +1023,9 @@ export class PackagePlugin extends BasePlugin {
       // 忽略原始方法，不再单独进行部署
       const deployOrigin = aggregationConfig.deployOrigin;
 
-      const allAggred = [];
       let handlers = [];
+      const allAggredHttpTriggers = [];
+      const allAggredEventTriggers = [];
 
       if (aggregationConfig.functions || aggregationConfig.functionsPattern) {
         const matchedFuncName = [];
@@ -1052,20 +1053,32 @@ export class PackagePlugin extends BasePlugin {
           if (!func || !func.events) {
             return;
           }
-          const httpEventIndex = func.events.findIndex(
-            (event: any) => !!event.http
-          );
-          if (httpEventIndex === -1) {
-            return;
-          }
-          func.events.forEach(httpEvent => {
-            if (!httpEvent?.http?.path) {
-              return;
+
+          for (const event of func.events) {
+            const eventType = Object.keys(event)[0];
+            const handlerInfo: any = {
+              ...func,
+              functionName,
+              eventType,
+            };
+            if (eventType === 'http') {
+              const httpInfo = {
+                path: event.http.path,
+                method: event.http.method,
+              };
+              allAggredHttpTriggers.push(httpInfo);
+              Object.assign(handlerInfo, httpInfo);
+            } else if (aggregationConfig.eventTrigger) {
+              // 事件触发器支持
+              const existsEventTrigger = handlers.find(
+                handlerInfo => handlerInfo.eventType === eventType
+              );
+              if (!existsEventTrigger) {
+                allAggredEventTriggers.push(event);
+              }
+            } else {
+              continue;
             }
-            allAggred.push({
-              path: httpEvent.http.path,
-              method: httpEvent.http.method,
-            });
             if (!deployOrigin) {
               // 不把原有的函数进行部署
               this.core.cli.log(
@@ -1073,44 +1086,47 @@ export class PackagePlugin extends BasePlugin {
               );
               delete this.core.service.functions[functionName];
             }
-            handlers.push({
-              ...func,
-              events: httpEvent,
-              path: httpEvent.http.path,
-              method: httpEvent.http.method,
-            });
-          });
+
+            handlers.push(handlerInfo);
+          }
         });
       }
       handlers = handlers.filter((func: any) => !!func);
-      const allPaths = allAggred.map(aggre => aggre.path);
-      let currentPath = commonPrefix(allPaths);
-      currentPath =
-        currentPath && currentPath !== '/' ? `${currentPath}/*` : '/*';
 
-      this.core.cli.log(
-        ` - using path '${currentPath}' to deploy '${allPaths.join("', '")}'`
-      );
-      // path parameter
-      if (currentPath.includes(':')) {
-        const newCurrentPath = currentPath.replace(/\/:.*$/, '/*');
-        this.core.cli.log(
-          ` - using path '${newCurrentPath}' to deploy '${currentPath}' (for path parameter)`
-        );
-        currentPath = newCurrentPath;
-      }
-      if (allAggregationPaths.indexOf(currentPath) !== -1) {
-        console.error(
-          `Cannot use the same prefix '${currentPath}' for aggregation deployment`
-        );
-        process.exit(1);
-      }
-      allAggregationPaths.push(currentPath);
       this.core.service.functions[aggregationFuncName]._handlers = handlers;
-      this.core.service.functions[aggregationFuncName]._allAggred = allAggred;
-      this.core.service.functions[aggregationFuncName].events = [
-        { http: { method: 'any', path: currentPath } },
-      ];
+      this.core.service.functions[aggregationFuncName]._allAggred =
+        allAggredHttpTriggers;
+      this.core.service.functions[aggregationFuncName].events =
+        allAggredEventTriggers;
+
+      if (allAggredHttpTriggers?.length) {
+        const allPaths = allAggredHttpTriggers.map(aggre => aggre.path);
+        let currentPath = commonPrefix(allPaths);
+        currentPath =
+          currentPath && currentPath !== '/' ? `${currentPath}/*` : '/*';
+
+        this.core.cli.log(
+          ` - using path '${currentPath}' to deploy '${allPaths.join("', '")}'`
+        );
+        // path parameter
+        if (currentPath.includes(':')) {
+          const newCurrentPath = currentPath.replace(/\/:.*$/, '/*');
+          this.core.cli.log(
+            ` - using path '${newCurrentPath}' to deploy '${currentPath}' (for path parameter)`
+          );
+          currentPath = newCurrentPath;
+        }
+        if (allAggregationPaths.indexOf(currentPath) !== -1) {
+          console.error(
+            `Cannot use the same prefix '${currentPath}' for aggregation deployment`
+          );
+          process.exit(1);
+        }
+        allAggregationPaths.push(currentPath);
+        this.core.service.functions[aggregationFuncName].events.push({
+          http: { method: 'any', path: currentPath },
+        });
+      }
     }
 
     const tmpSpecFile = resolve(tmpdir(), `aggre-${Date.now()}/f.yml`);
