@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.5-beta.3](https://github.com/midwayjs/cli/compare/v1.3.4...v1.3.5-beta.3) (2022-05-25)
+
+
+### Features
+
+* support event trigger aggregation ([#281](https://github.com/midwayjs/cli/issues/281)) ([84b4789](https://github.com/midwayjs/cli/commit/84b478901ed1b49d6fb558be2f1ca0267027d2da))
+* upgrade ts-node to 10 ([#282](https://github.com/midwayjs/cli/issues/282)) ([7a1bbb1](https://github.com/midwayjs/cli/commit/7a1bbb11c89e74f5c31dad3e9b7fba2f22cd03da))
+
+
+
+
+
 ## [1.3.5-beta.2](https://github.com/midwayjs/cli/compare/v1.3.5-beta.1...v1.3.5-beta.2) (2022-05-24)
 
 **Note:** Version bump only for package @midwayjs/cli-plugin-test

@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/cli-plugin-check",
-  "version": "1.3.5-beta.2",
+  "version": "1.3.5-beta.3",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/command-core": "^1.3.5-beta.2",
+    "@midwayjs/command-core": "^1.3.5-beta.3",
     "@midwayjs/locate": "^1.0.3",
     "@midwayjs/luckyeye": "^1.0.2",
     "chalk": "^4.1.1",
