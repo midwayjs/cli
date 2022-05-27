@@ -1,5 +1,5 @@
 import { findNpmModule, exists } from '@midwayjs/command-core';
-import { stat, unlink, } from 'fs-extra';
+import { stat, unlink } from 'fs-extra';
 import * as globby from 'globby';
 import { isAbsolute, join, relative } from 'path';
 export const transformPathToRelative = (baseDir: string, targetDir: string) => {

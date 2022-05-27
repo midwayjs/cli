@@ -10,6 +10,7 @@ export interface ICopyOptions {
 export interface IAggregationConfig {
   [aggregationName: string]: {
     deployOrigin?: boolean;
+    eventTrigger?: boolean;
     functions?: string[];
     functionsPattern?: string[];
   };

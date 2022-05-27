@@ -1,4 +1,4 @@
-import { CommandCore } from '@midwayjs/command-core';
+import { CommandCore, exec } from '@midwayjs/command-core';
 import { loadSpec } from '@midwayjs/serverless-spec-builder';
 import { PackagePlugin } from '../src/index';
 import { AliyunFCPlugin } from '../../cli-plugin-fc/src/index';
@@ -7,7 +7,7 @@ import { resolve } from 'path';
 import { existsSync, remove, readFileSync } from 'fs-extra';
 import * as assert from 'assert';
 
-describe('/test/package.test.ts', () => {
+describe('/test/aggregation.test.ts', () => {
   describe('integration project build', () => {
     it('aggregation package', async () => {
       const baseDir = resolve(__dirname, './fixtures/aggregation');
@@ -35,6 +35,10 @@ describe('/test/package.test.ts', () => {
       const baseDir = resolve(__dirname, './fixtures/aggregation-fp');
       const buildDir = resolve(baseDir, './.serverless');
       await remove(buildDir);
+      await exec({
+        baseDir: baseDir,
+        cmd: 'npm install',
+      });
       const core = new CommandCore({
         config: {
           servicePath: baseDir,
@@ -55,5 +59,29 @@ describe('/test/package.test.ts', () => {
       assert(/"router": "\/multiply\/1"/.test(allCode));
       assert(/"router": "\/multiply\/2"/.test(allCode));
     });
+  });
+
+  it('aggregation event trigger', async () => {
+    const baseDir = resolve(__dirname, './fixtures/aggregation-event');
+    const buildDir = resolve(baseDir, './.serverless');
+    await remove(buildDir);
+    await exec({
+      baseDir: baseDir,
+      cmd: 'npm install',
+    });
+    const core = new CommandCore({
+      config: {
+        servicePath: baseDir,
+      },
+      commands: ['package'],
+      service: loadSpec(baseDir),
+      provider: 'aliyun',
+      options: {},
+      log: console,
+    });
+    core.addPlugin(PackagePlugin);
+    core.addPlugin(AliyunFCPlugin);
+    await core.ready();
+    await core.invoke(['package']);
   });
 });

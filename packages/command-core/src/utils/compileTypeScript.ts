@@ -1,9 +1,13 @@
-import { readFile } from "fs-extra";
-import { join, relative } from "path";
-import { findNpmModule } from "../npm"
-import { exists } from "./copy";
+import { readFile } from 'fs-extra';
+import { join, relative } from 'path';
+import { findNpmModule } from '../npm';
+import { exists } from './copy';
 
-export const compileTypeScript = async (baseDir: string, tsOptions?, coverOptions?) => {
+export const compileTypeScript = async (
+  baseDir: string,
+  tsOptions?,
+  coverOptions?
+) => {
   const tsMod = findNpmModule(baseDir, 'typescript');
   const ts = require(tsMod);
   if (!tsOptions) {
@@ -12,7 +16,11 @@ export const compileTypeScript = async (baseDir: string, tsOptions?, coverOption
   if (!tsOptions.compilerOptions) {
     tsOptions.compilerOptions = {};
   }
-  tsOptions.compilerOptions = Object.assign({}, tsOptions.compilerOptions, coverOptions);
+  tsOptions.compilerOptions = Object.assign(
+    {},
+    tsOptions.compilerOptions,
+    coverOptions
+  );
   if (!tsOptions.include?.length) {
     tsOptions.include = ['src'];
   }
@@ -26,10 +34,12 @@ export const compileTypeScript = async (baseDir: string, tsOptions?, coverOption
   const fileNames = parsedCommandLine.fileNames;
   const program = ts.createProgram(fileNames, parsedCommandLine.options, host);
   const emitResult = program.emit();
-  const allDiagnostics = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
-  let errors = [];
+  const allDiagnostics = ts
+    .getPreEmitDiagnostics(program)
+    .concat(emitResult.diagnostics);
+  const errors = [];
   const necessaryErrors = [];
-  for(const error of allDiagnostics) {
+  for (const error of allDiagnostics) {
     if (error.category !== ts.DiagnosticCategory.Error) {
       continue;
     }
@@ -38,25 +48,22 @@ export const compileTypeScript = async (baseDir: string, tsOptions?, coverOption
     if (!error.reportsUnnecessary) {
       necessaryErrors.push(errorItem);
     }
-    errors.push(errorItem)
-  }  
+    errors.push(errorItem);
+  }
   return {
     fileNames,
     options: parsedCommandLine.options,
     errors,
     necessaryErrors,
   };
-}
+};
 
 const formatTsError = (baseDir, error) => {
   if (!error || !error.messageText) {
-    return { message: '', path: ''};
+    return { message: '', path: '' };
   }
   if (typeof error.messageText === 'object') {
-    return formatTsError(
-      baseDir,
-      error.messageText,
-    );
+    return formatTsError(baseDir, error.messageText);
   }
 
   let errorPath = '';
@@ -70,22 +77,21 @@ const formatTsError = (baseDir, error) => {
   return {
     message: error?.messageText || '',
     path: errorPath,
-  }
-}
+  };
+};
 
 export const readJson = async (path: string) => {
   if (await exists(path)) {
     try {
       return JSON.parse(await readFile(path, 'utf-8'));
     } catch {
-      return {}
+      return {};
     }
   }
   return {};
 };
 
-
 export const getTsConfig = async (baseDir: string) => {
   const tsConfigPath = join(baseDir, 'tsconfig.json');
   return readJson(tsConfigPath);
-}
+};

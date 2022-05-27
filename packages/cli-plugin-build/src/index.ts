@@ -159,12 +159,18 @@ export class BuildPlugin extends BasePlugin {
     const outDir = this.getOutDir();
     this.core.debug('outDir', outDir, this.midwayCliConfig);
     const { cwd } = this.core;
-    const { errors, necessaryErrors } = await compileTypeScript(cwd, this.getTsConfig());
+    const { errors, necessaryErrors } = await compileTypeScript(
+      cwd,
+      this.getTsConfig()
+    );
     if (errors.length) {
-      for(const error of errors) {
+      for (const error of errors) {
         this.core.cli.error(`\n[TS Error] ${error.message} (${error.path})`);
       }
-      if (necessaryErrors.length && !this.midwayCliConfig?.experimentalFeatures?.ignoreTsError) {
+      if (
+        necessaryErrors.length &&
+        !this.midwayCliConfig?.experimentalFeatures?.ignoreTsError
+      ) {
         throw new Error(
           `Error: ${necessaryErrors.length} ts error that must be fixed!`
         );

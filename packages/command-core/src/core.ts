@@ -575,7 +575,7 @@ export class CommandCore implements ICommandCore {
   private getLog() {
     return {
       ...console,
-      ...this.options.log
+      ...this.options.log,
     };
   }
 

@@ -3,6 +3,50 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.5](https://github.com/midwayjs/cli/compare/v1.3.5-beta.3...v1.3.5) (2022-05-25)
+
+**Note:** Version bump only for package @midwayjs/fcli-plugin-package
+
+
+
+
+
+## [1.3.5-beta.3](https://github.com/midwayjs/cli/compare/v1.3.4...v1.3.5-beta.3) (2022-05-25)
+
+
+### Features
+
+* support event trigger aggregation ([#281](https://github.com/midwayjs/cli/issues/281)) ([84b4789](https://github.com/midwayjs/cli/commit/84b478901ed1b49d6fb558be2f1ca0267027d2da))
+
+
+
+
+
+## [1.3.5-beta.2](https://github.com/midwayjs/cli/compare/v1.3.5-beta.1...v1.3.5-beta.2) (2022-05-24)
+
+**Note:** Version bump only for package @midwayjs/fcli-plugin-package
+
+
+
+
+
+## [1.3.5-beta.1](https://github.com/midwayjs/cli/compare/v1.3.4...v1.3.5-beta.1) (2022-05-24)
+
+
+### Bug Fixes
+
+* aggregation midway faas 3 ([dee1482](https://github.com/midwayjs/cli/commit/dee148296e4ba75d41a118b1ca6f2f96ffb576fd))
+* midway faas 3 ([433a03e](https://github.com/midwayjs/cli/commit/433a03ec1667cb76606897c028006354c4463bca))
+
+
+### Features
+
+* support event trigger aggregation ([80a91a3](https://github.com/midwayjs/cli/commit/80a91a394bb30c883f448be24b35dbec03ed76d4))
+
+
+
+
+
 ## [1.3.4](https://github.com/midwayjs/cli/compare/v1.3.3...v1.3.4) (2022-05-11)
 
 

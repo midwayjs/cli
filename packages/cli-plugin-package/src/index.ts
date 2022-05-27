@@ -127,18 +127,25 @@ export class PackagePlugin extends BasePlugin {
     if (this._skipTsBuild) {
       return;
     }
-    const { errors, necessaryErrors } = await compileTypeScript(this.midwayBuildPath, null, {
-      target: 'es2018',
-      module: 'commonjs',
-      outDir: './dist',
-      rootDir: this.tsCodeRoot,
-      experimentalDecorators: true,
-    });
+    const { errors, necessaryErrors } = await compileTypeScript(
+      this.midwayBuildPath,
+      null,
+      {
+        target: 'es2018',
+        module: 'commonjs',
+        outDir: './dist',
+        rootDir: this.tsCodeRoot,
+        experimentalDecorators: true,
+      }
+    );
     if (errors.length) {
-      for(const error of errors) {
+      for (const error of errors) {
         this.core.cli.error(`\n[TS Error] ${error.message} (${error.path})`);
       }
-      if (necessaryErrors.length && !this.core.service?.experimentalFeatures?.ignoreTsError) {
+      if (
+        necessaryErrors.length &&
+        !this.core.service?.experimentalFeatures?.ignoreTsError
+      ) {
         throw new Error(
           `Error: ${necessaryErrors.length} ts error that must be fixed!`
         );
