@@ -209,7 +209,7 @@ export class DevPlugin extends BasePlugin {
         execArgv,
       });
 
-      if (this.options.ts && this.options.fast === 'esbuild') {
+      if (this.options.ts && this.options.fast === 'swc') {
         this.checkTsType();
       }
 

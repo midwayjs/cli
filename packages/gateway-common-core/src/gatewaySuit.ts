@@ -6,7 +6,6 @@ import { join } from 'path';
 import * as expressBodyParser from 'body-parser';
 import * as koaBodyParser from 'koa-bodyparser';
 import { DevPackOptions } from '.';
-import { invoke } from '@midwayjs/serverless-invoke';
 
 export interface GatewaySuitOptions extends Partial<DevPackOptions> {
   functionDir?: string;
@@ -29,7 +28,7 @@ export const createKoaSuit = (options: GatewaySuitOptions = {}) => {
     await createKoaGateway(options).transform(
       ctx,
       next,
-      options.invokeCallback || invoke
+      options.invokeCallback
     );
   });
 

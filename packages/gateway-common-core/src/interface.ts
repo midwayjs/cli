@@ -1,10 +1,7 @@
 import { Context, Request as KoaRequest } from 'koa';
 import { NextFunction, Request, Response } from 'express';
-import { InvokeOptions } from '@midwayjs/serverless-invoke';
 
-export { InvokeOptions } from '@midwayjs/serverless-invoke';
-
-export type InvokeCallback = (result: InvokeOptions) => Promise<any>;
+export type InvokeCallback = (result: any) => Promise<any>;
 
 export interface ExpressGatewayAdapter {
   transform(
