@@ -49,7 +49,7 @@ export function getExpressDevPack(cwd: string, options?: IStartOptions) {
   return wrapDevPack(useExpressDevPack, cwd, options);
 }
 
-const wrapDevPack = (
+export const wrapDevPack = (
   devPack,
   cwd,
   startOptions: IStartOptions = {}

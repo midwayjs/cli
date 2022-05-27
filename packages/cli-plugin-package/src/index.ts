@@ -134,7 +134,7 @@ export class PackagePlugin extends BasePlugin {
         target: 'es2018',
         module: 'commonjs',
         outDir: './dist',
-        rootDir: this.tsCodeRoot,
+        rootDir: 'src',
         experimentalDecorators: true,
       }
     );

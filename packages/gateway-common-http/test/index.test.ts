@@ -9,6 +9,62 @@ import {
   createKoaSuit,
 } from '@midwayjs/gateway-common-core';
 
+const getInvokeFun = () => {
+  const funcList = [
+    {
+      method: 'post',
+      path: '/server/user/info',
+      headers: { 'x-schema': 'bbb' },
+      body: 'zhangting,hello http world,doTest',
+    },
+    {
+      method: 'post',
+      path: '/server/user/info2',
+      headers: { 'x-schema': 'bbb' },
+      body: 'zhangting,hello http world,doTest',
+    },
+    { method: 'post', path: '/api/abc', body: 'test3' },
+    { method: 'post', path: '/api/a/b/c/d', body: 'test3' },
+    { method: 'post', path: '/api/a/b/c', body: 'test4' },
+  ];
+  const functionList = {};
+  let i = 0;
+  for (const func of funcList) {
+    functionList['fun' + i++] = {
+      events: [
+        {
+          http: {
+            method: func.method,
+            path: func.path,
+          },
+        },
+      ],
+    };
+  }
+  return async () => {
+    return {
+      functionList,
+      invoke: async ctx => {
+        console.log('ctx', ctx);
+        const result = funcList.find(func => {
+          return (
+            func.method === ctx.data[0].method.toLowerCase() &&
+            func.path === ctx.data[0].path
+          );
+        });
+        return Object.assign(
+          {
+            statusCode: 200,
+            headers: {},
+            body: '',
+          },
+          result || {}
+        );
+      },
+    };
+  };
+};
+
 describe('/test/index.test.ts', () => {
   describe('test url match', () => {
     it('test micromatch', () => {
@@ -71,10 +127,12 @@ describe('/test/index.test.ts', () => {
   });
 
   describe('test express', () => {
-    it('test /server/user/info', done => {
+    it.only('test /server/user/info', done => {
+      const cwd = join(__dirname, './fixtures/ice-demo-repo');
       createExpressSuit({
-        functionDir: join(__dirname, './fixtures/ice-demo-repo'),
+        functionDir: cwd,
         sourceDir: 'src/apis',
+        invokeCallback: getInvokeFun(),
       })
         .post('/server/user/info')
         .query({
@@ -87,10 +145,11 @@ describe('/test/index.test.ts', () => {
         .expect(200, done);
     });
 
-    it('test second url /server/user/info2', done => {
+    it.only('test second url /server/user/info2', done => {
       createExpressSuit({
         functionDir: join(__dirname, './fixtures/ice-demo-repo'),
         sourceDir: 'src/apis',
+        invokeCallback: getInvokeFun(),
       })
         .post('/server/user/info2')
         .query({
@@ -116,10 +175,11 @@ describe('/test/index.test.ts', () => {
         .expect(200, done);
     });
 
-    it('test /api/* router', done => {
+    it.only('test /api/* router', done => {
       createExpressSuit({
         functionDir: join(__dirname, './fixtures/ice-demo-repo'),
         sourceDir: 'src/apis',
+        invokeCallback: getInvokeFun(),
       })
         .post('/api/abc')
         .query({
@@ -129,10 +189,11 @@ describe('/test/index.test.ts', () => {
         .expect(200, done);
     });
 
-    it('test /api/a/b/c router', done => {
+    it.only('test /api/a/b/c router', done => {
       createExpressSuit({
         functionDir: join(__dirname, './fixtures/ice-demo-repo'),
         sourceDir: 'src/apis',
+        invokeCallback: getInvokeFun(),
       })
         .post('/api/a/b/c')
         .query({
@@ -142,10 +203,11 @@ describe('/test/index.test.ts', () => {
         .expect(200, done);
     });
 
-    it('test /api/a/b/c/d router must match /api/* not /api/a/b/c', done => {
+    it.only('test /api/a/b/c/d router must match /api/* not /api/a/b/c', done => {
       createExpressSuit({
         functionDir: join(__dirname, './fixtures/ice-demo-repo'),
         sourceDir: 'src/apis',
+        invokeCallback: getInvokeFun(),
       })
         .post('/api/a/b/c/d')
         .expect(/test3/)

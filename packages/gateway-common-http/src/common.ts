@@ -8,7 +8,7 @@ const ignoreWildcardFunctionsWhiteList = [];
 export async function parseInvokeOptionsByOriginUrl(
   options: DevPackOptions,
   req,
-  getFuncList
+  getFuncListAndInvoke
 ): Promise<{
   invokeOptions: Partial<InvokeOptions>;
   invokeFun?: any;
@@ -37,7 +37,7 @@ export async function parseInvokeOptionsByOriginUrl(
   invokeOptions.functionDir = options.functionDir;
   invokeOptions.sourceDir = options.sourceDir;
   invokeOptions.verbose = options.verbose;
-  const { functionList, invoke } = await getFuncList({
+  const { functionList, invoke } = await getFuncListAndInvoke({
     getFunctionList: true,
     functionDir: options.functionDir,
     sourceDir: options.sourceDir,

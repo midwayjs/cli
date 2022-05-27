@@ -17,10 +17,13 @@ export class KoaGateway {
   async transform(
     ctx: Context,
     next: () => Promise<any>,
-    invoke: InvokeCallback
+    getFuncListAndInvoke: InvokeCallback
   ) {
-    const { invokeOptions, invokeFun = invoke } =
-      await parseInvokeOptionsByOriginUrl(this.options, ctx.request, invoke);
+    const { invokeOptions, invokeFun } = await parseInvokeOptionsByOriginUrl(
+      this.options,
+      ctx.request,
+      getFuncListAndInvoke
+    );
     if (!invokeOptions.functionName) {
       await next();
     } else {
