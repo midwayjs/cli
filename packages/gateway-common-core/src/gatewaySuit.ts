@@ -48,7 +48,7 @@ export const createExpressSuit = (options: GatewaySuitOptions = {}) => {
       req,
       res,
       next,
-      options.invokeCallback || invoke
+      options.invokeCallback
     );
   });
 
