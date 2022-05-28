@@ -1,4 +1,4 @@
-import { commonPrefix } from '../src/utils';
+import { commonPrefix } from '../src/aggregation';
 import * as assert from 'assert';
 describe('/test/commonPrefix.test.ts', () => {
   describe('commonPrefix', () => {
