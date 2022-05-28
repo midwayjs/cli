@@ -112,14 +112,12 @@ export class PackagePlugin extends BasePlugin {
     await ensureDir(this.midwayBuildPath);
 
     this.pkgJson = await readJson(join(this.servicePath, 'package.json'));
+    // 安装研发期依赖
+    await this.prepareInstallDevDep();
     // 定位项目结构
     await this.prepareLocate();
-    await Promise.all([
-      // 安装研发期依赖
-      this.prepareInstallDevDep(),
-      // 拷贝非代码文件
-      this.prepareCopyFile(),
-    ]);
+    // 拷贝非代码文件
+    await this.prepareCopyFile();
   }
 
   // 编译 ts 代码
@@ -176,7 +174,7 @@ export class PackagePlugin extends BasePlugin {
         this.core.service.aggregation
       );
       this.core.service.functions = funcMap;
-      logs.forEach(this.core.cli.log);
+      logs.forEach(log => this.core.cli.log(log));
     }
 
     // 单函数发布处理
