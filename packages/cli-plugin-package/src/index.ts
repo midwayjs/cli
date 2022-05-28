@@ -513,13 +513,16 @@ export class PackagePlugin extends BasePlugin {
       exclude,
     });
 
-    const tsSourceDir = join(this.servicePath, this.tsCodeRoot);
-    if (await exists(tsSourceDir)) {
-      await copy(tsSourceDir, join(this.midwayBuildPath, 'src'));
-    } else {
+    if (this.options.skipBuild) {
       this._skipTsBuild = true;
+    } else {
+      const tsSourceDir = join(this.servicePath, this.tsCodeRoot);
+      if (await exists(tsSourceDir)) {
+        await copy(tsSourceDir, join(this.midwayBuildPath, 'src'));
+      } else {
+        this._skipTsBuild = true;
+      }
     }
-
     if (this.options.sharedDir) {
       this.options.sharedTargetDir = this.options.sharedTargetDir || 'static';
       this.options.sharedDir = transformPathToAbsolute(
