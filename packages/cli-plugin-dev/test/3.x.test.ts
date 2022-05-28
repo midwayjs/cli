@@ -17,7 +17,6 @@ describe('test/3.x.test.ts', () => {
       cmd: 'npm install',
     });
     const { close, port } = await run(cwd, {
-      ignoreMock: true,
       silent: true,
       fast: false,
     });

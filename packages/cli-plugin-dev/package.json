@@ -42,7 +42,7 @@
     "build": "tsc --build",
     "lint": "../../node_modules/.bin/eslint .",
     "test-bugs": "../../node_modules/.bin/jest ./test/bugs*",
-    "test": "../../node_modules/.bin/jest ./test/not-commonjs.test.ts --detectOpenHandles --forceExit --runInBand",
+    "test": "../../node_modules/.bin/jest --detectOpenHandles --forceExit --runInBand",
     "cov": "../../node_modules/.bin/jest --coverage --runInBand --forceExit",
     "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
     "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov"
