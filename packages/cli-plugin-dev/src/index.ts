@@ -119,7 +119,9 @@ export class DevPlugin extends BasePlugin {
       if (!/deployType/.test(ymlData)) {
         process.env.MIDWAY_DEV_IS_SERVERLESS = 'true';
         // eslint-disable-next-line
-        framework = require.resolve('@midwayjs/serverless-app');
+        framework = require.resolve('@midwayjs/serverless-app', {
+          paths: [cwd],
+        });
       }
     }
 

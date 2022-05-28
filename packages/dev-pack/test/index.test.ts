@@ -17,13 +17,14 @@ describe('/test/index.test.ts', () => {
   });
 
   describe('test buffer return', () => {
-    it('test buffer result koa in http trigger', async done => {
+    it('test buffer result koa in http trigger', done => {
       const app = new koa();
       const cwd = join(__dirname, './fixtures/base-fn-http');
-      execSync(`cd ${cwd};npm install @midwayjs/mock@2`);
+      execSync(`cd ${cwd};npm install`);
       const devPack = getKoaDevPack(cwd, {
         notWatch: true,
         notAwait: true,
+        sourceDir: 'src',
       });
       app.use(
         devPack({
@@ -43,10 +44,11 @@ describe('/test/index.test.ts', () => {
     it('test buffer result koa in apigw trigger', done => {
       const app = new koa();
       const cwd = join(__dirname, './fixtures/base-fn-apigw');
-      execSync(`cd ${cwd};npm install @midwayjs/mock@2`);
+      execSync(`cd ${cwd};npm install`);
       const devPack = getKoaDevPack(cwd, {
         notWatch: true,
         notAwait: true,
+        sourceDir: 'src',
       });
       app.use(
         devPack({
@@ -66,10 +68,11 @@ describe('/test/index.test.ts', () => {
     it('test buffer result express in http trigger', done => {
       const app = express();
       const cwd = join(__dirname, './fixtures/base-fn-http');
-      execSync(`cd ${cwd};npm install @midwayjs/mock@2`);
+      execSync(`cd ${cwd};npm install`);
       const devPack = getExpressDevPack(cwd, {
         notWatch: true,
         notAwait: true,
+        sourceDir: 'src',
       });
       app.use(
         devPack({
@@ -89,10 +92,11 @@ describe('/test/index.test.ts', () => {
     it('test buffer result express in apigw trigger', done => {
       const app = express();
       const cwd = join(__dirname, './fixtures/base-fn-apigw');
-      execSync(`cd ${cwd};npm install @midwayjs/mock@2`);
+      execSync(`cd ${cwd};npm install`);
       const devPack = getExpressDevPack(cwd, {
         notWatch: true,
         notAwait: true,
+        sourceDir: 'src',
       });
       app.use(
         devPack({

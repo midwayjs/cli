@@ -123,7 +123,6 @@ describe('command-core:index.test.ts invoke', () => {
     core.addPlugin('npm:test2:debug');
     core.addPlugin(`local:test:${resolve(__dirname, './plugins/store.set')}`);
     core.addPlugin('local:test2:./plugins/store.set');
-    core.addPlugin('xxx');
     await core.ready();
     await core.spawn('store', {});
     assert((core as any).coreInstance.store.get('StoreGet:get') === 123456);

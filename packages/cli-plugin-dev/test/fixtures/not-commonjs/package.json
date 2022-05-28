@@ -1,5 +1,12 @@
 {
+  "name": "faas-demo",
   "dependencies": {
-    "@midwayjs/faas": "^2.8.0"
+    "@midwayjs/faas": "^2.8.0",
+    "@midwayjs/mock": "^2.14.6"
+  },
+  "devDependencies": {
+    "@midwayjs/serverless-app": "^2",
+    "@midwayjs/serverless-fc-starter": "^2",
+    "@midwayjs/serverless-fc-trigger": "^2"
   }
 }

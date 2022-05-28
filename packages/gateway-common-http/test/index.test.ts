@@ -26,6 +26,19 @@ const getInvokeFun = () => {
     { method: 'post', path: '/api/abc', body: 'test3' },
     { method: 'post', path: '/api/a/b/c/d', body: 'test3' },
     { method: 'post', path: '/api/a/b/c', body: 'test4' },
+    { method: 'post', path: '/api/', body: 'test6' },
+    { method: 'post', path: '/bbbbbb/ccccc', body: 'test2' },
+    {
+      method: 'post',
+      path: '/json/test.json',
+      body: 'zhangting,hello http world,doTest',
+      headers: { 'x-schema': 'bbb' },
+    },
+    {
+      method: 'get',
+      path: '/param/xijian/info',
+      body: 'xijian,hello http world',
+    },
   ];
   const functionList = {};
   let i = 0;
@@ -45,7 +58,6 @@ const getInvokeFun = () => {
     return {
       functionList,
       invoke: async ctx => {
-        console.log('ctx', ctx);
         const result = funcList.find(func => {
           return (
             func.method === ctx.data[0].method.toLowerCase() &&
@@ -55,10 +67,17 @@ const getInvokeFun = () => {
         return Object.assign(
           {
             statusCode: 200,
-            headers: {},
             body: '',
           },
-          result || {}
+          result || {},
+          {
+            headers: Object.assign(
+              {
+                'Content-type': 'text/html; charset=utf-8',
+              },
+              result.headers
+            ),
+          }
         );
       },
     };
@@ -127,7 +146,7 @@ describe('/test/index.test.ts', () => {
   });
 
   describe('test express', () => {
-    it.only('test /server/user/info', done => {
+    it('test /server/user/info', done => {
       const cwd = join(__dirname, './fixtures/ice-demo-repo');
       createExpressSuit({
         functionDir: cwd,
@@ -145,7 +164,7 @@ describe('/test/index.test.ts', () => {
         .expect(200, done);
     });
 
-    it.only('test second url /server/user/info2', done => {
+    it('test second url /server/user/info2', done => {
       createExpressSuit({
         functionDir: join(__dirname, './fixtures/ice-demo-repo'),
         sourceDir: 'src/apis',
@@ -166,6 +185,7 @@ describe('/test/index.test.ts', () => {
       createExpressSuit({
         functionDir: join(__dirname, './fixtures/ice-demo-repo'),
         sourceDir: 'src/apis',
+        invokeCallback: getInvokeFun(),
       })
         .post('/bbbbbb/ccccc')
         .query({
@@ -175,7 +195,7 @@ describe('/test/index.test.ts', () => {
         .expect(200, done);
     });
 
-    it.only('test /api/* router', done => {
+    it('test /api/* router', done => {
       createExpressSuit({
         functionDir: join(__dirname, './fixtures/ice-demo-repo'),
         sourceDir: 'src/apis',
@@ -189,7 +209,7 @@ describe('/test/index.test.ts', () => {
         .expect(200, done);
     });
 
-    it.only('test /api/a/b/c router', done => {
+    it('test /api/a/b/c router', done => {
       createExpressSuit({
         functionDir: join(__dirname, './fixtures/ice-demo-repo'),
         sourceDir: 'src/apis',
@@ -203,7 +223,7 @@ describe('/test/index.test.ts', () => {
         .expect(200, done);
     });
 
-    it.only('test /api/a/b/c/d router must match /api/* not /api/a/b/c', done => {
+    it('test /api/a/b/c/d router must match /api/* not /api/a/b/c', done => {
       createExpressSuit({
         functionDir: join(__dirname, './fixtures/ice-demo-repo'),
         sourceDir: 'src/apis',
@@ -218,6 +238,7 @@ describe('/test/index.test.ts', () => {
       createExpressSuit({
         functionDir: join(__dirname, './fixtures/ice-demo-repo'),
         sourceDir: 'src/apis',
+        invokeCallback: getInvokeFun(),
       })
         .post('/api/')
         .query({
@@ -232,6 +253,7 @@ describe('/test/index.test.ts', () => {
     createKoaSuit({
       functionDir: join(__dirname, './fixtures/ice-demo-repo'),
       sourceDir: 'src/apis',
+      invokeCallback: getInvokeFun(),
     })
       .post('/server/user/info')
       .query({
@@ -248,6 +270,7 @@ describe('/test/index.test.ts', () => {
     createKoaSuit({
       functionDir: join(__dirname, './fixtures/ice-demo-repo'),
       sourceDir: 'src/apis',
+      invokeCallback: getInvokeFun(),
     })
       .post('/server/user/info2')
       .query({
@@ -264,6 +287,7 @@ describe('/test/index.test.ts', () => {
     createKoaSuit({
       functionDir: join(__dirname, './fixtures/ice-demo-repo'),
       sourceDir: 'src/apis',
+      invokeCallback: getInvokeFun(),
     })
       .post('/json/test.json')
       .query({
@@ -280,6 +304,7 @@ describe('/test/index.test.ts', () => {
     createKoaSuit({
       functionDir: join(__dirname, './fixtures/ice-demo-repo'),
       sourceDir: 'src/apis',
+      invokeCallback: getInvokeFun(),
     })
       .get('/param/xijian/info')
       .expect(/xijian,hello http world/)
@@ -292,6 +317,7 @@ describe('/test/index.test.ts', () => {
         functionDir: join(__dirname, './fixtures/ice-demo-repo'),
         sourceDir: 'src/apis',
         ignorePattern: ['.do'],
+        invokeCallback: getInvokeFun(),
       })
         .post('/ignore.do')
         .send({ name: 'zhangting' })
@@ -305,6 +331,7 @@ describe('/test/index.test.ts', () => {
         ignorePattern: req => {
           return /\.do/.test(req.url);
         },
+        invokeCallback: getInvokeFun(),
       })
         .post('/ignore.do')
         .send({ name: 'zhangting' })
@@ -316,6 +343,7 @@ describe('/test/index.test.ts', () => {
         functionDir: join(__dirname, './fixtures/ice-demo-repo'),
         sourceDir: 'src/apis',
         ignoreWildcardFunctions: ['test2'],
+        invokeCallback: getInvokeFun(),
       })
         .post('/p')
         .send({ name: 'zhangting' })
@@ -353,6 +381,7 @@ describe('/test/index.test.ts', () => {
         functionDir: join(__dirname, './fixtures/ice-demo-repo'),
         sourceDir: 'src/apis',
         ignoreWildcardFunctions: ['test2'],
+        invokeCallback: getInvokeFun(),
       })
         .post('/p')
         .send({ name: 'zhangting' })
