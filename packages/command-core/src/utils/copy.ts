@@ -25,7 +25,6 @@ export const copyFiles = async (options: ICopyOptions) => {
 };
 
 export const copyStaticFiles = async ({ sourceDir, targetDir, log }) => {
-  console.log('copyStaticFiles', sourceDir, targetDir, log);
   if (!sourceDir || !targetDir) {
     return;
   }
