@@ -122,6 +122,7 @@ export class PackagePlugin extends BasePlugin {
 
   // 编译 ts 代码
   async compile() {
+    console.log('this._skipTsBuild', this._skipTsBuild);
     if (this._skipTsBuild) {
       return;
     }
@@ -136,6 +137,7 @@ export class PackagePlugin extends BasePlugin {
         experimentalDecorators: true,
       }
     );
+    console.log('compile errors', errors);
     if (errors.length) {
       for (const error of errors) {
         this.core.cli.error(`\n[TS Error] ${error.message} (${error.path})`);
