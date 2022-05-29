@@ -29,7 +29,7 @@
   ],
   "scripts": {
     "lint": "../../node_modules/.bin/eslint .",
-    "test": "../../node_modules/.bin/jest --runInBand",
+    "test": "../../node_modules/.bin/jest ./test/package.test.ts --runInBand",
     "cov": "../../node_modules/.bin/jest --coverage --runInBand",
     "build": "tsc --build",
     "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",

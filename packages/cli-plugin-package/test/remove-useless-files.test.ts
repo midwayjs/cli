@@ -6,7 +6,7 @@ import { existsSync, remove } from 'fs-extra';
 import * as assert from 'assert';
 
 describe('/test/remove-useless-files.test.ts', () => {
-  const baseDir = resolve(__dirname, './fixtures/base-app');
+  const baseDir = resolve(__dirname, './fixtures/base-app-useless');
   afterEach(async () => {
     await remove(join(baseDir, 'serverless.zip'));
     // await remove(join(baseDir, 'package-lock.json'));
