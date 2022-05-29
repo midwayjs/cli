@@ -41,6 +41,17 @@ describe('/test/package.test.ts', () => {
       assert(existsSync(resolve(baseDir, 'serverless.zip')));
       assert(existsSync(join(buildPath, 'f.origin.yml')));
     });
+  });
+
+  describe('package base midway faas project', () => {
+    const baseDir = resolve(__dirname, './fixtures/base-app-target');
+
+    afterEach(async () => {
+      await remove(join(baseDir, 'serverless.zip'));
+      await remove(join(baseDir, 'package-lock.json'));
+      await remove(join(baseDir, '.serverless'));
+      await remove(join(baseDir, 'node_modules'));
+    });
     it('build target package', async () => {
       const core = new CommandCore({
         config: {
