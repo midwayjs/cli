@@ -24,7 +24,7 @@ export const copyFiles = async (options: ICopyOptions) => {
   await docopy(sourceDir, targetDir, paths, log);
 };
 
-export const copyStaticFiles = async ({ sourceDir, targetDir }) => {
+export const copyStaticFiles = async ({ sourceDir, targetDir, log }) => {
   if (!sourceDir || !targetDir) {
     return;
   }
@@ -36,7 +36,7 @@ export const copyStaticFiles = async ({ sourceDir, targetDir }) => {
       '**/node_modules/**', // 模块依赖目录
     ],
   });
-  return docopy(sourceDir, targetDir, paths);
+  return docopy(sourceDir, targetDir, paths, log);
 };
 
 const docopy = async (

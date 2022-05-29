@@ -152,6 +152,9 @@ export class PackagePlugin extends BasePlugin {
     await copyStaticFiles({
       sourceDir: this.tsCodeRoot,
       targetDir: join(this.midwayBuildPath, 'dist'),
+      log: (...args) => {
+        this.core.cli.log(' - copy ', ...args);
+      },
     });
   }
 
