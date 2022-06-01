@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.6-beta.1](https://github.com/midwayjs/bin/compare/v1.3.5...v1.3.6-beta.1) (2022-06-01)
+
+
+### Bug Fixes
+
+* aggregation eventTrigger ([31f26c9](https://github.com/midwayjs/bin/commit/31f26c955df2f21a85f5db58e050e5d1275f52b6))
+* aggregation http and event ([c745062](https://github.com/midwayjs/bin/commit/c74506201483e116c746c66f84947b4e13d5737a))
+* aggregationBeforeExecScript ([3e336df](https://github.com/midwayjs/bin/commit/3e336dfe6261c9f39c37268315080b99a4261752))
+
+
+
+
+
 ## [1.3.5](https://github.com/midwayjs/bin/compare/v1.3.5-beta.3...v1.3.5) (2022-05-25)
 
 **Note:** Version bump only for package midway-bin
