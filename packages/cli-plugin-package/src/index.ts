@@ -1037,14 +1037,13 @@ export class PackagePlugin extends BasePlugin {
           });
           // http 函数并且开启了 eventTrigger，需要忽略
           // 非 http 函数，并且没有开启  eventTrigger，需要忽略
+          let isMatch = false;
           if (
             (isHttpFunction && aggregationConfig.eventTrigger) ||
             (!isHttpFunction && !aggregationConfig.eventTrigger)
           ) {
-            continue;
-          }
-          let isMatch = false;
-          if (aggregationConfig.functions) {
+            isMatch = false;
+          } else if (aggregationConfig.functions) {
             isMatch = aggregationConfig.functions.indexOf(functionName) !== -1;
           } else if (aggregationConfig.functionsPattern) {
             isMatch = micromatch.all(

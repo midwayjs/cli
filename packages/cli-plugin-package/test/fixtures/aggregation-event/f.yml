@@ -4,7 +4,10 @@ provider:
   name: aliyun
 
 aggregation:
-  all:
+  allEvent:
     eventTrigger: true
+    functionsPattern:
+      - '*'
+  allHttp:
     functionsPattern:
       - '*'
