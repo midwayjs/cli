@@ -1026,11 +1026,23 @@ export class PackagePlugin extends BasePlugin {
       let handlers = [];
       const allAggredHttpTriggers = [];
       const allAggredEventTriggers = [];
-
       if (aggregationConfig.functions || aggregationConfig.functionsPattern) {
         const matchedFuncName = [];
         const notMatchedFuncName = [];
+        const functions = this.core.service.functions;
         for (const functionName of allFuncNames) {
+          const func = functions[functionName];
+          const isHttpFunction = func.events?.find(event => {
+            return Object.keys(event)[0] === 'http';
+          });
+          // http 函数并且开启了 eventTrigger，需要忽略
+          // 非 http 函数，并且没有开启  eventTrigger，需要忽略
+          if (
+            (isHttpFunction && aggregationConfig.eventTrigger) ||
+            (!isHttpFunction && !aggregationConfig.eventTrigger)
+          ) {
+            continue;
+          }
           let isMatch = false;
           if (aggregationConfig.functions) {
             isMatch = aggregationConfig.functions.indexOf(functionName) !== -1;
