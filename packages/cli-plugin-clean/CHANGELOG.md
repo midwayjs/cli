@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.6](https://github.com/midwayjs/cli/compare/v1.3.5...v1.3.6) (2022-06-02)
+
+
+### Bug Fixes
+
+* aggregationBeforeExecScript ([#283](https://github.com/midwayjs/cli/issues/283)) ([83528f4](https://github.com/midwayjs/cli/commit/83528f4d3b13500879e4b1ad68efa31654fbcb63))
+
+
+
+
+
 ## [1.3.6-beta.1](https://github.com/midwayjs/cli/compare/v1.3.5...v1.3.6-beta.1) (2022-06-01)
 
 **Note:** Version bump only for package @midwayjs/cli-plugin-clean
