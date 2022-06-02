@@ -83,5 +83,8 @@ describe('/test/aggregation.test.ts', () => {
     core.addPlugin(AliyunFCPlugin);
     await core.ready();
     await core.invoke(['package']);
+    const functions = (core as any).coreInstance.service.functions;
+    assert(functions.allEvent._handlers.length === 3);
+    assert(functions.allHttp._handlers.length === 3);
   });
 });

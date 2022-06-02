@@ -5,8 +5,8 @@ import * as assert from 'assert';
 const fetch = require('node-fetch');
 const cwd = join(__dirname, 'fixtures/faas');
 describe('test/faas.test.ts', () => {
-  it('dev esbuild', async () => {
-    const { close, port } = await run(cwd, { silent: true, fast: 'esbuild' });
+  it.skip('dev swc', async () => {
+    const { close, port } = await run(cwd, { silent: true, fast: 'swc' });
     const response = await fetch(`http://127.0.0.1:${port}/hello?name=midway`);
     const body = await response.text();
     await close();

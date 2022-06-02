@@ -76,6 +76,7 @@ const getHandler = (hanlderName, ...originArgs) => {
       %> frameworkInstance.handleInvokeWrapper('<%=handlerData.handler%>'); <% } else {
       %> async (ctx, ...args) => {
         const allHandlers = <%-JSON.stringify(handlerData.handlers, null, 2)%>;
+        <%-aggregationBeforeExecScript%>
         if (args[0] && args[0].func && (!ctx || !ctx.path)) {
           const handlerInfo = allHandlers.find(handler => {
             return handler.functionName === args[0].func;

@@ -25,6 +25,7 @@ export function writeWrapper(options: {
   entryAppDir?: string;
   entryBaseDir?: string;
   moreTemplateVariables?: { [name: string]: any };
+  aggregationBeforeExecScript?: string; // 高密度部署前置模板脚本
 }) {
   const {
     service,
@@ -48,6 +49,7 @@ export function writeWrapper(options: {
     entryAppDir,
     entryBaseDir,
     moreTemplateVariables = {},
+    aggregationBeforeExecScript = '',
   } = options;
 
   const files = {};
@@ -180,6 +182,7 @@ export function writeWrapper(options: {
       entryBaseDir,
       defaultFunctionHandlerName: files[file].defaultFunctionHandlerName,
       preloadFile,
+      aggregationBeforeExecScript,
       ...layers,
       ...moreTemplateVariables,
     });

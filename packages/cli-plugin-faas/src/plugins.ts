@@ -41,12 +41,6 @@ export const PluginList: Array<{
     command: ['package'],
   },
   {
-    mod: '@midwayjs/fcli-plugin-aws',
-    name: 'AWSLambdaPlugin',
-    platform: 'aws',
-    command: ['deploy', 'package'],
-  },
-  {
     mod: '@midwayjs/cli-plugin-vercel',
     name: 'VercelPlugin',
     platform: 'vercel',
