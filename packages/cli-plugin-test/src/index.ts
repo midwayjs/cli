@@ -159,7 +159,15 @@ export class TestPlugin extends BasePlugin {
       args.push('--coverage');
     }
 
-    const ignoreOptions = ['cov', 'f', 'file', 'ts', 'npm', 'debug', 'ignoreTypeCheck'];
+    const ignoreOptions = [
+      'cov',
+      'f',
+      'file',
+      'ts',
+      'npm',
+      'debug',
+      'ignoreTypeCheck',
+    ];
 
     Object.keys(this.options).forEach(option => {
       if (ignoreOptions.includes(option)) {
