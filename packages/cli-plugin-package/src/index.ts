@@ -994,15 +994,9 @@ export class PackagePlugin extends BasePlugin {
       return;
     }
 
-    // if (
-    //   !this.core.service.custom ||
-    //   !this.core.service.custom.customDomain ||
-    //   !this.core.service.custom.customDomain.domainName
-    // ) {
-    //   console.warn(
-    //     'If using aggregation deploy, it is best to configure custom domain'
-    //   );
-    // }
+    if (this.core.service?.deployType) {
+      return;
+    }
 
     this.core.cli.log('Aggregation Deploy');
 

@@ -1,0 +1,15 @@
+service: serverless-midway-test
+
+provider:
+  name: aliyun
+
+aggregation:
+  allEvent:
+    eventTrigger: true
+    functionsPattern:
+      - '*'
+  allHttp:
+    functionsPattern:
+      - '*'
+deployType:
+  type: egg
