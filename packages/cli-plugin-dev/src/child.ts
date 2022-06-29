@@ -22,6 +22,7 @@ const closeApp = async () => {
   await closeApp();
   exit();
 };
+process.on('SIGINT', () => null);
 (async () => {
   if (process.env.MIDWAY_DEV_IS_DEBUG) {
     await waitDebug(process.env.MIDWAY_DEV_IS_DEBUG);
