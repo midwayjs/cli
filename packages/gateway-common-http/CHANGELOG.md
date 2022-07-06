@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.7-beta.1](https://github.com/midwayjs/cli/compare/v1.3.6...v1.3.7-beta.1) (2022-07-06)
+
+
+### Bug Fixes
+
+* common http daya type ([3498985](https://github.com/midwayjs/cli/commit/3498985c10fc21b47dbacf07b44068bb82c6b815))
+
+
+
+
+
 ## [1.3.6](https://github.com/midwayjs/cli/compare/v1.3.5...v1.3.6) (2022-06-02)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.7-beta.1](https://github.com/midwayjs/cli/compare/v1.3.6...v1.3.7-beta.1) (2022-07-06)
+
+
+### Bug Fixes
+
+* cannot trigger "onStop" in dev mode ([#285](https://github.com/midwayjs/cli/issues/285)) ([5a04e20](https://github.com/midwayjs/cli/commit/5a04e2030be29a9fe08a509d339f56606e1e1d46))
+
+
+
+
+
 ## [1.3.6](https://github.com/midwayjs/cli/compare/v1.3.5...v1.3.6) (2022-06-02)
 
 
