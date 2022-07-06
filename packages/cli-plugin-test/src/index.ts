@@ -219,8 +219,9 @@ export class TestPlugin extends BasePlugin {
     }
     args.push(timeout ? `--timeout=${timeout}` : '--no-timeout');
 
-    if (this.options.reporter || process.env.TEST_REPORTER) {
-      args.push('--reporter=true');
+    const reporter = this.options.reporter || process.env.TEST_REPORTER;
+    if (reporter) {
+      args.push('--reporter=' + reporter);
     }
 
     args.push('--exit=true');
