@@ -131,7 +131,11 @@ export async function parseInvokeOptionsByOriginUrl(
       const contentType = invokeHTTPData.headers['content-type'] || '';
       if (contentType.startsWith('application/x-www-form-urlencoded')) {
         invokeHTTPData.body = qs.stringify(req.body);
-      } else if (contentType.startsWith('multipart/form-data')) {
+      } else if (
+        contentType.startsWith('multipart/form-data') ||
+        contentType.startsWith('text/') ||
+        contentType.endsWith('/xml')
+      ) {
         if (req.pipe) {
           req.body = await getRawBody(req);
         }

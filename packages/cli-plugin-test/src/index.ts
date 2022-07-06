@@ -159,7 +159,15 @@ export class TestPlugin extends BasePlugin {
       args.push('--coverage');
     }
 
-    const ignoreOptions = ['cov', 'f', 'file', 'ts', 'npm', 'debug', 'ignoreTypeCheck'];
+    const ignoreOptions = [
+      'cov',
+      'f',
+      'file',
+      'ts',
+      'npm',
+      'debug',
+      'ignoreTypeCheck',
+    ];
 
     Object.keys(this.options).forEach(option => {
       if (ignoreOptions.includes(option)) {
@@ -211,8 +219,9 @@ export class TestPlugin extends BasePlugin {
     }
     args.push(timeout ? `--timeout=${timeout}` : '--no-timeout');
 
-    if (this.options.reporter || process.env.TEST_REPORTER) {
-      args.push('--reporter=true');
+    const reporter = this.options.reporter || process.env.TEST_REPORTER;
+    if (reporter) {
+      args.push('--reporter=' + reporter);
     }
 
     args.push('--exit=true');
