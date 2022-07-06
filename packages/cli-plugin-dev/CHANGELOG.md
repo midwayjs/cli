@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.7](https://github.com/midwayjs/cli/compare/v1.3.6...v1.3.7) (2022-07-06)
+
+
+### Bug Fixes
+
+* cannot trigger "onStop" in dev mode ([#285](https://github.com/midwayjs/cli/issues/285)) ([5a04e20](https://github.com/midwayjs/cli/commit/5a04e2030be29a9fe08a509d339f56606e1e1d46))
+* common http daya type ([#286](https://github.com/midwayjs/cli/issues/286)) ([9afe43c](https://github.com/midwayjs/cli/commit/9afe43c09a1c73edf9d7112aed0ea5271d7ab3f7))
+
+
+
+
+
 ## [1.3.7-beta.1](https://github.com/midwayjs/cli/compare/v1.3.6...v1.3.7-beta.1) (2022-07-06)
 
 

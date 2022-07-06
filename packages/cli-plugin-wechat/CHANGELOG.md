@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.7](https://github.com/midwayjs/cli/compare/v1.3.6...v1.3.7) (2022-07-06)
+
+
+### Bug Fixes
+
+* common http daya type ([#286](https://github.com/midwayjs/cli/issues/286)) ([9afe43c](https://github.com/midwayjs/cli/commit/9afe43c09a1c73edf9d7112aed0ea5271d7ab3f7))
+
+
+
+
+
 ## [1.3.7-beta.1](https://github.com/midwayjs/cli/compare/v1.3.6...v1.3.7-beta.1) (2022-07-06)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-wechat

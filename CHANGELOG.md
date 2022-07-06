@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.7](https://github.com/midwayjs/bin/compare/v1.3.6...v1.3.7) (2022-07-06)
+
+
+### Bug Fixes
+
+* cannot trigger "onStop" in dev mode ([#285](https://github.com/midwayjs/bin/issues/285)) ([5a04e20](https://github.com/midwayjs/bin/commit/5a04e2030be29a9fe08a509d339f56606e1e1d46))
+* common http daya type ([#286](https://github.com/midwayjs/bin/issues/286)) ([9afe43c](https://github.com/midwayjs/bin/commit/9afe43c09a1c73edf9d7112aed0ea5271d7ab3f7))
+* **test:** avoid passing ignoreTypeCheck to jest ([#276](https://github.com/midwayjs/bin/issues/276)) ([7e76397](https://github.com/midwayjs/bin/commit/7e763979c80d0e4f2cfdf36bd7e7a074f5cd10a7))
+* deployType ignore aggregation ([#284](https://github.com/midwayjs/bin/issues/284)) ([ea920de](https://github.com/midwayjs/bin/commit/ea920deb3a5e7d5f43efa45796cfe7f1ec1fdc0a))
+
+
+
+
+
 ## [1.3.7-beta.1](https://github.com/midwayjs/bin/compare/v1.3.6...v1.3.7-beta.1) (2022-07-06)
 
 
