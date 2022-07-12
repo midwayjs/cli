@@ -120,11 +120,12 @@ export const analysisDecorator = async (cwd: string, currentFunc?) => {
     WebRouterCollector,
   } = require(midwayCoreMod);
   let result;
+  let collector;
   if (ServerlessTriggerCollector) {
-    const collector = new ServerlessTriggerCollector(cwd);
+    collector = new ServerlessTriggerCollector(cwd);
     result = await collector.getFunctionList();
   } else {
-    const collector = new WebRouterCollector(cwd, {
+    collector = new WebRouterCollector(cwd, {
       includeFunctionRouter: true,
     });
     result = await collector.getFlattenRouterTable();
