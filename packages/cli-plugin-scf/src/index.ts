@@ -34,10 +34,15 @@ export class TencentSCFPlugin extends BasePlugin {
     'package:generateEntry': async () => {
       this.core.cli.log('Generate entry file...');
       const { version } = findMidwayVersion(this.servicePath);
-      this.setGlobalDependencies(
-        '@midwayjs/serverless-scf-starter',
-        version.major || '*'
-      );
+      const specificStarterName =
+        this.core.service?.provider?.specificStarterName;
+      if (!specificStarterName) {
+        this.setGlobalDependencies(
+          '@midwayjs/serverless-scf-starter',
+          version.major || '*'
+        );
+      }
+
       writeWrapper({
         baseDir: this.servicePath,
         service: this.core.service,

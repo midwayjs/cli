@@ -567,6 +567,20 @@ export class CheckPlugin extends BasePlugin {
           }
           return [true];
         })
+        .check('provider starter', () => {
+          const yamlStarter = yamlObj?.provider?.starter;
+          if (!yamlStarter) {
+            return [true];
+          }
+          const deps = this.pkg.dependencies || {};
+          if (!deps[yamlStarter]) {
+            return [
+              false,
+              `${yamlStarter} need to be added to pacakge.json dependencies`,
+            ];
+          }
+          return [true];
+        })
         .check('trigger list', () => {
           if (!yamlObj?.functions) {
             return [CHECK_SKIP];
