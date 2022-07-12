@@ -27,6 +27,6 @@ describe('test/package-json.test.ts', () => {
     const cwd = join(__dirname, 'fixtures/midway-version');
     const logs = await runCheck(cwd);
     const logStr = logs.join('\n');
-    console.log('logStr', logStr);
+    assert(logStr.includes('There are 2 versions'))
   });
 });

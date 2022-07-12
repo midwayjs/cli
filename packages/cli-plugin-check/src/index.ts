@@ -506,6 +506,7 @@ export class CheckPlugin extends BasePlugin {
             return [true];
           }
           const configurationFile = join(
+            this.servicePath,
             this.options.sourceDir,
             'configuration.ts'
           );
@@ -821,7 +822,6 @@ export class CheckPlugin extends BasePlugin {
             ident: 1,
           });
         } else {
-          console.log('data', data);
           this.errors.push({
             group: this.currentGroup,
             title: data.title,
