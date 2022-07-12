@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.8-beta.1](https://github.com/midwayjs/cli/compare/v1.3.7...v1.3.8-beta.1) (2022-07-12)
+
+
+### Features
+
+* new faas & check ([9eb6133](https://github.com/midwayjs/cli/commit/9eb61337ca000b201b70c16f85ab6e9f1f74db4a))
+
+
+
+
+
 ## [1.3.6](https://github.com/midwayjs/cli/compare/v1.3.5...v1.3.6) (2022-06-02)
 
 
