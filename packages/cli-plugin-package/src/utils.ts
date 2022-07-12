@@ -115,9 +115,20 @@ export const removeUselessFiles = async (target: string) => {
 // 分析装饰器上面的函数信息
 export const analysisDecorator = async (cwd: string, currentFunc?) => {
   const midwayCoreMod = findNpmModule(cwd, '@midwayjs/core');
-  const { ServerlessTriggerCollector } = require(midwayCoreMod);
-  const collector = new ServerlessTriggerCollector(cwd);
-  const result = await collector.getFunctionList();
+  const {
+    ServerlessTriggerCollector,
+    WebRouterCollector,
+  } = require(midwayCoreMod);
+  let result;
+  if (ServerlessTriggerCollector) {
+    const collector = new ServerlessTriggerCollector(cwd);
+    result = await collector.getFunctionList();
+  } else {
+    const collector = new WebRouterCollector(cwd, {
+      includeFunctionRouter: true,
+    });
+    result = await collector.getFlattenRouterTable();
+  }
   const allFunc = currentFunc || {};
   if (Array.isArray(result)) {
     result.forEach(func => {

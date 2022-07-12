@@ -34,8 +34,7 @@ export class TencentSCFPlugin extends BasePlugin {
     'package:generateEntry': async () => {
       this.core.cli.log('Generate entry file...');
       const { version } = findMidwayVersion(this.servicePath);
-      const specificStarterName =
-        this.core.service?.provider?.specificStarterName;
+      const specificStarterName = this.core.service?.provider?.starter;
       if (!specificStarterName) {
         this.setGlobalDependencies(
           '@midwayjs/serverless-scf-starter',

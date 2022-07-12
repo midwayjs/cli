@@ -25,7 +25,8 @@
     "wrapper_app.ejs",
     "wrapper_v1.ejs",
     "wrapper_v2.ejs",
-    "wrapper_v3.ejs"
+    "wrapper_v3.ejs",
+    "wrapper_v3_specific.ejs"
   ],
   "scripts": {
     "build": "tsc --build",
