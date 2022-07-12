@@ -23,4 +23,10 @@ describe('test/package-json.test.ts', () => {
     );
     assert(logStr.includes('YAML package.exclude type should be Array'));
   });
+  it('midway version', async () => {
+    const cwd = join(__dirname, 'fixtures/midway-version');
+    const logs = await runCheck(cwd);
+    const logStr = logs.join('\n');
+    console.log('logStr', logStr);
+  });
 });

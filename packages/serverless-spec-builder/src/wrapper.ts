@@ -12,18 +12,19 @@ export function writeWrapper(options: {
   loadDirectory?: string[];
   initializeName?: string; // default is initializer
   faasModName?: string; // default is '@midwayjs/faas'
-  advancePreventMultiInit?: boolean;
+  advancePreventMultiInit?: boolean; // v1:
   faasStarterName?: string; // default is FaaSStarter
-  middleware?: string[]; // middleware
-  clearCache?: boolean; // clearContainerCache clearModule
+  middleware?: string[]; // v1: middleware
+  clearCache?: boolean; // v1: clearContainerCache clearModule
+  moreArgs?: boolean; // v1, aggregation more args
+  specificStarterName?: string; // v3: f.yml specific starter name
   preloadModules?: string[]; // pre load module
   templatePath?: string; // ejs template path
-  moreArgs?: boolean; // aggregation more args
-  isDefaultFunc?: boolean; // entry is module.export = () => {}
-  skipInitializer?: boolean; // skip generate initializer method
+  isDefaultFunc?: boolean; // vercel: entry is module.export = () => {}
+  skipInitializer?: boolean; // vercel: skip generate initializer method
+  entryAppDir?: string; // vercel
+  entryBaseDir?: string; // vercel
   preloadFile?: string; // pre require in entry file
-  entryAppDir?: string;
-  entryBaseDir?: string;
   moreTemplateVariables?: { [name: string]: any };
   aggregationBeforeExecScript?: string; // 高密度部署前置模板脚本
 }) {
@@ -50,6 +51,7 @@ export function writeWrapper(options: {
     entryBaseDir,
     moreTemplateVariables = {},
     aggregationBeforeExecScript = '',
+    specificStarterName = '',
   } = options;
 
   const files = {};
@@ -128,8 +130,11 @@ export function writeWrapper(options: {
   }
 
   let entryWrapper = '../wrapper_v1.ejs';
+  // 指定了 deployType
   if (isCustomAppType) {
     entryWrapper = '../wrapper_app.ejs';
+  } else if (specificStarterName) {
+    entryWrapper = '../wrapper_v3_specific.ejs';
   } else {
     if (faasVersion === 2) {
       entryWrapper = '../wrapper_v2.ejs';
@@ -183,6 +188,7 @@ export function writeWrapper(options: {
       defaultFunctionHandlerName: files[file].defaultFunctionHandlerName,
       preloadFile,
       aggregationBeforeExecScript,
+      specificStarterName,
       ...layers,
       ...moreTemplateVariables,
     });
