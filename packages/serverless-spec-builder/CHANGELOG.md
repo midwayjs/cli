@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.8-beta.2](https://github.com/midwayjs/cli/compare/v1.3.8-beta.1...v1.3.8-beta.2) (2022-07-12)
+
+
+### Bug Fixes
+
+* v3 starter ([1af272c](https://github.com/midwayjs/cli/commit/1af272cb9efaf32681604ceaa112ce746c8ca0cb))
+
+
+
+
+
 ## [1.3.8-beta.1](https://github.com/midwayjs/cli/compare/v1.3.7...v1.3.8-beta.1) (2022-07-12)
 
 
