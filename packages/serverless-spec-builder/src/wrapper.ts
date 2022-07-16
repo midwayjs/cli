@@ -95,9 +95,10 @@ export function writeWrapper(options: {
     }
     // 高密度部署
     if (handlerConf._isAggregation) {
+      files[handlerFileName].aggregationHandlerName = name;
       files[handlerFileName].handlers.push({
         name,
-        handlers: formetAggregationHandlers(handlerConf._handlers),
+        handlers: formatAggregationHandlers(handlerConf._handlers),
       });
     } else {
       files[handlerFileName].handlers.push({
@@ -189,6 +190,7 @@ export function writeWrapper(options: {
       preloadFile,
       aggregationBeforeExecScript,
       specificStarterName,
+      aggregationHandlerName: files[file].aggregationHandlerName, // for v3 specific
       ...layers,
       ...moreTemplateVariables,
     });
@@ -217,7 +219,7 @@ const assignToFunctionMap = (functionMap, handlerConf) => {
   return functionMap;
 };
 
-export function formetAggregationHandlers(handlers) {
+export function formatAggregationHandlers(handlers) {
   if (!handlers || !handlers.length) {
     return [];
   }
