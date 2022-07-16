@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.8-beta.3](https://github.com/midwayjs/cli/compare/v1.3.8-beta.2...v1.3.8-beta.3) (2022-07-16)
+
+
+### Bug Fixes
+
+* aggregation wrapper ([74b4560](https://github.com/midwayjs/cli/commit/74b4560f8d1903d2c33e50e28dd16e45219c4617))
+
+
+
+
+
 ## [1.3.8-beta.2](https://github.com/midwayjs/cli/compare/v1.3.8-beta.1...v1.3.8-beta.2) (2022-07-12)
 
 
