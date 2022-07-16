@@ -95,7 +95,7 @@ export function writeWrapper(options: {
     }
     // 高密度部署
     if (handlerConf._isAggregation) {
-      files[handlerFileName].aggregationHandlerName = name;
+      files[handlerFileName].aggregationHandlerName = handlerConf.handler;
       files[handlerFileName].handlers.push({
         name,
         handlers: formatAggregationHandlers(handlerConf._handlers),
