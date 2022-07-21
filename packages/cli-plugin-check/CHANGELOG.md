@@ -3,6 +3,47 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.8-beta.4](https://github.com/midwayjs/cli/compare/v1.3.8-beta.3...v1.3.8-beta.4) (2022-07-16)
+
+**Note:** Version bump only for package @midwayjs/cli-plugin-check
+
+
+
+
+
+## [1.3.8-beta.3](https://github.com/midwayjs/cli/compare/v1.3.8-beta.2...v1.3.8-beta.3) (2022-07-16)
+
+**Note:** Version bump only for package @midwayjs/cli-plugin-check
+
+
+
+
+
+## [1.3.8-beta.2](https://github.com/midwayjs/cli/compare/v1.3.8-beta.1...v1.3.8-beta.2) (2022-07-12)
+
+**Note:** Version bump only for package @midwayjs/cli-plugin-check
+
+
+
+
+
+## [1.3.8-beta.1](https://github.com/midwayjs/cli/compare/v1.3.7...v1.3.8-beta.1) (2022-07-12)
+
+
+### Bug Fixes
+
+* luckyeye ([90ced0c](https://github.com/midwayjs/cli/commit/90ced0c22a3d9c26d6a761d63604a7b0c596c5d9))
+* new faas starter ([55d40a4](https://github.com/midwayjs/cli/commit/55d40a4d200be4e3761e294452c7cd77778ebbb2))
+
+
+### Features
+
+* new faas & check ([9eb6133](https://github.com/midwayjs/cli/commit/9eb61337ca000b201b70c16f85ab6e9f1f74db4a))
+
+
+
+
+
 ## [1.3.5](https://github.com/midwayjs/cli/compare/v1.3.5-beta.3...v1.3.5) (2022-05-25)
 
 **Note:** Version bump only for package @midwayjs/cli-plugin-check

@@ -3,6 +3,57 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.8-beta.4](https://github.com/midwayjs/bin/compare/v1.3.8-beta.3...v1.3.8-beta.4) (2022-07-16)
+
+
+### Bug Fixes
+
+* aggregation handler name ([7ed1d48](https://github.com/midwayjs/bin/commit/7ed1d483b86cf24c619026ffa9d1e02f861cea39))
+
+
+
+
+
+## [1.3.8-beta.3](https://github.com/midwayjs/bin/compare/v1.3.8-beta.2...v1.3.8-beta.3) (2022-07-16)
+
+
+### Bug Fixes
+
+* aggregation wrapper ([74b4560](https://github.com/midwayjs/bin/commit/74b4560f8d1903d2c33e50e28dd16e45219c4617))
+
+
+
+
+
+## [1.3.8-beta.2](https://github.com/midwayjs/bin/compare/v1.3.8-beta.1...v1.3.8-beta.2) (2022-07-12)
+
+
+### Bug Fixes
+
+* collerctor ([2d6aceb](https://github.com/midwayjs/bin/commit/2d6acebe2b3b945b130a0fcc9f969794b7008dbb))
+* v3 starter ([1af272c](https://github.com/midwayjs/bin/commit/1af272cb9efaf32681604ceaa112ce746c8ca0cb))
+
+
+
+
+
+## [1.3.8-beta.1](https://github.com/midwayjs/bin/compare/v1.3.7...v1.3.8-beta.1) (2022-07-12)
+
+
+### Bug Fixes
+
+* luckyeye ([90ced0c](https://github.com/midwayjs/bin/commit/90ced0c22a3d9c26d6a761d63604a7b0c596c5d9))
+* new faas starter ([55d40a4](https://github.com/midwayjs/bin/commit/55d40a4d200be4e3761e294452c7cd77778ebbb2))
+
+
+### Features
+
+* new faas & check ([9eb6133](https://github.com/midwayjs/bin/commit/9eb61337ca000b201b70c16f85ab6e9f1f74db4a))
+
+
+
+
+
 ## [1.3.7](https://github.com/midwayjs/bin/compare/v1.3.6...v1.3.7) (2022-07-06)
 
 

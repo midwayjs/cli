@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/serverless-spec-builder",
-  "version": "1.3.6",
+  "version": "1.3.8-beta.4",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -25,7 +25,8 @@
     "wrapper_app.ejs",
     "wrapper_v1.ejs",
     "wrapper_v2.ejs",
-    "wrapper_v3.ejs"
+    "wrapper_v3.ejs",
+    "wrapper_v3_specific.ejs"
   ],
   "scripts": {
     "build": "tsc --build",

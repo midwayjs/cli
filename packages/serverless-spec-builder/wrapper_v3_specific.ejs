@@ -1,0 +1,15 @@
+const { join } = require('path');
+const { BootstrapStarter } = require('<%=specificStarterName %>');
+const starter = new BootstrapStarter();
+module.exports = starter.start({
+  appDir: __dirname,
+  baseDir: join(__dirname, 'dist'),
+  initializeMethodName: '<%=initializer%>',
+  <% if (aggregationHandlerName) { %>
+  aggregationHandlerName: '<%-aggregationHandlerName%>',
+  handlerNameMapping: (handlerName, event, context, oldContext) => {
+    <%-aggregationBeforeExecScript%>
+    return [handlerName, event, context, oldContext];
+  },
+  <% }%>
+});

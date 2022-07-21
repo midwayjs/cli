@@ -1,4 +1,4 @@
-import { BasePlugin, resolveMidwayConfig } from '@midwayjs/command-core';
+import { BasePlugin, exec, resolveMidwayConfig } from '@midwayjs/command-core';
 import { RunnerContainer, Runner } from '@midwayjs/luckyeye';
 import { join } from 'path';
 import { existsSync, readFileSync } from 'fs';
@@ -228,6 +228,60 @@ export class CheckPlugin extends BasePlugin {
           }
 
           return [true];
+        })
+        .check('@midwayjs/core version', async () => {
+          try {
+            const version = (await exec({
+              cmd: 'npm ls @midwayjs/core',
+              slience: true,
+              baseDir: this.globalData.cwd,
+            })) as any;
+            const reg = /@midwayjs\/core@([\w\-.]*)/g;
+            let matched;
+            const versions = {};
+            while (version && (matched = reg.exec(version))) {
+              versions[matched[1]] = true;
+            }
+            const versionList = Object.keys(versions);
+            if (versionList.length > 1) {
+              return [
+                false,
+                `There are ${versionList.length} versions(${versionList.join(
+                  ', '
+                )}) of @midwayjs/core`,
+              ];
+            }
+          } catch {
+            //
+          }
+          return [true];
+        })
+        .check('@midwayjs/decorator version', async () => {
+          try {
+            const version = (await exec({
+              cmd: 'npm ls @midwayjs/decorator',
+              slience: true,
+              baseDir: this.globalData.cwd,
+            })) as any;
+            const reg = /@midwayjs\/decorator@([\w\-.]*)/g;
+            let matched;
+            const versions = {};
+            while (version && (matched = reg.exec(version))) {
+              versions[matched[1]] = true;
+            }
+            const versionList = Object.keys(versions);
+            if (versionList.length > 1) {
+              return [
+                false,
+                `There are ${versionList.length} versions(${versionList.join(
+                  ', '
+                )}) of @midwayjs/decorator`,
+              ];
+            }
+          } catch {
+            //
+          }
+          return [true];
         });
     };
   }
@@ -263,7 +317,7 @@ export class CheckPlugin extends BasePlugin {
           }
           return [true];
         })
-        .check('project type', () => {
+        .check('project type', async () => {
           if (
             !this.globalData.locateResult?.projectType ||
             this.globalData.locateResult.projectType === 'unknown'
@@ -452,7 +506,8 @@ export class CheckPlugin extends BasePlugin {
             return [true];
           }
           const configurationFile = join(
-            this.globalData.tsCodeRoot,
+            this.servicePath,
+            this.options.sourceDir,
             'configuration.ts'
           );
           if (!existsSync(configurationFile)) {
@@ -508,6 +563,20 @@ export class CheckPlugin extends BasePlugin {
             return [
               false,
               'Yaml should have provider.name config, e.g. aliyun',
+            ];
+          }
+          return [true];
+        })
+        .check('provider starter', () => {
+          const yamlStarter = yamlObj?.provider?.starter;
+          if (!yamlStarter) {
+            return [true];
+          }
+          const deps = this.pkg.dependencies || {};
+          if (!deps[yamlStarter]) {
+            return [
+              false,
+              `${yamlStarter} need to be added to pacakge.json dependencies`,
             ];
           }
           return [true];

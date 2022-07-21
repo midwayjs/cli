@@ -1,4 +1,4 @@
-import { writeWrapper, formetAggregationHandlers } from '../src/wrapper';
+import { writeWrapper, formatAggregationHandlers } from '../src/wrapper';
 import { resolve } from 'path';
 import * as assert from 'assert';
 import { existsSync, readFileSync, remove, mkdirpSync } from 'fs-extra';
@@ -207,8 +207,8 @@ describe('/test/wrapper.test.ts', () => {
       );
     });
   });
-  it('formetAggregationHandlers', async () => {
-    const formatResult = formetAggregationHandlers([
+  it('formatAggregationHandlers', async () => {
+    const formatResult = formatAggregationHandlers([
       { path: '/api/1', eventType: 'http' },
       { path: '/api/', eventType: 'http' },
       { path: '/', eventType: 'http' },
