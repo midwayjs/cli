@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.8](https://github.com/midwayjs/cli/compare/v1.3.7...v1.3.8) (2022-07-21)
+
+
+### Features
+
+* new faas & check ([#287](https://github.com/midwayjs/cli/issues/287)) ([2d62fdc](https://github.com/midwayjs/cli/commit/2d62fdc4d91d87ff60c92a0fd9060301e10a3fa5))
+
+
+
+
+
 ## [1.3.8-beta.4](https://github.com/midwayjs/cli/compare/v1.3.8-beta.3...v1.3.8-beta.4) (2022-07-16)
 
 **Note:** Version bump only for package @midwayjs/cli-plugin-generator
