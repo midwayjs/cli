@@ -27,6 +27,7 @@ export function writeWrapper(options: {
   preloadFile?: string; // pre require in entry file
   moreTemplateVariables?: { [name: string]: any };
   aggregationBeforeExecScript?: string; // 高密度部署前置模板脚本
+  initializeInHandler?: boolean; // 在 handler 中初始化
 }) {
   const {
     service,
@@ -52,6 +53,7 @@ export function writeWrapper(options: {
     moreTemplateVariables = {},
     aggregationBeforeExecScript = '',
     specificStarterName = '',
+    initializeInHandler = false,
   } = options;
 
   const files = {};
@@ -190,6 +192,7 @@ export function writeWrapper(options: {
       preloadFile,
       aggregationBeforeExecScript,
       specificStarterName,
+      initializeInHandler,
       aggregationHandlerName: files[file].aggregationHandlerName, // for v3 specific
       ...layers,
       ...moreTemplateVariables,

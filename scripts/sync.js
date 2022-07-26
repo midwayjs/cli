@@ -8,7 +8,7 @@ const finished = [];
 
 async function syncPackage(pkg) {
   await execa('cnpm', ['sync', pkg]);
-  // await execa('tnpm', ['sync', pkg]);
+  await execa('tnpm', ['sync', pkg]);
   finished.push(pkg);
   console.log(`[${finished.length}/${data.length}] ${pkg} sync finished`);
 }
