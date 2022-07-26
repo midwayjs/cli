@@ -29,7 +29,7 @@ const initializeMethod = async (initializeContext = {}) => {
 // initializer skip
 <% } else { %> 
 exports.<%=initializer%> = asyncWrapper(async (...args) => {
-  if (initStatus === initializationError') {
+  if (initStatus === 'initializationError') {
     console.error('init failed due to init status is error, and that error is: ' + initError);
     console.error('FATAL: duplicated init! Will exit with code 121.');
     process.exit(121);
@@ -42,7 +42,7 @@ exports.<%=initializer%> = asyncWrapper(async (...args) => {
       await initializeMethod();
     }
   } catch (e) {
-    initStatus = initializationError';
+    initStatus = 'initializationError';
     initError = e;
     throw e;
   }
@@ -74,7 +74,7 @@ module.exports = asyncWrapper(async (...args) => {
         await initializeMethod();
       }
     } catch (e) {
-      initStatus = initializationError';
+      initStatus = 'initializationError';
       initError = e;
       throw e;
     }
