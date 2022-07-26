@@ -29,12 +29,12 @@ const initializeMethod = async (initializeContext = {}) => {
 // initializer skip
 <% } else { %> 
 exports.<%=initializer%> = asyncWrapper(async (...args) => {
-  if( initStatus === 'initialeError') {
+  if (initStatus === 'initialeError') {
+    console.error('init failed due to init status is error, and that error is: ' + initError);
     console.error('FATAL: duplicated init! Will exit with code 121.');
     process.exit(121);
-    throw new Error('init failed due to init status is error, and that error is: ' + initError);
   }
-  if(initStatus !== 'uninitialized') {
+  if (initStatus !== 'uninitialized') {
     throw new Error('init failed due to init status is ' + initStatus);
   }
   try {
