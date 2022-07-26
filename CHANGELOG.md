@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.9-beta.2](https://github.com/midwayjs/bin/compare/v1.3.9-beta.1...v1.3.9-beta.2) (2022-07-26)
+
+
+### Bug Fixes
+
+* uptime ([c01abc7](https://github.com/midwayjs/bin/commit/c01abc77bf482bd9a236103d03cc24ddd2ea0969))
+
+
+
+
+
 ## [1.3.9-beta.1](https://github.com/midwayjs/bin/compare/v1.3.8...v1.3.9-beta.1) (2022-07-26)
 
 

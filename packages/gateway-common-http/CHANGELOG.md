@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.9-beta.2](https://github.com/midwayjs/cli/compare/v1.3.9-beta.1...v1.3.9-beta.2) (2022-07-26)
+
+**Note:** Version bump only for package @midwayjs/gateway-common-http
+
+
+
+
+
 ## [1.3.9-beta.1](https://github.com/midwayjs/cli/compare/v1.3.8...v1.3.9-beta.1) (2022-07-26)
 
 **Note:** Version bump only for package @midwayjs/gateway-common-http
