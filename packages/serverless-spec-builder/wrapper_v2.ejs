@@ -125,6 +125,7 @@ const getHandler = (hanlderName, ...originArgs) => {
 // initializer skip
 <% } else { %> 
 exports.<%=initializer%> = asyncWrapper(async (...args) => {
+  console.log(`initializer: process uptime: ${process.uptime()}, initStatus: ${initStatus}`);
   if (initStatus === 'initializationError') {
     console.error('init failed due to init status is error, and that error is: ' + initError);
     console.error('FATAL: duplicated init! Will exit with code 121.');
