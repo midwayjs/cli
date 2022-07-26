@@ -125,7 +125,6 @@ exports.<%=initializer%> = asyncWrapper(async (...args) => {
 
 <% handlers.forEach(function(handlerData){ %>
 exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
-  <% if(initializeInHandler) { %>
   try {
     if (!inited) {
       await initializeMethod();
@@ -134,7 +133,6 @@ exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
     initError = e;
     throw e;
   }
-  <% } %>
   if (initError) {
     throw initError;
   }
