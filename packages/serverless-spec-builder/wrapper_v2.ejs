@@ -67,7 +67,7 @@ const initializeMethod = async (initializeContext = {}) => {
     runtimeConfig: <%-JSON.stringify(runtimeConfig)%>,
   });
 
-  initStatus = 'initialed';
+  initStatus = 'initialled';
 };
 
 const getHandler = (hanlderName, ...originArgs) => {
@@ -125,7 +125,7 @@ const getHandler = (hanlderName, ...originArgs) => {
 // initializer skip
 <% } else { %> 
 exports.<%=initializer%> = asyncWrapper(async (...args) => {
-  if (initStatus === 'initialeError') {
+  if (initStatus === 'initialError') {
     console.error('init failed due to init status is error, and that error is: ' + initError);
     console.error('FATAL: duplicated init! Will exit with code 121.');
     process.exit(121);
@@ -136,7 +136,7 @@ exports.<%=initializer%> = asyncWrapper(async (...args) => {
   try {
     await initializeMethod(...args);
   } catch (e) {
-    initStatus = 'initialeError';
+    initStatus = 'initialError';
     initError = e;
     throw e;
   }
@@ -146,7 +146,7 @@ exports.<%=initializer%> = asyncWrapper(async (...args) => {
 <% if (isDefaultFunc) { %>
 module.exports = asyncWrapper(async (...args) => {
   try {
-    if (initStatus !== 'initialed') {
+    if (initStatus !== 'initialled') {
       await initializeMethod();
     }
   } catch (e) {
@@ -166,16 +166,16 @@ module.exports = asyncWrapper(async (...args) => {
 exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
   <% if(initializeInHandler) { %>
   try {
-    if (initStatus !== 'initialed') {
+    if (initStatus !== 'initialled') {
       await initializeMethod();
     }
   } catch (e) {
-    initStatus = 'initialeError';
+    initStatus = 'initialError';
     initError = e;
     throw e;
   }
   <% } %>
-  if(initStatus !== 'initialed') {
+  if(initStatus !== 'initialled') {
     throw new Error('init failed due to init status is ' + initStatus);
   }
 
