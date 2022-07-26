@@ -176,7 +176,7 @@ exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
   }
   <% } %>
   if(initStatus !== 'initialized') {
-    throw new Error('init failed due to init status is ' + initStatus);
+    throw new Error('invoke failed due to init status is ' + initStatus);
   }
 
   const handler = getHandler('<%=handlerData.name%>', ...args);

@@ -80,7 +80,7 @@ module.exports = asyncWrapper(async (...args) => {
     }
     <% } %>
     if (initStatus !== 'initialized') {
-      throw new Error('init failed due to init status is ' + initStatus);
+      throw new Error('invoke failed due to init status is ' + initStatus);
     }
     return runtime.asyncEvent()(...args);
   });
