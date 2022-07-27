@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.9](https://github.com/midwayjs/bin/compare/v1.3.8...v1.3.9) (2022-07-27)
+
+
+### Bug Fixes
+
+* wrapper initialize in handler ([#288](https://github.com/midwayjs/bin/issues/288)) ([ba8cda2](https://github.com/midwayjs/bin/commit/ba8cda26c6283215289e2117087c47f82cb6d382))
+
+
+
+
+
 ## [1.3.9-beta.2](https://github.com/midwayjs/bin/compare/v1.3.9-beta.1...v1.3.9-beta.2) (2022-07-26)
 
 
