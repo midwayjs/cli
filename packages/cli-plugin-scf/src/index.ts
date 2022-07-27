@@ -47,6 +47,7 @@ export class TencentSCFPlugin extends BasePlugin {
         service: this.core.service,
         distDir: this.midwayBuildPath,
         specificStarterName: this.core.service?.provider?.specificStarterName,
+        initializeInHandler: true,
         starter: '@midwayjs/serverless-scf-starter',
       });
     },

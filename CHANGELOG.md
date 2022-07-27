@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.9-beta.2](https://github.com/midwayjs/bin/compare/v1.3.9-beta.1...v1.3.9-beta.2) (2022-07-26)
+
+
+### Bug Fixes
+
+* uptime ([c01abc7](https://github.com/midwayjs/bin/commit/c01abc77bf482bd9a236103d03cc24ddd2ea0969))
+
+
+
+
+
+## [1.3.9-beta.1](https://github.com/midwayjs/bin/compare/v1.3.8...v1.3.9-beta.1) (2022-07-26)
+
+
+### Bug Fixes
+
+* init status ([69ff47c](https://github.com/midwayjs/bin/commit/69ff47cfaecf4cb527943b089449c5d039405669))
+* initializationError ([e42a47f](https://github.com/midwayjs/bin/commit/e42a47f070afc67c9e75636966b3a2c18ff0c316))
+* initialized ([0077b48](https://github.com/midwayjs/bin/commit/0077b4818949e5aa224001a96c95b19c32b91698))
+* invoke ([47b596a](https://github.com/midwayjs/bin/commit/47b596a7a4de2a78878da9ca7854c877fbea9105))
+* resume v1 ([1066642](https://github.com/midwayjs/bin/commit/10666428a62598f2172d79c503c3ed2aab5406af))
+* word spelling ([510857f](https://github.com/midwayjs/bin/commit/510857f0cc237ebde172efe118b7dfc0d86e6e20))
+* wrapper error ([946f98b](https://github.com/midwayjs/bin/commit/946f98b186802afe4028edd0202870252459dc1c))
+* wrapper initialize in handler ([81d4918](https://github.com/midwayjs/bin/commit/81d49187ae37b653d4d5d5929dc38ca43fdbbb21))
+
+
+
+
+
 ## [1.3.8](https://github.com/midwayjs/bin/compare/v1.3.7...v1.3.8) (2022-07-21)
 
 

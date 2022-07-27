@@ -10,10 +10,11 @@ try {
 <% }); %>
 
 let runtime;
-let inited = false;
+let initStatus = 'uninitialized';
 let initError;
 
 const initializeMethod = async (initializeContext = {}) => {
+  initStatus = 'initialing';
   return lock.sureOnce(async () => {
     runtime = await start({
       layers: layers,
@@ -21,18 +22,28 @@ const initializeMethod = async (initializeContext = {}) => {
       initContext: initializeContext,
       runtimeConfig: <%-JSON.stringify(runtimeConfig)%>,
     });
+    initStatus = 'initialized';
   }, 'APP_START_LOCK_KEY');
 };
 <% if (skipInitializer) { %>
 // initializer skip
 <% } else { %> 
 exports.<%=initializer%> = asyncWrapper(async (...args) => {
+  console.log(`initializer: process uptime: ${process.uptime()}, initStatus: ${initStatus}`);
+  if (initStatus === 'initializationError') {
+    console.error('init failed due to init status is error, and that error is: ' + initError);
+    console.error('FATAL: duplicated init! Will exit with code 121.');
+    process.exit(121);
+  }
+  if (initStatus !== 'uninitialized') {
+    throw new Error('init failed due to init status is ' + initStatus);
+  }
   try {
-    if (!inited) {
-      inited = true;
+    if (initStatus !== 'initialized') {
       await initializeMethod();
     }
   } catch (e) {
+    initStatus = 'initializationError';
     initError = e;
     throw e;
   }
@@ -43,7 +54,7 @@ exports.<%=initializer%> = asyncWrapper(async (...args) => {
 <% if (isDefaultFunc) { %>
 module.exports = asyncWrapper(async (...args) => {
   try {
-    if (!inited) {
+    if (initStatus !== 'initialized') {
       await initializeMethod();
     }
   } catch (e) {
@@ -58,16 +69,19 @@ module.exports = asyncWrapper(async (...args) => {
 <% } else { %> 
 <% handlers.forEach(function(handlerData){ %>
   exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
+    <% if(initializeInHandler) { %>
     try {
-      if (!inited) {
+      if (initStatus !== 'initialized') {
         await initializeMethod();
       }
     } catch (e) {
+      initStatus = 'initializationError';
       initError = e;
       throw e;
     }
-    if (initError) {
-      throw initError;
+    <% } %>
+    if (initStatus !== 'initialized') {
+      throw new Error('invoke failed due to init status is ' + initStatus);
     }
     return runtime.asyncEvent()(...args);
   });
