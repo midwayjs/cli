@@ -68,7 +68,7 @@ export class CheckPlugin extends BasePlugin {
       }
     }
     const cwd = this.getCwd();
-    let tsCodeRoot = join(cwd, 'src');
+    let tsCodeRoot = join(cwd, this.options.sourceDir || 'src');
     let locateResult: AnalyzeResult;
 
     if (this.projectType === ProjectType.FaaS) {
@@ -105,6 +105,7 @@ export class CheckPlugin extends BasePlugin {
       tsCodeRoot,
       locateResult,
     };
+    this.core.debug('globalData', this.globalData);
 
     if (existsSync(tsCodeRoot)) {
       const tsSourceFileList = await globby(['**/*.ts'], {
@@ -318,11 +319,8 @@ export class CheckPlugin extends BasePlugin {
           return [true];
         })
         .check('project type', async () => {
-          if (
-            !this.globalData.locateResult?.projectType ||
-            this.globalData.locateResult.projectType === 'unknown'
-          ) {
-            return [false, 'can not check project type'];
+          if (this.globalData.locateResult?.projectType === 'unknown') {
+            return [false, 'can not check faas project type'];
           }
           return [true];
         })
@@ -361,7 +359,10 @@ export class CheckPlugin extends BasePlugin {
             return [false, 'config need to be set in configuration.ts'];
           }
 
-          if (configurationData.includes('config/config.')) {
+          if (
+            configurationData.includes('./config/config.') &&
+            !/\s+from\s+'\.\/config\/config\./.test(configurationData)
+          ) {
             return [
               false,
               "please use join(__dirname, './config/') to import config",
@@ -506,8 +507,7 @@ export class CheckPlugin extends BasePlugin {
             return [true];
           }
           const configurationFile = join(
-            this.servicePath,
-            this.options.sourceDir,
+            this.globalData.tsCodeRoot,
             'configuration.ts'
           );
           if (!existsSync(configurationFile)) {
@@ -516,6 +516,25 @@ export class CheckPlugin extends BasePlugin {
           const configurationData = readFileSync(configurationFile).toString();
           if (!configurationData.includes('hooks(')) {
             return [false, 'Need add hooks() to configutation.ts imports list'];
+          }
+          return [true];
+        })
+        .check('configuration class', () => {
+          const configurationFile = join(
+            this.globalData.tsCodeRoot,
+            'configuration.ts'
+          );
+          if (!existsSync(configurationFile)) {
+            return [CHECK_SKIP];
+          }
+          const configurationData = readFileSync(configurationFile).toString();
+          const exportClasses = configurationData.split('export class ');
+          const classesCount = exportClasses.length - 1;
+          if (classesCount !== 1) {
+            return [
+              false,
+              `configuration needs to export 1 class (current ${classesCount})`,
+            ];
           }
           return [true];
         });
