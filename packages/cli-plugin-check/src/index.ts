@@ -52,6 +52,7 @@ export class CheckPlugin extends BasePlugin {
   };
 
   pkg: any = {};
+  pkgContent = '';
 
   isHooks = false;
 
@@ -96,7 +97,8 @@ export class CheckPlugin extends BasePlugin {
 
     const pkgJsonFile = join(cwd, 'package.json');
     if (existsSync(pkgJsonFile)) {
-      this.pkg = JSON.parse(readFileSync(pkgJsonFile).toString());
+      this.pkgContent = readFileSync(pkgJsonFile).toString();
+      this.pkg = JSON.parse(this.pkgContent);
     }
 
     this.globalData = {
@@ -144,7 +146,7 @@ export class CheckPlugin extends BasePlugin {
     ];
 
     if (this.projectType === ProjectType.FaaS) {
-      ruleList.push(this.ruleTSConfig(), await this.ruleFaaSDecorator());
+      ruleList.push(this.ruleTSConfig(), await this.ruleFaaS());
     }
 
     if (
@@ -548,10 +550,39 @@ export class CheckPlugin extends BasePlugin {
     };
   }
 
-  async ruleFaaSDecorator(): Promise<RunnerItem> {
+  async ruleFaaS(): Promise<RunnerItem> {
     // 校验是否存在 decorator 重名
     // 校验 @Logger 装饰器所在class是否被继承
-    return () => {};
+    return runner => {
+      runner
+        .group('faas')
+        .check('f command', () => {
+          if (!this.pkg.dependencies?.['@midwayjs/cli']) {
+            return [CHECK_SKIP];
+          }
+          if (/("|\s)f\s+(invoke|test)/.test(this.pkgContent)) {
+            return [
+              false,
+              'you can no longer use the f command after using @midwayjs/cli',
+            ];
+          }
+          return [true];
+        })
+        .check('@Func', () => {
+          for (const { code, tsSourceFile } of this.sourcesInfo) {
+            if (
+              code.includes('@ServerlessTrigger') &&
+              (code.includes('@Func') || code.includes('@func'))
+            ) {
+              return [
+                false,
+                `@func decorator is deprecated, use @ServerlessTrigger instead.(${tsSourceFile})`,
+              ];
+            }
+          }
+          return [true];
+        });
+    };
   }
 
   // 校验yaml格式

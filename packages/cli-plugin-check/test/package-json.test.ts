@@ -15,7 +15,13 @@ describe('test/package-json.test.ts', () => {
     assert(logStr.includes('@xxx/faas-invoke'));
     assert(!logStr.includes('async'));
     assert(logStr.includes('tsconfig.json not exists'));
-    assert(logStr.includes('can not check project type'));
+    assert(logStr.includes('can not check faas project type'));
+    assert(logStr.includes('ts-node needs to be upgrated to version 10'));
+    assert(
+      logStr.includes(
+        'you can no longer use the f command after using @midwayjs/cli'
+      )
+    );
     assert(logStr.includes('Yaml should have service config'));
     assert(logStr.includes('Yaml should have provider.name config'));
     assert(
