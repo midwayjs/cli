@@ -319,7 +319,11 @@ export class CheckPlugin extends BasePlugin {
           return [true];
         })
         .check('project type', async () => {
-          if (this.globalData.locateResult?.projectType === 'unknown') {
+          if (
+            (this.projectType === ProjectType.FaaS &&
+              !this.globalData.locateResult) ||
+            this.globalData.locateResult?.projectType === 'unknown'
+          ) {
             return [false, 'can not check faas project type'];
           }
           return [true];
