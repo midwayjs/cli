@@ -25,9 +25,7 @@ const initializeMethod = async (initializeContext = {}) => {
     initStatus = 'initialized';
   }, 'APP_START_LOCK_KEY');
 };
-<% if (skipInitializer) { %>
-// initializer skip
-<% } else { %> 
+
 exports.<%=initializer%> = asyncWrapper(async (...args) => {
   console.log(`initializer: process uptime: ${process.uptime()}, initStatus: ${initStatus}`);
   if (initStatus === 'initializationError') {
@@ -48,7 +46,6 @@ exports.<%=initializer%> = asyncWrapper(async (...args) => {
     throw e;
   }
 });
-<% } %>
 
 
 <% handlers.forEach(function(handlerData){ %>
