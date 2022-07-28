@@ -503,8 +503,8 @@ export class CheckPlugin extends BasePlugin {
           ];
         })
         .check('hooks import', () => {
-          if (!this.isHooks) {
-            return [true];
+          if (!this.isHooks || !this.globalData.tsCodeRoot) {
+            return [CHECK_SKIP];
           }
           const configurationFile = join(
             this.globalData.tsCodeRoot,
@@ -520,6 +520,9 @@ export class CheckPlugin extends BasePlugin {
           return [true];
         })
         .check('configuration class', () => {
+          if (!this.globalData.tsCodeRoot) {
+            return [CHECK_SKIP];
+          }
           const configurationFile = join(
             this.globalData.tsCodeRoot,
             'configuration.ts'
@@ -784,6 +787,20 @@ export class CheckPlugin extends BasePlugin {
             tsconfig?.compilerOptions?.emitDecoratorMetadata;
           if (!emitDecoratorMetadata) {
             return [false, 'tsconfig emitDecoratorMetadata need true'];
+          }
+          return [true];
+        })
+        .check('ts-node', () => {
+          if (this.pkg.dependencies?.['ts-node']) {
+            return [false, 'ts-node needs to be placed in devDependencies'];
+          }
+          const tsnode = this.pkg.devDependencies?.['ts-node'];
+          if (!tsnode) {
+            return [CHECK_SKIP];
+          }
+          const version = tsnode.replace(/[^\d.]/g, '').split('.')[0];
+          if (version && /^\d+$/.test(version) && version < 10) {
+            return [false, 'ts-node needs to be upgrated to version 10'];
           }
           return [true];
         });

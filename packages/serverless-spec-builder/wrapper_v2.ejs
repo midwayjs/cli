@@ -51,8 +51,7 @@ const initializeMethod = async (initializeContext = {}) => {
         });
         const boot = new BootstrapStarter();
         boot.configure({
-          appDir: <% if (entryAppDir) { %><%-entryAppDir%><% } else { %>__dirname<% }%>,
-          <% if (entryBaseDir) { %><%-entryBaseDir%>,<% } %>
+          appDir: __dirname,
           applicationContext,
         }).load(frameworkInstance);
 
@@ -120,10 +119,6 @@ const getHandler = (hanlderName, ...originArgs) => {
   <% }); %>
 }
 
-
-<% if (skipInitializer) { %>
-// initializer skip
-<% } else { %> 
 exports.<%=initializer%> = asyncWrapper(async (...args) => {
   console.log(`initializer: process uptime: ${process.uptime()}, initStatus: ${initStatus}`);
   if (initStatus === 'initializationError') {
@@ -142,26 +137,7 @@ exports.<%=initializer%> = asyncWrapper(async (...args) => {
     throw e;
   }
 });
-<% } %>
 
-<% if (isDefaultFunc) { %>
-module.exports = asyncWrapper(async (...args) => {
-  try {
-    if (initStatus !== 'initialized') {
-      await initializeMethod();
-    }
-  } catch (e) {
-    initError = e;
-    throw e;
-  }
-  if (initError) {
-    throw initError;
-  }
-
-  const handler = getHandler('<%=defaultFunctionHandlerName%>', ...args);
-  return runtime.asyncEvent(handler)(...args);
-});
-<% } else { %> 
 
 <% handlers.forEach(function(handlerData){ %>
 exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
@@ -184,5 +160,3 @@ exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
   return runtime.asyncEvent(handler)(...args);
 });
 <% }); %>
-<% } %>
-

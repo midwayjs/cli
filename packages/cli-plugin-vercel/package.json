@@ -19,6 +19,8 @@
   "files": [
     "plugin.json",
     "dist",
+    "wrapper_v2.ejs",
+    "wrapper_v3.ejs",
     "src"
   ],
   "scripts": {

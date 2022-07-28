@@ -51,22 +51,6 @@ exports.<%=initializer%> = asyncWrapper(async (...args) => {
 <% } %>
 
 
-<% if (isDefaultFunc) { %>
-module.exports = asyncWrapper(async (...args) => {
-  try {
-    if (initStatus !== 'initialized') {
-      await initializeMethod();
-    }
-  } catch (e) {
-    initError = e;
-    throw e;
-  }
-  if (initError) {
-    throw initError;
-  }
-  return runtime.asyncEvent()(...args);
-});
-<% } else { %> 
 <% handlers.forEach(function(handlerData){ %>
   exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
     <% if(initializeInHandler) { %>
@@ -86,4 +70,3 @@ module.exports = asyncWrapper(async (...args) => {
     return runtime.asyncEvent()(...args);
   });
 <% }); %>
-<% } %>

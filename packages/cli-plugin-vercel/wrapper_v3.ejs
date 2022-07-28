@@ -49,9 +49,8 @@ const initializeMethod = async (initializeContext = {}) => {
   initStatus = 'initialized';
 };
 
-const getHandler = (hanlderName, ...originArgs) => {
+const getHandler = (...originArgs) => {
   <% handlers.forEach(function(handlerData){ %>
-    if (hanlderName === '<%=handlerData.name%>') {
       return <% if (handlerData.handler) {
       %> frameworkInstance.handleInvokeWrapper('<%=handlerData.handler%>'); <% } else {
       %> async (ctx, ...args) => {
@@ -96,49 +95,22 @@ const getHandler = (hanlderName, ...originArgs) => {
         ctx.set('Content-Type', 'text/html');
         return '<h1>404 Page Not Found</h1>';
       }; <% } %>
-    }
   <% }); %>
 }
 
-exports.<%=initializer%> = asyncWrapper(async (...args) => {
-  console.log(`initializer: process uptime: ${process.uptime()}, initStatus: ${initStatus}`);
-  if (initStatus === 'initializationError') {
-    console.error('init failed due to init status is error, and that error is: ' + initError);
-    console.error('FATAL: duplicated init! Will exit with code 121.');
-    process.exit(121);
-  }
-  if (initStatus !== 'uninitialized') {
-    throw new Error('init failed due to init status is ' + initStatus);
-  }
-
-  try {
-    await initializeMethod(...args);
-  } catch (e) {
-    initStatus = 'initializationError';
-    initError = e;
-    throw e;
-  }
-});
-
-<% handlers.forEach(function(handlerData){ %>
-exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
-  <% if(initializeInHandler) { %>
+module.exports = asyncWrapper(async (...args) => {
   try {
     if (initStatus !== 'initialized') {
       await initializeMethod();
     }
   } catch (e) {
-    initStatus = 'initializationError';
     initError = e;
     throw e;
   }
-  <% } %>
-
-  if(initStatus !== 'initialized') {
-    throw new Error('invoke failed due to init status is ' + initStatus);
+  if (initError) {
+    throw initError;
   }
-  const handler = getHandler('<%=handlerData.name%>', ...args);
+
+  const handler = getHandler(...args);
   return runtime.asyncEvent(handler)(...args);
 });
-<% }); %>
-

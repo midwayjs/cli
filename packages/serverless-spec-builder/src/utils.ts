@@ -1,3 +1,5 @@
+import { existsSync, readFileSync } from 'fs';
+
 export interface Ilayer {
   [extName: string]: {
     path: string;
@@ -132,3 +134,26 @@ export function filterUserDefinedEnv() {
   }
   return userDefinedEnv;
 }
+
+export const getFaaSPackageVersion = (distDir, baseDir) => {
+  let faasPkgFile;
+  const cwd = process.cwd();
+  try {
+    const modName: any = '@midwayjs/faas';
+    faasPkgFile = require.resolve(modName + '/package.json', {
+      paths: [distDir, baseDir],
+    });
+  } catch {
+    //
+  }
+  process.chdir(cwd);
+
+  let faasVersion = 1;
+  if (faasPkgFile && existsSync(faasPkgFile)) {
+    const { version } = JSON.parse(readFileSync(faasPkgFile).toString());
+    if (version[0]) {
+      faasVersion = +version[0];
+    }
+  }
+  return faasVersion;
+};
