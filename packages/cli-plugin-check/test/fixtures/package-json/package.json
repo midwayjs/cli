@@ -7,5 +7,11 @@
     "@xxx/faas-fun": "1.0.0",
     "@xxx/faas-invoke": "1.0.0",
     "async": "*"
+  },
+  "devDependencies": {
+    "ts-node": "^9.0.0"
+  },
+  "scripts": {
+    "test": "f test"
   }
 }

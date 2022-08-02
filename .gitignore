@@ -30,3 +30,4 @@ code.zip
 cloudfunctions
 artifact.zip
 .history
+**/test/fixtures/faas-v2/all.js

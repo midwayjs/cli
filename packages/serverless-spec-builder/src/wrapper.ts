@@ -1,7 +1,7 @@
 import { join, resolve } from 'path';
 import { writeFileSync, existsSync, readFileSync } from 'fs';
 import { render } from 'ejs';
-import { getLayers } from './utils';
+import { getFaaSPackageVersion, getLayers } from './utils';
 // 写入口
 export function writeWrapper(options: {
   service: any;
@@ -20,12 +20,8 @@ export function writeWrapper(options: {
   specificStarterName?: string; // v3: f.yml specific starter name
   preloadModules?: string[]; // pre load module
   templatePath?: string; // ejs template path
-  isDefaultFunc?: boolean; // vercel: entry is module.export = () => {}
-  skipInitializer?: boolean; // vercel: skip generate initializer method
-  entryAppDir?: string; // vercel
-  entryBaseDir?: string; // vercel
   preloadFile?: string; // pre require in entry file
-  moreTemplateVariables?: { [name: string]: any };
+  moreTemplateVariables?: any;
   aggregationBeforeExecScript?: string; // 高密度部署前置模板脚本
   initializeInHandler?: boolean; // 在 handler 中初始化
 }) {
@@ -45,11 +41,7 @@ export function writeWrapper(options: {
     clearCache = true,
     templatePath,
     moreArgs,
-    isDefaultFunc = false,
-    skipInitializer = false,
     preloadFile,
-    entryAppDir,
-    entryBaseDir,
     moreTemplateVariables = {},
     aggregationBeforeExecScript = '',
     specificStarterName = '',
@@ -72,11 +64,8 @@ export function writeWrapper(options: {
       });
     }
     const handlerSplitInfo = handlerConf.handler.split('.');
-    let handlerFileName = handlerSplitInfo[0];
+    const handlerFileName = handlerConf.handlerFileName || handlerSplitInfo[0];
     const name = handlerSplitInfo[1];
-    if (isDefaultFunc) {
-      handlerFileName = func;
-    }
     if (!cover && existsSync(join(baseDir, handlerFileName + '.js'))) {
       // 如果入口文件名存在，则跳过
       continue;
@@ -87,11 +76,6 @@ export function writeWrapper(options: {
         originLayers: [],
       };
     }
-
-    if (isDefaultFunc) {
-      files[handlerFileName].defaultFunctionHandlerName = name;
-    }
-
     if (handlerConf.layers && handlerConf.layers.length) {
       files[handlerFileName].originLayers.push(handlerConf.layers);
     }
@@ -110,45 +94,27 @@ export function writeWrapper(options: {
     }
   }
 
-  const isCustomAppType = !!service?.deployType;
-
-  let faasPkgFile;
-  const cwd = process.cwd();
-  try {
-    const modName: any = '@midwayjs/faas';
-    faasPkgFile = require.resolve(modName + '/package.json', {
-      paths: [distDir, baseDir],
-    });
-  } catch {
-    //
-  }
-  process.chdir(cwd);
-
-  let faasVersion = 1;
-  if (faasPkgFile && existsSync(faasPkgFile)) {
-    const { version } = JSON.parse(readFileSync(faasPkgFile).toString());
-    if (version[0]) {
-      faasVersion = +version[0];
+  let tplPath = templatePath;
+  if (!tplPath) {
+    let entryWrapper = '../wrapper_v1.ejs';
+    const isCustomAppType = !!service?.deployType;
+    // 指定了 deployType
+    if (isCustomAppType) {
+      entryWrapper = '../wrapper_app.ejs';
+    } else if (specificStarterName) {
+      entryWrapper = '../wrapper_v3_specific.ejs';
+    } else {
+      const faasVersion = getFaaSPackageVersion(distDir, baseDir);
+      if (faasVersion === 2) {
+        entryWrapper = '../wrapper_v2.ejs';
+      } else if (faasVersion === 3) {
+        entryWrapper = '../wrapper_v3.ejs';
+      }
     }
+    tplPath = resolve(__dirname, entryWrapper);
   }
 
-  let entryWrapper = '../wrapper_v1.ejs';
-  // 指定了 deployType
-  if (isCustomAppType) {
-    entryWrapper = '../wrapper_app.ejs';
-  } else if (specificStarterName) {
-    entryWrapper = '../wrapper_v3_specific.ejs';
-  } else {
-    if (faasVersion === 2) {
-      entryWrapper = '../wrapper_v2.ejs';
-    } else if (faasVersion === 3) {
-      entryWrapper = '../wrapper_v3.ejs';
-    }
-  }
-
-  const tpl = readFileSync(
-    templatePath ? templatePath : resolve(__dirname, entryWrapper)
-  ).toString();
+  const tpl = readFileSync(tplPath).toString();
 
   if (functionMap?.functionList?.length) {
     const target = join(distDir, 'registerFunction.js');
@@ -168,8 +134,9 @@ export function writeWrapper(options: {
 
   for (const file in files) {
     const fileName = join(distDir, `${file}.js`);
-    const layers = getLayers(service.layers, ...files[file].originLayers);
-    const content = render(tpl, {
+    const fileInfo = files[file];
+    const layers = getLayers(service.layers, ...fileInfo.originLayers);
+    let variables = {
       starter,
       runtimeConfig: service, // yaml data
       faasModName: faasModName || '@midwayjs/faas',
@@ -179,24 +146,29 @@ export function writeWrapper(options: {
       faasStarterName: faasStarterName || 'FaaSStarter',
       advancePreventMultiInit: advancePreventMultiInit || false,
       initializer: initializeName || 'initializer',
-      handlers: files[file].handlers,
+      handlers: fileInfo.handlers,
       functionMap,
       preloadModules,
       clearCache,
       moreArgs: moreArgs || false,
-      isDefaultFunc,
-      skipInitializer,
-      entryAppDir,
-      entryBaseDir,
-      defaultFunctionHandlerName: files[file].defaultFunctionHandlerName,
       preloadFile,
       aggregationBeforeExecScript,
       specificStarterName,
       initializeInHandler,
       aggregationHandlerName: files[file].aggregationHandlerName, // for v3 specific
       ...layers,
-      ...moreTemplateVariables,
-    });
+    };
+    // 更多变量
+    if (typeof moreTemplateVariables === 'object') {
+      Object.assign(variables, moreTemplateVariables);
+    } else if (typeof moreTemplateVariables === 'function') {
+      variables = moreTemplateVariables({
+        file,
+        fileInfo,
+        variables,
+      });
+    }
+    const content = render(tpl, variables);
     if (existsSync(fileName)) {
       const oldContent = readFileSync(fileName).toString();
       if (oldContent === content) {

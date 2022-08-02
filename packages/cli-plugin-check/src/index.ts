@@ -52,6 +52,7 @@ export class CheckPlugin extends BasePlugin {
   };
 
   pkg: any = {};
+  pkgContent = '';
 
   isHooks = false;
 
@@ -68,7 +69,7 @@ export class CheckPlugin extends BasePlugin {
       }
     }
     const cwd = this.getCwd();
-    let tsCodeRoot = join(cwd, 'src');
+    let tsCodeRoot = join(cwd, this.options.sourceDir || 'src');
     let locateResult: AnalyzeResult;
 
     if (this.projectType === ProjectType.FaaS) {
@@ -96,7 +97,8 @@ export class CheckPlugin extends BasePlugin {
 
     const pkgJsonFile = join(cwd, 'package.json');
     if (existsSync(pkgJsonFile)) {
-      this.pkg = JSON.parse(readFileSync(pkgJsonFile).toString());
+      this.pkgContent = readFileSync(pkgJsonFile).toString();
+      this.pkg = JSON.parse(this.pkgContent);
     }
 
     this.globalData = {
@@ -105,6 +107,7 @@ export class CheckPlugin extends BasePlugin {
       tsCodeRoot,
       locateResult,
     };
+    this.core.debug('globalData', this.globalData);
 
     if (existsSync(tsCodeRoot)) {
       const tsSourceFileList = await globby(['**/*.ts'], {
@@ -143,7 +146,7 @@ export class CheckPlugin extends BasePlugin {
     ];
 
     if (this.projectType === ProjectType.FaaS) {
-      ruleList.push(this.ruleTSConfig(), await this.ruleFaaSDecorator());
+      ruleList.push(this.ruleTSConfig(), await this.ruleFaaS());
     }
 
     if (
@@ -319,10 +322,11 @@ export class CheckPlugin extends BasePlugin {
         })
         .check('project type', async () => {
           if (
-            !this.globalData.locateResult?.projectType ||
-            this.globalData.locateResult.projectType === 'unknown'
+            (this.projectType === ProjectType.FaaS &&
+              !this.globalData.locateResult) ||
+            this.globalData.locateResult?.projectType === 'unknown'
           ) {
-            return [false, 'can not check project type'];
+            return [false, 'can not check faas project type'];
           }
           return [true];
         })
@@ -361,7 +365,10 @@ export class CheckPlugin extends BasePlugin {
             return [false, 'config need to be set in configuration.ts'];
           }
 
-          if (configurationData.includes('config/config.')) {
+          if (
+            configurationData.includes('./config/config.') &&
+            !/\s+from\s+'\.\/config\/config\./.test(configurationData)
+          ) {
             return [
               false,
               "please use join(__dirname, './config/') to import config",
@@ -502,12 +509,11 @@ export class CheckPlugin extends BasePlugin {
           ];
         })
         .check('hooks import', () => {
-          if (!this.isHooks) {
-            return [true];
+          if (!this.isHooks || !this.globalData.tsCodeRoot) {
+            return [CHECK_SKIP];
           }
           const configurationFile = join(
-            this.servicePath,
-            this.options.sourceDir,
+            this.globalData.tsCodeRoot,
             'configuration.ts'
           );
           if (!existsSync(configurationFile)) {
@@ -518,14 +524,65 @@ export class CheckPlugin extends BasePlugin {
             return [false, 'Need add hooks() to configutation.ts imports list'];
           }
           return [true];
+        })
+        .check('configuration class', () => {
+          if (!this.globalData.tsCodeRoot) {
+            return [CHECK_SKIP];
+          }
+          const configurationFile = join(
+            this.globalData.tsCodeRoot,
+            'configuration.ts'
+          );
+          if (!existsSync(configurationFile)) {
+            return [CHECK_SKIP];
+          }
+          const configurationData = readFileSync(configurationFile).toString();
+          const exportClasses = configurationData.split('export class ');
+          const classesCount = exportClasses.length - 1;
+          if (classesCount !== 1) {
+            return [
+              false,
+              `configuration needs to export 1 class (current ${classesCount})`,
+            ];
+          }
+          return [true];
         });
     };
   }
 
-  async ruleFaaSDecorator(): Promise<RunnerItem> {
+  async ruleFaaS(): Promise<RunnerItem> {
     // 校验是否存在 decorator 重名
     // 校验 @Logger 装饰器所在class是否被继承
-    return () => {};
+    return runner => {
+      runner
+        .group('faas')
+        .check('f command', () => {
+          if (!this.pkg.dependencies?.['@midwayjs/cli']) {
+            return [CHECK_SKIP];
+          }
+          if (/("|\s)f\s+(invoke|test)/.test(this.pkgContent)) {
+            return [
+              false,
+              'you can no longer use the f command after using @midwayjs/cli',
+            ];
+          }
+          return [true];
+        })
+        .check('@Func', () => {
+          for (const { code, tsSourceFile } of this.sourcesInfo) {
+            if (
+              code.includes('@ServerlessTrigger') &&
+              (code.includes('@Func') || code.includes('@func'))
+            ) {
+              return [
+                false,
+                `@func decorator is deprecated, use @ServerlessTrigger instead.(${tsSourceFile})`,
+              ];
+            }
+          }
+          return [true];
+        });
+    };
   }
 
   // 校验yaml格式
@@ -765,6 +822,20 @@ export class CheckPlugin extends BasePlugin {
             tsconfig?.compilerOptions?.emitDecoratorMetadata;
           if (!emitDecoratorMetadata) {
             return [false, 'tsconfig emitDecoratorMetadata need true'];
+          }
+          return [true];
+        })
+        .check('ts-node', () => {
+          if (this.pkg.dependencies?.['ts-node']) {
+            return [false, 'ts-node needs to be placed in devDependencies'];
+          }
+          const tsnode = this.pkg.devDependencies?.['ts-node'];
+          if (!tsnode) {
+            return [CHECK_SKIP];
+          }
+          const version = tsnode.replace(/[^\d.]/g, '').split('.')[0];
+          if (version && /^\d+$/.test(version) && version < 10) {
+            return [false, 'ts-node needs to be upgrated to version 10'];
           }
           return [true];
         });

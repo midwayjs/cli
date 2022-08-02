@@ -12,6 +12,7 @@ import { convertMethods } from './utils';
 import {
   writeWrapper,
   filterUserDefinedEnv,
+  getFaaSPackageVersion,
 } from '@midwayjs/serverless-spec-builder';
 // refs: vercel.com/docs/configuration
 export class VercelPlugin extends BasePlugin {
@@ -117,20 +118,22 @@ export class VercelPlugin extends BasePlugin {
     const functions = {};
     for (const func of functionList) {
       functions[func.funcName] = func.funcInfo;
+      functions[func.funcName].handlerFileName = func.funcName;
     }
 
+    const faasVersion = getFaaSPackageVersion(apiDir, this.servicePath);
     writeWrapper({
       baseDir: this.servicePath,
       service: {
         ...this.core.service,
         functions,
       },
+      templatePath: join(
+        __dirname,
+        faasVersion === 2 ? '../wrapper_v2.ejs' : '../wrapper_v3.ejs'
+      ),
       distDir: apiDir,
-      isDefaultFunc: true,
-      skipInitializer: true,
       starter: '@midwayjs/serverless-vercel-starter',
-      entryAppDir: "require('path').join(__dirname, '../')",
-      entryBaseDir: "baseDir: require('path').join(__dirname, '../dist')",
     });
   }
 

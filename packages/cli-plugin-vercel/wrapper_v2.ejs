@@ -1,0 +1,137 @@
+const { BootstrapStarter } = require('@midwayjs/bootstrap');
+const { Framework } = require('@midwayjs/faas');
+const { asyncWrapper, start } = require('<%=starter %>');
+const { match } = require('path-to-regexp');
+const { join } = require('path')
+<% if (preloadFile) { %>
+const { MidwayContainer, CustomModuleDetector } = require('@midwayjs/core');
+const preload = require('./<%-preloadFile %>');
+<% }%>
+const layers = [];
+<% layerDeps.forEach(function(layer){ %>
+try {
+  const <%=layer.name%> = require('<%=layer.path%>');
+  layers.push(<%=layer.name%>);
+} catch(e) { }
+<% }); %>
+
+let frameworkInstance;
+let runtime;
+let initStatus = 'uninitialized';
+let initError;
+
+const initializeMethod = async (initializeContext = {}) => {
+  initStatus = 'initialing';
+  layers.unshift(engine => {
+    engine.addRuntimeExtension({
+      async beforeFunctionStart(runtime) {
+        let startConfig = {
+          initializeContext,
+          preloadModules: <%-JSON.stringify(preloadModules, null, 2)%>,
+          applicationAdapter: runtime
+        };
+        let applicationContext;
+        <% if (preloadFile) { %>
+        const container = new MidwayContainer();
+        container.setFileDetector(
+          new CustomModuleDetector({
+            modules: preload.modules
+          })
+        );
+        if (preload.configuration) {
+          container.load(preload.configuration);
+        }
+        applicationContext = container;
+        <% } %>
+
+        frameworkInstance = new Framework();
+        frameworkInstance.configure({
+          initializeContext,
+          preloadModules: <%-JSON.stringify(preloadModules, null, 2)%>,
+          applicationAdapter: runtime
+        });
+        const boot = new BootstrapStarter();
+        boot.configure({
+          appDir: join(__dirname, '../'),
+          baseDir: join(__dirname, '../dist'),
+          applicationContext,
+        }).load(frameworkInstance);
+
+        await boot.init();
+        await boot.run();
+      }
+    });
+  })
+  runtime = await start({
+    layers: layers,
+    initContext: initializeContext,
+    runtimeConfig: <%-JSON.stringify(runtimeConfig)%>,
+  });
+
+  initStatus = 'initialized';
+};
+
+const getHandler = (...originArgs) => {
+<% handlers.forEach(function(handlerData){ %>
+    return <% if (handlerData.handler) {
+    %> frameworkInstance.handleInvokeWrapper('<%=handlerData.handler%>'); <% } else {
+    %> async (ctx, ...args) => {
+      const allHandlers = <%-JSON.stringify(handlerData.handlers, null, 2)%>;
+      <%-aggregationBeforeExecScript%>
+      if (args[0] && args[0].func && (!ctx || !ctx.path)) {
+        const handlerInfo = allHandlers.find(handler => {
+          return handler.functionName === args[0].func;
+        });
+        if (handlerInfo) {
+          return frameworkInstance.handleInvokeWrapper(handlerInfo.handler)(ctx, args[0].event);
+        }
+        return { error: `function not found`, args };
+      }
+      let handler = null;
+      let ctxPath = ctx && ctx.path || '';
+      let currentMethod = (ctx && ctx.method || '').toLowerCase();
+      let matchRes;
+      if (ctxPath) {
+        handler = allHandlers.find(handler => {
+          matchRes = match(handler.regRouter)(ctxPath);
+          if (matchRes) {
+            if (handler.method && handler.method.length && handler.method.indexOf(currentMethod) === -1) {
+              return false;
+            }
+          }
+          return matchRes;
+        });
+      }
+
+      if (handler) {
+        if (matchRes && matchRes.params) {
+          const req = originArgs && originArgs[0];
+          if (req) {
+            req.pathParameters = Object.assign({}, matchRes.params, req.pathParameters);
+          }
+        }
+        return frameworkInstance.handleInvokeWrapper(handler.handler)(ctx, ...args);
+      }
+      ctx.status = 404;
+      ctx.set('Content-Type', 'text/html');
+      return '<h1>404 Page Not Found</h1>';
+    }; <% } %>
+<% }); %>
+}
+
+module.exports = asyncWrapper(async (...args) => {
+  try {
+    if (initStatus !== 'initialized') {
+      await initializeMethod();
+    }
+  } catch (e) {
+    initError = e;
+    throw e;
+  }
+  if (initError) {
+    throw initError;
+  }
+
+  const handler = getHandler(...args);
+  return runtime.asyncEvent(handler)(...args);
+});
