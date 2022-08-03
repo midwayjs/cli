@@ -132,7 +132,7 @@ describe('test/build.test.ts', () => {
       assert(/Unexpected token \//.test(e.message));
     }
   });
-  it.only('bundle', async () => {
+  it('bundle', async () => {
     const bundle = join(__dirname, 'fixtures/bundle');
     const dist = join(bundle, 'dist');
     if (existsSync(dist)) {
