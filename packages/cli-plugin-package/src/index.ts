@@ -2,6 +2,8 @@ import {
   BasePlugin,
   findMidwayVersion,
   forkNode,
+  copyFiles,
+  copyStaticFiles,
   installNpm,
   resolveMidwayConfig,
 } from '@midwayjs/command-core';
@@ -36,11 +38,6 @@ import {
 } from './utils';
 import { findNpmModule, exec } from '@midwayjs/command-core';
 import {
-  analysisResultToSpec,
-  copyFiles,
-  copyStaticFiles,
-} from '@midwayjs/faas-code-analysis';
-import {
   CompilerHost,
   Program,
   resolveTsConfigFile,
@@ -49,6 +46,7 @@ import {
 import * as JSZip from 'jszip';
 import { AnalyzeResult, Locator } from '@midwayjs/locate';
 import { tmpdir, platform } from 'os';
+import { analysisResultToSpec } from './codeAnalysis';
 
 export class PackagePlugin extends BasePlugin {
   options: any;

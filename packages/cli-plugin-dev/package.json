@@ -15,7 +15,7 @@
     "light-spinner": "^1.0.1",
     "node-fetch": "^2.6.0",
     "tsconfig-paths": "^3.9.0",
-    "typescript": "^4.1.0",
+    "typescript": "~4.6.0",
     "ws": "^7.2.3"
   },
   "peerDependencies": {

@@ -1,19 +1,23 @@
-import { Analyzer, AnalyzeResult } from '@midwayjs/mwcc';
-import { formatUpperCamel, firstCharLower, getEventKey } from './utils';
-import { IParam, IResult, IFunction, IEvent } from './interface';
-export * from './interface';
-export * from './utils';
-export const analysis = async (codePath: IParam) => {
-  if (Array.isArray(codePath)) {
-    codePath = codePath[0];
-    console.log('[warn] code analysi only support 1 source dir');
+import { AnalyzeResult } from '@midwayjs/mwcc';
+
+// 首字母小写
+const firstCharLower = str => {
+  return str.replace(/^[A-Z]/g, match => match.toLowerCase());
+};
+
+// 驼峰变为 -
+const formatUpperCamel = str => {
+  return firstCharLower(str).replace(
+    /[A-Z]/g,
+    match => `-${match.toLowerCase()}`
+  );
+};
+
+const getEventKey = (type, event) => {
+  if (type === 'http') {
+    return `${event.method || ''}:${event.path || ''}`;
   }
-  const analysisInstance = new Analyzer({
-    projectDir: codePath,
-    decoratorLowerCase: true,
-  });
-  const analysisResult: AnalyzeResult = analysisInstance.analyze();
-  return analysisResultToSpec(analysisResult);
+  return type;
 };
 
 export const analysisResultToSpec = (analysisResult: AnalyzeResult) => {
@@ -100,3 +104,23 @@ const formatFuncInfo = (result, funcInfo, parentTarget?) => {
   existsFuncData.events = events;
   result.functions[funName] = existsFuncData;
 };
+
+export type IParam = string | string[];
+export interface IResult {
+  functions: {
+    [functionName: string]: IFunction;
+  };
+}
+
+export interface IFunction {
+  handler: string;
+  events: IEvent[];
+}
+
+export interface IEvent {
+  http?: {
+    method: string | string[];
+    path: string;
+  };
+  [othEvent: string]: any;
+}
