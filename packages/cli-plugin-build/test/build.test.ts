@@ -62,8 +62,9 @@ describe('test/build.test.ts', () => {
     }
     try {
       await run(errorcwd, 'build');
+      assert(false);
     } catch (e) {
-      assert(/stringx/.test(e.message));
+      assert(e.message.includes('1 ts error that must be fixed'));
     }
   });
   it('ignore error ts', async () => {
@@ -96,8 +97,9 @@ describe('test/build.test.ts', () => {
       await run(errorcwd, 'build', {
         tsConfig: 'xxx',
       });
+      assert(false);
     } catch (e) {
-      assert(/Unexpected token x/.test(e.message));
+      assert(e.message.includes('Unexpected token'));
     }
   });
   it('ts config options', async () => {
