@@ -132,16 +132,7 @@ describe('test/build.test.ts', () => {
       assert(/Unexpected token \//.test(e.message));
     }
   });
-  it('test hooks', async () => {
-    const hooks = join(__dirname, 'fixtures/hooks');
-    const dist = join(hooks, 'dist');
-    if (existsSync(dist)) {
-      await remove(dist);
-    }
-    execSync(`cd ${hooks};npm i`);
-    await run(hooks, 'build');
-  });
-  it('bundle', async () => {
+  it.only('bundle', async () => {
     const bundle = join(__dirname, 'fixtures/bundle');
     const dist = join(bundle, 'dist');
     if (existsSync(dist)) {
