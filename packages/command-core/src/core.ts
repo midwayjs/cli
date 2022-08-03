@@ -588,9 +588,8 @@ export class CommandCore implements ICommandCore {
     const { cli } = this.coreInstance;
     if (cli && cli.error) {
       cli.error(errObj);
-    } else {
-      throw new Error(errObj.message);
     }
+    throw new Error(errObj.message);
   }
 
   debug(...args) {
