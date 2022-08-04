@@ -60,6 +60,9 @@ export class DevPlugin extends BasePlugin {
         detectPort: {
           usage: 'when using entryFile, auto detect port',
         },
+        restartOnError: {
+          usage: 'auto restart when an error is thrown',
+        },
       },
     },
   };
@@ -135,6 +138,9 @@ export class DevPlugin extends BasePlugin {
   private start() {
     return new Promise<void>(async resolve => {
       const options = this.getOptions();
+      if (this.spin) {
+        this.spin.stop();
+      }
       this.spin = new Spin({
         text: this.started ? 'Midway Restarting' : 'Midway Starting',
       });
@@ -223,6 +229,9 @@ export class DevPlugin extends BasePlugin {
       });
       this.child.stderr.on('data', data => {
         this.error(data.toString());
+        if (this.options.restartOnError) {
+          this.restart();
+        }
       });
       this.child.on('message', msg => {
         if (msg.type === 'started') {

@@ -66,4 +66,17 @@ describe('test/index.test.ts', () => {
     const { close } = await run(cwd, { port: 12336 });
     await close();
   });
+  it('dev error alive', async () => {
+    const cwd = join(__dirname, 'fixtures/alive');
+    const dist = join(cwd, 'dist');
+    if (existsSync(dist)) {
+      await remove(dist);
+    }
+    const { close } = await run(cwd, {
+      port: 12337,
+      restartOnError: true,
+      ignoreMock: true,
+    });
+    await close();
+  });
 });
