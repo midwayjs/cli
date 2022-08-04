@@ -75,7 +75,6 @@ describe('test/index.test.ts', () => {
     const { close } = await run(cwd, {
       port: 12337,
       restartOnError: true,
-      ignoreMock: true,
     });
     await close();
   });
