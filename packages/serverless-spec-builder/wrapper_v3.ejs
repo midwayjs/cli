@@ -107,6 +107,10 @@ exports.<%=initializer%> = asyncWrapper(async (...args) => {
     console.error('FATAL: duplicated init! Will exit with code 121.');
     process.exit(121);
   }
+  if (initStatus === 'initialized') {
+    console.warn('skip init due to init status is initialized');
+    return;
+  }
   if (initStatus !== 'uninitialized') {
     throw new Error('init failed due to init status is ' + initStatus);
   }

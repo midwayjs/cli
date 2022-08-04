@@ -36,6 +36,10 @@ exports.<%=initializer%> = asyncWrapper(async (...args) => {
   if (initStatus !== 'uninitialized') {
     throw new Error('init failed due to init status is ' + initStatus);
   }
+  if (initStatus === 'initialized') {
+    console.warn('skip init due to init status is initialized');
+    return;
+  }
   try {
     if (initStatus !== 'initialized') {
       await initializeMethod();

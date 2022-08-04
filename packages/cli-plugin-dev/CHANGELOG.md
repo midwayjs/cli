@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.11-beta.1](https://github.com/midwayjs/cli/compare/v1.3.9...v1.3.11-beta.1) (2022-08-04)
+
+
+### Bug Fixes
+
+* dev alive ([8f06d66](https://github.com/midwayjs/cli/commit/8f06d6697ad5bb62730f538227056ad900f8b124))
+
+
+
+
+
 ## [1.3.7](https://github.com/midwayjs/cli/compare/v1.3.6...v1.3.7) (2022-07-06)
 
 
