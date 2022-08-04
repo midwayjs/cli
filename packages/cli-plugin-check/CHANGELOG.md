@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.10](https://github.com/midwayjs/cli/compare/v1.3.9...v1.3.10) (2022-08-04)
+
+
+### Features
+
+* check configuration export class ([#289](https://github.com/midwayjs/cli/issues/289)) ([cab92b4](https://github.com/midwayjs/cli/commit/cab92b4f9e6e7b2bb6967ea155f68a826388c19b))
+
+
+
+
+
 ## [1.3.10-beta.1](https://github.com/midwayjs/cli/compare/v1.3.9...v1.3.10-beta.1) (2022-08-03)
 
 
