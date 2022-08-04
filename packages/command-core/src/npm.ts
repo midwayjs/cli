@@ -90,28 +90,17 @@ export async function loadNpm(
   }
 }
 
-const findNpmModuleByResolve = (cwd, modName) => {
+export const findNpmModule = (cwd, modName) => {
+  const modPath = join(cwd, 'node_modules', modName);
+  if (existsSync(modPath)) {
+    return modPath;
+  }
   try {
     return dirname(
       require.resolve(`${modName}/package.json`, { paths: [cwd] })
     );
   } catch (e) {
     return;
-  }
-};
-
-export const findNpmModule = (cwd, modName) => {
-  if ('pnp' in process.versions || process.env.npm_execpath?.includes('pnpm')) {
-    return findNpmModuleByResolve(cwd, modName);
-  }
-
-  const modPath = join(cwd, 'node_modules', modName);
-  if (existsSync(modPath)) {
-    return modPath;
-  }
-  const parentCwd = join(cwd, '../');
-  if (parentCwd !== cwd) {
-    return findNpmModule(parentCwd, modName);
   }
 };
 

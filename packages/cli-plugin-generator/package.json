@@ -1,11 +1,11 @@
 {
   "name": "@midwayjs/cli-plugin-generator",
-  "version": "1.3.9",
+  "version": "1.3.10-beta.1",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/command-core": "^1.3.5",
-    "@midwayjs/serverless-spec-builder": "^1.3.9",
+    "@midwayjs/command-core": "^1.3.10-beta.1",
+    "@midwayjs/serverless-spec-builder": "^1.3.10-beta.1",
     "camel-case": "^4.1.2",
     "capital-case": "^1.0.4",
     "chalk": "^4.1.2",
@@ -45,7 +45,7 @@
     "@types/parse-json": "^4.0.0",
     "@types/prettier": "^2.3.2",
     "@types/strip-comments": "^2.0.1",
-    "typescript": "^4.1.0"
+    "typescript": "~4.6.0"
   },
   "engines": {
     "node": ">= 10"

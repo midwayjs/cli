@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.10-beta.1](https://github.com/midwayjs/cli/compare/v1.3.9...v1.3.10-beta.1) (2022-08-03)
+
+
+### Bug Fixes
+
+* build remove mwcc & remove faas-code-analysis ([fc11b6b](https://github.com/midwayjs/cli/commit/fc11b6bc301c89b85166bf11f2ee0d07b3935b97))
+
+
+
+
+
 ## [1.3.8](https://github.com/midwayjs/cli/compare/v1.3.7...v1.3.8) (2022-07-21)
 
 
