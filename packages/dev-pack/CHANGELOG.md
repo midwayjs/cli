@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.12-beta.1](https://github.com/midwayjs/cli/compare/v1.3.11...v1.3.12-beta.1) (2022-08-05)
+
+**Note:** Version bump only for package @midwayjs/serverless-dev-pack
+
+
+
+
+
 ## [1.3.11](https://github.com/midwayjs/cli/compare/v1.3.9...v1.3.11) (2022-08-04)
 
 **Note:** Version bump only for package @midwayjs/serverless-dev-pack
