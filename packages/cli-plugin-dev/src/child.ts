@@ -22,6 +22,12 @@ const closeApp = async () => {
   await closeApp();
   exit();
 };
+process.on('unhandledRejection', e => {
+  console.error('unhandledRejection', e);
+});
+process.on('uncaughtException', e => {
+  console.error('uncaughtException', e);
+});
 process.on('SIGINT', () => null);
 (async () => {
   if (process.env.MIDWAY_DEV_IS_DEBUG) {
