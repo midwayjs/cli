@@ -1184,16 +1184,13 @@ export class PackagePlugin extends BasePlugin {
         service.provider.initTimeout = 10;
       }
 
-      // add default function
-      if (!service.functions || Object.keys(service.functions).length === 0) {
-        this.core.cli.log(' - create default functions');
-        service.functions = {
-          [deployName]: {
-            handler: 'index.handler',
-            events: [{ http: { path: '/*' } }],
-          },
-        };
-      }
+      this.core.cli.log(' - create default functions');
+      service.functions = {
+        [deployName]: {
+          handler: 'index.handler',
+          events: [{ http: { path: '/*' } }],
+        },
+      };
       if (!service?.layers) {
         service.layers = {};
       }
