@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.12-beta.3](https://github.com/midwayjs/bin/compare/v1.3.12-beta.2...v1.3.12-beta.3) (2022-08-22)
+
+
+### Features
+
+* midway v3 package function list ([10ac206](https://github.com/midwayjs/bin/commit/10ac206611303f3ce68908032edb4429faababee))
+
+
+
+
+
 ## [1.3.12-beta.2](https://github.com/midwayjs/bin/compare/v1.3.12-beta.1...v1.3.12-beta.2) (2022-08-07)
 
 
