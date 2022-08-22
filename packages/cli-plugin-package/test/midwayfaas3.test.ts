@@ -28,6 +28,10 @@ describe('/test/midwayfaas3.test.ts', () => {
     await core.ready();
     await core.invoke(['package']);
     const specFunctions = (core as any).coreInstance.service.functions;
-    assert(specFunctions);
+    assert(specFunctions['helloService-httpAllTrigger']);
+    assert(specFunctions['helloService-httpTrigger']);
+    assert(specFunctions['helloService-ossTrigger']);
+    assert(specFunctions['helloService-coverConfig']);
+    assert(specFunctions['helloService-hsfTrigger']);
   });
 });
