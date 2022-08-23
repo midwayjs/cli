@@ -316,12 +316,13 @@ export class PackagePlugin extends BasePlugin {
       exclude.push('package-lock.json');
       exclude.push('pnpm-lock.yaml');
     }
+    const tsCodeRoot: string = this.getTsCodeRoot();
     await copyFiles({
       sourceDir: this.servicePath,
       targetDir: this.midwayBuildPath,
       include: this.options.skipBuild
         ? [].concat(packageObj.include || [])
-        : [this.options.sourceDir || 'src'].concat(packageObj.include || []),
+        : [tsCodeRoot].concat(packageObj.include || []),
       exclude,
       log: path => {
         this.core.cli.log(`   - Copy ${path}`);
