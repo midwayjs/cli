@@ -316,7 +316,7 @@ export class PackagePlugin extends BasePlugin {
       exclude.push('package-lock.json');
       exclude.push('pnpm-lock.yaml');
     }
-    const tsCodeRoot: string = this.getTsCodeRoot();
+    const tsCodeRoot: string = relative(this.servicePath, this.getTsCodeRoot());
     await copyFiles({
       sourceDir: this.servicePath,
       targetDir: this.midwayBuildPath,
