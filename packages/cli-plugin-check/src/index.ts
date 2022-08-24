@@ -920,6 +920,8 @@ export class CheckPlugin extends BasePlugin {
           });
         }
       },
+      reportWarn: () => {},
+      reportError: () => {},
       reportEnd: () => {
         if (this.errors.length) {
           this.checkReporterOutput();
