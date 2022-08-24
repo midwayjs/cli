@@ -1,0 +1,5 @@
+{
+    "devDependencies": {
+        "@midwayjs/web": "^1.2.3-beta.1"
+    }
+}

@@ -1,8 +1,15 @@
-import { CommandCore, findNpm, formatInstallNpmCommand } from '../src';
+import {
+  CommandCore,
+  findMidwayVersion,
+  findNpm,
+  formatInstallNpmCommand,
+  resolveMidwayConfig,
+} from '../src';
 import { join } from 'path';
 import { existsSync, remove } from 'fs-extra';
 import * as assert from 'assert';
 import * as mm from 'mm';
+import { execSync } from 'child_process';
 describe('command-core:npm.test.ts', () => {
   it('npm plugin', async () => {
     const nm = join(
@@ -118,5 +125,19 @@ describe('command-core:npm.test.ts', () => {
       mode: ['production'],
     });
     assert(cmd === 'yarn install --production --no-lockfile --ignore-optional');
+  });
+  it('findMidwayVersion', async () => {
+    const cwd = join(__dirname, 'fixtures/findMidwayVersion');
+    const res = findMidwayVersion(cwd);
+    assert(res['module'] === '@midwayjs/web');
+    assert(res['version'].major === '1');
+    assert(res['version'].minor === '2');
+    assert(res['version'].patch === '3-beta');
+  });
+  it('resolveMidwayConfig', async () => {
+    const cwd = join(__dirname, 'fixtures/resolveMidwayConfig');
+    execSync(`cd ${cwd};npm install @midwayjs/hooks@3`);
+    const res = resolveMidwayConfig(cwd);
+    assert(res.exist && res.source === 'src/apis');
   });
 });
