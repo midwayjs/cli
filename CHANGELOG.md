@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.12](https://github.com/midwayjs/bin/compare/v1.3.12-beta.3...v1.3.12) (2022-08-25)
+
+
+### Bug Fixes
+
+* check report ([5404f5d](https://github.com/midwayjs/bin/commit/5404f5da60d55cfb69b65a58e1f8d53cae9f8d05))
+* copyFiles ([19ba304](https://github.com/midwayjs/bin/commit/19ba3042e1a3f38eed5f44435d5b7022b54569e2))
+* package copyFile src dir ([8de1be6](https://github.com/midwayjs/bin/commit/8de1be6eb117a940849322715bf48635aa7df57b))
+
+
+
+
+
 ## [1.3.12-beta.3](https://github.com/midwayjs/bin/compare/v1.3.12-beta.2...v1.3.12-beta.3) (2022-08-22)
 
 
