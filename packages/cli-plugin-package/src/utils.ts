@@ -117,7 +117,9 @@ export const analysisDecorator = async (cwd: string, currentFunc?) => {
   const midwayCoreMod = findNpmModule(cwd, '@midwayjs/core');
   const {
     ServerlessTriggerCollector,
-    WebRouterCollector,
+    MidwayFrameworkService,
+    MidwayServerlessFunctionService,
+    prepareGlobalApplicationContext,
   } = require(midwayCoreMod);
   let result;
   let collector;
@@ -125,10 +127,29 @@ export const analysisDecorator = async (cwd: string, currentFunc?) => {
     collector = new ServerlessTriggerCollector(cwd);
     result = await collector.getFunctionList();
   } else {
-    collector = new WebRouterCollector(cwd, {
-      includeFunctionRouter: true,
+    const midwayDecoratorMod = findNpmModule(cwd, '@midwayjs/decorator');
+    const {
+      CONFIGURATION_KEY,
+      listModule,
+      Types,
+    } = require(midwayDecoratorMod);
+    const applicationContext = prepareGlobalApplicationContext({
+      baseDir: cwd,
+      appDir: cwd,
     });
-    result = await collector.getFlattenRouterTable();
+    await applicationContext.getAsync(MidwayFrameworkService, [
+      applicationContext,
+    ]);
+    const cycles = listModule(CONFIGURATION_KEY);
+    for (const cycle of cycles) {
+      if (cycle.target && Types.isClass(cycle.target)) {
+        await applicationContext.getAsync(cycle.target);
+      }
+    }
+    const midwayServerlessFunctionService = applicationContext.get(
+      MidwayServerlessFunctionService
+    );
+    result = await midwayServerlessFunctionService.getFunctionList();
   }
   const allFunc = currentFunc || {};
   if (Array.isArray(result)) {
@@ -139,8 +160,8 @@ export const analysisDecorator = async (cwd: string, currentFunc?) => {
       const handler = func.funcHandlerName;
       if (
         !handler ||
-        func.functionName.includes('undefined') ||
-        func.handlerName.includes('undefined')
+        func.functionName?.includes('undefined') ||
+        func.handlerName?.includes('undefined')
       ) {
         return;
       }

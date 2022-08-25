@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.12](https://github.com/midwayjs/cli/compare/v1.3.12-beta.3...v1.3.12) (2022-08-25)
+
+
+### Bug Fixes
+
+* copyFiles ([19ba304](https://github.com/midwayjs/cli/commit/19ba3042e1a3f38eed5f44435d5b7022b54569e2))
+* package copyFile src dir ([8de1be6](https://github.com/midwayjs/cli/commit/8de1be6eb117a940849322715bf48635aa7df57b))
+
+
+
+
+
+## [1.3.12-beta.3](https://github.com/midwayjs/cli/compare/v1.3.12-beta.2...v1.3.12-beta.3) (2022-08-22)
+
+
+### Features
+
+* midway v3 package function list ([10ac206](https://github.com/midwayjs/cli/commit/10ac206611303f3ce68908032edb4429faababee))
+
+
+
+
+
+## [1.3.12-beta.2](https://github.com/midwayjs/cli/compare/v1.3.12-beta.1...v1.3.12-beta.2) (2022-08-07)
+
+
+### Bug Fixes
+
+* deploy type ([780c6e2](https://github.com/midwayjs/cli/commit/780c6e2e8281531511326053942069edd6cc2a21))
+
+
+
+
+
 ## [1.3.11](https://github.com/midwayjs/cli/compare/v1.3.9...v1.3.11) (2022-08-04)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-package

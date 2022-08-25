@@ -316,12 +316,13 @@ export class PackagePlugin extends BasePlugin {
       exclude.push('package-lock.json');
       exclude.push('pnpm-lock.yaml');
     }
+    const tsCodeRoot: string = relative(this.servicePath, this.getTsCodeRoot());
     await copyFiles({
       sourceDir: this.servicePath,
       targetDir: this.midwayBuildPath,
       include: this.options.skipBuild
         ? [].concat(packageObj.include || [])
-        : [this.options.sourceDir || 'src'].concat(packageObj.include || []),
+        : [tsCodeRoot].concat(packageObj.include || []),
       exclude,
       log: path => {
         this.core.cli.log(`   - Copy ${path}`);
@@ -1184,16 +1185,13 @@ export class PackagePlugin extends BasePlugin {
         service.provider.initTimeout = 10;
       }
 
-      // add default function
-      if (!service.functions || Object.keys(service.functions).length === 0) {
-        this.core.cli.log(' - create default functions');
-        service.functions = {
-          [deployName]: {
-            handler: 'index.handler',
-            events: [{ http: { path: '/*' } }],
-          },
-        };
-      }
+      this.core.cli.log(' - create default functions');
+      service.functions = {
+        [deployName]: {
+          handler: 'index.handler',
+          events: [{ http: { path: '/*' } }],
+        },
+      };
       if (!service?.layers) {
         service.layers = {};
       }

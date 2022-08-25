@@ -60,9 +60,6 @@ export class DevPlugin extends BasePlugin {
         detectPort: {
           usage: 'when using entryFile, auto detect port',
         },
-        restartOnError: {
-          usage: 'auto restart when an error is thrown',
-        },
       },
     },
   };
@@ -229,9 +226,6 @@ export class DevPlugin extends BasePlugin {
       });
       this.child.stderr.on('data', data => {
         this.error(data.toString());
-        if (this.options.restartOnError) {
-          this.restart();
-        }
       });
       this.child.on('message', msg => {
         if (msg.type === 'started') {
