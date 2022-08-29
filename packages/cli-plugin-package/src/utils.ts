@@ -120,6 +120,7 @@ export const analysisDecorator = async (cwd: string, currentFunc?) => {
     MidwayFrameworkService,
     MidwayServerlessFunctionService,
     prepareGlobalApplicationContext,
+    WebRouterCollector,
   } = require(midwayCoreMod);
   let result;
   let collector;
@@ -150,6 +151,12 @@ export const analysisDecorator = async (cwd: string, currentFunc?) => {
       MidwayServerlessFunctionService
     );
     result = await midwayServerlessFunctionService.getFunctionList();
+    if (!result?.length) {
+      collector = new WebRouterCollector(cwd, {
+        includeFunctionRouter: true,
+      });
+      result = await collector.getFlattenRouterTable();
+    }
   }
   const allFunc = currentFunc || {};
   if (Array.isArray(result)) {
