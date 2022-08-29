@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.13-beta.1](https://github.com/midwayjs/bin/compare/v1.3.11...v1.3.13-beta.1) (2022-08-29)
+
+
+### Bug Fixes
+
+* pacakge old compatible ([cf73798](https://github.com/midwayjs/bin/commit/cf737984d65369f62e9c29ee61716629efd5c811))
+
+
+
+
+
 ## [1.3.12](https://github.com/midwayjs/bin/compare/v1.3.12-beta.3...v1.3.12) (2022-08-25)
 
 
