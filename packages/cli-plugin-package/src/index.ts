@@ -344,8 +344,8 @@ export class PackagePlugin extends BasePlugin {
         //
       }
       await writeJSON(join(this.midwayBuildPath, 'package.json'), {
-        ...originPkgJson,
         name: this.codeAnalyzeResult.projectType,
+        ...originPkgJson,
         version: '1.0.0',
         dependencies: this.codeAnalyzeResult.usingDependenciesVersion.valid,
       });
