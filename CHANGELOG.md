@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.13-beta.2](https://github.com/midwayjs/bin/compare/v1.3.13-beta.1...v1.3.13-beta.2) (2022-09-06)
+
+
+### Features
+
+* bundle support hooks 3 ([3bacb4a](https://github.com/midwayjs/bin/commit/3bacb4a66223d9d5445bc8c4197e875ca6002dc4))
+
+
+
+
+
 ## [1.3.13-beta.1](https://github.com/midwayjs/bin/compare/v1.3.11...v1.3.13-beta.1) (2022-08-29)
 
 
