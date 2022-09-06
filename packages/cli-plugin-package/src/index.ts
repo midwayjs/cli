@@ -687,23 +687,78 @@ export class PackagePlugin extends BasePlugin {
       return;
     }
 
-    let preloadCode = '';
+    const midwayBuildPath = this.core.config.buildPath;
     const distDir = join(this.midwayBuildPath, 'dist');
-    const preloadFile = join(distDir, '_midway_preload_modules.js');
+    let isUseHcc = false;
+    console.log('midwayBuildPath', midwayBuildPath);
+    try {
+      const modules = [];
+      // TODO: hooks bundle
+      const { getPreloadCode } = require('@midwayjs/hcc');
+      const hooksBundle = await getPreloadCode(midwayBuildPath, file => {
+        if (/midway_preload/.test(file)) {
+          return false;
+        }
+        modules.push(`require('./${file}')`);
+        return true;
+      });
+
+      const code = `${hooksBundle};exports.modules = [${modules.join(', ')}];`;
+
+      console.log('hooksBundle code:', code);
+      isUseHcc = true;
+      writeFileSync(join(distDir, 'midway_hcc.js'), code);
+    } catch (e) {
+      console.log('hooksBundle err:', e);
+    }
+
+    let preloadCode = '';
+    // 预加载文件，加载各种函数文件
+    const preloadFile = join(distDir, 'midway_preload_modules.js');
     const requireList = await globby(['**/*.js'], {
       cwd: distDir,
     });
     preloadCode += [
-      'exports.modules = [',
+      // for midway hooks preload
+      'let hccModules = {modules: []};',
+      isUseHcc
+        ? `try {
+        hccModules = require('./midway_hcc.js');
+        console.log("hccModules", hccModules);
+      } catch(e) {
+        console.log("hccModules error", e);
+      }`
+        : '',
+      'exports.modules = [...(hccModules && hccModules.modules || []),',
+      // for user code preload
       ...requireList.map(file => {
         return `  require('./${file}'),`;
       }),
       '];',
     ].join('\n');
-    const configurationFilePath = join(distDir, 'configuration.js');
-    if (existsSync(configurationFilePath)) {
-      preloadCode += "exports.configuration = require('./configuration.js');";
+
+    const configuratioCode = join(distDir, 'configuration.js');
+    if (existsSync(configuratioCode)) {
+      preloadCode += `
+      const configurationModule = require('./configuration.js');
+      if(typeof configurationModule === 'object') {
+        const className = Object.keys(configurationModule).find(key => {
+          const cls = configurationModule[key];
+          if (typeof cls === 'function' && cls.prototype) {
+            try {
+              cls.arguments && cls.caller;
+            } catch(e) {
+              return true;
+            }
+          }
+        });
+        exports.Configuration = configurationModule[className];
+      } else {
+        exports.Configuration = configurationModule
+      }
+      `;
     }
+
     this.setStore(
       'preloadFile',
       relative(this.midwayBuildPath, preloadFile),
