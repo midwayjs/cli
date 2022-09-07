@@ -94,8 +94,14 @@ export class DevPlugin extends BasePlugin {
   }
 
   async run() {
+    const onSigint = signal => {
+      process.off('SIGINT', onSigint);
+      process.on('SIGINT', () => null);
+      this.handleClose(true, signal);
+    };
+
     process.on('exit', this.handleClose.bind(this, false));
-    process.on('SIGINT', this.handleClose.bind(this, true));
+    process.on('SIGINT', onSigint);
     this.setStore('dev:closeApp', this.handleClose.bind(this), true);
     const options = this.getOptions();
     await this.start();
