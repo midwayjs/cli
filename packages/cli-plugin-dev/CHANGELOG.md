@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.13](https://github.com/midwayjs/cli/compare/v1.3.11...v1.3.13) (2022-09-07)
+
+
+### Bug Fixes
+
+* 重复处理信号可能导致的异常 ([#293](https://github.com/midwayjs/cli/issues/293)) ([e693374](https://github.com/midwayjs/cli/commit/e6933745784a6e68c1eefb7f06ace73c8ec9172c))
+
+
+
+
+
 ## [1.3.13-beta.2](https://github.com/midwayjs/cli/compare/v1.3.13-beta.1...v1.3.13-beta.2) (2022-09-06)
 
 **Note:** Version bump only for package @midwayjs/cli-plugin-dev

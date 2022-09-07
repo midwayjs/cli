@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.13](https://github.com/midwayjs/bin/compare/v1.3.11...v1.3.13) (2022-09-07)
+
+
+### Bug Fixes
+
+* 重复处理信号可能导致的异常 ([#293](https://github.com/midwayjs/bin/issues/293)) ([e693374](https://github.com/midwayjs/bin/commit/e6933745784a6e68c1eefb7f06ace73c8ec9172c))
+* package intergration name ([#295](https://github.com/midwayjs/bin/issues/295)) ([8af416a](https://github.com/midwayjs/bin/commit/8af416abd0c46541e19b9bc420ca52d19d03cdfe))
+
+
+
+
+
 ## [1.3.13-beta.2](https://github.com/midwayjs/bin/compare/v1.3.13-beta.1...v1.3.13-beta.2) (2022-09-06)
 
 
