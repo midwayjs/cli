@@ -1,3 +1,6 @@
+<% if (requireAtFirst) { %>
+require('./<%-requireAtFirst %>');
+<% }%>
 const { Bootstrap } = require('@midwayjs/bootstrap');
 const { Framework } = require('@midwayjs/faas');
 const { asyncWrapper, start } = require('<%=starter %>');

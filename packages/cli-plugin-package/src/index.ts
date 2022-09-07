@@ -696,20 +696,22 @@ export class PackagePlugin extends BasePlugin {
       // TODO: hooks bundle
       const { getPreloadCode } = require('@midwayjs/hcc');
       const hooksBundle = await getPreloadCode(midwayBuildPath, file => {
-        if (/midway_preload/.test(file)) {
+        if (/midway_preload|configuration/.test(file)) {
           return false;
         }
         modules.push(`require('./${file}')`);
         return true;
       });
 
-      const code = `${hooksBundle};exports.modules = [${modules.join(', ')}];`;
-
+      let code = `${hooksBundle};exports.modules = [${modules.join(', ')}];`;
+      // TODO: hooks bug
+      code = code.replace('will be overwritten.', 'will be overwritten.\n');
+      code = code.replace("require('./configuration.js')", '');
       console.log('hooksBundle code:', code);
       isUseHcc = true;
       writeFileSync(join(distDir, 'midway_hcc.js'), code);
-    } catch (e) {
-      console.log('hooksBundle err:', e);
+    } catch {
+      //
     }
 
     let preloadCode = '';
@@ -742,17 +744,21 @@ export class PackagePlugin extends BasePlugin {
       preloadCode += `
       const configurationModule = require('./configuration.js');
       if(typeof configurationModule === 'object') {
-        const className = Object.keys(configurationModule).find(key => {
-          const cls = configurationModule[key];
-          if (typeof cls === 'function' && cls.prototype) {
-            try {
-              cls.arguments && cls.caller;
-            } catch(e) {
-              return true;
+        if (configurationModule.default) {
+          exports.Configuration = configurationModule.default;
+        } else {
+          const className = Object.keys(configurationModule).find(key => {
+            const cls = configurationModule[key];
+            if (typeof cls === 'function' && cls.prototype) {
+              try {
+                cls.arguments && cls.caller;
+              } catch(e) {
+                return true;
+              }
             }
-          }
-        });
-        exports.Configuration = configurationModule[className];
+          });
+          exports.Configuration = configurationModule[className];
+        }
       } else {
         exports.Configuration = configurationModule
       }
