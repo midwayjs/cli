@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.14-beta.2](https://github.com/midwayjs/cli/compare/v1.3.14-beta.1...v1.3.14-beta.2) (2022-09-07)
+
+
+### Bug Fixes
+
+* bundle ncc & hcc ([50954a0](https://github.com/midwayjs/cli/commit/50954a0cd3e5ae8dbc1ec19715102e5672029adc))
+
+
+
+
+
 ## [1.3.14-beta.1](https://github.com/midwayjs/cli/compare/v1.3.13...v1.3.14-beta.1) (2022-09-07)
 
 
