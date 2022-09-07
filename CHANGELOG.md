@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.14-beta.1](https://github.com/midwayjs/bin/compare/v1.3.13...v1.3.14-beta.1) (2022-09-07)
+
+
+### Bug Fixes
+
+* bundle ([bf7da31](https://github.com/midwayjs/bin/commit/bf7da31e024bb2bc61a0265cf8e741272b80828c))
+
+
+
+
+
 ## [1.3.13](https://github.com/midwayjs/bin/compare/v1.3.13-beta.3...v1.3.13) (2022-09-07)
 
 
