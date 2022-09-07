@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.13-beta.3](https://github.com/midwayjs/cli/compare/v1.3.13...v1.3.13-beta.3) (2022-09-07)
+
+**Note:** Version bump only for package @midwayjs/fcli-plugin-wechat
+
+
+
+
+
 ## [1.3.13](https://github.com/midwayjs/cli/compare/v1.3.11...v1.3.13) (2022-09-07)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-wechat

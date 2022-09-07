@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.13-beta.3](https://github.com/midwayjs/cli/compare/v1.3.13...v1.3.13-beta.3) (2022-09-07)
+
+**Note:** Version bump only for package @midwayjs/faas-code-analysis
+
+
+
+
+
 ## [1.3.8](https://github.com/midwayjs/cli/compare/v1.3.7...v1.3.8) (2022-07-21)
 
 
