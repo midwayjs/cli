@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.13-beta.4](https://github.com/midwayjs/cli/compare/v1.3.13-beta.3...v1.3.13-beta.4) (2022-09-07)
+
+
+### Bug Fixes
+
+* package resume to  webRouterCollector ([900d15c](https://github.com/midwayjs/cli/commit/900d15cd03d60809b4c9394d3e262edb70c4b35d))
+
+
+
+
+
 ## [1.3.13-beta.3](https://github.com/midwayjs/cli/compare/v1.3.13...v1.3.13-beta.3) (2022-09-07)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-package
