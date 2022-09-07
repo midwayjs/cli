@@ -22,6 +22,7 @@ import {
   lstat,
   readFile,
   createWriteStream,
+  writeFile,
 } from 'fs-extra';
 import * as ts from 'typescript';
 import * as globby from 'globby';
@@ -66,6 +67,8 @@ export class PackagePlugin extends BasePlugin {
 
   private compilerHost: CompilerHost;
   private program: Program;
+  // 在 bundle 的情况下是否使用 hcc 编译 @midwayjs/hooks
+  private isUseHcc = false;
 
   commands = {
     package: {
@@ -689,11 +692,9 @@ export class PackagePlugin extends BasePlugin {
 
     const midwayBuildPath = this.core.config.buildPath;
     const distDir = join(this.midwayBuildPath, 'dist');
-    let isUseHcc = false;
     console.log('midwayBuildPath', midwayBuildPath);
     try {
       const modules = [];
-      // TODO: hooks bundle
       const { getPreloadCode } = require('@midwayjs/hcc');
       const hooksBundle = await getPreloadCode(midwayBuildPath, file => {
         if (/midway_preload|configuration/.test(file)) {
@@ -704,11 +705,11 @@ export class PackagePlugin extends BasePlugin {
       });
 
       let code = `${hooksBundle};exports.modules = [${modules.join(', ')}];`;
-      // TODO: hooks bug
+      // TODO: fix hooks bug
       code = code.replace('will be overwritten.', 'will be overwritten.\n');
       code = code.replace("require('./configuration.js')", '');
       console.log('hooksBundle code:', code);
-      isUseHcc = true;
+      this.isUseHcc = true;
       writeFileSync(join(distDir, 'midway_hcc.js'), code);
     } catch {
       //
@@ -723,7 +724,7 @@ export class PackagePlugin extends BasePlugin {
     preloadCode += [
       // for midway hooks preload
       'let hccModules = {modules: []};',
-      isUseHcc
+      this.isUseHcc
         ? `try {
         hccModules = require('./midway_hcc.js');
         console.log("hccModules", hccModules);
@@ -742,27 +743,43 @@ export class PackagePlugin extends BasePlugin {
     const configuratioCode = join(distDir, 'configuration.js');
     if (existsSync(configuratioCode)) {
       preloadCode += `
-      const configurationModule = require('./configuration.js');
+      let configurationModule = require('./configuration.js');
+      if (configurationModule && configurationModule.default) {
+        configurationModule = configurationModule.default;
+      }
       if(typeof configurationModule === 'object') {
-        if (configurationModule.default) {
-          exports.Configuration = configurationModule.default;
-        } else {
-          const className = Object.keys(configurationModule).find(key => {
-            const cls = configurationModule[key];
-            if (typeof cls === 'function' && cls.prototype) {
-              try {
-                cls.arguments && cls.caller;
-              } catch(e) {
-                return true;
-              }
+        const className = Object.keys(configurationModule).find(key => {
+          const cls = configurationModule[key];
+          if (typeof cls === 'function' && cls.prototype) {
+            try {
+              cls.arguments && cls.caller;
+            } catch(e) {
+              return true;
             }
-          });
-          exports.Configuration = configurationModule[className];
-        }
+          }
+        });
+        exports.Configuration = configurationModule[className];
       } else {
         exports.Configuration = configurationModule
       }
       `;
+    }
+
+    // TODO: fix ncc bug
+    try {
+      // eslint-disable-next-line
+      const midwayFaasMod = require.resolve('@midwayjs/faas/package.json', {
+        paths: [this.getCwd()],
+      });
+      const faasIndexPath = join(dirname(midwayFaasMod), './dist/index.js');
+      let faasIndexCode = await readFile(faasIndexPath, 'utf8');
+      faasIndexCode = faasIndexCode.replace(
+        /"\.\/configuration"/g,
+        '"@midwayjs/faas/dist/configuration"'
+      );
+      await writeFile(faasIndexPath, faasIndexCode);
+    } catch {
+      //
     }
 
     this.setStore(
@@ -1292,6 +1309,15 @@ export class PackagePlugin extends BasePlugin {
 
     await Promise.all(
       entryList.map(async entry => {
+        const entryPath = join(this.midwayBuildPath, entry);
+        if (this.isUseHcc) {
+          // 如果使用了 hcc 编译 midway hooks，在入口需要添加 hooks的编译文件，解决 midway.config.js 文件加载问题
+          const entryCode = await readFile(entryPath, 'utf8');
+          await writeFile(
+            entryPath,
+            'require("./dist/midway_hcc.js");' + entryCode
+          );
+        }
         const entryName = entry.slice(0, -3);
         await forkNode(
           nccCli,
@@ -1300,13 +1326,13 @@ export class PackagePlugin extends BasePlugin {
             cwd: this.midwayBuildPath,
           }
         );
-        await remove(join(this.midwayBuildPath, entry));
+        await remove(entryPath);
         await move(
           join(
             this.midwayBuildPath,
             'ncc_build_tmp/' + entryName + '/index.js'
           ),
-          join(this.midwayBuildPath, entry)
+          entryPath
         );
       })
     );
