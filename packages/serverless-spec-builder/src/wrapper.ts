@@ -74,8 +74,10 @@ export function writeWrapper(options: {
       files[handlerFileName] = {
         handlers: [],
         originLayers: [],
+        defaultFunctionHandlerName: name, // for worker
       };
     }
+
     if (handlerConf.layers && handlerConf.layers.length) {
       files[handlerFileName].originLayers.push(handlerConf.layers);
     }

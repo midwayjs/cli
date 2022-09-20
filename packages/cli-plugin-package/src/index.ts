@@ -1309,6 +1309,9 @@ export class PackagePlugin extends BasePlugin {
 
     await Promise.all(
       entryList.map(async entry => {
+        if (entry === 'midway.config.js' || entry === 'jest.config.js') {
+          return;
+        }
         const entryPath = join(this.midwayBuildPath, entry);
         if (this.isUseHcc) {
           // 如果使用了 hcc 编译 midway hooks，在入口需要添加 hooks的编译文件，解决 midway.config.js 文件加载问题
