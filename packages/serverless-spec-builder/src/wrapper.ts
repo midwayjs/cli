@@ -157,6 +157,7 @@ export function writeWrapper(options: {
       aggregationBeforeExecScript,
       specificStarterName,
       initializeInHandler,
+      defaultFunctionHandlerName: files[file].defaultFunctionHandlerName, // for worker
       aggregationHandlerName: files[file].aggregationHandlerName, // for v3 specific
       ...layers,
     };
