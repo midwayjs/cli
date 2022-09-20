@@ -22,6 +22,7 @@ export function writeWrapper(options: {
   templatePath?: string; // ejs template path
   preloadFile?: string; // pre require in entry file
   moreTemplateVariables?: any;
+  isDefaultFunc?: boolean; // for worker
   aggregationBeforeExecScript?: string; // 高密度部署前置模板脚本
   initializeInHandler?: boolean; // 在 handler 中初始化
 }) {
@@ -46,6 +47,7 @@ export function writeWrapper(options: {
     aggregationBeforeExecScript = '',
     specificStarterName = '',
     initializeInHandler = false,
+    isDefaultFunc = false,
   } = options;
 
   const files = {};
@@ -64,8 +66,11 @@ export function writeWrapper(options: {
       });
     }
     const handlerSplitInfo = handlerConf.handler.split('.');
-    const handlerFileName = handlerConf.handlerFileName || handlerSplitInfo[0];
+    let handlerFileName = handlerConf.handlerFileName || handlerSplitInfo[0];
     const name = handlerSplitInfo[1];
+    if (isDefaultFunc) {
+      handlerFileName = func;
+    }
     if (!cover && existsSync(join(baseDir, handlerFileName + '.js'))) {
       // 如果入口文件名存在，则跳过
       continue;
@@ -74,8 +79,11 @@ export function writeWrapper(options: {
       files[handlerFileName] = {
         handlers: [],
         originLayers: [],
-        defaultFunctionHandlerName: name, // for worker
       };
+    }
+
+    if (isDefaultFunc) {
+      files[handlerFileName].defaultFunctionHandlerName = name;
     }
 
     if (handlerConf.layers && handlerConf.layers.length) {
