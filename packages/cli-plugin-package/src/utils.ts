@@ -117,9 +117,9 @@ export const analysisDecorator = async (cwd: string, currentFunc?) => {
   const midwayCoreMod = findNpmModule(cwd, '@midwayjs/core');
   const {
     ServerlessTriggerCollector,
-    // MidwayFrameworkService,
-    // MidwayServerlessFunctionService,
-    // prepareGlobalApplicationContext,
+    MidwayFrameworkService,
+    MidwayServerlessFunctionService,
+    prepareGlobalApplicationContext,
     WebRouterCollector,
   } = require(midwayCoreMod);
   let result;
@@ -128,34 +128,34 @@ export const analysisDecorator = async (cwd: string, currentFunc?) => {
     collector = new ServerlessTriggerCollector(cwd);
     result = await collector.getFunctionList();
   } else {
-    // const midwayDecoratorMod = findNpmModule(cwd, '@midwayjs/decorator');
-    // const {
-    //   CONFIGURATION_KEY,
-    //   listModule,
-    //   Types,
-    // } = require(midwayDecoratorMod);
-    // const applicationContext = prepareGlobalApplicationContext({
-    //   baseDir: cwd,
-    //   appDir: cwd,
-    // });
-    // await applicationContext.getAsync(MidwayFrameworkService, [
-    //   applicationContext,
-    // ]);
-    // const cycles = listModule(CONFIGURATION_KEY);
-    // for (const cycle of cycles) {
-    //   if (cycle.target && Types.isClass(cycle.target)) {
-    //     await applicationContext.getAsync(cycle.target);
-    //   }
-    // }
-    // const midwayServerlessFunctionService = applicationContext.get(
-    //   MidwayServerlessFunctionService
-    // );
-    // result = await midwayServerlessFunctionService.getFunctionList();
-    if (!result?.length) {
-      collector = new WebRouterCollector(cwd, {
-        includeFunctionRouter: true,
+    collector = new WebRouterCollector(cwd, {
+      includeFunctionRouter: true,
+    });
+    result = await collector.getFlattenRouterTable();
+    if (!result?.length && prepareGlobalApplicationContext) {
+      const midwayDecoratorMod = findNpmModule(cwd, '@midwayjs/decorator');
+      const {
+        CONFIGURATION_KEY,
+        listModule,
+        Types,
+      } = require(midwayDecoratorMod);
+      const applicationContext = prepareGlobalApplicationContext({
+        baseDir: cwd,
+        appDir: cwd,
       });
-      result = await collector.getFlattenRouterTable();
+      await applicationContext.getAsync(MidwayFrameworkService, [
+        applicationContext,
+      ]);
+      const cycles = listModule(CONFIGURATION_KEY);
+      for (const cycle of cycles) {
+        if (cycle.target && Types.isClass(cycle.target)) {
+          await applicationContext.getAsync(cycle.target);
+        }
+      }
+      const midwayServerlessFunctionService = applicationContext.get(
+        MidwayServerlessFunctionService
+      );
+      result = await midwayServerlessFunctionService.getFunctionList();
     }
   }
   const allFunc = currentFunc || {};
