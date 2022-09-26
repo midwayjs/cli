@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.14-beta.5](https://github.com/midwayjs/bin/compare/v1.3.14-beta.4...v1.3.14-beta.5) (2022-09-26)
+
+
+### Bug Fixes
+
+* support midwat hooks 3 package ([f9dbbb1](https://github.com/midwayjs/bin/commit/f9dbbb18c346e0b0720997be2e9a7912a3784391))
+
+
+
+
+
 ## [1.3.14-beta.4](https://github.com/midwayjs/bin/compare/v1.3.14-beta.3...v1.3.14-beta.4) (2022-09-22)
 
 
