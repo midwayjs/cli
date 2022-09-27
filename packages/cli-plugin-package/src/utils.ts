@@ -128,11 +128,9 @@ export const analysisDecorator = async (cwd: string, currentFunc?) => {
     collector = new ServerlessTriggerCollector(cwd);
     result = await collector.getFunctionList();
   } else {
-    collector = new WebRouterCollector(cwd, {
-      includeFunctionRouter: true,
-    });
-    result = await collector.getFlattenRouterTable();
-    if (!result?.length && prepareGlobalApplicationContext) {
+    const pkg = join(midwayCoreMod, 'package.json');
+    const corePkgJson = JSON.parse(readFileSync(pkg, 'utf-8'));
+    if (corePkgJson?.version?.[0] === '3' && prepareGlobalApplicationContext) {
       const midwayDecoratorMod = findNpmModule(cwd, '@midwayjs/decorator');
       const {
         CONFIGURATION_KEY,
@@ -156,6 +154,11 @@ export const analysisDecorator = async (cwd: string, currentFunc?) => {
         MidwayServerlessFunctionService
       );
       result = await midwayServerlessFunctionService.getFunctionList();
+    } else {
+      collector = new WebRouterCollector(cwd, {
+        includeFunctionRouter: true,
+      });
+      result = await collector.getFlattenRouterTable();
     }
   }
   const allFunc = currentFunc || {};
