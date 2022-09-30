@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.14-beta.10](https://github.com/midwayjs/cli/compare/v1.3.14-beta.9...v1.3.14-beta.10) (2022-09-30)
+
+
+### Bug Fixes
+
+* command core deps ([a1c0d34](https://github.com/midwayjs/cli/commit/a1c0d3418273c68addbd45ec7296783b6528befe))
+
+
+
+
+
 ## [1.3.14-beta.9](https://github.com/midwayjs/cli/compare/v1.3.14-beta.8...v1.3.14-beta.9) (2022-09-27)
 
 **Note:** Version bump only for package @midwayjs/command-core

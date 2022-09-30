@@ -1,11 +1,11 @@
 {
   "name": "@midwayjs/command-core",
-  "version": "1.3.14-beta.9",
+  "version": "1.3.14-beta.10",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "light-spinner": "^1.0.0",
     "fs-extra": "^8.1.0",
+    "light-spinner": "^1.0.0",
     "minimist": "^1.2.5"
   },
   "devDependencies": {
