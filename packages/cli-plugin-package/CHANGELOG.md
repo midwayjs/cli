@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.1](https://github.com/midwayjs/cli/compare/v1.3.14...v2.0.0-beta.1) (2022-10-10)
+
+
+### Features
+
+* fix package remove mwcc ([546038f](https://github.com/midwayjs/cli/commit/546038ff3b2aa6a2580acf431638ab93362de251))
+* package remove mwcc ([bd333af](https://github.com/midwayjs/cli/commit/bd333afee3fc2a64c7c4b3f62214bf59dc1b18e5))
+
+
+
+
+
 ## [1.3.14](https://github.com/midwayjs/cli/compare/v1.3.13...v1.3.14) (2022-10-10)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-package
