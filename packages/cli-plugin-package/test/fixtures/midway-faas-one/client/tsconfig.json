@@ -4,8 +4,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "build",
-    "module": "esnext",
-    "target": "es6",
+    "module": "commonjs",
+    "target": "ES2018",
     "jsx": "react",
     "moduleResolution": "node",
     "resolveJsonModule": true,

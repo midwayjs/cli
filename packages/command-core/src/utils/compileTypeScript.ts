@@ -6,11 +6,12 @@ import { exists } from './copy';
 export const compileTypeScript = async (options: {
   baseDir: string;
   sourceDir?: string;
+  outDir?: string;
   tsOptions?: any;
   coverOptions?: any;
 }) => {
   let { tsOptions } = options;
-  const { baseDir, coverOptions, sourceDir } = options;
+  const { baseDir, coverOptions, sourceDir, outDir } = options;
   const tsMod = findNpmModule(baseDir, 'typescript');
   const ts = require(tsMod);
   if (!tsOptions) {
@@ -20,13 +21,19 @@ export const compileTypeScript = async (options: {
     tsOptions.compilerOptions = {};
   }
   tsOptions.compilerOptions = Object.assign(
-    {},
+    {
+      experimentalDecorators: true,
+      emitDecoratorMetadata: true,
+    },
     tsOptions.compilerOptions,
     coverOptions
   );
 
+  if (outDir) {
+    tsOptions.compilerOptions.outDir = outDir;
+  }
   if (sourceDir) {
-    tsOptions.sourceRoot = sourceDir;
+    tsOptions.compilerOptions.rootDir = sourceDir;
   }
   if (!tsOptions.include?.length) {
     tsOptions.include = [sourceDir || 'src'];

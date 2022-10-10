@@ -353,7 +353,6 @@ export class PackagePlugin extends BasePlugin {
         this.midwayBuildPath,
         this.options.sharedTargetDir
       );
-      console.log(this.options.sharedTargetDir);
       await copy(this.options.sharedDir, this.options.sharedTargetDir);
     }
     this.core.cli.log(' - File copy complete');
@@ -552,11 +551,16 @@ export class PackagePlugin extends BasePlugin {
     if (!existsSync(resolve(this.servicePath, 'tsconfig.json'))) {
       return;
     }
-    const { cwd } = this.core;
+    const cwd = this.getCwd();
+    const tsCodeRoot = this.getTsCodeRoot();
+    const tsOptions = this.getTsConfig();
+    tsOptions.include = [tsCodeRoot];
+
     const { errors, necessaryErrors } = await compileTypeScript({
       baseDir: cwd,
-      tsOptions: this.getTsConfig(),
-      sourceDir: this.getTsCodeRoot(),
+      tsOptions,
+      sourceDir: tsCodeRoot,
+      outDir: join(this.midwayBuildPath, 'dist'),
     });
     if (errors.length) {
       for (const error of errors) {
@@ -578,7 +582,7 @@ export class PackagePlugin extends BasePlugin {
   }
 
   private getTsConfig() {
-    const { cwd } = this.core;
+    const cwd = this.getCwd();
     this.core.debug('CWD', cwd);
     let { tsConfig } = this.options;
     let tsConfigResult;
@@ -619,7 +623,6 @@ export class PackagePlugin extends BasePlugin {
 
     const midwayBuildPath = this.core.config.buildPath;
     const distDir = join(this.midwayBuildPath, 'dist');
-    console.log('midwayBuildPath', midwayBuildPath);
     try {
       const modules = [];
       const { getPreloadCode } = require('@midwayjs/hcc');
@@ -635,7 +638,6 @@ export class PackagePlugin extends BasePlugin {
       // TODO: fix hooks bug
       code = code.replace('will be overwritten.', 'will be overwritten.\n');
       code = code.replace("require('./configuration.js')", '');
-      console.log('hooksBundle code:', code);
       this.isUseHcc = true;
       writeFileSync(join(distDir, 'midway_hcc.js'), code);
     } catch {
