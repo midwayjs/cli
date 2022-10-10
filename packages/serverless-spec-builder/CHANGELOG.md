@@ -3,6 +3,99 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.14-beta.10](https://github.com/midwayjs/cli/compare/v1.3.14-beta.9...v1.3.14-beta.10) (2022-09-30)
+
+**Note:** Version bump only for package @midwayjs/serverless-spec-builder
+
+
+
+
+
+## [1.3.14-beta.9](https://github.com/midwayjs/cli/compare/v1.3.14-beta.8...v1.3.14-beta.9) (2022-09-27)
+
+**Note:** Version bump only for package @midwayjs/serverless-spec-builder
+
+
+
+
+
+## [1.3.14-beta.8](https://github.com/midwayjs/cli/compare/v1.3.14-beta.7...v1.3.14-beta.8) (2022-09-27)
+
+**Note:** Version bump only for package @midwayjs/serverless-spec-builder
+
+
+
+
+
+## [1.3.14-beta.7](https://github.com/midwayjs/cli/compare/v1.3.14-beta.6...v1.3.14-beta.7) (2022-09-27)
+
+**Note:** Version bump only for package @midwayjs/serverless-spec-builder
+
+
+
+
+
+## [1.3.14-beta.6](https://github.com/midwayjs/cli/compare/v1.3.14-beta.5...v1.3.14-beta.6) (2022-09-26)
+
+**Note:** Version bump only for package @midwayjs/serverless-spec-builder
+
+
+
+
+
+## [1.3.14-beta.5](https://github.com/midwayjs/cli/compare/v1.3.14-beta.4...v1.3.14-beta.5) (2022-09-26)
+
+**Note:** Version bump only for package @midwayjs/serverless-spec-builder
+
+
+
+
+
+## [1.3.14-beta.4](https://github.com/midwayjs/cli/compare/v1.3.14-beta.3...v1.3.14-beta.4) (2022-09-22)
+
+
+### Bug Fixes
+
+* isDefaultFunc wrapper ([e151543](https://github.com/midwayjs/cli/commit/e151543c55c1590c00988658de321fdb6cb49752))
+
+
+
+
+
+## [1.3.14-beta.3](https://github.com/midwayjs/cli/compare/v1.3.14-beta.2...v1.3.14-beta.3) (2022-09-20)
+
+
+### Bug Fixes
+
+* defaultFunctionHandlerName ([be785cb](https://github.com/midwayjs/cli/commit/be785cbbe477e33f7bf6c283916a37d85d62e8b5))
+* resume defaultFunctionHandlerName support ([30b5eb5](https://github.com/midwayjs/cli/commit/30b5eb5465fea4e5632cff0ac253d22e3bf094c7))
+
+
+
+
+
+## [1.3.14-beta.2](https://github.com/midwayjs/cli/compare/v1.3.14-beta.1...v1.3.14-beta.2) (2022-09-07)
+
+
+### Bug Fixes
+
+* bundle ncc & hcc ([50954a0](https://github.com/midwayjs/cli/commit/50954a0cd3e5ae8dbc1ec19715102e5672029adc))
+
+
+
+
+
+## [1.3.14-beta.1](https://github.com/midwayjs/cli/compare/v1.3.13...v1.3.14-beta.1) (2022-09-07)
+
+
+### Bug Fixes
+
+* bundle ([bf7da31](https://github.com/midwayjs/cli/commit/bf7da31e024bb2bc61a0265cf8e741272b80828c))
+
+
+
+
+
 ## [1.3.13](https://github.com/midwayjs/cli/compare/v1.3.13-beta.3...v1.3.13) (2022-09-07)
 
 

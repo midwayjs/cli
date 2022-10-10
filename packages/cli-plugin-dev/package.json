@@ -1,11 +1,11 @@
 {
   "name": "@midwayjs/cli-plugin-dev",
-  "version": "1.3.13",
+  "version": "1.3.14-beta.10",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@koa/router": "^10.0.0",
-    "@midwayjs/command-core": "^1.3.13",
+    "@midwayjs/command-core": "^1.3.14-beta.10",
     "@midwayjs/debugger": "^1.0.x",
     "chalk": "^4.1.0",
     "chokidar": "^3.4.2",
@@ -22,7 +22,7 @@
     "@midwayjs/mock": "*"
   },
   "devDependencies": {
-    "@midwayjs/cli-plugin-swc": "^1.3.13",
+    "@midwayjs/cli-plugin-swc": "^1.3.14-beta.10",
     "@midwayjs/core": "^2.8.0",
     "@midwayjs/serverless-app": "^2.8.9",
     "@midwayjs/web": "^2.8.0",
