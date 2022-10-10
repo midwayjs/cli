@@ -158,10 +158,11 @@ export class BuildPlugin extends BasePlugin {
     const outDir = this.getOutDir();
     this.core.debug('outDir', outDir, this.midwayCliConfig);
     const { cwd } = this.core;
-    const { errors, necessaryErrors } = await compileTypeScript(
-      cwd,
-      this.getTsConfig()
-    );
+    const { errors, necessaryErrors } = await compileTypeScript({
+      baseDir: cwd,
+      tsOptions: this.getTsConfig(),
+      sourceDir: this.getTsCodeRoot(),
+    });
     if (errors.length) {
       for (const error of errors) {
         this.core.cli.error(`\n[TS Error] ${error.message} (${error.path})`);
@@ -200,6 +201,10 @@ export class BuildPlugin extends BasePlugin {
     const { cwd } = this.core;
     const { project } = this.options;
     return resolve(cwd, project || 'tsconfig.json');
+  }
+
+  private getTsCodeRoot() {
+    return resolve(this.core.cwd, this.options.srcDir || 'src');
   }
 
   private getTsConfig() {

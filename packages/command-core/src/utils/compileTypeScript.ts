@@ -3,11 +3,14 @@ import { join, relative } from 'path';
 import { findNpmModule } from '../npm';
 import { exists } from './copy';
 
-export const compileTypeScript = async (
-  baseDir: string,
-  tsOptions?,
-  coverOptions?
-) => {
+export const compileTypeScript = async (options: {
+  baseDir: string;
+  sourceDir?: string;
+  tsOptions?: any;
+  coverOptions?: any;
+}) => {
+  let { tsOptions } = options;
+  const { baseDir, coverOptions, sourceDir } = options;
   const tsMod = findNpmModule(baseDir, 'typescript');
   const ts = require(tsMod);
   if (!tsOptions) {
@@ -21,8 +24,12 @@ export const compileTypeScript = async (
     tsOptions.compilerOptions,
     coverOptions
   );
+
+  if (sourceDir) {
+    tsOptions.sourceRoot = sourceDir;
+  }
   if (!tsOptions.include?.length) {
-    tsOptions.include = ['src'];
+    tsOptions.include = [sourceDir || 'src'];
   }
 
   const parsedCommandLine = ts.parseJsonConfigFileContent(

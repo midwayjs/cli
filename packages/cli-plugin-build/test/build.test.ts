@@ -62,7 +62,7 @@ describe('test/build.test.ts', () => {
     }
     try {
       await run(errorcwd, 'build');
-      assert(false)
+      assert(false);
     } catch (e) {
       assert(e.message.includes('1 ts error that must be fixed'));
     }
@@ -98,7 +98,7 @@ describe('test/build.test.ts', () => {
         tsConfig: 'xxx',
       });
     } catch (e) {
-      console.log('e.message', e.message)
+      console.log('e.message', e.message);
       assert(/Unexpected token x/.test(e.message));
     }
   });
@@ -132,7 +132,7 @@ describe('test/build.test.ts', () => {
       assert(/Unexpected token \//.test(e.message));
     }
   });
-  it.only('test hooks', async () => {
+  it('test hooks', async () => {
     const hooks = join(__dirname, 'fixtures/hooks');
     const dist = join(hooks, 'dist');
     if (existsSync(dist)) {
