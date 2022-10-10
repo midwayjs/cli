@@ -573,7 +573,10 @@ export class CommandCore implements ICommandCore {
   }
 
   private getLog() {
-    return this.options.log || console;
+    return {
+      ...console,
+      ...this.options.log,
+    };
   }
 
   error<T>(type: string, info?: T) {
@@ -585,9 +588,8 @@ export class CommandCore implements ICommandCore {
     const { cli } = this.coreInstance;
     if (cli && cli.error) {
       cli.error(errObj);
-    } else {
-      throw new Error(errObj.message);
     }
+    throw new Error(errObj.message);
   }
 
   debug(...args) {
