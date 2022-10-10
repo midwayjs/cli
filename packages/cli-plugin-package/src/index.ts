@@ -2,8 +2,13 @@ import {
   BasePlugin,
   findMidwayVersion,
   forkNode,
+  copyFiles,
+  copyStaticFiles,
   installNpm,
+  findNpmModule,
+  exec,
   resolveMidwayConfig,
+  compileTypeScript,
 } from '@midwayjs/command-core';
 import { getSpecFile, writeToSpec } from '@midwayjs/serverless-spec-builder';
 import { dirname, isAbsolute, join, relative, resolve } from 'path';
@@ -24,7 +29,6 @@ import {
   createWriteStream,
   writeFile,
 } from 'fs-extra';
-import * as ts from 'typescript';
 import * as globby from 'globby';
 import * as micromatch from 'micromatch';
 import {
@@ -35,18 +39,6 @@ import {
   analysisDecorator,
   copyFromNodeModules,
 } from './utils';
-import { findNpmModule, exec } from '@midwayjs/command-core';
-import {
-  analysisResultToSpec,
-  copyFiles,
-  copyStaticFiles,
-} from '@midwayjs/faas-code-analysis';
-import {
-  CompilerHost,
-  Program,
-  resolveTsConfigFile,
-  Analyzer,
-} from '@midwayjs/mwcc';
 import * as JSZip from 'jszip';
 import { AnalyzeResult, Locator } from '@midwayjs/locate';
 import { tmpdir, platform } from 'os';
@@ -64,9 +56,6 @@ export class PackagePlugin extends BasePlugin {
   codeAnalyzeResult: AnalyzeResult;
   integrationDistTempDirectory = 'integration_dist'; // 一体化构建的临时目录
   zipCodeDefaultName = 'serverless.zip';
-
-  private compilerHost: CompilerHost;
-  private program: Program;
   // 在 bundle 的情况下是否使用 hcc 编译 @midwayjs/hooks
   private isUseHcc = false;
 
@@ -79,7 +68,6 @@ export class PackagePlugin extends BasePlugin {
         'locate', // 确定项目结构
         'copyFile', // 拷贝文件: package.include 和 shared content
         'compile', //
-        'emit', // 编译函数  'package:after:tscompile'
         'analysisCode', // 分析代码
         'copyStaticFile', // 拷贝src中的静态文件到dist目录，例如 html 等
         'preload', // 预加载用户代码文件
@@ -149,7 +137,6 @@ export class PackagePlugin extends BasePlugin {
     'before:package:generateSpec': this.defaultBeforeGenerateSpec.bind(this),
     'after:package:generateEntry': this.defaultGenerateEntry.bind(this),
     'before:package:finalize': this.finalize.bind(this),
-    'package:emit': this.emit.bind(this),
     'package:copyStaticFile': this.copyStaticFile.bind(this),
     'package:analysisCode': this.analysisCode.bind(this),
     'package:bundle': this.bundle.bind(this),
@@ -411,14 +398,9 @@ export class PackagePlugin extends BasePlugin {
 
   async installDep() {
     this.core.cli.log('Install production dependencies...');
-
-    if (+this.midwayVersion >= 2) {
-      const { version } = findMidwayVersion(this.servicePath);
-      this.setGlobalDependencies('@midwayjs/bootstrap', version.major || '*');
-      this.setGlobalDependencies('path-to-regexp');
-    } else {
-      this.setGlobalDependencies('picomatch');
-    }
+    const { version } = findMidwayVersion(this.servicePath);
+    this.setGlobalDependencies('@midwayjs/bootstrap', version.major || '*');
+    this.setGlobalDependencies('path-to-regexp');
     // globalDependencies
     // pkg.json dependencies
     const pkgJsonPath: string = join(this.midwayBuildPath, 'package.json');
@@ -570,54 +552,24 @@ export class PackagePlugin extends BasePlugin {
     if (!existsSync(resolve(this.servicePath, 'tsconfig.json'))) {
       return;
     }
-    const tsCodeRoot: string = this.getTsCodeRoot();
-
-    let configName;
-    let configObj: any = {};
-    if (this.options.tsConfig) {
-      if (typeof this.options.tsConfig === 'string') {
-        // 先判断是否为json
-        try {
-          configObj = JSON.parse(this.options.tsConfig);
-        } catch {
-          configName = this.options.tsConfig;
-        }
-      } else if (typeof this.options.tsConfig === 'object') {
-        configObj = this.options.tsConfig;
+    const { cwd } = this.core;
+    const { errors, necessaryErrors } = await compileTypeScript({
+      baseDir: cwd,
+      tsOptions: this.getTsConfig(),
+      sourceDir: this.getTsCodeRoot(),
+    });
+    if (errors.length) {
+      for (const error of errors) {
+        this.core.cli.error(`\n[TS Error] ${error.message} (${error.path})`);
       }
-    }
-
-    const { config } = resolveTsConfigFile(
-      this.servicePath,
-      join(this.midwayBuildPath, 'dist'),
-      configName,
-      this.getStore('mwccHintConfig', 'global'),
-      {
-        ...configObj,
-        compilerOptions: {
-          sourceRoot: '../src',
-          rootDir: tsCodeRoot,
-          ...(configObj.compilerOptions || {}),
-        },
-        include: (configObj.include || []).concat(tsCodeRoot),
+      if (
+        necessaryErrors.length &&
+        !this.core.service?.experimentalFeatures?.ignoreTsError
+      ) {
+        throw new Error(
+          `Error: ${necessaryErrors.length} ts error that must be fixed!`
+        );
       }
-    );
-    this.compilerHost = new CompilerHost(this.servicePath, config);
-    this.program = new Program(this.compilerHost);
-
-    // midway 2版本的装饰器分析由框架提供了
-    if (+this.midwayVersion < 2) {
-      if (this.core.service.functions) {
-        return this.core.service.functions;
-      }
-      const analyzeInstance = new Analyzer({
-        program: this.program,
-        decoratorLowerCase: true,
-      });
-      const analyzeResult = analyzeInstance.analyze();
-      const newSpec = analysisResultToSpec(analyzeResult);
-      this.core.debug('CodeAnalysis', newSpec);
-      this.core.service.functions = newSpec.functions;
     }
   }
 
@@ -625,64 +577,39 @@ export class PackagePlugin extends BasePlugin {
     return this.servicePath || this.core.cwd || process.cwd();
   }
 
-  async emit() {
-    // 跳过编译
-    if (this.options.skipBuild) {
-      return;
-    }
-    const isTsDir = existsSync(join(this.servicePath, 'tsconfig.json'));
-    this.core.cli.log('Building project directory files...');
-    if (!isTsDir) {
-      this.core.cli.log(' - Not found tsconfig.json and skip build');
-      return;
-    }
-    this.core.cli.log(' - Using tradition build mode');
-
-    const { diagnostics } = await this.program.emit();
-    if (!diagnostics || !diagnostics.length) {
-      return;
-    }
-    const errorNecessary = [];
-    const errorUnnecessary = [];
-    diagnostics.forEach(diagnostic => {
-      if (diagnostic.category !== ts.DiagnosticCategory.Error) {
-        return;
+  private getTsConfig() {
+    const { cwd } = this.core;
+    this.core.debug('CWD', cwd);
+    let { tsConfig } = this.options;
+    let tsConfigResult;
+    if (typeof tsConfig === 'string') {
+      // if ts config is file
+      if (existsSync(tsConfig)) {
+        tsConfig = readFileSync(tsConfig).toString();
       }
-      if (diagnostic.reportsUnnecessary) {
-        errorUnnecessary.push(diagnostic);
-      } else {
-        errorNecessary.push(diagnostic);
+      try {
+        tsConfigResult = JSON.parse(tsConfig);
+      } catch (e) {
+        console.log('[midway-bin] tsConfig should be JSON string or Object');
+        throw e;
       }
-    });
-    const cwd = this.getCwd();
-    if (errorNecessary.length) {
-      console.log('');
-      errorNecessary.forEach(error => {
-        let errorPath = '';
-        // tsconfig error, file is undefined
-        if (error?.file?.text) {
-          const code = error.file.text.slice(0, error.start).split('\n');
-          errorPath = `(${relative(cwd, error.file.fileName)}:${code.length}:${
-            code[code.length - 1].length
-          })`;
-        }
-        this.outputTsErrorMessage(error, errorPath);
-      });
-      if (!this.core.service?.experimentalFeatures?.ignoreTsError) {
-        throw new Error(
-          `Error: ${errorNecessary.length} ts error that must be fixed!`
+    }
+    const projectFile = resolve(cwd, 'tsconfig.json');
+    if (!tsConfigResult) {
+      if (!existsSync(projectFile)) {
+        console.log(`[ Midway ] tsconfig.json not found in ${cwd}\n`);
+        throw new Error('tsconfig.json not found');
+      }
+      try {
+        tsConfigResult = JSON.parse(
+          readFileSync(projectFile, 'utf-8').toString()
         );
+      } catch (e) {
+        console.log('[ Midway ] Read TsConfig Error', e.message);
+        throw e;
       }
     }
-
-    if (errorUnnecessary.length) {
-      errorUnnecessary.forEach(error => {
-        const errorPath = `(${relative(cwd, error.file.fileName)})`;
-        this.outputTsErrorMessage(error, errorPath);
-      });
-    }
-
-    this.core.cli.log(' - Build project complete');
+    return tsConfigResult;
   }
 
   async preload() {
@@ -795,22 +722,19 @@ export class PackagePlugin extends BasePlugin {
     if (this.options.skipBuild) {
       return;
     }
-    // midway 2版本的装饰器分析由框架提供了
-    if (+this.midwayVersion >= 2) {
-      if (!this.core.service.functions) {
-        this.core.service.functions = {};
-      }
-      process.chdir(this.midwayBuildPath);
-      const { funcSpec, applicationContext } = await analysisDecorator(
-        join(this.midwayBuildPath, 'dist'),
-        this.core.service.functions
-      );
-      process.chdir(this.core.cwd);
-      this.core.service.functions = funcSpec;
-      // 添加分析后引用 container
-      this.setStore('MIDWAY_APPLICATION_CONTEXT', applicationContext, true);
-      this.core.debug('funcSpec', funcSpec);
+    if (!this.core.service.functions) {
+      this.core.service.functions = {};
     }
+    process.chdir(this.midwayBuildPath);
+    const { funcSpec, applicationContext } = await analysisDecorator(
+      join(this.midwayBuildPath, 'dist'),
+      this.core.service.functions
+    );
+    process.chdir(this.core.cwd);
+    this.core.service.functions = funcSpec;
+    // 添加分析后引用 container
+    this.setStore('MIDWAY_APPLICATION_CONTEXT', applicationContext, true);
+    this.core.debug('funcSpec', funcSpec);
   }
 
   private outputTsErrorMessage(error, errorPath, prefixIndex = 0) {

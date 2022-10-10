@@ -3,7 +3,7 @@ import {
 } from '@midwayjs/command-core';
 export class FpPackagePlugin extends BasePlugin {
   hooks = {
-    'after:package:emit': async () => {
+    'after:package:compile': async () => {
       this.core.service.functions['fp'] = {
         handler: 'fp.handler',
         isFunctional: true,
