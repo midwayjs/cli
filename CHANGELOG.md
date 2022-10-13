@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.15-beta.1](https://github.com/midwayjs/bin/compare/v1.3.14...v1.3.15-beta.1) (2022-10-11)
+
+
+### Bug Fixes
+
+* hooks old ([7c7c075](https://github.com/midwayjs/bin/commit/7c7c0756ea1458483ee1ec81ccc72b87920d6db0))
+
+
+
+
+
 ## [1.3.14](https://github.com/midwayjs/bin/compare/v1.3.13...v1.3.14) (2022-10-10)
 
 **Note:** Version bump only for package midway-bin

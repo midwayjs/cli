@@ -418,7 +418,7 @@ export class DevPlugin extends BasePlugin {
   }
 
   private error(...args: any[]) {
-    console.error(chalk.hex('#ff0000')('[ Midway ]', ...args));
+    console.error(chalk.hex('#ff0000')(...args));
   }
 
   // 检测tsconfig中module的配置
