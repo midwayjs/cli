@@ -3,7 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/midwayjs/cli/compare/v2.0.0-beta.1...v2.0.0) (2022-10-13)
+
+**Note:** Version bump only for package @midwayjs/cli-plugin-faas
+
+
+
+
+
+<<<<<<< HEAD
 # [2.0.0-beta.1](https://github.com/midwayjs/cli/compare/v1.3.14...v2.0.0-beta.1) (2022-10-10)
+=======
+## [1.3.15](https://github.com/midwayjs/cli/compare/v1.3.14...v1.3.15) (2022-10-13)
+
+
+### Bug Fixes
+
+* hooks old ([#299](https://github.com/midwayjs/cli/issues/299)) ([5b13c36](https://github.com/midwayjs/cli/commit/5b13c36ace3e2bfbfa582c5915455c34ecbfb104))
+
+
+
+
+
+## [1.3.15-beta.1](https://github.com/midwayjs/cli/compare/v1.3.14...v1.3.15-beta.1) (2022-10-11)
+>>>>>>> 3b4e25111408724a591edd8c68efa890ac0e9ce1
 
 **Note:** Version bump only for package @midwayjs/cli-plugin-faas
 

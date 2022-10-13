@@ -5,7 +5,7 @@ import { existsSync, readFileSync } from 'fs';
 import * as chalk from 'chalk';
 import * as YAML from 'js-yaml';
 import { Locator, AnalyzeResult } from '@midwayjs/locate';
-import { transformToRelative } from './utils';
+import { getMainVersion, transformToRelative } from './utils';
 import * as globby from 'globby';
 
 enum ProjectType {
@@ -283,6 +283,59 @@ export class CheckPlugin extends BasePlugin {
             }
           } catch {
             //
+          }
+          return [true];
+        })
+        .check('midway componnet version', async () => {
+          const deps = pkjJson['dependencies'] || {};
+          const coreMod = [
+            '@midwayjs/core',
+            '@midwayjs/decorator',
+            '@midwayjs/faas',
+            '@midwayjs/koa',
+            '@midwayjs/web',
+            '@midwayjs/express',
+          ].find(modName => {
+            return deps[modName];
+          });
+          if (!coreMod) {
+            return [CHECK_SKIP];
+          }
+          const coreModVersion = getMainVersion(deps[coreMod]);
+          const components = [
+            'axios',
+            'cache',
+            'cos',
+            'jwt',
+            'orm',
+            'oss',
+            'redis',
+            'swagger',
+            'task',
+            'tablestore',
+            'mongoose',
+          ].filter(name => {
+            const modName = `@midwayjs/${name}`;
+            if (!deps[modName]) {
+              return false;
+            }
+            const version = getMainVersion(deps[modName]);
+            if (version !== coreModVersion) {
+              return true;
+            }
+          });
+          if (components.length) {
+            return [
+              false,
+              `${coreMod}@${coreModVersion} and ${components
+                .map(comp => {
+                  const mod = `@midwayjs/${comp}`;
+                  return `${mod}@${deps[mod]}`;
+                })
+                .join(', ')} are incompatible, please using ${components
+                .map(comp => `@midwayjs/${comp}@${coreModVersion}`)
+                .join(', ')}`,
+            ];
           }
           return [true];
         });

@@ -113,7 +113,7 @@ export const removeUselessFiles = async (target: string) => {
 };
 
 // 分析装饰器上面的函数信息
-export const analysisDecorator = async (cwd: string, currentFunc?) => {
+export const analysisDecorator = async (cwd: string, spec?) => {
   const midwayCoreMod = findNpmModule(cwd, '@midwayjs/core');
   const {
     ServerlessTriggerCollector,
@@ -130,7 +130,11 @@ export const analysisDecorator = async (cwd: string, currentFunc?) => {
   } else {
     const pkg = join(midwayCoreMod, 'package.json');
     const corePkgJson = JSON.parse(readFileSync(pkg, 'utf-8'));
-    if (corePkgJson?.version?.[0] === '3' && prepareGlobalApplicationContext) {
+    if (
+      corePkgJson?.version?.[0] === '3' &&
+      prepareGlobalApplicationContext &&
+      spec?.provider?.starter
+    ) {
       const midwayDecoratorMod = findNpmModule(cwd, '@midwayjs/decorator');
       const {
         CONFIGURATION_KEY,
@@ -161,7 +165,7 @@ export const analysisDecorator = async (cwd: string, currentFunc?) => {
       result = await collector.getFlattenRouterTable();
     }
   }
-  const allFunc = currentFunc || {};
+  const allFunc = spec?.functions || {};
   if (Array.isArray(result)) {
     result.forEach(func => {
       if (!func.functionTriggerName) {

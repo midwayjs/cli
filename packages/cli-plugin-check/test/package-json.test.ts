@@ -35,4 +35,14 @@ describe('test/package-json.test.ts', () => {
     const logStr = logs.join('\n');
     assert(logStr);
   });
+  it('midway compnents version', async () => {
+    const cwd = join(__dirname, 'fixtures/midway-components-version');
+    const logs = await runCheck(cwd);
+    const logStr = logs.join('\n');
+    assert(
+      logStr.includes(
+        '@midwayjs/core@2 and @midwayjs/cache@^3, @midwayjs/jwt@latest, @midwayjs/oss@beta are incompatible, please using @midwayjs/cache@2, @midwayjs/jwt@2, @midwayjs/oss@2'
+      )
+    );
+  });
 });
