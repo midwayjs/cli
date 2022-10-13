@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/midwayjs/bin/compare/v1.3.15...v2.0.0) (2022-10-13)
+
+
+
+# [2.0.0-beta.1](https://github.com/midwayjs/bin/compare/v1.3.14...v2.0.0-beta.1) (2022-10-10)
+
+
+### Bug Fixes
+
+* remove unexists plugin ([225a601](https://github.com/midwayjs/bin/commit/225a601948cadd66e8afa17916e9fe47d440400c))
+
+
+### Features
+
+* build command remove mwcc ([1a254ed](https://github.com/midwayjs/bin/commit/1a254eded97edaa16f77e78cdeb98b4fb5100ec2))
+* fix package remove mwcc ([546038f](https://github.com/midwayjs/bin/commit/546038ff3b2aa6a2580acf431638ab93362de251))
+* package remove mwcc ([bd333af](https://github.com/midwayjs/bin/commit/bd333afee3fc2a64c7c4b3f62214bf59dc1b18e5))
+* remove mwcc ([5e78f46](https://github.com/midwayjs/bin/commit/5e78f46c0b2a3aee8d13db680568e0a8907aaee2))
+
+
+
+
+
 # [2.0.0](https://github.com/midwayjs/bin/compare/v2.0.0-beta.1...v2.0.0) (2022-10-13)
 
 **Note:** Version bump only for package midway-bin

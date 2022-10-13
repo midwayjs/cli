@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/midwayjs/cli/compare/v1.3.15...v2.0.0) (2022-10-13)
+
+
+
+# [2.0.0-beta.1](https://github.com/midwayjs/cli/compare/v1.3.14...v2.0.0-beta.1) (2022-10-10)
+
+
+### Features
+
+* build command remove mwcc ([1a254ed](https://github.com/midwayjs/cli/commit/1a254eded97edaa16f77e78cdeb98b4fb5100ec2))
+* remove mwcc ([5e78f46](https://github.com/midwayjs/cli/commit/5e78f46c0b2a3aee8d13db680568e0a8907aaee2))
+
+
+
+
+
 # [2.0.0](https://github.com/midwayjs/cli/compare/v2.0.0-beta.1...v2.0.0) (2022-10-13)
 
 **Note:** Version bump only for package @midwayjs/cli-plugin-build
