@@ -415,7 +415,7 @@ export class PackagePlugin extends BasePlugin {
     if (+this.midwayVersion >= 2) {
       const { version } = findMidwayVersion(this.servicePath);
       this.setGlobalDependencies('@midwayjs/bootstrap', version.major || '*');
-      this.setGlobalDependencies('path-to-regexp');
+      this.setGlobalDependencies('path-to-regexp', '6');
     } else {
       this.setGlobalDependencies('picomatch');
     }
