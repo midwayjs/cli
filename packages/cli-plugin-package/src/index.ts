@@ -399,7 +399,7 @@ export class PackagePlugin extends BasePlugin {
     this.core.cli.log('Install production dependencies...');
     const { version } = findMidwayVersion(this.servicePath);
     this.setGlobalDependencies('@midwayjs/bootstrap', version.major || '*');
-    this.setGlobalDependencies('path-to-regexp');
+    this.setGlobalDependencies('path-to-regexp', '6');
     // globalDependencies
     // pkg.json dependencies
     const pkgJsonPath: string = join(this.midwayBuildPath, 'package.json');
