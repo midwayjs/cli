@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1-beta.1](https://github.com/midwayjs/midway/compare/v2.0.0...v2.0.1-beta.1) (2022-10-26)
+
+
+### Features
+
+* upgrade jest to 29 ([#300](https://github.com/midwayjs/midway/issues/300)) ([e2b211a](https://github.com/midwayjs/midway/commit/e2b211a43345131ec6c89a9a4263f57403c26474))
+
+
+
+
+
 # [2.0.0](https://github.com/midwayjs/midway/compare/v1.3.15...v2.0.0) (2022-10-13)
 
 
