@@ -7,12 +7,11 @@ import { readFileSync } from 'fs';
 const demoDir = join(__dirname, './fixtures/fast-nm-install');
 const nm = join(demoDir, 'node_modules');
 describe('/test/utils.test.ts', () => {
-  beforeAll(async done => {
+  beforeAll(async () => {
     if (existsSync(nm)) {
       await remove(nm);
     }
     execSync(`cd ${demoDir};npm install`);
-    done();
   });
   it('findModuleFromNodeModules', async () => {
     const deps = JSON.parse(
