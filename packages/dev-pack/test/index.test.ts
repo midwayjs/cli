@@ -17,7 +17,7 @@ describe('/test/index.test.ts', () => {
   });
 
   describe('test buffer return', () => {
-    it('test buffer result koa in http trigger', async done => {
+    it('test buffer result koa in http trigger', done => {
       const app = new koa();
       const cwd = join(__dirname, './fixtures/base-fn-http');
       execSync(`cd ${cwd};npm install @midwayjs/mock@2`);

@@ -1,4 +1,8 @@
-import { BasePlugin, forkNode } from '@midwayjs/command-core';
+import {
+  BasePlugin,
+  forkNode,
+  findNpmModuleByResolve,
+} from '@midwayjs/command-core';
 import { existsSync } from 'fs';
 import * as globby from 'globby';
 import { join } from 'path';
@@ -97,7 +101,23 @@ export class TestPlugin extends BasePlugin {
         throw e;
       }
     } else {
-      binFile = require.resolve('jest/bin/jest');
+      const jestModuleDir = findNpmModuleByResolve(process.cwd(), 'jest');
+      if (!jestModuleDir) {
+        const errorMsg = [
+          '!!!',
+          '@midwayjs/cli 提供的 test 命令不再默认引入 jest 相关依赖',
+          '请手动安装 jest、ts-jest 这两个依赖之后再次执行 midway-bin test 命令',
+          '建议安装 jest@29 及以上版本',
+          '您可以访问 https://www.midwayjs.org/docs/tool/cli#test-%E5%91%BD%E4%BB%A4 查看更多 midway 单测的帮助信息',
+          '---',
+        ].join('\n');
+        console.error(errorMsg);
+        throw new Error(errorMsg);
+      }
+
+      binFile = join(jestModuleDir, './bin/jest');
+      this.core.debug(`using jest at ${binFile}`);
+
       defaultOptionsEnv['MIDWAY_JEST_MODE'] = true;
       if (isTs) {
         execArgv.push('--require', require.resolve('ts-node/register'));
