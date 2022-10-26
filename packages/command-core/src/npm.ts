@@ -90,7 +90,7 @@ export async function loadNpm(
   }
 }
 
-const findNpmModuleByResolve = (cwd, modName) => {
+export const findNpmModuleByResolve = (cwd, modName) => {
   try {
     return dirname(
       require.resolve(`${modName}/package.json`, { paths: [cwd] })
