@@ -20,7 +20,7 @@ npm i @midwayjs/cli -D
 
 ### Document
 
-[中文简体](https://www.yuque.com/midwayjs/midway_v2/cli) | [English](https://www.yuque.com/midwayjs/midway_v2/cli?translate=en)
+[中文简体](https://www.midwayjs.org/docs/tool/cli) | [English](https://www.midwayjs.org/en/docs/tool/cli)
 
 
 ---
