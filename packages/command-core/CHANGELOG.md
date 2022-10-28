@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.16](https://github.com/midwayjs/cli/compare/v1.3.15...v1.3.16) (2022-10-28)
+
+
+### Features
+
+* upgrade jest to 29 ([#300](https://github.com/midwayjs/cli/issues/300)) ([e2b211a](https://github.com/midwayjs/cli/commit/e2b211a43345131ec6c89a9a4263f57403c26474))
+
+
+
+
+
 ## [1.3.14](https://github.com/midwayjs/cli/compare/v1.3.13...v1.3.14) (2022-10-10)
 
 **Note:** Version bump only for package @midwayjs/command-core

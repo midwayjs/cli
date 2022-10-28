@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.16](https://github.com/midwayjs/cli/compare/v1.3.15...v1.3.16) (2022-10-28)
+
+
+### Bug Fixes
+
+* vw no faas handle ([#301](https://github.com/midwayjs/cli/issues/301)) ([fbadfdc](https://github.com/midwayjs/cli/commit/fbadfdc36147cff2a07f9185972835bf31c36ac0))
+
+
+### Features
+
+* upgrade jest to 29 ([#300](https://github.com/midwayjs/cli/issues/300)) ([e2b211a](https://github.com/midwayjs/cli/commit/e2b211a43345131ec6c89a9a4263f57403c26474))
+
+
+
+
+
 ## [1.3.15](https://github.com/midwayjs/cli/compare/v1.3.14...v1.3.15) (2022-10-13)
 
 
