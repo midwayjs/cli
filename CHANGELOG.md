@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1](https://github.com/midwayjs/bin/compare/v2.0.1-beta.1...v2.0.1) (2022-10-28)
+
+
+### Bug Fixes
+
+* vw no faas handle ([#301](https://github.com/midwayjs/bin/issues/301)) ([fbadfdc](https://github.com/midwayjs/bin/commit/fbadfdc36147cff2a07f9185972835bf31c36ac0))
+
+
+
+
+
 
 
 **Note:** Version bump only for package midway-bin

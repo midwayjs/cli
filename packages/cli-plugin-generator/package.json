@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/cli-plugin-generator",
-  "version": "2.0.1-beta.1",
+  "version": "2.0.1",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/command-core": "^2.0.1-beta.1",
+    "@midwayjs/command-core": "^2.0.1",
     "@midwayjs/serverless-spec-builder": "^2.0.0",
     "camel-case": "^4.1.2",
     "capital-case": "^1.0.4",
