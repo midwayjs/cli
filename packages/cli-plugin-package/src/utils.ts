@@ -115,6 +115,8 @@ export const removeUselessFiles = async (target: string) => {
 // 分析装饰器上面的函数信息
 export const analysisDecorator = async (cwd: string, spec?) => {
   const midwayCoreMod = findNpmModule(cwd, '@midwayjs/core');
+  const pkg = join(midwayCoreMod, 'package.json');
+  const corePkgJson = JSON.parse(readFileSync(pkg, 'utf-8'));
   const {
     ServerlessTriggerCollector,
     MidwayFrameworkService,
@@ -128,8 +130,6 @@ export const analysisDecorator = async (cwd: string, spec?) => {
     collector = new ServerlessTriggerCollector(cwd);
     result = await collector.getFunctionList();
   } else {
-    const pkg = join(midwayCoreMod, 'package.json');
-    const corePkgJson = JSON.parse(readFileSync(pkg, 'utf-8'));
     if (
       corePkgJson?.version?.[0] === '3' &&
       prepareGlobalApplicationContext &&
@@ -172,12 +172,21 @@ export const analysisDecorator = async (cwd: string, spec?) => {
         return;
       }
       const handler = func.funcHandlerName;
-      if (
-        !handler ||
-        func.functionName?.includes('undefined') ||
-        func.handlerName?.includes('undefined')
-      ) {
+      if (!handler || func.functionName?.includes('undefined')) {
         return;
+      }
+      if (func.handlerName?.includes('undefined')) {
+        // midwayjs/core v2 版本 处理 @Func 直接挂在到 class 上面的情况存在缺陷
+        // 没有把通过 @Func 装饰器传入的 funHandler 赋值到 handlerName 上
+        // ref: https://github.com/midwayjs/midway/blob/2.x/packages/core/src/util/webRouterCollector.ts#L364
+        // funHandler: xxx.abc
+        // handler: xxx.abc
+        // func.handlerName: className.undefined
+        if (corePkgJson?.version?.[0] === '2') {
+          func.handlerName = handler;
+        } else {
+          return;
+        }
       }
 
       if (!func.functionTriggerMetadata) {
