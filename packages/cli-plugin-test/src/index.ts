@@ -271,7 +271,6 @@ export class TestPlugin extends BasePlugin {
       pattern = [`test/**/*.test.${isTs ? 'ts' : 'js'}`];
     }
     pattern = pattern.concat(['!test/fixtures', '!test/node_modules']);
-
     const files = globby.sync(pattern);
 
     if (files.length === 0) {
