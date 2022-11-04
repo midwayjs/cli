@@ -82,16 +82,27 @@ export async function invokeByDev(getDevCore) {
         }
       });
       params.redirect = 'manual';
+      const hostPrefix = `http://127.0.0.1:${port}`;
       const result = await fetch(
-        `http://127.0.0.1:${port}${params.path || '/'}${
-          query ? `?${query}` : ''
-        }`,
+        `${hostPrefix}${params.path || '/'}${query ? `?${query}` : ''}`,
         params
       );
       const body = await result.text();
+      const statusCode = result.status;
+      const headers = result.headers.raw();
+      if (statusCode === 302) {
+        if (Array.isArray(headers['location'])) {
+          headers['location'][0] = headers['location'][0].replace(
+            hostPrefix,
+            ''
+          );
+        } else if (typeof headers['location'] === 'string') {
+          headers['location'] = headers['location'].replace(hostPrefix, '');
+        }
+      }
       return {
-        headers: result.headers.raw(),
-        statusCode: result.status,
+        headers,
+        statusCode,
         body,
       };
     },
