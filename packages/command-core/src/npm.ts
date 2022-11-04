@@ -144,7 +144,11 @@ export const resolveMidwayConfig = (cwd: string) => {
 };
 
 // 从本地检索npm包
-export const findNpm = (argv?) => {
+export const findNpm = (argv?: {
+  npm?: string;
+  registry?: string;
+  skipAutoFindNpm?: boolean;
+}) => {
   let npm = '';
   let registry = '';
   let ignoreRegistry = false;
@@ -170,7 +174,7 @@ export const findNpm = (argv?) => {
     }
   }
 
-  if (!npm) {
+  if (!npm && !argv.skipAutoFindNpm) {
     const npmList = ['pnpm', 'cnpm'];
     const currentPlatform = platform();
     const cmd = npmList.find(cmd => {

@@ -16,97 +16,98 @@ describe('/test/index.test.ts', () => {
     }
   });
 
-  describe('test buffer return', () => {
-    it('test buffer result koa in http trigger', done => {
-      const app = new koa();
-      const cwd = join(__dirname, './fixtures/base-fn-http');
-      execSync(`cd ${cwd};npm install @midwayjs/mock@2`);
-      const devPack = getKoaDevPack(cwd, {
-        notWatch: true,
-        notAwait: true,
-      });
-      app.use(
-        devPack({
-          functionDir: cwd,
-        })
-      );
-      request(app.callback())
-        .get('/api')
-        .expect('Content-type', 'text/plain; charset=utf-8')
-        .expect(/hello world/)
-        .expect(200, () => {
-          devPack.close();
-          done();
-        });
+  it('test buffer result koa in http trigger', done => {
+    const app = new koa();
+    const cwd = join(__dirname, './fixtures/base-fn-http');
+    execSync(`cd ${cwd};npm install @midwayjs/mock@2`);
+    const devPack = getKoaDevPack(cwd, {
+      notWatch: true,
+      notAwait: true,
     });
+    app.use(
+      devPack({
+        functionDir: cwd,
+      })
+    );
+    request(app.callback())
+      .get('/api')
+      .expect('Content-type', 'text/plain; charset=utf-8')
+      .expect(/hello world/)
+      .expect(200, () => {
+        devPack.close();
+        done();
+      });
+  });
 
-    it('test buffer result koa in apigw trigger', done => {
-      const app = new koa();
-      const cwd = join(__dirname, './fixtures/base-fn-apigw');
-      execSync(`cd ${cwd};npm install @midwayjs/mock@2`);
-      const devPack = getKoaDevPack(cwd, {
-        notWatch: true,
-        notAwait: true,
-      });
-      app.use(
-        devPack({
-          functionDir: cwd,
-        })
-      );
-      request(app.callback())
-        .get('/api')
-        .expect('Content-type', 'text/plain; charset=utf-8')
-        .expect(/hello world/)
-        .expect(200, () => {
-          devPack.close();
-          done();
-        });
+  it('test buffer result koa in apigw trigger', done => {
+    const app = new koa();
+    const cwd = join(__dirname, './fixtures/base-fn-apigw');
+    execSync(`cd ${cwd};npm install @midwayjs/mock@2`);
+    const devPack = getKoaDevPack(cwd, {
+      notWatch: true,
+      notAwait: true,
     });
+    app.use(
+      devPack({
+        functionDir: cwd,
+      })
+    );
+    request(app.callback())
+      .get('/api')
+      .expect('Content-type', 'text/plain; charset=utf-8')
+      .expect(/hello world/)
+      .expect(200, e => {
+        devPack.close();
+        done(e);
+      });
+  });
 
-    it('test buffer result express in http trigger', done => {
-      const app = express();
-      const cwd = join(__dirname, './fixtures/base-fn-http');
-      execSync(`cd ${cwd};npm install @midwayjs/mock@2`);
-      const devPack = getExpressDevPack(cwd, {
-        notWatch: true,
-        notAwait: true,
-      });
-      app.use(
-        devPack({
-          functionDir: cwd,
-        })
-      );
-      request(app)
-        .get('/api')
-        .expect('Content-type', 'text/plain; charset=utf-8')
-        .expect(/hello world/)
-        .expect(200, () => {
-          devPack.close();
-          done();
-        });
+  it('test buffer result express in http trigger', done => {
+    const app = express();
+    const cwd = join(__dirname, './fixtures/base-fn-http');
+    execSync(`cd ${cwd};npm install @midwayjs/mock@2`);
+    const devPack = getExpressDevPack(cwd, {
+      notWatch: true,
+      notAwait: true,
     });
+    app.use(
+      devPack({
+        functionDir: cwd,
+      })
+    );
+    request(app)
+      .get('/api')
+      .expect('Content-type', 'text/plain; charset=utf-8')
+      .expect(/hello world/)
+      .expect(200, () => {
+        devPack.close();
+        done();
+      });
+  });
 
-    it('test buffer result express in apigw trigger', done => {
-      const app = express();
-      const cwd = join(__dirname, './fixtures/base-fn-apigw');
-      execSync(`cd ${cwd};npm install @midwayjs/mock@2`);
-      const devPack = getExpressDevPack(cwd, {
-        notWatch: true,
-        notAwait: true,
-      });
-      app.use(
-        devPack({
-          functionDir: cwd,
-        })
-      );
-      request(app)
-        .get('/api')
-        .expect('Content-type', 'text/plain; charset=utf-8')
-        .expect(/hello world/)
-        .expect(200, () => {
-          devPack.close();
-          done();
-        });
+  it('test redirect location no host', done => {
+    const app = express();
+    const cwd = join(__dirname, './fixtures/base-fn-redirect');
+
+    execSync(`cd ${cwd};npm install @midwayjs/mock@2`);
+    const devPack = getExpressDevPack(cwd, {
+      notWatch: true,
+      notAwait: true,
     });
+    app.use(
+      devPack({
+        functionDir: cwd,
+      })
+    );
+    const req = request(app)
+      .get('/redirect')
+      .expect(302, e => {
+        devPack.close();
+        if (!e && req.response.headers.location.startsWith('http://')) {
+          done(new Error('not auto add redirect http://'));
+        } else {
+          done(e);
+        }
+      });
   });
 });

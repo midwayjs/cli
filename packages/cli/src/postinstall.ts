@@ -37,7 +37,10 @@ export const postinstall = async (baseDir: string) => {
   });
 
   const allMods = Object.keys(modMap);
-  const npm = findNpm().cmd;
+  const npm = findNpm({ skipAutoFindNpm: true }).cmd;
+  if (allMods.length) {
+    console.log('[midway] auto install cli deps by ', npm);
+  }
   for (const name of allMods) {
     console.log('[midway] auto install', name);
     await installNpm({
