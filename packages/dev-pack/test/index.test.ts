@@ -89,7 +89,7 @@ describe('/test/index.test.ts', () => {
     const app = express();
     const cwd = join(__dirname, './fixtures/base-fn-redirect');
 
-    execSync(`cd ${cwd};cnpm install @midwayjs/mock@2`);
+    execSync(`cd ${cwd};npm install @midwayjs/mock@2`);
     const devPack = getExpressDevPack(cwd, {
       notWatch: true,
       notAwait: true,
