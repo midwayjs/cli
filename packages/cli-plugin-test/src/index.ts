@@ -156,7 +156,7 @@ export class TestPlugin extends BasePlugin {
       pattern = process.env.TESTS.split(',');
     }
     if (!pattern.length) {
-      args.push(`/test/.*\\.test\\.${isTs ? 'ts' : 'js'}$`);
+      args.push(`./test/.*\\.test\\.${isTs ? 'ts' : 'js'}$`);
     } else {
       const matchPattern = pattern.concat([
         '!test/fixtures',
@@ -187,6 +187,7 @@ export class TestPlugin extends BasePlugin {
       'npm',
       'debug',
       'ignoreTypeCheck',
+      '_',
     ];
 
     Object.keys(this.options).forEach(option => {
