@@ -7,6 +7,7 @@ import * as YAML from 'js-yaml';
 import { Locator, AnalyzeResult } from '@midwayjs/locate';
 import { getMainVersion, transformToRelative } from './utils';
 import * as globby from 'globby';
+import { check } from 'midway-version';
 
 enum ProjectType {
   FaaS = 'faas',
@@ -332,9 +333,25 @@ export class CheckPlugin extends BasePlugin {
                   const mod = `@midwayjs/${comp}`;
                   return `${mod}@${deps[mod]}`;
                 })
-                .join(', ')} are incompatible, please using ${components
+                .join(', ')} are incompatible, please use ${components
                 .map(comp => `@midwayjs/${comp}@${coreModVersion}`)
                 .join(', ')}`,
+            ];
+          }
+          return [true];
+        })
+        .check('midway version', async () => {
+          const result = check();
+          if (Array.isArray(result)) {
+            return [
+              false,
+              result.map(item => {
+                return `${item.name}@${
+                  item.current
+                } is not compatible with your project, please use ${
+                  item.name
+                }@${[].concat(item.allow)[0]}`;
+              }),
             ];
           }
           return [true];
@@ -984,11 +1001,14 @@ export class CheckPlugin extends BasePlugin {
           });
           let i = 1;
           for (const error of this.errors) {
-            this.checkReporterOutput({
-              msg: `${i++}. ${error.message} [ ${error.group} ]`,
-              color: CHECK_COLOR.ERROR,
-              ident: 1,
-            });
+            const messages = [].concat(error.message || []);
+            for (const message of messages) {
+              this.checkReporterOutput({
+                msg: `${i++}. ${message} [ ${error.group} ]`,
+                color: CHECK_COLOR.ERROR,
+                ident: 1,
+              });
+            }
           }
         } else {
           this.checkReporterOutput();
