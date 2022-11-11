@@ -53,13 +53,12 @@ export class CoreBaseCLI {
     const packageJson = JSON.parse(readFileSync(packageJsonFile).toString());
     const deps = packageJson?.['midway-cli']?.plugins || [];
     this.core.debug('mw plugin', deps);
-    const currentNodeModules = join(cwd, 'node_modules');
     deps.forEach(dep => {
-      const npmPath = join(currentNodeModules, dep);
-      if (!existsSync(npmPath)) {
-        throw new Error(
-          `Auto load mw plugin error: '${dep}' not install in '${currentNodeModules}'`
-        );
+      let npmPath;
+      try {
+        npmPath = require.resolve(dep, { paths: [cwd] });
+      } catch (error) {
+        throw new Error(`Auto load mw plugin error: '${dep}' not install`);
       }
       try {
         const mod = require(npmPath);
