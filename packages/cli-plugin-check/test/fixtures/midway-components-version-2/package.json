@@ -1,0 +1,13 @@
+{
+  "name": "test",
+  "version": "0.1.0",
+  "dependencies": {
+    "@midwayjs/faas": "^3",
+    "@midwayjs/core": "2.12.3",
+    "@midwayjs/decorator": "2.12.3",
+    "@midwayjs/axios": "2.x",
+    "@midwayjs/cache": "^3",
+    "@midwayjs/jwt": "latest",
+    "@midwayjs/oss": "beta"
+  }
+}

@@ -5,6 +5,7 @@ import { join } from 'path';
 import { ensureDir, existsSync, remove } from 'fs-extra';
 import { writeFileSync } from 'fs';
 import * as YAML from 'js-yaml';
+import { execSync } from 'child_process';
 describe('test/faas.test.ts', () => {
   it('check', async () => {
     const cwd = join(__dirname, 'fixtures/faas');
@@ -106,5 +107,15 @@ describe('test/faas.test.ts', () => {
         assert(!logStr.includes(`Deploying ${typeInfo.type} as FAAS`));
       }
     }
+  });
+  it('midway version 2', async () => {
+    const cwd = join(__dirname, 'fixtures/midway-components-version-2');
+    process.chdir(cwd);
+    if (!existsSync(join(cwd, 'node_modules'))) {
+      execSync(`cd ${cwd} && npm i`);
+    }
+    const logs = await runCheck(cwd);
+    const logStr = logs.join('\n');
+    assert(logStr.includes('is not compatible with your project'));
   });
 });

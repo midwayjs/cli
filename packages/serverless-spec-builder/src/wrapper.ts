@@ -83,7 +83,7 @@ export function writeWrapper(options: {
     }
 
     if (isDefaultFunc) {
-      files[handlerFileName].defaultFunctionHandlerName = name;
+      files[handlerFileName].defaultFunctionHandlerName = handlerConf.handler;
     }
 
     if (handlerConf.layers && handlerConf.layers.length) {

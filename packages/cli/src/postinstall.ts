@@ -5,6 +5,7 @@ import { PluginList } from './plugins';
 import { findNpm, installNpm } from '@midwayjs/command-core';
 const matchReg = /(?:^|\s)(?:midway-bin|mw)\s+([a-z]+?)(?:\s|$)/i;
 export const postinstall = async (baseDir: string) => {
+  const version = require(join(__dirname, '../package.json')).version || '*';
   const pkgJson = getPkgJson(baseDir);
   const pkgJsonList = [];
   if (pkgJson) {
@@ -46,7 +47,7 @@ export const postinstall = async (baseDir: string) => {
     await installNpm({
       baseDir,
       register: npm,
-      moduleName: name,
+      moduleName: `${name}@${version.split('.')[0]}`,
       slience: true,
       isLerna,
     });
