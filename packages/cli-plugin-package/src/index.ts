@@ -730,7 +730,7 @@ export class PackagePlugin extends BasePlugin {
     process.chdir(this.midwayBuildPath);
     const { funcSpec, applicationContext } = await analysisDecorator(
       join(this.midwayBuildPath, 'dist'),
-      this.core.service.functions
+      this.core.service
     );
     process.chdir(this.core.cwd);
     this.core.service.functions = funcSpec;
