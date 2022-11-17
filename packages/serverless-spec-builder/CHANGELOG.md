@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.2](https://github.com/midwayjs/cli/compare/v2.0.1...v2.0.2) (2022-11-17)
+
+
+### Features
+
+* check midway version ([#303](https://github.com/midwayjs/cli/issues/303)) ([cb6934a](https://github.com/midwayjs/cli/commit/cb6934ae27eac9d346d9e0bf251c2d168e27ed0c))
+
+
+
+
+
 # [2.0.0](https://github.com/midwayjs/cli/compare/v1.3.15...v2.0.0) (2022-10-13)
 
 **Note:** Version bump only for package @midwayjs/serverless-spec-builder

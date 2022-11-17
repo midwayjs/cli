@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.2](https://github.com/midwayjs/bin/compare/v2.0.1...v2.0.2) (2022-11-17)
+
+
+### Bug Fixes
+
+* dev pack 302 redirect ([#302](https://github.com/midwayjs/bin/issues/302)) ([3fc3160](https://github.com/midwayjs/bin/commit/3fc3160dc65fcc8208611ecdd123e8a9db167f0c)), closes [midwayjs/midway#2473](https://github.com/midwayjs/midway/issues/2473) [midwayjs/midway#2010](https://github.com/midwayjs/midway/issues/2010)
+* package f.yml ([71f6bd8](https://github.com/midwayjs/bin/commit/71f6bd81064bca0a12d44143d2680b69c44fee2e))
+
+
+### Features
+
+* check midway version ([#303](https://github.com/midwayjs/bin/issues/303)) ([cb6934a](https://github.com/midwayjs/bin/commit/cb6934ae27eac9d346d9e0bf251c2d168e27ed0c))
+* support plugin loading normally in monorepo project ([#304](https://github.com/midwayjs/bin/issues/304)) ([6f23e9c](https://github.com/midwayjs/bin/commit/6f23e9c8090d9826c68b874786925daf89f7adc1))
+
+
+
+
+
 ## [2.0.1](https://github.com/midwayjs/bin/compare/v2.0.1-beta.1...v2.0.1) (2022-10-28)
 
 

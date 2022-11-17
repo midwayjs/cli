@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.2](https://github.com/midwayjs/midway/compare/v2.0.1...v2.0.2) (2022-11-17)
+
+
+### Bug Fixes
+
+* dev pack 302 redirect ([#302](https://github.com/midwayjs/midway/issues/302)) ([3fc3160](https://github.com/midwayjs/midway/commit/3fc3160dc65fcc8208611ecdd123e8a9db167f0c)), closes [midwayjs/midway#2473](https://github.com/midwayjs/midway/issues/2473) [midwayjs/midway#2010](https://github.com/midwayjs/midway/issues/2010)
+
+
+### Features
+
+* check midway version ([#303](https://github.com/midwayjs/midway/issues/303)) ([cb6934a](https://github.com/midwayjs/midway/commit/cb6934ae27eac9d346d9e0bf251c2d168e27ed0c))
+
+
+
+
+
 ## [2.0.1](https://github.com/midwayjs/midway/compare/v2.0.1-beta.1...v2.0.1) (2022-10-28)
 
 **Note:** Version bump only for package @midwayjs/cli

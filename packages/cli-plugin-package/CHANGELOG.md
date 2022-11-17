@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.2](https://github.com/midwayjs/cli/compare/v2.0.1...v2.0.2) (2022-11-17)
+
+
+### Bug Fixes
+
+* package f.yml ([71f6bd8](https://github.com/midwayjs/cli/commit/71f6bd81064bca0a12d44143d2680b69c44fee2e))
+
+
+
+
+
 ## [2.0.1](https://github.com/midwayjs/cli/compare/v2.0.1-beta.1...v2.0.1) (2022-10-28)
 
 
