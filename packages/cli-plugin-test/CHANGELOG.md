@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.17](https://github.com/midwayjs/cli/compare/v1.3.16...v1.3.17) (2022-11-18)
+
+
+### Bug Fixes
+
+* dev pack 302 redirect ([#302](https://github.com/midwayjs/cli/issues/302)) ([80349b6](https://github.com/midwayjs/cli/commit/80349b6429960e27685779333e9140c7a17f28f7)), closes [midwayjs/midway#2473](https://github.com/midwayjs/midway/issues/2473) [midwayjs/midway#2010](https://github.com/midwayjs/midway/issues/2010)
+
+
+
+
+
 ## [1.3.16](https://github.com/midwayjs/cli/compare/v1.3.15...v1.3.16) (2022-10-28)
 
 
