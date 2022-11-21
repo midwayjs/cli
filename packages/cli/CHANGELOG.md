@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.18](https://github.com/midwayjs/midway/compare/v1.3.17...v1.3.18) (2022-11-21)
+
+
+### Bug Fixes
+
+* argv is undefined ([#306](https://github.com/midwayjs/midway/issues/306)) ([f88d5f6](https://github.com/midwayjs/midway/commit/f88d5f63938216eb12fd2c69f3db7401cd5614c9))
+
+
+
+
+
 
 
 **Note:** Version bump only for package @midwayjs/cli
