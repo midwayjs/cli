@@ -174,7 +174,7 @@ export const findNpm = (argv?: {
     }
   }
 
-  if (!npm && !argv.skipAutoFindNpm) {
+  if (!npm && !argv?.skipAutoFindNpm) {
     const npmList = ['pnpm', 'cnpm'];
     const currentPlatform = platform();
     const cmd = npmList.find(cmd => {
