@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.3](https://github.com/midwayjs/bin/compare/v2.0.2...v2.0.3) (2022-11-21)
+
+
+### Bug Fixes
+
+* npm argv is undefined ([520ddeb](https://github.com/midwayjs/bin/commit/520ddeb5000db3a3255891412935c84f63f02837))
+
+
+
+
+
 ## [2.0.2](https://github.com/midwayjs/bin/compare/v2.0.1...v2.0.2) (2022-11-17)
 
 
