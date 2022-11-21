@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.17-beta.1](https://github.com/midwayjs/bin/compare/v1.3.17...v1.3.17-beta.1) (2022-11-21)
+
+
+### Bug Fixes
+
+* argv is undefined ([443ef35](https://github.com/midwayjs/bin/commit/443ef352e2bf43ffa85deab1df0e0763072297b2))
+
+
+
+
+
 ## [1.3.17](https://github.com/midwayjs/bin/compare/v1.3.16...v1.3.17) (2022-11-18)
 
 
