@@ -1,4 +1,4 @@
-import { BasePlugin } from '@midwayjs/command-core';
+import { BasePlugin, findNpmModuleByResolve } from '@midwayjs/command-core';
 import { fork, execSync } from 'child_process';
 import Spin from 'light-spinner';
 import * as chokidar from 'chokidar';
@@ -185,7 +185,7 @@ export class DevPlugin extends BasePlugin {
         }
 
         if (!fastRegister) {
-          execArgv = ['-r', 'ts-node/register'];
+          execArgv = ['-r', this.getTsNodeRegister()];
           if (this.tsconfigJson?.compilerOptions?.baseUrl) {
             execArgv.push('-r', 'tsconfig-paths/register');
           }
@@ -260,6 +260,21 @@ export class DevPlugin extends BasePlugin {
         }
       });
     });
+  }
+
+  private getTsNodeRegister() {
+    const tsNodePath = findNpmModuleByResolve(this.core.cwd, 'ts-node');
+    if (tsNodePath) {
+      return join(tsNodePath, 'register');
+    }
+    const errorMsg = [
+      '!!!',
+      '未找到 ts-node 来处理您的 Typescript 代码',
+      '请手动安装 ts-node@10 依赖之后再次执行 midway-bin dev --ts',
+      '---',
+    ].join('\n');
+    console.error(errorMsg);
+    throw new Error(errorMsg);
   }
 
   private async handleClose(isExit?, signal?) {
