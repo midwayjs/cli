@@ -93,7 +93,9 @@ export async function loadNpm(
 export const findNpmModuleByResolve = (cwd, modName) => {
   try {
     return dirname(
-      require.resolve(`${modName}/package.json`, { paths: [cwd] })
+      require.resolve(`${modName}/package.json`, {
+        paths: [cwd, process.env.MIDWAY_CLI_PATH || ''],
+      })
     );
   } catch (e) {
     return;
