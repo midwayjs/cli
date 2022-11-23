@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.19](https://github.com/midwayjs/cli/compare/v1.3.18...v1.3.19) (2022-11-23)
+
+
+### Bug Fixes
+
+* find ts-node ([#307](https://github.com/midwayjs/cli/issues/307)) ([4b2a689](https://github.com/midwayjs/cli/commit/4b2a68920900fd667c9b06333fc2e82cf0ab250c))
+
+
+
+
+
 ## [1.3.19-beta.2](https://github.com/midwayjs/cli/compare/v1.3.19-beta.1...v1.3.19-beta.2) (2022-11-23)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-deploy
