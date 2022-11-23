@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.19-beta.1](https://github.com/midwayjs/cli/compare/v1.3.18...v1.3.19-beta.1) (2022-11-23)
+
+
+### Bug Fixes
+
+* find ts-node ([817e99d](https://github.com/midwayjs/cli/commit/817e99dad196da95fd0062d086b2cd03413f76d7))
+
+
+
+
+
 ## [1.3.18](https://github.com/midwayjs/cli/compare/v1.3.17...v1.3.18) (2022-11-21)
 
 
