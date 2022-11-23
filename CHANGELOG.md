@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.4](https://github.com/midwayjs/bin/compare/v2.0.3...v2.0.4) (2022-11-23)
+
+
+### Bug Fixes
+
+* find ts-node ([87944ea](https://github.com/midwayjs/bin/commit/87944eaa7dbe077b10ed907775000a982d2220e3))
+
+
+
+
+
 ## [2.0.3](https://github.com/midwayjs/bin/compare/v2.0.2...v2.0.3) (2022-11-21)
 
 
