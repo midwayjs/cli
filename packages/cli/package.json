@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/cli",
-  "version": "1.3.19-beta.1",
+  "version": "1.3.19-beta.2",
   "description": "Midway Command Tools",
   "main": "index.js",
   "bin": {
@@ -20,12 +20,12 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@midwayjs/cli-plugin-build": "^1.3.19-beta.1",
-    "@midwayjs/cli-plugin-check": "^1.3.19-beta.1",
-    "@midwayjs/cli-plugin-clean": "^1.3.19-beta.1",
-    "@midwayjs/cli-plugin-dev": "^1.3.19-beta.1",
-    "@midwayjs/cli-plugin-test": "^1.3.19-beta.1",
-    "@midwayjs/command-core": "^1.3.19-beta.1",
+    "@midwayjs/cli-plugin-build": "^1.3.19-beta.2",
+    "@midwayjs/cli-plugin-check": "^1.3.19-beta.2",
+    "@midwayjs/cli-plugin-clean": "^1.3.19-beta.2",
+    "@midwayjs/cli-plugin-dev": "^1.3.19-beta.2",
+    "@midwayjs/cli-plugin-test": "^1.3.19-beta.2",
+    "@midwayjs/command-core": "^1.3.19-beta.2",
     "enquirer": "^2.3.4",
     "minimist": "^1.2.5",
     "mod-info": "^1.0.0",
