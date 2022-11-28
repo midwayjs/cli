@@ -54,6 +54,12 @@ export class DevPlugin extends BasePlugin {
         watchFile: {
           usage: 'watch more file',
         },
+        watchFilePatten: {
+          usage: 'watch more files by glob patten',
+        },
+        unWatchFilePatten: {
+          usage: 'unwatch files by glob patten',
+        },
         watchExt: {
           usage: 'watch more extensions',
         },
@@ -371,6 +377,22 @@ export class DevPlugin extends BasePlugin {
           this.core.debug('other watch picomatch rule', file);
           watcher.add(file);
         }
+      });
+    }
+    if (this.options.watchFilePatten) {
+      const watchFilePattenList = this.options.watchFilePatten.split(',');
+      watchFilePattenList.forEach(file => {
+        const filePath = resolve(this.core.cwd, file);
+        this.core.debug('watch glob patten', filePath);
+        watcher.add(filePath);
+      });
+    }
+    if (this.options.unWatchFilePatten) {
+      const unWatchFilePattenList = this.options.unWatchFilePatten.split(',');
+      unWatchFilePattenList.forEach(file => {
+        const filePath = resolve(this.core.cwd, file);
+        this.core.debug('unwatch glob patten', filePath);
+        watcher.unwatch(filePath);
       });
     }
     watcher.on('all', (event, path) => {
