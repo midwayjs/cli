@@ -9,6 +9,12 @@ const cwd = join(__dirname, 'fixtures/base-app');
 const api = join(cwd, 'src/controller/api.ts');
 const api1 = join(cwd, 'src/controller/api.cache');
 const api2 = join(cwd, 'src/controller/api2.cache');
+
+const dConfig = join(cwd, 'default-data.js');
+const dcConfig = join(cwd, 'default-data-cache');
+const uConfig = join(cwd, 'unittest-data.js');
+const ucConfig = join(cwd, 'unittest-data-cache');
+
 describe('test/index.test.ts', () => {
   it('dev', async () => {
     const dist = join(cwd, 'dist');
@@ -18,6 +24,9 @@ describe('test/index.test.ts', () => {
     const { close, port } = await run(cwd, {
       fast: true,
       watchFile: 'package.json',
+      watchFilePatten: './*-data.js',
+      unWatchFilePatten: './unittest*.js',
+      watchExt: '.ts,.yml,.json,.js',
     });
     if (existsSync(api)) {
       await remove(api);
@@ -34,6 +43,21 @@ describe('test/index.test.ts', () => {
     const response2 = await fetch(`http://127.0.0.1:${port}/?name=midway`);
     const body2 = await response2.text();
     assert(body2 === 'hello world2,midway');
+
+    await remove(dConfig);
+    await copy(dcConfig, dConfig);
+    await wait();
+    const response3 = await fetch(`http://127.0.0.1:${port}/testWatch`);
+    const body3 = await response3.text();
+    assert(body3 === 'watch2');
+
+    await remove(uConfig);
+    await copy(ucConfig, uConfig);
+    await wait();
+    const response4 = await fetch(`http://127.0.0.1:${port}/tesUnWatch`);
+    const body4 = await response4.text();
+    assert(body4 === 'unwatch3');
+
     await wait();
     await close();
   });

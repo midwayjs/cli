@@ -8,6 +8,7 @@ import {
   Body,
   HttpCode,
   Redirect,
+  Config
 } from '@midwayjs/decorator';
 import { UserService } from '../service/user';
 
@@ -20,6 +21,12 @@ export class APIController {
   @Inject()
   userService: UserService;
 
+  @Config()
+  watchKey: string;
+
+  @Config()
+  unWatchKey: string;
+
   @Post()
   async postData(@Body('bbbbb') bbbb) {
     return 'data';
@@ -29,6 +36,18 @@ export class APIController {
   @HttpCode(201)
   async home(@Query('name') name: string) {
     return 'hello world,' + name;
+  }
+
+  @Get('/testWatch')
+  @HttpCode(201)
+  async testWatch() {
+    return this.watchKey;
+  }
+
+  @Get('/tesUnWatch')
+  @HttpCode(201)
+  async tesUnWatch() {
+    return this.unWatchKey;
   }
 
   @Get('/login')
