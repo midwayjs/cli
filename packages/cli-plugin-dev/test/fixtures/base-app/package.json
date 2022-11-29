@@ -1,6 +1,7 @@
 {
   "name": "ali-demo",
   "dependencies": {
+    "@midwayjs/mock": "^2.14.6",
     "@midwayjs/web": "2"
   }
 }
