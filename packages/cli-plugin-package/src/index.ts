@@ -35,7 +35,7 @@ import {
   analysisDecorator,
   copyFromNodeModules,
 } from './utils';
-import { findNpmModule, exec } from '@midwayjs/command-core';
+import { findNpmModuleByResolve, exec } from '@midwayjs/command-core';
 import {
   analysisResultToSpec,
   copyFiles,
@@ -221,7 +221,7 @@ export class PackagePlugin extends BasePlugin {
 
     // 分析midway version
     const cwd = this.getCwd();
-    const faasModulePath = findNpmModule(cwd, '@midwayjs/faas');
+    const faasModulePath = findNpmModuleByResolve(cwd, '@midwayjs/faas');
     if (faasModulePath) {
       const pkgJson = JSON.parse(
         readFileSync(join(faasModulePath, 'package.json')).toString()

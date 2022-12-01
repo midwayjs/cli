@@ -1,7 +1,7 @@
 import { join } from 'path';
 import * as globby from 'globby';
 import { unlink, existsSync, stat, readFileSync, copy } from 'fs-extra';
-import { findNpmModule } from '@midwayjs/command-core';
+import { findNpmModuleByResolve } from '@midwayjs/command-core';
 import * as semver from 'semver';
 interface Ilayer {
   [extName: string]: {
@@ -114,7 +114,7 @@ export const removeUselessFiles = async (target: string) => {
 
 // 分析装饰器上面的函数信息
 export const analysisDecorator = async (cwd: string, spec?) => {
-  const midwayCoreMod = findNpmModule(cwd, '@midwayjs/core');
+  const midwayCoreMod = findNpmModuleByResolve(cwd, '@midwayjs/core');
   const pkg = join(midwayCoreMod, 'package.json');
   const corePkgJson = JSON.parse(readFileSync(pkg, 'utf-8'));
   const {
@@ -135,7 +135,10 @@ export const analysisDecorator = async (cwd: string, spec?) => {
       prepareGlobalApplicationContext &&
       spec?.provider?.starter
     ) {
-      const midwayDecoratorMod = findNpmModule(cwd, '@midwayjs/decorator');
+      const midwayDecoratorMod = findNpmModuleByResolve(
+        cwd,
+        '@midwayjs/decorator'
+      );
       const {
         CONFIGURATION_KEY,
         listModule,
