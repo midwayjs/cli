@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.20-beta.1](https://github.com/midwayjs/cli/compare/v1.3.19...v1.3.20-beta.1) (2022-12-01)
+
+
+### Features
+
+* support add templateModule options and env MIDWAY_TEMPLATE_MODULE ([99c34bc](https://github.com/midwayjs/cli/commit/99c34bcdb000bc4f0f5f7064d01d73e50b4847f5))
+* support watching files by glob patten in dev mode ([#305](https://github.com/midwayjs/cli/issues/305)) ([5f68c06](https://github.com/midwayjs/cli/commit/5f68c06f0a9691766f3f5eb22ff1f067ae1e8821))
+
+
+
+
+
 ## [1.3.19](https://github.com/midwayjs/cli/compare/v1.3.18...v1.3.19) (2022-11-23)
 
 
