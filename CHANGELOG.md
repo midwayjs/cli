@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.5](https://github.com/midwayjs/bin/compare/v2.0.5-beta.1...v2.0.5) (2022-12-01)
+
+
+### Features
+
+* support add option templateModule ([7701ec2](https://github.com/midwayjs/bin/commit/7701ec253a9f61cd35909776fabb21c1dc8c26b0))
+
+
+
+
+
 
 
 **Note:** Version bump only for package midway-bin
