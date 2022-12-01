@@ -64,9 +64,16 @@ export class AddPlugin extends BasePlugin {
       this.options.templateModule ||
       process.env.MIDWAY_TEMPLATE_MODULE ||
       '@midwayjs/boilerplate-list';
-    const templateModulePath = findNpmModuleByResolve(cwd, templateModuleName);
-    this.core.debug('templateModulePath', templateModulePath);
-    this.templateList = require(templateModulePath);
+    if (typeof templateModuleName === 'string') {
+      const templateModulePath = findNpmModuleByResolve(
+        cwd,
+        templateModuleName
+      );
+      this.core.debug('templateModulePath', templateModulePath);
+      this.templateList = require(templateModulePath);
+    } else {
+      this.templateList = templateModuleName;
+    }
 
     this.template = this.options.template;
     if (this.options.type) {
