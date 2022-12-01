@@ -1,4 +1,4 @@
-import { findNpmModule } from '@midwayjs/command-core';
+import { findNpmModuleByResolve } from '@midwayjs/command-core';
 import { analysisDecorator, waitDebug } from './utils';
 const options: any = JSON.parse(process.argv[2]);
 let app;
@@ -33,7 +33,7 @@ process.on('SIGINT', () => null);
   if (process.env.MIDWAY_DEV_IS_DEBUG) {
     await waitDebug(process.env.MIDWAY_DEV_IS_DEBUG);
   }
-  const modPath = findNpmModule(process.cwd(), '@midwayjs/mock');
+  const modPath = findNpmModuleByResolve(process.cwd(), '@midwayjs/mock');
   if (!modPath) {
     throw new Error('Please add @midwayjs/mock to your devDependencies');
   }
