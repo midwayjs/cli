@@ -1,11 +1,11 @@
 {
   "name": "@midwayjs/cli-plugin-vercel",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/command-core": "^2.0.4",
-    "@midwayjs/serverless-spec-builder": "^2.0.2",
+    "@midwayjs/command-core": "^2.0.5",
+    "@midwayjs/serverless-spec-builder": "^2.0.5",
     "fs-extra": "^8.1.0",
     "globby": "^10.0.0",
     "vercel": "^23.0.1"
