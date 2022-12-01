@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.5-beta.1](https://github.com/midwayjs/bin/compare/v2.0.4...v2.0.5-beta.1) (2022-12-01)
+
+
+### Features
+
+* merga master ([c585444](https://github.com/midwayjs/bin/commit/c585444fb827702e2e3fd320891f340e969070b6))
+* support watching files by glob patten in dev mode ([#305](https://github.com/midwayjs/bin/issues/305)) ([e4b97b6](https://github.com/midwayjs/bin/commit/e4b97b69b762252c5414aaad1ae06131d699df1b))
+
+
+
+
+
 ## [2.0.4](https://github.com/midwayjs/bin/compare/v2.0.3...v2.0.4) (2022-11-23)
 
 
