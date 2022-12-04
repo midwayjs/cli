@@ -952,7 +952,7 @@ export class PackagePlugin extends BasePlugin {
       this.core.cli.log(' - Experimental Feature RemoveUselessFiles');
       ignore = uselessFilesMatch;
     }
-    const globbyMatched = ['**'];
+    const globbyMatched = ['**', '.env*'];
     const npmClient = this.getNPMClient();
     if (npmClient?.startsWith('pnpm')) {
       globbyMatched.push('**/.pnpm/**');
