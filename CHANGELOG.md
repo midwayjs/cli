@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.6-beta.1](https://github.com/midwayjs/bin/compare/v2.0.5...v2.0.6-beta.1) (2022-12-05)
+
+
+### Bug Fixes
+
+* v3 serverless app ([51b298c](https://github.com/midwayjs/bin/commit/51b298cd6df3dbc6764edaa92d3c0c0a8345a7ac))
+* zip support include and exclude ([256e565](https://github.com/midwayjs/bin/commit/256e565fcfc9ebd100dfcbdc4aa6585788624f11))
+
+
+
+
+
 ## [2.0.5](https://github.com/midwayjs/bin/compare/v2.0.5-beta.1...v2.0.5) (2022-12-01)
 
 
