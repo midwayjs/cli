@@ -115,6 +115,9 @@ export class PackagePlugin extends BasePlugin {
           usage: 'Skip zip artifact',
           shortcut: 'z',
         },
+        skipInstallDep: {
+          usage: 'Skip Install Dependencies',
+        },
         skipBuild: {
           usage: 'Skip funciton build',
         },
