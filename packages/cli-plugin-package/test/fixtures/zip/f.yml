@@ -1,0 +1,8 @@
+package:
+  include:
+    - .env
+    - .env.prod
+    - test/.env.*
+    - app/.name
+  exclude:
+    - test/.env.exclude
