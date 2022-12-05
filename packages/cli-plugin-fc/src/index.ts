@@ -265,7 +265,7 @@ export class AliyunFCPlugin extends BasePlugin {
           this.core.debug(
             'serverless devs deploy input',
             funcName,
-            fcDeployInputs
+            JSON.stringify(fcDeployInputs)
           );
           await fcDeploy.deploy(fcDeployInputs);
         }
