@@ -45,6 +45,12 @@ export class AddPlugin extends BasePlugin {
           usage: 'show all built-in template',
           shortcut: 'a',
         },
+        skipInstallDep: {
+          usage: 'Skip Install Dependencies',
+        },
+        templateModule: {
+          usage: 'Instead of @midwayjs/boilerplate-list',
+        },
       },
       passingCommand: true,
     },
@@ -181,6 +187,9 @@ export class AddPlugin extends BasePlugin {
   }
 
   private async installDep() {
+    if (this.options.skipInstallDep) {
+      return;
+    }
     await this.npmInstall(this.projectDirPath);
   }
 
