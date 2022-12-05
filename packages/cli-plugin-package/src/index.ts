@@ -883,6 +883,25 @@ export class PackagePlugin extends BasePlugin {
     if (npmClient?.startsWith('pnpm')) {
       globbyMatched.push('**/.pnpm/**');
     }
+
+    // include file
+    const { include, exclude } = this.core.service.package || {};
+    if (Array.isArray(include)) {
+      for (const pattern of include) {
+        if (typeof pattern === 'string') {
+          globbyMatched.push(pattern);
+        }
+      }
+    }
+    // eclude file
+    if (Array.isArray(exclude)) {
+      for (const pattern of exclude) {
+        if (typeof pattern === 'string') {
+          ignore.push(pattern);
+        }
+      }
+    }
+
     const fileList = await globby(globbyMatched, {
       onlyFiles: false,
       followSymbolicLinks: false,
