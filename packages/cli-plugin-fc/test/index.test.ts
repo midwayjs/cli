@@ -182,6 +182,7 @@ describe('/test/index.test.ts', () => {
         },
       },
       options: {
+        verbose: true,
         skipDeploy: true,
         skipInstallDep: true,
       },
@@ -194,8 +195,19 @@ describe('/test/index.test.ts', () => {
     // clean
     await remove(join(baseDir, '.serverless'));
     const logsStr = logs.join(';');
+    const ossJson = /helloService-oss;(.*?"--use-local"\})/.exec(logsStr);
     assert(logsStr.includes('@serverless-devs'));
     assert(logsStr.includes('deploy success'));
+    assert(ossJson && ossJson[1]);
+    const ossInfo = JSON.parse(ossJson[1]);
+    assert(ossInfo.props.triggers.length === 1);
+    const trigger = ossInfo.props.triggers[0];
+    assert(
+      trigger.type === 'oss' &&
+        trigger.config.bucketName === 'testBuck' &&
+        trigger.config.filter.key.Prefix === 'pre' &&
+        trigger.config.filter.key.Suffix === 'suf'
+    );
     if (!exists) {
       await remove(accessYaml);
     }
