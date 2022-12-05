@@ -253,20 +253,20 @@ export class AliyunFCPlugin extends BasePlugin {
         fcDeployInputs.path = { configPath: this.midwayBuildPath };
         fcDeployInputs.props.function.codeUri = artifactFile;
         const funcName = fcDeployInputs.props.function.name;
+        const args = [];
+        if (!this.options.useRemoteConfig) {
+          args.push('--use-local');
+        }
+        if (this.options.yes) {
+          args.push('--assume-yes');
+        }
+        fcDeployInputs.args = args.join(' ');
+        this.core.debug(
+          'serverless devs deploy input',
+          funcName,
+          JSON.stringify(fcDeployInputs)
+        );
         if (!this.options.skipDeploy) {
-          const args = [];
-          if (!this.options.useRemoteConfig) {
-            args.push('--use-local');
-          }
-          if (this.options.yes) {
-            args.push('--assume-yes');
-          }
-          fcDeployInputs.args = args.join(' ');
-          this.core.debug(
-            'serverless devs deploy input',
-            funcName,
-            JSON.stringify(fcDeployInputs)
-          );
           await fcDeploy.deploy(fcDeployInputs);
         }
 
