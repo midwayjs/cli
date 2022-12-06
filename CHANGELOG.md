@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.6-beta.3](https://github.com/midwayjs/bin/compare/v2.0.6-beta.2...v2.0.6-beta.3) (2022-12-06)
+
+
+### Bug Fixes
+
+* package paths alias execute tsc-alias ([72b71a6](https://github.com/midwayjs/bin/commit/72b71a62e28d1aa45f9be2baac4ac813463fa8bc))
+
+
+
+
+
 ## [2.0.6-beta.2](https://github.com/midwayjs/bin/compare/v2.0.6-beta.1...v2.0.6-beta.2) (2022-12-06)
 
 
