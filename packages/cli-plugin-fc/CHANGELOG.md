@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.6-beta.2](https://github.com/midwayjs/cli/compare/v2.0.6-beta.1...v2.0.6-beta.2) (2022-12-06)
+
+
+### Performance Improvements
+
+* more debug info for fc deploy ([0f93c35](https://github.com/midwayjs/cli/commit/0f93c3511066f7ea75f9a95e89632f155631deed))
+
+
+
+
+
 ## [2.0.6-beta.1](https://github.com/midwayjs/cli/compare/v2.0.5...v2.0.6-beta.1) (2022-12-05)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-fc

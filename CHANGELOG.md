@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.6-beta.2](https://github.com/midwayjs/bin/compare/v2.0.6-beta.1...v2.0.6-beta.2) (2022-12-06)
+
+
+### Bug Fixes
+
+* faas build support ts paths alias ([ccda8c9](https://github.com/midwayjs/bin/commit/ccda8c939fa89849601bb5b3aac8708205844849))
+
+
+### Performance Improvements
+
+* more debug info for fc deploy ([0f93c35](https://github.com/midwayjs/bin/commit/0f93c3511066f7ea75f9a95e89632f155631deed))
+
+
+
+
+
 ## [2.0.6-beta.1](https://github.com/midwayjs/bin/compare/v2.0.5...v2.0.6-beta.1) (2022-12-05)
 
 
