@@ -583,6 +583,7 @@ export class PackagePlugin extends BasePlugin {
       }
     }
     // support ts alias
+    let isNeedExecuteTscAlias = false;
     if (tsOptions?.compilerOptions?.paths) {
       const tscAliasPath = findNpmModuleByResolve(cwd, 'tsc-alias');
       if (!tscAliasPath) {
@@ -597,6 +598,7 @@ export class PackagePlugin extends BasePlugin {
         );
       } else {
         Object.keys(tsOptions.compilerOptions.paths).forEach(alias => {
+          isNeedExecuteTscAlias = true;
           const rules = tsOptions.compilerOptions.paths[alias];
           if (rules.length === 1) {
             const rule = rules[0];
@@ -612,11 +614,6 @@ export class PackagePlugin extends BasePlugin {
             this.core.debug(`path alias: ${alias} 无法处理`);
           }
         });
-        await exec({
-          cmd: 'tsc-alias',
-          baseDir: this.midwayBuildPath,
-          log: this.core.cli.log,
-        });
       }
     }
     tsOptions.compilerOptions.outDir = 'dist';
@@ -624,6 +621,13 @@ export class PackagePlugin extends BasePlugin {
       join(this.midwayBuildPath, 'tsconfig.json'),
       JSON.stringify(tsOptions, null, 2)
     );
+    if (isNeedExecuteTscAlias) {
+      await exec({
+        cmd: 'tsc-alias',
+        baseDir: this.midwayBuildPath,
+        log: this.core.cli.log,
+      });
+    }
   }
 
   private getCwd() {
