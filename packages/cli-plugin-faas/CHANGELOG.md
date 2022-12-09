@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.20](https://github.com/midwayjs/cli/compare/v1.3.19...v1.3.20) (2022-12-09)
+
+
+### Features
+
+* support add templateModule options and env MIDWAY_TEMPLATE_MODULE ([#308](https://github.com/midwayjs/cli/issues/308)) ([1a6290a](https://github.com/midwayjs/cli/commit/1a6290aab11abcb73a34b99faa78e56f59da917c))
+
+
+
+
+
 ## [1.3.20-beta.1](https://github.com/midwayjs/cli/compare/v1.3.19...v1.3.20-beta.1) (2022-12-01)
 
 **Note:** Version bump only for package @midwayjs/cli-plugin-faas
