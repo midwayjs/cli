@@ -1,10 +1,10 @@
-import { findNpmModule } from '@midwayjs/command-core';
+import { findNpmModuleByResolve } from '@midwayjs/command-core';
 import { platform } from 'os';
 import { execSync } from 'child_process';
 import { createServer } from 'net';
 
 export const analysisDecorator = async (cwd: string) => {
-  const midwayCoreMod = findNpmModule(cwd, '@midwayjs/core');
+  const midwayCoreMod = findNpmModuleByResolve(cwd, '@midwayjs/core');
   const { WebRouterCollector } = require(midwayCoreMod);
   const collector = new WebRouterCollector(cwd, {
     includeFunctionRouter: true,

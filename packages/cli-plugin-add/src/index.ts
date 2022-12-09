@@ -1,4 +1,9 @@
-import { BasePlugin, findNpm, installNpm } from '@midwayjs/command-core';
+import {
+  BasePlugin,
+  findNpm,
+  findNpmModuleByResolve,
+  installNpm,
+} from '@midwayjs/command-core';
 import * as enquirer from 'enquirer';
 import { join, relative } from 'path';
 import { existsSync, remove, readJSONSync } from 'fs-extra';
@@ -6,12 +11,13 @@ import * as chalk from 'chalk';
 import { CategorySelect } from './categorySelect';
 import { LightGenerator } from 'light-generator';
 import Spin from 'light-spinner';
-const templateList = require('@midwayjs/boilerplate-list');
+
 export class AddPlugin extends BasePlugin {
   private projectName = '';
   private projectDirPath = '';
   private template = '';
   private checkDepInstallTimeout;
+  private templateList: any;
   commands = {
     new: {
       // mw new xxx -t
@@ -39,6 +45,12 @@ export class AddPlugin extends BasePlugin {
           usage: 'show all built-in template',
           shortcut: 'a',
         },
+        skipInstallDep: {
+          usage: 'Skip Install Dependencies',
+        },
+        templateModule: {
+          usage: 'Instead of @midwayjs/boilerplate-list',
+        },
       },
       passingCommand: true,
     },
@@ -52,9 +64,19 @@ export class AddPlugin extends BasePlugin {
   };
 
   async newFormatCommand() {
+    const { cwd } = this.core;
+    this.core.debug('cwd', cwd);
+    const templateModuleName =
+      this.options.templateModule ||
+      process.env.MIDWAY_TEMPLATE_MODULE ||
+      '@midwayjs/boilerplate-list';
+    const templateModulePath = findNpmModuleByResolve(cwd, templateModuleName);
+    this.core.debug('templateModulePath', templateModulePath);
+    this.templateList = require(templateModulePath);
+
     this.template = this.options.template;
     if (this.options.type) {
-      this.template = templateList[this.options.type]?.package;
+      this.template = this.templateList[this.options.type]?.package;
     }
     if (!this.template) {
       this.template = await this.userSelectTemplate();
@@ -78,8 +100,7 @@ export class AddPlugin extends BasePlugin {
       }).run();
     }
     this.projectName = projectPath;
-    const { cwd } = this.core;
-    this.core.debug('cwd', cwd);
+
     const projectDirPath = join(cwd, projectPath);
     if (existsSync(projectDirPath)) {
       const isOverwritten = await new (enquirer as any).Confirm({
@@ -139,26 +160,29 @@ export class AddPlugin extends BasePlugin {
   // 用户选择模板
   async userSelectTemplate() {
     if (!this.options.all) {
-      for (const key of Object.keys(templateList)) {
-        if (templateList[key]['hidden'] === true) {
-          delete templateList[key];
+      for (const key of Object.keys(this.templateList)) {
+        if (this.templateList[key]['hidden'] === true) {
+          delete this.templateList[key];
         }
       }
     }
     const prompt = new CategorySelect({
       name: 'templateName',
       message: 'Hello, traveller.\n  Which template do you like?',
-      groupChoices: templateList,
+      groupChoices: this.templateList,
       result: value => {
         return value.split(' - ')[0];
       },
       show: true,
     });
     const type = await prompt.run();
-    return templateList[type].package;
+    return this.templateList[type].package;
   }
 
   private async installDep() {
+    if (this.options.skipInstallDep) {
+      return;
+    }
     await this.npmInstall(this.projectDirPath);
   }
 

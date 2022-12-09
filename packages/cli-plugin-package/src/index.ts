@@ -35,7 +35,7 @@ import {
   analysisDecorator,
   copyFromNodeModules,
 } from './utils';
-import { findNpmModule, exec } from '@midwayjs/command-core';
+import { findNpmModuleByResolve, exec } from '@midwayjs/command-core';
 import {
   analysisResultToSpec,
   copyFiles,
@@ -114,6 +114,9 @@ export class PackagePlugin extends BasePlugin {
         skipZip: {
           usage: 'Skip zip artifact',
           shortcut: 'z',
+        },
+        skipInstallDep: {
+          usage: 'Skip Install Dependencies',
         },
         skipBuild: {
           usage: 'Skip funciton build',
@@ -221,7 +224,7 @@ export class PackagePlugin extends BasePlugin {
 
     // 分析midway version
     const cwd = this.getCwd();
-    const faasModulePath = findNpmModule(cwd, '@midwayjs/faas');
+    const faasModulePath = findNpmModuleByResolve(cwd, '@midwayjs/faas');
     if (faasModulePath) {
       const pkgJson = JSON.parse(
         readFileSync(join(faasModulePath, 'package.json')).toString()
@@ -957,6 +960,25 @@ export class PackagePlugin extends BasePlugin {
     if (npmClient?.startsWith('pnpm')) {
       globbyMatched.push('**/.pnpm/**');
     }
+
+    // include file
+    const { include, exclude } = this.core.service.package || {};
+    if (Array.isArray(include)) {
+      for (const pattern of include) {
+        if (typeof pattern === 'string') {
+          globbyMatched.push(pattern);
+        }
+      }
+    }
+    // eclude file
+    if (Array.isArray(exclude)) {
+      for (const pattern of exclude) {
+        if (typeof pattern === 'string') {
+          ignore.push(pattern);
+        }
+      }
+    }
+
     const fileList = await globby(globbyMatched, {
       onlyFiles: false,
       followSymbolicLinks: false,

@@ -53,9 +53,10 @@ export class AliyunFCPlugin extends BasePlugin {
     },
     'deploy:deploy': async () => {
       if (!this.options.useFun) {
+        this.core.debug('deploy to fc using serverless devs');
         return this.deployUseServerlessDev();
       }
-
+      this.core.debug('deploy to fc using @alicloud/fun');
       let AliyunDeploy;
       try {
         AliyunDeploy = require('@alicloud/fun/lib/commands/deploy');
@@ -251,18 +252,23 @@ export class AliyunFCPlugin extends BasePlugin {
         delete fcDeployInputs.access;
         fcDeployInputs.path = { configPath: this.midwayBuildPath };
         fcDeployInputs.props.function.codeUri = artifactFile;
+        const funcName = fcDeployInputs.props.function.name;
+        const args = [];
+        if (!this.options.useRemoteConfig) {
+          args.push('--use-local');
+        }
+        if (this.options.yes) {
+          args.push('--assume-yes');
+        }
+        fcDeployInputs.args = args.join(' ');
+        this.core.debug(
+          'serverless devs deploy input',
+          funcName,
+          JSON.stringify(fcDeployInputs)
+        );
         if (!this.options.skipDeploy) {
-          const args = [];
-          if (!this.options.useRemoteConfig) {
-            args.push('--use-local');
-          }
-          if (this.options.yes) {
-            args.push('--assume-yes');
-          }
-          fcDeployInputs.args = args.join(' ');
           await fcDeploy.deploy(fcDeployInputs);
         }
-        const funcName = fcDeployInputs.props.function.name;
 
         if (fcDeployInputs?.props?.customDomains?.[0]?.domainName === 'auto') {
           this.core.cli.log('');
