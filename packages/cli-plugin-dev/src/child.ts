@@ -28,7 +28,9 @@ process.on('unhandledRejection', e => {
 process.on('uncaughtException', e => {
   console.error('uncaughtException', e);
 });
-process.on('SIGINT', () => null);
+// 当父进程，支持 CTRL + C 的时候，会先触发子进程的 SIGINT
+// 所以要先忽略
+process.on('SIGINT', () => {});
 (async () => {
   if (process.env.MIDWAY_DEV_IS_DEBUG) {
     await waitDebug(process.env.MIDWAY_DEV_IS_DEBUG);
@@ -64,21 +66,22 @@ process.on('SIGINT', () => null);
     console.log(e);
   }
 
-  if (!process.env.MIDWAY_DEV_IS_SERVERLESS) {
-    process.on('message', async (msg: any) => {
-      if (!msg) {
-        return;
-      }
-      if (msg.type === 'functions') {
+  process.on('message', async (msg: any) => {
+    if (!msg || !msg.type) {
+      return;
+    }
+    if (msg.type === 'functions') {
+      // 因为 MIDWAY_DEV_IS_SERVERLESS
+      if (!process.env.MIDWAY_DEV_IS_SERVERLESS) {
         const data = await analysisDecorator(options.baseDir || process.cwd());
         process.send({ type: 'dev:' + msg.type, data, id: msg.id });
-      } else if (msg.type === 'exit') {
-        await closeApp();
-        process.send({ type: 'dev:' + msg.type, id: msg.id });
-        process.exit();
       }
-    });
-  }
+    } else if (msg.type === 'exit') {
+      await closeApp();
+      process.send({ type: 'dev:' + msg.type, id: msg.id });
+      process.exit();
+    }
+  });
 
   process.send({
     type: 'started',

@@ -129,10 +129,10 @@ export class DevPlugin extends BasePlugin {
     if (!this.options.framework && existsSync(yamlPath)) {
       const ymlData = readFileSync(yamlPath).toString();
       if (!/deployType/.test(ymlData)) {
-        process.env.MIDWAY_DEV_IS_SERVERLESS = 'true';
         try {
           // eslint-disable-next-line
           framework = require.resolve('@midwayjs/serverless-app');
+          process.env.MIDWAY_DEV_IS_SERVERLESS = 'true';
         } catch {
           //
         }
@@ -293,32 +293,32 @@ export class DevPlugin extends BasePlugin {
     }
     if (this.child) {
       const childExitError = 'childExitError';
-      const closeChildRes = await new Promise(resolve => {
+      await new Promise(resolve => {
         if (this.child.connected) {
           const id = Date.now() + ':exit:' + Math.random();
-          setTimeout(() => {
-            delete this.processMessageMap[id];
-            resolve(childExitError);
-          }, 2000);
+          setTimeout(
+            () => {
+              delete this.processMessageMap[id];
+              resolve(childExitError);
+            },
+            isExit ? 5000 : 2000
+          );
           this.processMessageMap[id] = resolve;
           this.child.send({ type: 'exit', id });
         } else {
           resolve(void 0);
         }
       });
-      if (closeChildRes === childExitError) {
-        const isWin = platform() === 'win32';
-        try {
-          if (!isWin) {
-            execSync(`kill -9 ${this.child.pid} || true`);
-          }
-          this.log('Pre Process Force Exit.');
-        } catch (e) {
-          this.error('Pre Process Force Exit Error', e.message);
+      // 无论上述close 是否成功关闭，都强行关闭一次
+      const isWin = platform() === 'win32';
+      try {
+        if (!isWin) {
+          execSync(`kill -9 ${this.child.pid} || true`);
         }
-      }
-      if (this.child?.kill) {
-        this.child.kill();
+      } catch {
+        if (this.child?.kill) {
+          this.child.kill();
+        }
       }
       this.child = null;
     }
