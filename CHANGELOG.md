@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.7-beta.1](https://github.com/midwayjs/bin/compare/v2.0.6...v2.0.7-beta.1) (2022-12-14)
+
+
+### Bug Fixes
+
+* dev close process ([4aaaac8](https://github.com/midwayjs/bin/commit/4aaaac89d93aac8df51a76d5bb99944a8be71151))
+
+
+### Features
+
+* cherry pick master ([3584763](https://github.com/midwayjs/bin/commit/3584763c91aaa0256f96a7ff7a310f70c059a478))
+
+
+
+
+
 ## [2.0.6](https://github.com/midwayjs/bin/compare/v2.0.6-beta.3...v2.0.6) (2022-12-09)
 
 **Note:** Version bump only for package midway-bin
