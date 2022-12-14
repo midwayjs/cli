@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.7-beta.5](https://github.com/midwayjs/cli/compare/v2.0.7-beta.4...v2.0.7-beta.5) (2022-12-14)
+
+
+### Bug Fixes
+
+* child listen sigint ([3015f5b](https://github.com/midwayjs/cli/commit/3015f5be1b0a60fd7b76389ff4f893f709c661a9))
+
+
+
+
+
 ## [2.0.7-beta.4](https://github.com/midwayjs/cli/compare/v2.0.7-beta.3...v2.0.7-beta.4) (2022-12-14)
 
 
