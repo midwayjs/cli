@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.7-beta.4](https://github.com/midwayjs/cli/compare/v2.0.7-beta.3...v2.0.7-beta.4) (2022-12-14)
+
+
+### Bug Fixes
+
+* fix child process listen SIGINT make process exit slow ([61d22d6](https://github.com/midwayjs/cli/commit/61d22d6fc23b1a2d3d7039fce4af1d732a41d914))
+
+
+
+
+
 ## [2.0.7-beta.3](https://github.com/midwayjs/cli/compare/v2.0.7-beta.2...v2.0.7-beta.3) (2022-12-14)
 
 
