@@ -17,11 +17,12 @@ const closeApp = async () => {
   } else {
     await closeFun(app);
   }
-};
-(process as any).exit = async () => {
-  await closeApp();
   exit();
 };
+(process as any).exit = closeApp;
+process.on('SIGINT', closeApp);
+process.on('SIGTERM', closeApp);
+process.on('disconnect', closeApp);
 process.on('unhandledRejection', e => {
   console.error('unhandledRejection', e);
 });
@@ -30,7 +31,7 @@ process.on('uncaughtException', e => {
 });
 // 当父进程，支持 CTRL + C 的时候，会先触发子进程的 SIGINT
 // 所以要先忽略
-process.on('SIGINT', () => {});
+
 (async () => {
   if (process.env.MIDWAY_DEV_IS_DEBUG) {
     await waitDebug(process.env.MIDWAY_DEV_IS_DEBUG);
@@ -55,7 +56,6 @@ process.on('SIGINT', () => {});
     } else {
       app = await createApp(process.cwd(), options, options.framework);
     }
-
     startSuccess = true;
   } catch (e) {
     console.log('');
