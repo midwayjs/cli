@@ -21,6 +21,8 @@ const closeApp = async () => {
 };
 (process as any).exit = closeApp;
 process.on('disconnect', closeApp);
+// 空的 SIGINT，可以有效减少父进程退出等待时间
+process.on('SIGINT', () => {});
 process.on('unhandledRejection', e => {
   console.error('unhandledRejection', e);
 });
