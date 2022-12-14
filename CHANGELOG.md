@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.7-beta.3](https://github.com/midwayjs/bin/compare/v2.0.7-beta.2...v2.0.7-beta.3) (2022-12-14)
+
+
+### Bug Fixes
+
+* resume MIDWAY_DEV_IS_SERVERLESS ([0814b1e](https://github.com/midwayjs/bin/commit/0814b1ea318db6cbf8b3ecbf888bfd3ba454d89a))
+
+
+
+
+
 ## [2.0.7-beta.2](https://github.com/midwayjs/bin/compare/v2.0.7-beta.1...v2.0.7-beta.2) (2022-12-14)
 
 
