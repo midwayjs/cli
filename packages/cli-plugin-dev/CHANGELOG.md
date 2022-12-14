@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.7-beta.2](https://github.com/midwayjs/cli/compare/v2.0.7-beta.1...v2.0.7-beta.2) (2022-12-14)
+
+
+### Bug Fixes
+
+* more stable close process ([2d0f1e7](https://github.com/midwayjs/cli/commit/2d0f1e72d912ce13afd1fb38ceb8a962a01f113d))
+
+
+
+
+
 ## [2.0.7-beta.1](https://github.com/midwayjs/cli/compare/v2.0.6...v2.0.7-beta.1) (2022-12-14)
 
 
