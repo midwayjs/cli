@@ -20,8 +20,6 @@ const closeApp = async () => {
   exit();
 };
 (process as any).exit = closeApp;
-process.on('SIGINT', closeApp);
-process.on('SIGTERM', closeApp);
 process.on('disconnect', closeApp);
 process.on('unhandledRejection', e => {
   console.error('unhandledRejection', e);
