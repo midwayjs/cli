@@ -4,7 +4,6 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@koa/router": "^10.0.0",
     "@midwayjs/command-core": "^2.0.6",
     "@midwayjs/debugger": "^1.0.x",
     "chalk": "^4.1.0",
