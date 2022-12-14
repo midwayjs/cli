@@ -71,8 +71,8 @@ process.on('uncaughtException', e => {
       return;
     }
     if (msg.type === 'functions') {
-      // 因为 MIDWAY_DEV_IS_SERVERLESS
-      if (!process.env.MIDWAY_DEV_IS_SERVERLESS) {
+      // 因为 在 serverless-app 中，处理的 functions 信息
+      if (!process.env.MIDWAY_DEV_IS_SERVERLESS_APP) {
         const data = await analysisDecorator(options.baseDir || process.cwd());
         process.send({ type: 'dev:' + msg.type, data, id: msg.id });
       }

@@ -130,10 +130,12 @@ export class DevPlugin extends BasePlugin {
     if (!this.options.framework && existsSync(yamlPath)) {
       const ymlData = readFileSync(yamlPath).toString();
       if (!/deployType/.test(ymlData)) {
+        // MIDWAY_DEV_IS_SERVERLESS 决定了使用 createFunctionApp 来启动
+        process.env.MIDWAY_DEV_IS_SERVERLESS = 'true';
         try {
           // eslint-disable-next-line
           framework = require.resolve('@midwayjs/serverless-app');
-          process.env.MIDWAY_DEV_IS_SERVERLESS = 'true';
+          process.env.MIDWAY_DEV_IS_SERVERLESS_APP = 'true';
         } catch {
           //
         }
@@ -153,6 +155,7 @@ export class DevPlugin extends BasePlugin {
     this.isInClosing = false;
     return new Promise<void>(async resolve => {
       const options = this.getOptions();
+      this.core.debug('start options', options);
       if (this.spin) {
         this.spin.stop();
       }
@@ -195,7 +198,6 @@ export class DevPlugin extends BasePlugin {
             execArgv = ['-r', fastRegister];
           }
         }
-
         if (!fastRegister) {
           execArgv = ['-r', this.getTsNodeRegister()];
           if (this.tsconfigJson?.compilerOptions?.baseUrl) {
