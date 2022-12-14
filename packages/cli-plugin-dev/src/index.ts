@@ -1,5 +1,9 @@
-import { BasePlugin, findNpmModuleByResolve } from '@midwayjs/command-core';
-import { fork, execSync } from 'child_process';
+import {
+  BasePlugin,
+  exec,
+  findNpmModuleByResolve,
+} from '@midwayjs/command-core';
+import { fork } from 'child_process';
 import Spin from 'light-spinner';
 import * as chokidar from 'chokidar';
 import { networkInterfaces, platform } from 'os';
@@ -302,7 +306,7 @@ export class DevPlugin extends BasePlugin {
     }
     if (this.child) {
       const childExitError = 'childExitError';
-      await new Promise(resolve => {
+      const closeChildRes = await new Promise(resolve => {
         if (this.child.connected) {
           const id = Date.now() + ':exit:' + Math.random();
           setTimeout(
@@ -322,12 +326,19 @@ export class DevPlugin extends BasePlugin {
       const isWin = platform() === 'win32';
       try {
         if (!isWin) {
-          execSync(`kill -9 ${this.child.pid} || true`);
+          await exec({
+            cmd: `kill -9 ${this.child.pid} || true`,
+            slience: true,
+          });
         }
       } catch {
-        if (this.child?.kill) {
-          this.child.kill();
-        }
+        //
+      }
+      if (this.child?.kill) {
+        this.child.kill();
+      }
+      if (closeChildRes === childExitError) {
+        this.log('Pre Process Force Exit.');
       }
       this.child = null;
     }
