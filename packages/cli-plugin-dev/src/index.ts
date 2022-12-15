@@ -1,5 +1,9 @@
-import { BasePlugin, findNpmModuleByResolve } from '@midwayjs/command-core';
-import { fork, execSync } from 'child_process';
+import {
+  BasePlugin,
+  exec,
+  findNpmModuleByResolve,
+} from '@midwayjs/command-core';
+import { fork } from 'child_process';
 import Spin from 'light-spinner';
 import * as chokidar from 'chokidar';
 import { networkInterfaces, platform } from 'os';
@@ -18,6 +22,7 @@ export class DevPlugin extends BasePlugin {
   private spin;
   private tsconfigJson;
   private childProcesslistenedPort; // child process listen port
+  private isInClosing = false;
   commands = {
     dev: {
       lifecycleEvents: ['checkEnv', 'run'],
@@ -100,15 +105,15 @@ export class DevPlugin extends BasePlugin {
   }
 
   async run() {
-    const onSigint = signal => {
-      process.off('SIGINT', onSigint);
-      process.on('SIGINT', () => null);
-      this.handleClose(true, signal);
-    };
-
-    process.on('exit', this.handleClose.bind(this, false));
-    process.on('SIGINT', onSigint);
-    this.setStore('dev:closeApp', this.handleClose.bind(this), true);
+    process.on('exit', this.handleClose.bind(this, 'exit', false));
+    process.on('SIGINT', this.handleClose.bind(this, 'SIGINT', true));
+    process.on('SIGTERM', this.handleClose.bind(this, 'SIGTERM', true));
+    process.on('disconnect', this.handleClose.bind(this, 'disconnect', true));
+    this.setStore(
+      'dev:closeApp',
+      this.handleClose.bind(this, 'dev:closeApp'),
+      true
+    );
     const options = this.getOptions();
     await this.start();
     if (!options.notWatch) {
@@ -129,10 +134,12 @@ export class DevPlugin extends BasePlugin {
     if (!this.options.framework && existsSync(yamlPath)) {
       const ymlData = readFileSync(yamlPath).toString();
       if (!/deployType/.test(ymlData)) {
+        // MIDWAY_DEV_IS_SERVERLESS 决定了使用 createFunctionApp 来启动
         process.env.MIDWAY_DEV_IS_SERVERLESS = 'true';
         try {
           // eslint-disable-next-line
           framework = require.resolve('@midwayjs/serverless-app');
+          process.env.MIDWAY_DEV_IS_SERVERLESS_APP = 'true';
         } catch {
           //
         }
@@ -149,8 +156,10 @@ export class DevPlugin extends BasePlugin {
   }
 
   private start() {
+    this.isInClosing = false;
     return new Promise<void>(async resolve => {
       const options = this.getOptions();
+      this.core.debug('start options', options);
       if (this.spin) {
         this.spin.stop();
       }
@@ -193,7 +202,6 @@ export class DevPlugin extends BasePlugin {
             execArgv = ['-r', fastRegister];
           }
         }
-
         if (!fastRegister) {
           execArgv = ['-r', this.getTsNodeRegister()];
           if (this.tsconfigJson?.compilerOptions?.baseUrl) {
@@ -287,7 +295,12 @@ export class DevPlugin extends BasePlugin {
     throw new Error(errorMsg);
   }
 
-  private async handleClose(isExit?, signal?) {
+  private async handleClose(type, isExit?, signal?) {
+    this.core.debug('handleClose', type, isExit, signal, this.isInClosing);
+    if (this.isInClosing) {
+      return;
+    }
+    this.isInClosing = true;
     if (this.spin) {
       this.spin.stop();
     }
@@ -296,39 +309,47 @@ export class DevPlugin extends BasePlugin {
       const closeChildRes = await new Promise(resolve => {
         if (this.child.connected) {
           const id = Date.now() + ':exit:' + Math.random();
-          setTimeout(() => {
-            delete this.processMessageMap[id];
-            resolve(childExitError);
-          }, 2000);
+          setTimeout(
+            () => {
+              delete this.processMessageMap[id];
+              resolve(childExitError);
+            },
+            isExit ? 5000 : 2000
+          );
           this.processMessageMap[id] = resolve;
           this.child.send({ type: 'exit', id });
         } else {
           resolve(void 0);
         }
       });
-      if (closeChildRes === childExitError) {
-        const isWin = platform() === 'win32';
-        try {
-          if (!isWin) {
-            execSync(`kill -9 ${this.child.pid} || true`);
-          }
-          this.log('Pre Process Force Exit.');
-        } catch (e) {
-          this.error('Pre Process Force Exit Error', e.message);
+      // 无论上述close 是否成功关闭，都强行关闭一次
+      const isWin = platform() === 'win32';
+      try {
+        if (!isWin) {
+          await exec({
+            cmd: `kill -9 ${this.child.pid} || true`,
+            slience: true,
+          });
         }
+      } catch {
+        //
       }
       if (this.child?.kill) {
         this.child.kill();
+      }
+      if (closeChildRes === childExitError) {
+        this.log('Pre Process Force Exit.');
       }
       this.child = null;
     }
     if (isExit) {
       process.exit(signal);
     }
+    this.isInClosing = false;
   }
 
   private async restart() {
-    await this.handleClose();
+    await this.handleClose('restart');
     await this.start();
   }
 
