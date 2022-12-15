@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.21](https://github.com/midwayjs/bin/compare/v1.3.20...v1.3.21) (2022-12-15)
+
+
+### Bug Fixes
+
+* dev close process ([#310](https://github.com/midwayjs/bin/issues/310)) ([96d08a9](https://github.com/midwayjs/bin/commit/96d08a9209be497cf78953734dbbd90e663df16d))
+
+
+
+
+
 ## [1.3.20](https://github.com/midwayjs/bin/compare/v1.3.19...v1.3.20) (2022-12-09)
 
 
