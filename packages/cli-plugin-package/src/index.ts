@@ -563,9 +563,12 @@ export class PackagePlugin extends BasePlugin {
     );
     tsOptions.include = [tsCodeRoot];
     const commonJS = 'CommonJS';
-    if (tsOptions.compilerOptions && tsOptions.compilerOptions.module !== commonJS) {
+    if (
+      tsOptions.compilerOptions &&
+      tsOptions.compilerOptions.module !== commonJS
+    ) {
       this.core.debug(
-        `midway serverless 将使用 commonjs 进行ts编译（原始为 ${ tsOptions.compilerOptions.module } ）`
+        `midway serverless 将使用 commonjs 进行ts编译（原始为 ${tsOptions.compilerOptions.module} ）`
       );
       tsOptions.compilerOptions.module = commonJS;
     }
@@ -790,7 +793,8 @@ export class PackagePlugin extends BasePlugin {
     process.chdir(this.midwayBuildPath);
     const { funcSpec, applicationContext } = await analysisDecorator(
       join(this.midwayBuildPath, 'dist'),
-      this.core.service
+      this.core.service,
+      this.core
     );
     process.chdir(this.core.cwd);
     this.core.service.functions = funcSpec;

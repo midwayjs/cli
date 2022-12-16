@@ -113,10 +113,12 @@ export const removeUselessFiles = async (target: string) => {
 };
 
 // 分析装饰器上面的函数信息
-export const analysisDecorator = async (cwd: string, spec?) => {
+export const analysisDecorator = async (cwd: string, spec?, core?) => {
+  const debug = core?.debug || (() => {});
   const midwayCoreMod = findNpmModuleByResolve(cwd, '@midwayjs/core');
   const pkg = join(midwayCoreMod, 'package.json');
   const corePkgJson = JSON.parse(readFileSync(pkg, 'utf-8'));
+  debug('midwayCoreMod', midwayCoreMod, corePkgJson);
   const {
     ServerlessTriggerCollector,
     MidwayFrameworkService,
@@ -169,6 +171,7 @@ export const analysisDecorator = async (cwd: string, spec?) => {
     }
   }
   const allFunc = spec?.functions || {};
+  debug('analysis function list', result);
   if (Array.isArray(result)) {
     result.forEach(func => {
       if (!func.functionTriggerName) {
