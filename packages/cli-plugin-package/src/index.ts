@@ -562,6 +562,13 @@ export class PackagePlugin extends BasePlugin {
       JSON.stringify(tsOptions, null, 2)
     );
     tsOptions.include = [tsCodeRoot];
+    const commonJS = 'CommonJS';
+    if (tsOptions.compilerOptions && tsOptions.compilerOptions.module !== commonJS) {
+      this.core.debug(
+        `midway serverless 将使用 commonjs 进行ts编译（原始为 ${ tsOptions.compilerOptions.module } ）`
+      );
+      tsOptions.compilerOptions.module = commonJS;
+    }
 
     const { errors, necessaryErrors } = await compileTypeScript({
       baseDir: cwd,
