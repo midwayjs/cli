@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.7-beta.6](https://github.com/midwayjs/cli/compare/v2.0.7-beta.5...v2.0.7-beta.6) (2022-12-16)
+
+
+### Bug Fixes
+
+* function ts compile using commonjs ([61527bb](https://github.com/midwayjs/cli/commit/61527bb81fa5a7fd90d12f1dbc1ec0980b49a719))
+
+
+
+
+
 ## [2.0.6](https://github.com/midwayjs/cli/compare/v2.0.6-beta.3...v2.0.6) (2022-12-09)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-package
