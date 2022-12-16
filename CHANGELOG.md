@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.7](https://github.com/midwayjs/bin/compare/v2.0.7-beta.6...v2.0.7) (2022-12-16)
+
+
+### Bug Fixes
+
+* more debug output ([141141c](https://github.com/midwayjs/bin/commit/141141ca64e44cd80fe76062d53af86ce8539f55))
+
+
+
+
+
 ## [2.0.7-beta.6](https://github.com/midwayjs/bin/compare/v2.0.7-beta.5...v2.0.7-beta.6) (2022-12-16)
 
 
