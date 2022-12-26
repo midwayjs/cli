@@ -8,6 +8,8 @@ export interface IStartOptions {
   entryFile?: string; // bootstrap entry file
   notWatch?: boolean; // default is false
   notAwait?: boolean; // default is false
+  randomPort?: boolean;
+  port?: number; // default is 7001
 }
 
 export interface IDevPack {
