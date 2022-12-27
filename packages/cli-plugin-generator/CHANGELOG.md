@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.8](https://github.com/midwayjs/cli/compare/v2.0.7...v2.0.8) (2022-12-27)
+
+
+### Bug Fixes
+
+* dev random port ([#311](https://github.com/midwayjs/cli/issues/311)) ([f61c9ef](https://github.com/midwayjs/cli/commit/f61c9efede8055e110dce7a458da1d6c5dd304f8))
+
+
+
+
+
 ## [2.0.8-beta.1](https://github.com/midwayjs/cli/compare/v2.0.7...v2.0.8-beta.1) (2022-12-26)
 
 **Note:** Version bump only for package @midwayjs/cli-plugin-generator
