@@ -2,3 +2,7 @@ service: serverless-midway-test
 
 provider:
   name: aliyun
+
+layers:
+  puppeteer:
+    path: 'd3fc5de8d120687be2bfab761518d5de#NodejS-Puppeteer17x#1'

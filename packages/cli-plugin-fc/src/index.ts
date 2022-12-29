@@ -252,6 +252,29 @@ export class AliyunFCPlugin extends BasePlugin {
         delete fcDeployInputs.access;
         fcDeployInputs.path = { configPath: this.midwayBuildPath };
         fcDeployInputs.props.function.codeUri = artifactFile;
+
+        if (
+          this.core.service.layers &&
+          typeof this.core.service.layers === 'object'
+        ) {
+          if (!fcDeployInputs.props.function.layers) {
+            fcDeployInputs.props.function.layers = [];
+          }
+          Object.keys(this.core.service.layers).forEach(layerName => {
+            if (
+              typeof this.core.service.layers[layerName] !== 'object' ||
+              !this.core.service.layers[layerName].path
+            ) {
+              return;
+            }
+            const { path } = this.core.service.layers[layerName];
+            if (path.startsWith('npm:') || path.startsWith('oss:')) {
+              return;
+            }
+            fcDeployInputs.props.function.layers.push(path);
+          });
+        }
+
         const funcName = fcDeployInputs.props.function.name;
         const args = [];
         if (!this.options.useRemoteConfig) {
