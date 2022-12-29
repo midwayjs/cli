@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.9-beta.2](https://github.com/midwayjs/bin/compare/v2.0.8...v2.0.9-beta.2) (2022-12-29)
+
+
+### Features
+
+* auto clear terminal ([e37911c](https://github.com/midwayjs/bin/commit/e37911cccfba4ace714051c9ee04e76592b0d490))
+
+
+
+
+
 ## [2.0.8](https://github.com/midwayjs/bin/compare/v2.0.7...v2.0.8) (2022-12-27)
 
 
