@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.9-beta.1](https://github.com/midwayjs/bin/compare/v2.0.8...v2.0.9-beta.1) (2022-12-29)
+
+
+### Bug Fixes
+
+* suppoert fc layers ([44bd845](https://github.com/midwayjs/bin/commit/44bd8459703371980fcfd64c1c325d46629e8e97))
+
+
+
+
+
 ## [2.0.8](https://github.com/midwayjs/bin/compare/v2.0.7...v2.0.8) (2022-12-27)
 
 
