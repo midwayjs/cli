@@ -362,15 +362,15 @@ export class PackagePlugin extends BasePlugin {
   }
 
   async installLayer() {
-    this.core.cli.log('Install layers...');
     const npmList = this.getLayerNpmList();
     if (npmList && npmList.length) {
+      this.core.cli.log('Install layers...');
       await this.npmInstall({
         npmList,
         production: true,
       });
+      this.core.cli.log(' - Layers install complete');
     }
-    this.core.cli.log(' - Layers install complete');
   }
 
   getLayerNpmList() {

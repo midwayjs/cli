@@ -6,7 +6,7 @@ export interface Ilayer {
   };
 }
 export function formatLayers(...multiLayers: Ilayer[]) {
-  const layerTypeList: any = {};
+  const layerTypeList: any = { npm: {}, oss: {} };
   multiLayers.forEach((layer: Ilayer) => {
     Object.keys(layer || {}).forEach(layerName => {
       if (!layer[layerName].path) {
@@ -14,7 +14,7 @@ export function formatLayers(...multiLayers: Ilayer[]) {
       }
       const [type, path] = layer[layerName].path.split(':');
       if (!layerTypeList[type]) {
-        layerTypeList[type] = {};
+        return;
       }
       layerTypeList[type][layerName] = path;
     });

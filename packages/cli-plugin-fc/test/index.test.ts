@@ -59,7 +59,7 @@ describe('/test/index.test.ts', () => {
     process.env.SERVERLESS_DEPLOY_ID = 'test';
     process.env.SERVERLESS_DEPLOY_AK = 'test';
     process.env.SERVERLESS_DEPLOY_SECRET = 'test';
-    const logs = [];
+    const logs: any = [];
     const core = new CommandCore({
       config: {
         servicePath: baseDir,
@@ -167,7 +167,7 @@ describe('/test/index.test.ts', () => {
     }
 
     const baseDir = join(__dirname, './fixtures/serverless-devs');
-    const logs = [];
+    const logs: any = [];
     const core = new CommandCore({
       config: {
         servicePath: baseDir,
@@ -200,6 +200,7 @@ describe('/test/index.test.ts', () => {
     assert(logsStr.includes('deploy success'));
     assert(ossJson && ossJson[1]);
     const ossInfo = JSON.parse(ossJson[1]);
+
     assert(ossInfo.props.triggers.length === 1);
     const trigger = ossInfo.props.triggers[0];
     assert(
@@ -208,6 +209,8 @@ describe('/test/index.test.ts', () => {
         trigger.config.filter.key.Prefix === 'pre' &&
         trigger.config.filter.key.Suffix === 'suf'
     );
+    const layers = ossInfo.props.function.layers;
+    assert(layers.length === 1 && typeof layers[0] === 'string');
     if (!exists) {
       await remove(accessYaml);
     }

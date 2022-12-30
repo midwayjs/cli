@@ -12,6 +12,9 @@ interface Ilayer {
 export function formatLayers(...multiLayers: Ilayer[]) {
   const layerTypeList = { npm: {}, oss: {} };
   multiLayers.forEach((layer: Ilayer) => {
+    if (typeof layer !== 'object') {
+      return;
+    }
     Object.keys(layer || {}).forEach(layerName => {
       if (!layer[layerName] || !layer[layerName].path) {
         return;
