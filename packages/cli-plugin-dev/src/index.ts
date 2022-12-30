@@ -161,6 +161,7 @@ export class DevPlugin extends BasePlugin {
   private start() {
     this.isInClosing = false;
     return new Promise<void>(async resolve => {
+      this.clearTernimal();
       const options = this.getOptions();
       this.core.debug('start options', options);
       if (this.spin) {
@@ -369,6 +370,17 @@ export class DevPlugin extends BasePlugin {
           return alias.address;
         }
       }
+    }
+  }
+
+  private clearTernimal() {
+    if (this.options.preserveOutput || process.env.MIDWAY_CLI_PRESERVE_OUTPUT) {
+      return;
+    }
+    if (process.platform === 'win32') {
+      console.log('\u001B[2J\u001B[0f');
+    } else {
+      console.log('\u001B[2J\u001B[3J\u001B[H');
     }
   }
 

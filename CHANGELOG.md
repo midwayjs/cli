@@ -9,6 +9,12 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * suppoert fc layers ([44bd845](https://github.com/midwayjs/bin/commit/44bd8459703371980fcfd64c1c325d46629e8e97))
+## [2.0.9-beta.2](https://github.com/midwayjs/bin/compare/v2.0.8...v2.0.9-beta.2) (2022-12-29)
+
+
+### Features
+
+* auto clear terminal ([e37911c](https://github.com/midwayjs/bin/commit/e37911cccfba4ace714051c9ee04e76592b0d490))
 
 
 
