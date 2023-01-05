@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/fcli-plugin-package",
-  "version": "2.0.9",
+  "version": "2.0.10-beta.1",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -11,9 +11,9 @@
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1",
     "jszip": "^3.2.2",
-    "tsc-alias": "^1.8.2",
     "micromatch": "^4.0.2",
-    "semver": "^7.3.5"
+    "semver": "^7.3.5",
+    "tsc-alias": "^1.8.2"
   },
   "devDependencies": {
     "@midwayjs/faas": "^2.8.0",

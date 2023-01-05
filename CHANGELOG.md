@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.10-beta.1](https://github.com/midwayjs/bin/compare/v2.0.9...v2.0.10-beta.1) (2023-01-05)
+
+
+### Bug Fixes
+
+* dep ts alias ([a41075e](https://github.com/midwayjs/bin/commit/a41075e130a58485b53f716fcac985be8a0c48e7))
+
+
+
+
+
 ## [2.0.9](https://github.com/midwayjs/bin/compare/v2.0.8...v2.0.9) (2022-12-30)
 
 
