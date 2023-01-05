@@ -11,6 +11,7 @@
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1",
     "jszip": "^3.2.2",
+    "tsc-alias": "^1.8.2",
     "micromatch": "^4.0.2",
     "semver": "^7.3.5"
   },
