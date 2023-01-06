@@ -1339,7 +1339,7 @@ export class PackagePlugin extends BasePlugin {
         const entryName = entry.slice(0, -3);
         await forkNode(
           nccCli,
-          ['build', entry, '-o', 'ncc_build_tmp/' + entryName, '-m'],
+          ['build', entry, '-o', 'ncc_build_tmp/' + entryName],
           {
             cwd: this.midwayBuildPath,
           }
