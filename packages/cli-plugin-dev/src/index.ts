@@ -313,13 +313,10 @@ export class DevPlugin extends BasePlugin {
       const closeChildRes = await new Promise(resolve => {
         if (this.child.connected) {
           const id = Date.now() + ':exit:' + Math.random();
-          setTimeout(
-            () => {
-              delete this.processMessageMap[id];
-              resolve(childExitError);
-            },
-            isExit ? 5000 : 2000
-          );
+          setTimeout(() => {
+            delete this.processMessageMap[id];
+            resolve(childExitError);
+          }, 2000);
           this.processMessageMap[id] = resolve;
           this.child.send({ type: 'exit', id });
         } else {
