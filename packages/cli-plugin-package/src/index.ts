@@ -594,8 +594,9 @@ export class PackagePlugin extends BasePlugin {
     }
     // support ts alias
     let isNeedExecuteTscAlias = false;
+    let tscAliasPath;
     if (tsOptions?.compilerOptions?.paths) {
-      const tscAliasPath = findNpmModuleByResolve(cwd, 'tsc-alias');
+      tscAliasPath = findNpmModuleByResolve(cwd, 'tsc-alias');
       if (!tscAliasPath) {
         this.core.cli.log(
           '您的 tsconfig.json 中使用了 paths alias 配置，而 tsc 在编译时无法处理此配置'
@@ -632,8 +633,13 @@ export class PackagePlugin extends BasePlugin {
       JSON.stringify(tsOptions, null, 2)
     );
     if (isNeedExecuteTscAlias) {
+      const pkg = join(tscAliasPath, 'package.json');
+      const bin = join(
+        tscAliasPath,
+        JSON.parse(readFileSync(pkg, 'utf-8')).bin['tsc-alias']
+      );
       await exec({
-        cmd: 'tsc-alias',
+        cmd: bin,
         baseDir: this.midwayBuildPath,
         log: this.core.cli.log,
       });
@@ -1333,7 +1339,7 @@ export class PackagePlugin extends BasePlugin {
         const entryName = entry.slice(0, -3);
         await forkNode(
           nccCli,
-          ['build', entry, '-o', 'ncc_build_tmp/' + entryName, '-m'],
+          ['build', entry, '-o', 'ncc_build_tmp/' + entryName],
           {
             cwd: this.midwayBuildPath,
           }

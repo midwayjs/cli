@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.10-beta.2](https://github.com/midwayjs/cli/compare/v2.0.10-beta.1...v2.0.10-beta.2) (2023-01-06)
+
+
+### Bug Fixes
+
+* v3 entry support preload module ([d2ecac4](https://github.com/midwayjs/cli/commit/d2ecac491b445343f8f49e932ff78144b4460b47))
+
+
+
+
+
 ## [2.0.9](https://github.com/midwayjs/cli/compare/v2.0.8...v2.0.9) (2022-12-30)
 
 
