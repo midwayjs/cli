@@ -42,6 +42,7 @@ import {
 import * as JSZip from 'jszip';
 import { AnalyzeResult, Locator } from '@midwayjs/locate';
 import { tmpdir, platform } from 'os';
+import { replaceTscAliasPaths } from 'tsc-alias';
 
 export class PackagePlugin extends BasePlugin {
   options: any;
@@ -594,54 +595,31 @@ export class PackagePlugin extends BasePlugin {
     }
     // support ts alias
     let isNeedExecuteTscAlias = false;
-    let tscAliasPath;
     if (tsOptions?.compilerOptions?.paths) {
-      tscAliasPath = findNpmModuleByResolve(cwd, 'tsc-alias');
-      if (!tscAliasPath) {
-        this.core.cli.log(
-          '您的 tsconfig.json 中使用了 paths alias 配置，而 tsc 在编译时无法处理此配置'
-        );
-        this.core.cli.log(
-          '如果您希望它在 Midway 代码中被应用，请安装 tsc-alias 到您的 devDependencies 中'
-        );
-        this.core.cli.log(
-          '然后重新发布，那么在构建时，您依赖的 tsc-alias 将会被加载，处理相关 alias 配置'
-        );
-      } else {
-        Object.keys(tsOptions.compilerOptions.paths).forEach(alias => {
-          isNeedExecuteTscAlias = true;
-          const rules = tsOptions.compilerOptions.paths[alias];
-          if (rules.length === 1) {
-            const rule = rules[0];
-            const relativePath = relative(rule.replace(/\*$/, ''), tsCodeRoot);
-            if (relativePath && !relativePath.startsWith('..')) {
-              const newAlias = alias.replace(/\/?\*?$/, `/${relativePath}/*`);
-              tsOptions.compilerOptions.paths[newAlias] = rules;
-              this.core.debug(
-                `path alias: ${alias} 的规则 ${rule} 被自动添加到 ${newAlias} 中`
-              );
-            }
-          } else {
-            this.core.debug(`path alias: ${alias} 无法处理`);
+      Object.keys(tsOptions.compilerOptions.paths).forEach(alias => {
+        isNeedExecuteTscAlias = true;
+        const rules = tsOptions.compilerOptions.paths[alias];
+        if (rules.length === 1) {
+          const rule = rules[0];
+          const relativePath = relative(rule.replace(/\*$/, ''), tsCodeRoot);
+          if (relativePath && !relativePath.startsWith('..')) {
+            const newAlias = alias.replace(/\/?\*?$/, `/${relativePath}/*`);
+            tsOptions.compilerOptions.paths[newAlias] = rules;
+            this.core.debug(
+              `path alias: ${alias} 的规则 ${rule} 被自动添加到 ${newAlias} 中`
+            );
           }
-        });
-      }
+        } else {
+          this.core.debug(`path alias: ${alias} 无法处理`);
+        }
+      });
     }
     tsOptions.compilerOptions.outDir = 'dist';
-    await writeFile(
-      join(this.midwayBuildPath, 'tsconfig.json'),
-      JSON.stringify(tsOptions, null, 2)
-    );
+    const configFile = join(this.midwayBuildPath, 'tsconfig.json');
+    await writeFile(configFile, JSON.stringify(tsOptions, null, 2));
     if (isNeedExecuteTscAlias) {
-      const pkg = join(tscAliasPath, 'package.json');
-      const bin = join(
-        tscAliasPath,
-        JSON.parse(readFileSync(pkg, 'utf-8')).bin['tsc-alias']
-      );
-      await exec({
-        cmd: bin,
-        baseDir: this.midwayBuildPath,
-        log: this.core.cli.log,
+      await replaceTscAliasPaths({
+        configFile,
       });
     }
   }
