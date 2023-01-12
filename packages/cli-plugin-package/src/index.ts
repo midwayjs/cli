@@ -565,7 +565,7 @@ export class PackagePlugin extends BasePlugin {
     const commonJS = 'CommonJS';
     if (
       tsOptions.compilerOptions &&
-      tsOptions.compilerOptions.module !== commonJS
+      tsOptions.compilerOptions.module?.toLowerCase() !== commonJS.toLowerCase()
     ) {
       this.core.debug(
         `midway serverless 将使用 commonjs 进行ts编译（原始为 ${tsOptions.compilerOptions.module} ）`
