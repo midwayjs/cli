@@ -220,14 +220,16 @@ export class BuildPlugin extends BasePlugin {
       try {
         tsConfigResult = JSON.parse(tsConfig);
       } catch (e) {
-        console.log('[midway-bin] tsConfig should be JSON string or Object');
+        this.core.cli.error(
+          '[midway-bin] tsConfig should be JSON string or Object'
+        );
         throw e;
       }
     }
     const projectFile = this.getProjectFile();
     if (!tsConfigResult) {
       if (!existsSync(projectFile)) {
-        console.log(`[ Midway ] tsconfig.json not found in ${cwd}\n`);
+        this.core.cli.error(`[ Midway ] tsconfig.json not found in ${cwd}\n`);
         throw new Error('tsconfig.json not found');
       }
       try {
@@ -235,7 +237,7 @@ export class BuildPlugin extends BasePlugin {
           readFileSync(projectFile, 'utf-8').toString()
         );
       } catch (e) {
-        console.log('[ Midway ] Read TsConfig Error', e.message);
+        this.core.cli.error('[ Midway ] Read TsConfig Error', e.message);
         throw e;
       }
     }
