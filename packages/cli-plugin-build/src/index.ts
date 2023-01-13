@@ -189,7 +189,7 @@ export class BuildPlugin extends BasePlugin {
         return this.getCompilerOptions(
           require(join(projectDir, tsConfig.extends)),
           optionKeyPath,
-          { projectDir }
+          dirname(join(projectDir, tsConfig.extends))
         );
       }
     }
