@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.22](https://github.com/midwayjs/cli/compare/v1.3.21...v1.3.22) (2023-01-31)
+
+**Note:** Version bump only for package @midwayjs/cli-plugin-vercel
+
+
+
+
+
 ## [1.3.19](https://github.com/midwayjs/cli/compare/v1.3.18...v1.3.19) (2022-11-23)
 
 

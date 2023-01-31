@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.22](https://github.com/midwayjs/cli/compare/v1.3.21...v1.3.22) (2023-01-31)
+
+
+### Bug Fixes
+
+* app layer entry init ([#314](https://github.com/midwayjs/cli/issues/314)) ([7e26a92](https://github.com/midwayjs/cli/commit/7e26a92ea20c62deb90cb6319955a02abcda5e63))
+
+
+
+
+
 ## [1.3.19](https://github.com/midwayjs/cli/compare/v1.3.18...v1.3.19) (2022-11-23)
 
 
