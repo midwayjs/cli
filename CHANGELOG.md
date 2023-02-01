@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.11-beta.1](https://github.com/midwayjs/bin/compare/v2.0.10...v2.0.11-beta.1) (2023-02-01)
+
+
+### Bug Fixes
+
+* `module: 'commonjs'` in tsconfig is case insensitive ([#316](https://github.com/midwayjs/bin/issues/316)) ([67e0808](https://github.com/midwayjs/bin/commit/67e080889f80eb3d309cbe29371b6ba5ad660b84))
+* tsconfig 引用路径解析问题 ([#319](https://github.com/midwayjs/bin/issues/319)) ([cedab2d](https://github.com/midwayjs/bin/commit/cedab2d51585c56fcd52ab360ec64f073b341b47))
+
+
+
+
+
 ## [2.0.10](https://github.com/midwayjs/bin/compare/v2.0.9...v2.0.10) (2023-01-09)
 
 **Note:** Version bump only for package midway-bin

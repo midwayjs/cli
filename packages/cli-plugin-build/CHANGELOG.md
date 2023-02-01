@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.11-beta.1](https://github.com/midwayjs/cli/compare/v2.0.10...v2.0.11-beta.1) (2023-02-01)
+
+
+### Bug Fixes
+
+* tsconfig 引用路径解析问题 ([#319](https://github.com/midwayjs/cli/issues/319)) ([cedab2d](https://github.com/midwayjs/cli/commit/cedab2d51585c56fcd52ab360ec64f073b341b47))
+
+
+
+
+
 ## [2.0.6](https://github.com/midwayjs/cli/compare/v2.0.6-beta.3...v2.0.6) (2022-12-09)
 
 **Note:** Version bump only for package @midwayjs/cli-plugin-build
