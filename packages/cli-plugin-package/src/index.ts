@@ -707,6 +707,7 @@ export class PackagePlugin extends BasePlugin {
       // TODO: fix hooks bug
       code = code.replace('will be overwritten.', 'will be overwritten.\n');
       code = code.replace("require('./configuration.js')", '');
+      code = code.replace(/\)\s+require/, ');require');
       this.isUseHcc = true;
       writeFileSync(join(distDir, 'midway_hcc.js'), code);
     } catch {

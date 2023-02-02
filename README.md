@@ -9,6 +9,7 @@ Midway bin
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/midwayjs/cli/blob/master/LICENSE)
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/midwayjs/cli/pulls)
+[![1.x](https://img.shields.io/badge/version-1.x-blue.svg)](https://github.com/midwayjs/cli/tree/1.x)
 
 ---
 
@@ -20,7 +21,7 @@ npm i @midwayjs/cli -D
 
 ### Document
 
-[中文简体](https://www.yuque.com/midwayjs/midway_v2/cli) | [English](https://www.yuque.com/midwayjs/midway_v2/cli?translate=en)
+[中文简体](https://www.midwayjs.org/docs/tool/cli) | [English](https://www.midwayjs.org/en/docs/tool/cli) | [changelog](https://www.yuque.com/midwayjs/report/cli-report)
 
 
 ---

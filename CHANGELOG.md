@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.11-beta.2](https://github.com/midwayjs/bin/compare/v2.0.11-beta.1...v2.0.11-beta.2) (2023-02-02)
+
+
+### Bug Fixes
+
+* hcc-bundle ([1977188](https://github.com/midwayjs/bin/commit/19771883d536ab04b76c341aba908e29449bb3a1))
+
+
+
+
+
 ## [2.0.11-beta.1](https://github.com/midwayjs/bin/compare/v2.0.10...v2.0.11-beta.1) (2023-02-01)
 
 
