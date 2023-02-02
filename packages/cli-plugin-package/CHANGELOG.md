@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.11](https://github.com/midwayjs/cli/compare/v2.0.11-beta.1...v2.0.11) (2023-02-02)
+
+**Note:** Version bump only for package @midwayjs/fcli-plugin-package
+
+
+
+
+
 ## [2.0.11-beta.2](https://github.com/midwayjs/cli/compare/v2.0.11-beta.1...v2.0.11-beta.2) (2023-02-02)
 
 
