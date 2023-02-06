@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/fcli-plugin-wechat",
-  "version": "2.0.12",
+  "version": "2.0.13",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -10,7 +10,7 @@
     "fs-extra": "^8.1.0"
   },
   "devDependencies": {
-    "@midwayjs/fcli-plugin-package": "^2.0.12",
+    "@midwayjs/fcli-plugin-package": "^2.0.13",
     "fs-extra": "^8.1.0"
   },
   "engines": {

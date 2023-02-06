@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.13](https://github.com/midwayjs/bin/compare/v2.0.12...v2.0.13) (2023-02-06)
+
+
+### Bug Fixes
+
+* hcc module name ([#323](https://github.com/midwayjs/bin/issues/323)) ([0412335](https://github.com/midwayjs/bin/commit/0412335e29c012f1d4b9c2243b5ac294c357630f))
+
+
+
+
+
 ## [2.0.12](https://github.com/midwayjs/bin/compare/v2.0.11...v2.0.12) (2023-02-06)
 
 
