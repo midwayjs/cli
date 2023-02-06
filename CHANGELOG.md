@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.12](https://github.com/midwayjs/bin/compare/v2.0.11...v2.0.12) (2023-02-06)
+
+
+### Bug Fixes
+
+* hcc position ([#322](https://github.com/midwayjs/bin/issues/322)) ([4d2ba01](https://github.com/midwayjs/bin/commit/4d2ba01ee24b6bf003d505c2d4f4d6dfb38fbcb7))
+
+
+
+
+
 ## [2.0.11](https://github.com/midwayjs/bin/compare/v2.0.11-beta.1...v2.0.11) (2023-02-02)
 
 **Note:** Version bump only for package midway-bin
