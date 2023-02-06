@@ -694,7 +694,12 @@ export class PackagePlugin extends BasePlugin {
     const distDir = join(this.midwayBuildPath, 'dist');
     try {
       const modules = [];
-      const { getPreloadCode } = require('@midwayjs/hcc');
+      const hccPath = dirname(
+        require.resolve("'@midwayjs/hcc/package.json", {
+          paths: [this.servicePath, this.getCwd(), process.cwd()],
+        })
+      );
+      const { getPreloadCode } = require(hccPath);
       const hooksBundle = await getPreloadCode(midwayBuildPath, file => {
         if (/midway_preload|configuration/.test(file)) {
           return false;
@@ -708,10 +713,11 @@ export class PackagePlugin extends BasePlugin {
       code = code.replace('will be overwritten.', 'will be overwritten.\n');
       code = code.replace("require('./configuration.js')", '');
       code = code.replace(/\)\s+require/, ');require');
+      this.core.debug('hcc code', code);
       this.isUseHcc = true;
       writeFileSync(join(distDir, 'midway_hcc.js'), code);
-    } catch {
-      //
+    } catch (e) {
+      this.core.debug('hcc error', e?.message);
     }
 
     let preloadCode = '';
