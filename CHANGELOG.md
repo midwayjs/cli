@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.14-beta.1](https://github.com/midwayjs/bin/compare/v2.0.13...v2.0.14-beta.1) (2023-02-07)
+
+
+### Bug Fixes
+
+* concurrency ([38046b6](https://github.com/midwayjs/bin/commit/38046b65387bd08f27365d3f269e0101d8acd724))
+
+
+
+
+
 ## [2.0.13](https://github.com/midwayjs/bin/compare/v2.0.12...v2.0.13) (2023-02-06)
 
 

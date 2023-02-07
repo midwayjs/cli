@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.14-beta.1](https://github.com/midwayjs/cli/compare/v2.0.13...v2.0.14-beta.1) (2023-02-07)
+
+
+### Bug Fixes
+
+* concurrency ([38046b6](https://github.com/midwayjs/cli/commit/38046b65387bd08f27365d3f269e0101d8acd724))
+
+
+
+
+
 ## [2.0.10](https://github.com/midwayjs/cli/compare/v2.0.9...v2.0.10) (2023-01-09)
 
 **Note:** Version bump only for package @midwayjs/serverless-spec-builder
