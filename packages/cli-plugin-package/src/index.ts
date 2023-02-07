@@ -695,7 +695,7 @@ export class PackagePlugin extends BasePlugin {
     try {
       const modules = [];
       const hccPath = dirname(
-        require.resolve("@midwayjs/hcc/package.json", {
+        require.resolve('@midwayjs/hcc/package.json', {
           paths: [this.servicePath, this.getCwd(), process.cwd()],
         })
       );
