@@ -318,7 +318,8 @@ export class FCComponentSpecBuilder extends SpecBuilder {
             runtime: funSpec.runtime || providerData.runtime || 'nodejs14',
             timeout: funSpec.timeout || providerData.timeout || 3,
             codeUri: funSpec.codeUri || '.',
-            instanceConcurrency: funSpec.concurrency || 1,
+            instanceConcurrency:
+              funSpec.concurrency || providerData.concurrency || 1,
             environmentVariables: {
               ...providerData.environment,
               ...funSpec.environment,

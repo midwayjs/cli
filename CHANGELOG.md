@@ -3,6 +3,70 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.14-beta.1](https://github.com/midwayjs/bin/compare/v2.0.13...v2.0.14-beta.1) (2023-02-07)
+
+
+### Bug Fixes
+
+* concurrency ([38046b6](https://github.com/midwayjs/bin/commit/38046b65387bd08f27365d3f269e0101d8acd724))
+
+
+
+
+
+## [2.0.13](https://github.com/midwayjs/bin/compare/v2.0.12...v2.0.13) (2023-02-06)
+
+
+### Bug Fixes
+
+* hcc module name ([#323](https://github.com/midwayjs/bin/issues/323)) ([0412335](https://github.com/midwayjs/bin/commit/0412335e29c012f1d4b9c2243b5ac294c357630f))
+
+
+
+
+
+## [2.0.12](https://github.com/midwayjs/bin/compare/v2.0.11...v2.0.12) (2023-02-06)
+
+
+### Bug Fixes
+
+* hcc position ([#322](https://github.com/midwayjs/bin/issues/322)) ([4d2ba01](https://github.com/midwayjs/bin/commit/4d2ba01ee24b6bf003d505c2d4f4d6dfb38fbcb7))
+
+
+
+
+
+## [2.0.11](https://github.com/midwayjs/bin/compare/v2.0.11-beta.1...v2.0.11) (2023-02-02)
+
+**Note:** Version bump only for package midway-bin
+
+
+
+
+
+## [2.0.11-beta.2](https://github.com/midwayjs/bin/compare/v2.0.11-beta.1...v2.0.11-beta.2) (2023-02-02)
+
+
+### Bug Fixes
+
+* hcc-bundle ([1977188](https://github.com/midwayjs/bin/commit/19771883d536ab04b76c341aba908e29449bb3a1))
+
+
+
+
+
+## [2.0.11-beta.1](https://github.com/midwayjs/bin/compare/v2.0.10...v2.0.11-beta.1) (2023-02-01)
+
+
+### Bug Fixes
+
+* `module: 'commonjs'` in tsconfig is case insensitive ([#316](https://github.com/midwayjs/bin/issues/316)) ([67e0808](https://github.com/midwayjs/bin/commit/67e080889f80eb3d309cbe29371b6ba5ad660b84))
+* tsconfig 引用路径解析问题 ([#319](https://github.com/midwayjs/bin/issues/319)) ([cedab2d](https://github.com/midwayjs/bin/commit/cedab2d51585c56fcd52ab360ec64f073b341b47))
+
+
+
+
+
 ## [2.0.10](https://github.com/midwayjs/bin/compare/v2.0.9...v2.0.10) (2023-01-09)
 
 **Note:** Version bump only for package midway-bin
