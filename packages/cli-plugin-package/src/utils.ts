@@ -140,10 +140,14 @@ export const analysisDecorator = async (cwd: string, spec?, core?) => {
       prepareGlobalApplicationContext &&
       spec?.provider?.starter
     ) {
-      const midwayDecoratorMod = findNpmModuleByResolve(
+      let midwayDecoratorMod = findNpmModuleByResolve(
         cwd,
         '@midwayjs/decorator'
       );
+      if (!midwayDecoratorMod) {
+        // 新版本 decorator 与 core 已经合并，不一定存在 decorator
+        midwayDecoratorMod = findNpmModuleByResolve(cwd, '@midwayjs/core');
+      }
       const {
         CONFIGURATION_KEY,
         listModule,

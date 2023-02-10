@@ -8,6 +8,7 @@ export interface ProviderStructure {
   timeout?: number;
   memorySize?: number;
   description?: string;
+  concurrency?: number;
   role?: string;
   environment?: {
     [key: string]: string;

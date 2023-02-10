@@ -10,6 +10,7 @@ module.exports = starter.start({
   <% if (aggregationHandlerName) { %>
   aggregationHandlerName: '<%-aggregationHandlerName%>',
   handlerNameMapping: (handlerName, event, context, oldContext) => {
+    const allHandlers = <%-JSON.stringify(handlers && handlers[0] && handlers[0].handlers || [], null, 2)%>;
     <%-aggregationBeforeExecScript%>
     return [handlerName, event, context, oldContext];
   },

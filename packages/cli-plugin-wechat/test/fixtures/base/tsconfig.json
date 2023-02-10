@@ -9,6 +9,7 @@
     "inlineSourceMap":true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
+    "skipLibCheck": true,
     "stripInternal": true,
     "pretty": true,
     "declaration": true,
