@@ -93,8 +93,8 @@ export class TestPlugin extends BasePlugin {
           binFile = require.resolve(mochaBin);
         }
       } catch (e) {
-        console.log('');
-        console.error(
+        this.core.cli.log('');
+        this.core.cli.error(
           'Using mocha test need deps ',
           this.options.cov ? 'nyc' : 'mocha'
         );
@@ -168,8 +168,8 @@ export class TestPlugin extends BasePlugin {
         return file.endsWith(`.${isTs ? 'ts' : 'js'}`);
       });
       if (files.length === 0) {
-        console.log('');
-        console.error(`No test files found with ${pattern}`);
+        this.core.cli.log('');
+        this.core.cli.error(`No test files found with ${pattern}`);
         return;
       }
       args.push('--findRelatedTests', ...files);
@@ -274,7 +274,7 @@ export class TestPlugin extends BasePlugin {
     const files = globby.sync(pattern);
 
     if (files.length === 0) {
-      console.log(`No test files found with ${pattern}`);
+      this.core.cli.error(`No test files found with ${pattern}`);
       return;
     }
 

@@ -663,14 +663,16 @@ export class PackagePlugin extends BasePlugin {
       try {
         tsConfigResult = JSON.parse(tsConfig);
       } catch (e) {
-        console.log('[midway-bin] tsConfig should be JSON string or Object');
+        this.core.cli.error(
+          '[midway-bin] tsConfig should be JSON string or Object'
+        );
         throw e;
       }
     }
     const projectFile = resolve(cwd, 'tsconfig.json');
     if (!tsConfigResult) {
       if (!existsSync(projectFile)) {
-        console.log(`[ Midway ] tsconfig.json not found in ${cwd}\n`);
+        this.core.cli.error(`[ Midway ] tsconfig.json not found in ${cwd}\n`);
         throw new Error('tsconfig.json not found');
       }
       try {
@@ -678,7 +680,7 @@ export class PackagePlugin extends BasePlugin {
           readFileSync(projectFile, 'utf-8').toString()
         );
       } catch (e) {
-        console.log('[ Midway ] Read TsConfig Error', e.message);
+        this.core.cli.error('[ Midway ] Read TsConfig Error', e.message);
         throw e;
       }
     }
@@ -732,9 +734,8 @@ export class PackagePlugin extends BasePlugin {
       this.isUseHcc
         ? `try {
         hccModules = require('./midway_hcc.js');
-        console.log("hccModules", hccModules);
       } catch(e) {
-        console.log("hccModules error", e);
+        //
       }`
         : '',
       'exports.modules = [...(hccModules && hccModules.modules || []),',
