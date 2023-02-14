@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.14-beta.2](https://github.com/midwayjs/cli/compare/v2.0.13...v2.0.14-beta.2) (2023-02-14)
+
+
+### Bug Fixes
+
+* concurrency ([#324](https://github.com/midwayjs/cli/issues/324)) ([47e3986](https://github.com/midwayjs/cli/commit/47e39865bdf6a426bd5bf163f7ebdb3ec188a67c))
+
+
+
+
+
 ## [2.0.14-beta.1](https://github.com/midwayjs/cli/compare/v2.0.13...v2.0.14-beta.1) (2023-02-07)
 
 **Note:** Version bump only for package @midwayjs/gateway-common-http
