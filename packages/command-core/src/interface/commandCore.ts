@@ -3,6 +3,8 @@ import { ICommandInstance } from './plugin';
 export interface ILog {
   log: (...any) => void;
   error?: (...any) => void;
+  debug?: (...any) => void;
+  warn?: (...any) => void;
 }
 
 export interface IOptions {
