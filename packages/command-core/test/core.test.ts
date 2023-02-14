@@ -169,21 +169,4 @@ describe('command-core', () => {
       assert(e.message.indexOf('load local plugi') !== -1);
     }
   });
-  it('stop lifecycle', async () => {
-    const result: string[] = [];
-    let cmd;
-    const core = new CommandCore({
-      provider: 'test',
-      log: {
-        log: (msg: string) => {
-          result.push(msg);
-        },
-      },
-      point: c => {
-        cmd = c;
-      },
-      stopLifecycle: 'invoke:one',
-    });
-    console.log('result', result);
-  });
 });
