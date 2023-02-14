@@ -37,8 +37,7 @@ export class CommandCore implements ICommandCore {
   private stopLifecycles: string[] = [];
   private loadNpm = loadNpm.bind(null, this);
   private timeTicks = [];
-  private outputLevel;
-  CLIOutputLevel = CLIOutputLevel.All;
+  private outputLevel = CLIOutputLevel.All;
 
   public store = new Map();
 
@@ -54,13 +53,13 @@ export class CommandCore implements ICommandCore {
     if (!this.options.config.servicePath) {
       this.options.config.servicePath = this.cwd;
     }
+    if (this.options.outputLevel !== undefined) {
+      this.outputLevel = +this.options.outputLevel;
+    }
     this.loadNpm = loadNpm.bind(null, this);
     this.coreInstance = this.getCoreInstance();
     if (!this.options.disableAutoLoad) {
       this.autoLoadPlugins();
-    }
-    if (this.options.outputLevel) {
-      this.outputLevel = +this.options.outputLevel;
     }
   }
 
@@ -637,7 +636,7 @@ export class CommandCore implements ICommandCore {
     }
     const diffTime = Number((now - this.preDebugTime) / 1000).toFixed(2);
     this.preDebugTime = now;
-    this.getLog().log(
+    this.getLog().debug(
       '[Verbose]',
       this.execId,
       `+${diffTime}s`,
