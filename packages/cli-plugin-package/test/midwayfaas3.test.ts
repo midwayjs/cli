@@ -64,11 +64,14 @@ describe('/test/midwayfaas3.test.ts', () => {
     await core.ready();
     await core.invoke(['package']);
     const specFunctions = (core as any).coreInstance.service.functions;
+    console.log('specFunctions', specFunctions);
     // TODO: midway bug
     // assert(specFunctions['aaa1']);
     assert(
       !logs.find(log => typeof log === 'string' && log.startsWith('[Verbose]'))
     );
+    assert(specFunctions['localHttpTest-abc']);
+    assert(specFunctions['localHttpTest-def']);
     assert(specFunctions['localTest-hello2']);
     assert(specFunctions['aaa3']);
     assert(specFunctions['aaa4']);
