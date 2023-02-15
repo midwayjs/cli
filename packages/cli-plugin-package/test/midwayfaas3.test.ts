@@ -101,7 +101,7 @@ describe('/test/midwayfaas3.test.ts', () => {
     assert(specFunctions['helloService-httpAllTrigger']);
     assert(specFunctions['helloService-httpTrigger']);
     assert(specFunctions['helloService-ossTrigger']);
-    assert(specFunctions['helloService-coverConfig']);
+    assert(specFunctions['cover-config']);
     assert(specFunctions['helloService-hsfTrigger']);
     const pkgJson = JSON.parse(
       readFileSync(join(buildDir, 'package.json'), 'utf-8')
