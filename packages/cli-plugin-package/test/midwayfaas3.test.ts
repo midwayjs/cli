@@ -48,6 +48,7 @@ describe('/test/midwayfaas3.test.ts', () => {
       service: loadSpec(baseDir),
       provider: 'aliyun',
       options: {
+        npm: 'tnpm',
         bundle: true,
         verbose: true,
       },
@@ -72,6 +73,7 @@ describe('/test/midwayfaas3.test.ts', () => {
     );
     assert(specFunctions['localHttpTest-abc']);
     assert(specFunctions['localHttpTest-def']);
+    assert(specFunctions['aaa1']);
     assert(specFunctions['localTest-hello2']);
     assert(specFunctions['aaa3']);
     assert(specFunctions['aaa4']);
