@@ -48,7 +48,6 @@ describe('/test/midwayfaas3.test.ts', () => {
       service: loadSpec(baseDir),
       provider: 'aliyun',
       options: {
-        npm: 'tnpm',
         bundle: true,
         verbose: true,
       },
