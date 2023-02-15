@@ -2,3 +2,4 @@ service: serverless-midway-test
 
 provider:
   name: aliyun
+  starter: 'test'

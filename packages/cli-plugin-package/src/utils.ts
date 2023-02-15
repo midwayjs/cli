@@ -131,6 +131,7 @@ export const analysisDecorator = async (cwd: string, spec?, core?) => {
   } = require(midwayCoreMod);
   let result;
   let collector;
+  let analysisByListModule = false;
   if (ServerlessTriggerCollector) {
     collector = new ServerlessTriggerCollector(cwd);
     result = await collector.getFunctionList();
@@ -170,6 +171,7 @@ export const analysisDecorator = async (cwd: string, spec?, core?) => {
         MidwayServerlessFunctionService
       );
       result = await midwayServerlessFunctionService.getFunctionList();
+      analysisByListModule = true;
     } else {
       collector = new WebRouterCollector(cwd, {
         includeFunctionRouter: true,
@@ -182,7 +184,20 @@ export const analysisDecorator = async (cwd: string, spec?, core?) => {
   if (Array.isArray(result)) {
     result.forEach(func => {
       if (!func.functionTriggerName) {
-        return;
+        if (
+          analysisByListModule &&
+          func.fullUrl &&
+          func.requestMethod &&
+          func.funcHandlerName
+        ) {
+          func.functionTriggerName = 'http';
+          func.functionTriggerMetadata = {
+            method: func.requestMethod,
+            path: func.fullUrl,
+          };
+        } else {
+          return;
+        }
       }
       const handler = func.funcHandlerName;
       if (!handler || func.functionName?.includes('undefined')) {
