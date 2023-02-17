@@ -227,6 +227,8 @@ export class DevPlugin extends BasePlugin {
         }
       }
 
+      execArgv = execArgv.concat(process.execArgv);
+
       this.child = fork(require.resolve('./child'), [JSON.stringify(options)], {
         cwd: this.core.cwd,
         env: {
