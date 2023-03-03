@@ -475,10 +475,11 @@ export class PackagePlugin extends BasePlugin {
       skipNpmInstall = !!copyResult;
       this.core.debug('skipNpmInstall', skipNpmInstall, Date.now() - start);
     }
-
+    const packageObj: any = this.core.service.package || {};
     if (!skipNpmInstall) {
       await this.npmInstall({
         production: true,
+        omitDev: packageObj.lockFile,
       });
     }
     // not await
@@ -1036,6 +1037,7 @@ export class PackagePlugin extends BasePlugin {
       npmList?: string[];
       baseDir?: string;
       production?: boolean;
+      omitDev?: boolean;
     } = {}
   ) {
     return new Promise((resolve, reject) => {
@@ -1052,6 +1054,7 @@ export class PackagePlugin extends BasePlugin {
         registerPath: this.options.registry,
         slience: true,
         debugLog: this.core.debug,
+        omitDev: options.omitDev,
       })
         .then(resolve)
         .catch(err => {
