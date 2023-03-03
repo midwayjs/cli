@@ -10,6 +10,7 @@ import {
   ICoreInstance,
   ICommands,
   IHooks,
+  CLIOutputLevel,
 } from './interface/commandCore';
 import { IPluginInstance, ICommandInstance } from './interface/plugin';
 import { IProviderInstance } from './interface/provider';
@@ -36,6 +37,7 @@ export class CommandCore implements ICommandCore {
   private stopLifecycles: string[] = [];
   private loadNpm = loadNpm.bind(null, this);
   private timeTicks = [];
+  private outputLevel = CLIOutputLevel.All;
 
   public store = new Map();
 
@@ -50,6 +52,9 @@ export class CommandCore implements ICommandCore {
     }
     if (!this.options.config.servicePath) {
       this.options.config.servicePath = this.cwd;
+    }
+    if (this.options.outputLevel !== undefined) {
+      this.outputLevel = +this.options.outputLevel;
     }
     this.loadNpm = loadNpm.bind(null, this);
     this.coreInstance = this.getCoreInstance();
@@ -192,22 +197,28 @@ export class CommandCore implements ICommandCore {
         });
         const userCmd = this.userLifecycle[lifecycle];
         this.debug('User Lifecycle', lifecycle);
-        const spin = new Spin({ text: `Executing: ${userCmd}` });
-        spin.start();
+        let spin;
+        const slience = this.outputLevel < CLIOutputLevel.All;
+        if (!slience) {
+          spin = new Spin({ text: `Executing: ${userCmd}` });
+          spin.start();
+        }
+
         try {
           await exec({
             cmd: userCmd,
             baseDir: this.cwd,
+            slience: slience,
             log: this.getLog().log,
           });
         } catch (e) {
-          spin.stop();
+          spin && spin.stop();
           this.debug('User Lifecycle Hook Error', userCmd, e);
           tickUser(e);
           throw e;
         }
         tickUser();
-        spin.stop();
+        spin && spin.stop();
       }
       const tick = this.tickTime(lifecycle, { hooks: hooks.length });
       this.debug('Core Lifecycle', lifecycle, hooks.length);
@@ -573,10 +584,23 @@ export class CommandCore implements ICommandCore {
   }
 
   private getLog() {
-    return {
+    const log = {
       ...console,
       ...this.options.log,
     };
+    if (this.outputLevel < CLIOutputLevel.All) {
+      log.debug = () => {};
+    }
+    if (this.outputLevel < CLIOutputLevel.Info) {
+      log.log = () => {};
+    }
+    if (this.outputLevel < CLIOutputLevel.Warn) {
+      log.warn = () => {};
+    }
+    if (this.outputLevel < CLIOutputLevel.Error) {
+      log.error = () => {};
+    }
+    return log;
   }
 
   error<T>(type: string, info?: T) {
@@ -597,7 +621,7 @@ export class CommandCore implements ICommandCore {
       this.options.options.V ||
       this.options.options.verbose ||
       process.env.MIDWAY_FAAS_VERBOSE;
-    if (!verbose) {
+    if (!verbose || this.outputLevel < CLIOutputLevel.Info) {
       return;
     }
 
@@ -612,7 +636,7 @@ export class CommandCore implements ICommandCore {
     }
     const diffTime = Number((now - this.preDebugTime) / 1000).toFixed(2);
     this.preDebugTime = now;
-    this.getLog().log(
+    this.getLog().debug(
       '[Verbose]',
       this.execId,
       `+${diffTime}s`,

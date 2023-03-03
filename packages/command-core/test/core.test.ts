@@ -116,7 +116,8 @@ describe('command-core', () => {
       provider: 'test',
       cwd,
       log: {
-        log: (...msg) => {
+        ...console,
+        debug: (...msg) => {
           result.push(...msg);
         },
       },

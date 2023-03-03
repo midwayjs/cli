@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@midwayjs/faas": "3",
+    "@midwayjs/decorator": "3",
+    "@midwayjs/core": "3"
+  }
+}

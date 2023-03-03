@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.14-beta.3](https://github.com/midwayjs/bin/compare/v2.0.14-beta.2...v2.0.14-beta.3) (2023-02-15)
+
+
+### Bug Fixes
+
+* analysis by list moudle ([b1f0478](https://github.com/midwayjs/bin/commit/b1f04783ebc4cbdf709c66bbfbbbe908ae19146e))
+* function name ([6df8fd5](https://github.com/midwayjs/bin/commit/6df8fd5cec281e734437933f1dad5827a0913fe8))
+* output ([e14592f](https://github.com/midwayjs/bin/commit/e14592f80a49173a7fa3514a6612fe86098d574b))
+
+
+
+
+
+## [2.0.14-beta.2](https://github.com/midwayjs/bin/compare/v2.0.13...v2.0.14-beta.2) (2023-02-14)
+
+
+### Bug Fixes
+
+* concurrency ([#324](https://github.com/midwayjs/bin/issues/324)) ([47e3986](https://github.com/midwayjs/bin/commit/47e39865bdf6a426bd5bf163f7ebdb3ec188a67c))
+* prevent log ([2a60bc6](https://github.com/midwayjs/bin/commit/2a60bc6e9a5f75edff826e817565cb6822faba0e))
+
+
+### Features
+
+* output level ([7001121](https://github.com/midwayjs/bin/commit/7001121f30d0e1d40bde672bba1b6d0a264ed2e3))
+
+
+
+
+
 ## [2.0.14-beta.1](https://github.com/midwayjs/bin/compare/v2.0.13...v2.0.14-beta.1) (2023-02-07)
 
 

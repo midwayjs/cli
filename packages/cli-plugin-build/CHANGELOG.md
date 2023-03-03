@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.14-beta.3](https://github.com/midwayjs/cli/compare/v2.0.14-beta.2...v2.0.14-beta.3) (2023-02-15)
+
+**Note:** Version bump only for package @midwayjs/cli-plugin-build
+
+
+
+
+
+## [2.0.14-beta.2](https://github.com/midwayjs/cli/compare/v2.0.13...v2.0.14-beta.2) (2023-02-14)
+
+
+### Bug Fixes
+
+* concurrency ([#324](https://github.com/midwayjs/cli/issues/324)) ([47e3986](https://github.com/midwayjs/cli/commit/47e39865bdf6a426bd5bf163f7ebdb3ec188a67c))
+
+
+### Features
+
+* output level ([7001121](https://github.com/midwayjs/cli/commit/7001121f30d0e1d40bde672bba1b6d0a264ed2e3))
+
+
+
+
+
 ## [2.0.11](https://github.com/midwayjs/cli/compare/v2.0.11-beta.1...v2.0.11) (2023-02-02)
 
 **Note:** Version bump only for package @midwayjs/cli-plugin-build

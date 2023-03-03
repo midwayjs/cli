@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.14-beta.3](https://github.com/midwayjs/cli/compare/v2.0.14-beta.2...v2.0.14-beta.3) (2023-02-15)
+
+
+### Bug Fixes
+
+* output ([e14592f](https://github.com/midwayjs/cli/commit/e14592f80a49173a7fa3514a6612fe86098d574b))
+
+
+
+
+
+## [2.0.14-beta.2](https://github.com/midwayjs/cli/compare/v2.0.13...v2.0.14-beta.2) (2023-02-14)
+
+
+### Bug Fixes
+
+* prevent log ([2a60bc6](https://github.com/midwayjs/cli/commit/2a60bc6e9a5f75edff826e817565cb6822faba0e))
+
+
+### Features
+
+* output level ([7001121](https://github.com/midwayjs/cli/commit/7001121f30d0e1d40bde672bba1b6d0a264ed2e3))
+
+
+
+
+
 ## [2.0.6](https://github.com/midwayjs/cli/compare/v2.0.6-beta.3...v2.0.6) (2022-12-09)
 
 **Note:** Version bump only for package @midwayjs/command-core

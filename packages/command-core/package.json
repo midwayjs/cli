@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/command-core",
-  "version": "2.0.6",
+  "version": "2.0.14-beta.3",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -27,7 +27,7 @@
   "scripts": {
     "lint": "../../node_modules/.bin/eslint .",
     "build": "tsc --build",
-    "test": "../../node_modules/.bin/jest",
+    "test": "../../node_modules/.bin/jest ./test/cli.test.ts",
     "cov": "cross-env ../../node_modules/.bin/jest --coverage",
     "cov-win": "npm run cov",
     "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",

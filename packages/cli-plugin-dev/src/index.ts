@@ -220,7 +220,7 @@ export class DevPlugin extends BasePlugin {
         this.core.debug('Debug port:', port);
         const portIsUse: boolean = await checkPort(port);
         if (portIsUse) {
-          console.log(`\n\nDebug port ${port} is in use\n\n`);
+          this.core.cli.log(`\n\nDebug port ${port} is in use\n\n`);
         } else {
           MIDWAY_DEV_IS_DEBUG = port;
           execArgv.push(`--inspect=${port}`);
@@ -375,9 +375,9 @@ export class DevPlugin extends BasePlugin {
       return;
     }
     if (process.platform === 'win32') {
-      console.log('\u001B[2J\u001B[0f');
+      this.core.cli.log('\u001B[2J\u001B[0f');
     } else {
-      console.log('\u001B[2J\u001B[3J\u001B[H');
+      this.core.cli.log('\u001B[2J\u001B[3J\u001B[H');
     }
   }
 
@@ -488,7 +488,7 @@ export class DevPlugin extends BasePlugin {
   }
 
   private log(...args: any[]) {
-    console.log('[ Midway ]', ...args);
+    this.core.cli.log('[ Midway ]', ...args);
   }
 
   private error(...args: any[]) {

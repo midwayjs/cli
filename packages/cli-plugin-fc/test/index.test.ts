@@ -168,6 +168,7 @@ describe('/test/index.test.ts', () => {
 
     const baseDir = join(__dirname, './fixtures/serverless-devs');
     const logs: any = [];
+    const debug: any = [];
     const core = new CommandCore({
       config: {
         servicePath: baseDir,
@@ -179,6 +180,9 @@ describe('/test/index.test.ts', () => {
         ...console,
         log: (...logInfo) => {
           logs.push(...logInfo);
+        },
+        debug: (...logInfo) => {
+          debug.push(...logInfo);
         },
       },
       options: {
@@ -195,7 +199,8 @@ describe('/test/index.test.ts', () => {
     // clean
     await remove(join(baseDir, '.serverless'));
     const logsStr = logs.join(';');
-    const ossJson = /helloService-oss;(.*?"--use-local"\})/.exec(logsStr);
+    const debugLogsStr = debug.join(';');
+    const ossJson = /helloService-oss;(.*?"--use-local"\})/.exec(debugLogsStr);
     assert(logsStr.includes('@serverless-devs'));
     assert(logsStr.includes('deploy success'));
     assert(ossJson && ossJson[1]);
