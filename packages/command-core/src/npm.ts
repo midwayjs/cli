@@ -52,6 +52,7 @@ interface INpmInstallOptions {
   mode?: string[];
   slience?: boolean;
   isLerna?: boolean;
+  omitDev?: boolean;
   debugLog?: (...args: any[]) => void;
 }
 // yarn: yarn add mod --dev
@@ -238,7 +239,13 @@ export const findNpm = (argv?: {
 
 // 转换npm安装命令
 export const formatInstallNpmCommand = (options: INpmInstallOptions) => {
-  const { register = 'npm', moduleName, registerPath, isLerna } = options;
+  const {
+    register = 'npm',
+    moduleName,
+    registerPath,
+    isLerna,
+    omitDev,
+  } = options;
   let { installCmd = 'i', mode } = options;
   if (!mode?.length) {
     mode = ['no-save'];
@@ -291,6 +298,9 @@ export const formatInstallNpmCommand = (options: INpmInstallOptions) => {
     });
     if (!isProduction) {
       mode.push('legacy-peer-deps');
+    }
+    if (omitDev) {
+      mode.push('omit=dev');
     }
   }
   const cmd = `${register} ${installCmd}${

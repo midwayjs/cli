@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@midwayjs/faas": "3.10.0",
+    "@midwayjs/decorator": "3.10.0"
+  },
+  "devDependencies": {
+    "dolmx": "1.1.0"
+  }
+}

@@ -5,7 +5,7 @@ import { AliyunFCPlugin } from '../../cli-plugin-fc/src/index';
 import { join, resolve } from 'path';
 import { remove } from 'fs-extra';
 import * as assert from 'assert';
-import { readFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 
 describe('/test/midwayfaas3.test.ts', () => {
   it('package', async () => {
@@ -108,5 +108,41 @@ describe('/test/midwayfaas3.test.ts', () => {
     );
     assert(pkgJson['dependencies']['@midwayjs/faas'] === '3');
     assert(!pkgJson['dependencies']['dolmx']);
+  });
+  it('package with npm lock', async () => {
+    const baseDir = resolve(__dirname, './fixtures/lock');
+    const buildDir = resolve(baseDir, './.serverless');
+    await remove(buildDir);
+    const core = new CommandCore({
+      config: {
+        servicePath: baseDir,
+      },
+      commands: ['package'],
+      service: loadSpec(baseDir),
+      provider: 'aliyun',
+      options: {},
+      log: console,
+    });
+    core.addPlugin(PackagePlugin);
+    core.addPlugin(AliyunFCPlugin);
+    await core.ready();
+    await core.invoke(['package']);
+    const specFunctions = (core as any).coreInstance.service.functions;
+    assert(specFunctions['helloService-httpAllTrigger']);
+    assert(specFunctions['helloService-httpTrigger']);
+    assert(specFunctions['helloService-ossTrigger']);
+    assert(specFunctions['helloService-coverConfig']);
+    assert(specFunctions['helloService-hsfTrigger']);
+    assert(existsSync(join(buildDir, 'package-lock.json')));
+    const coreJsonFile = join(
+      buildDir,
+      'node_modules/@midwayjs/core/package.json'
+    );
+    const coreVersion =
+      existsSync(coreJsonFile) &&
+      JSON.parse(readFileSync(coreJsonFile, 'utf-8')).version;
+    assert(coreVersion === '3.10.0');
+    // omit deps
+    assert(!existsSync(join(buildDir, 'node_modules/dolmx')));
   });
 });

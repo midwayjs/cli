@@ -1,12 +1,12 @@
 {
   "name": "@midwayjs/fcli-plugin-package",
-  "version": "2.0.14-beta.3",
+  "version": "2.0.14-beta.4",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/command-core": "^2.0.14-beta.3",
+    "@midwayjs/command-core": "^2.0.14-beta.4",
     "@midwayjs/locate": "^1.0.3",
-    "@midwayjs/serverless-spec-builder": "^2.0.14-beta.3",
+    "@midwayjs/serverless-spec-builder": "^2.0.14-beta.4",
     "@vercel/ncc": "^0.30.0",
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1",

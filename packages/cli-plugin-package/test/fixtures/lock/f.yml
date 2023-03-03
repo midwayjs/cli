@@ -1,0 +1,7 @@
+service: serverless-midway-test
+
+provider:
+  name: aliyun
+
+package:
+  lockFile: true
