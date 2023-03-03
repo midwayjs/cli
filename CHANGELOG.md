@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.14-beta.4](https://github.com/midwayjs/bin/compare/v2.0.13...v2.0.14-beta.4) (2023-03-03)
+
+
+### Bug Fixes
+
+* concurrency ([#324](https://github.com/midwayjs/bin/issues/324)) ([47e3986](https://github.com/midwayjs/bin/commit/47e39865bdf6a426bd5bf163f7ebdb3ec188a67c))
+
+
+### Features
+
+* output level ([#320](https://github.com/midwayjs/bin/issues/320)) ([f83750a](https://github.com/midwayjs/bin/commit/f83750a0a217cf38d86626e130070caa4fac5c79))
+* support lock ([2e9bfd6](https://github.com/midwayjs/bin/commit/2e9bfd60e579984c30b4de54cb7285f7918a1f22))
+
+
+
+
+
 ## [2.0.14-beta.3](https://github.com/midwayjs/bin/compare/v2.0.14-beta.2...v2.0.14-beta.3) (2023-02-15)
 
 
