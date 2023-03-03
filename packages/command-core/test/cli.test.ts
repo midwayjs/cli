@@ -174,12 +174,12 @@ describe('command-core / cli.test.ts', () => {
     await remove(pkjJson);
   });
   it('cli auto load plugin no pacakge.json', async () => {
-    const logList = [];
+    const debugLogList: any = [];
     class TestCli extends CoreBaseCLI {
       loadLog() {
         const log = super.loadLog();
-        log.log = (...args) => {
-          logList.push(...args);
+        log.debug = (...args) => {
+          debugLogList.push(...args);
         };
         return log;
       }
@@ -193,8 +193,8 @@ describe('command-core / cli.test.ts', () => {
     }
     cli.cwd = baseDir;
     await cli.start();
-    const logContext = logList.join('\n');
-    assert(logContext.indexOf('no user package.json') !== -1);
+    const debugLogString = debugLogList.join('\n');
+    assert(debugLogString.indexOf('no user package.json') !== -1);
   });
   it('cli auto load plugin no auto plugins', async () => {
     const cli = new CoreBaseCLI(['', '', '-h']);
@@ -260,12 +260,12 @@ describe('command-core / cli.test.ts', () => {
     assert(logList.join('\n').indexOf('noLifecycleEvents') === -1);
   });
   it('cli verbose', async () => {
-    const logList = [];
+    const debugLogList: any = [];
     class TestCli extends CoreBaseCLI {
       loadLog() {
         const log = super.loadLog();
-        log.log = (...args) => {
-          logList.push(...args);
+        log.debug = (...args) => {
+          debugLogList.push(...args);
         };
         return log;
       }
@@ -276,7 +276,7 @@ describe('command-core / cli.test.ts', () => {
       'no-provider.ts'
     );
     await cli.start();
-    assert(logList.join('\n').indexOf('[Verbose]') !== -1);
+    assert(debugLogList.join('\n').indexOf('[Verbose]') !== -1);
   });
 
   it('cli error', async () => {

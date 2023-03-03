@@ -3,6 +3,8 @@ import { ICommandInstance } from './plugin';
 export interface ILog {
   log: (...any) => void;
   error?: (...any) => void;
+  debug?: (...any) => void;
+  warn?: (...any) => void;
 }
 
 export interface IOptions {
@@ -22,6 +24,15 @@ export interface IOptions {
   stopLifecycle?: string; // 生命周期执行到什么时候终止，例如 invoke:invoke
   disableAutoLoad?: boolean; // 是否禁用自动加载插件
   cwd?: string; // command core 执行时cwd目录
+  outputLevel?: CLIOutputLevel; // 屏蔽所有输出
+}
+
+export enum CLIOutputLevel {
+  None = 0,
+  Error = 1,
+  Warn = 2,
+  Info = 3,
+  All = 4,
 }
 
 export interface ICommandCore {

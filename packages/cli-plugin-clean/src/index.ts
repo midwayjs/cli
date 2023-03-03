@@ -16,7 +16,7 @@ export class CleanPlugin extends BasePlugin {
   async clean() {
     const { cwd } = this.core;
     if (!existsSync(join(cwd, 'package.json'))) {
-      console.log(`[ Midway ] package.json not found in ${cwd}\n`);
+      this.core.cli.error(`[ Midway ] package.json not found in ${cwd}\n`);
       return;
     }
 
@@ -26,9 +26,9 @@ export class CleanPlugin extends BasePlugin {
     if (pkg['midway-bin-clean'] && pkg['midway-bin-clean'].length) {
       for (const file of pkg['midway-bin-clean']) {
         await this.safeRemove(join(cwd, file));
-        console.log(`[ Midway ] clean ${file} success!`);
+        this.core.cli.log(`[ Midway ] clean ${file} success!`);
       }
-      console.log('[ Midway ] clean complete!');
+      this.core.cli.log('[ Midway ] clean complete!');
     }
   }
 
@@ -38,7 +38,7 @@ export class CleanPlugin extends BasePlugin {
     for (const name of rmDirName) {
       await this.safeRemove(join(cwd, name));
     }
-    console.log('[ Midway ] clean midway temporary files complete!');
+    this.core.cli.log('[ Midway ] clean midway temporary files complete!');
   }
 
   private safeRemove(path) {
