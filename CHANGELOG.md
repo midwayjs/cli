@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.15-beta.1](https://github.com/midwayjs/bin/compare/v2.0.14...v2.0.15-beta.1) (2023-03-19)
+
+
+### Features
+
+* incremental dev ([f8f5608](https://github.com/midwayjs/bin/commit/f8f560816040068826ba25bfa969eec1726a27a0))
+
+
+
+
+
 ## [2.0.14](https://github.com/midwayjs/bin/compare/v2.0.13...v2.0.14) (2023-03-03)
 
 
