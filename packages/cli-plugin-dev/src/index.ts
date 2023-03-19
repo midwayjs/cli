@@ -12,7 +12,7 @@ import { statSync, existsSync, readFileSync, writeFileSync } from 'fs';
 import * as chalk from 'chalk';
 import * as detect from 'detect-port';
 import { parse } from 'json5';
-import { checkPort } from './utils';
+import { checkPort, tsNodeFastEnv } from './utils';
 export class DevPlugin extends BasePlugin {
   private child;
   private started = false;
@@ -23,6 +23,7 @@ export class DevPlugin extends BasePlugin {
   private tsconfigJson;
   private childProcesslistenedPort; // child process listen port
   private isInClosing = false;
+  private startTime = Date.now();
   commands = {
     dev: {
       lifecycleEvents: ['checkEnv', 'run'],
@@ -176,14 +177,12 @@ export class DevPlugin extends BasePlugin {
 
       let tsNodeFast = {};
       if (options.fast) {
-        tsNodeFast = {
-          TS_NODE_FILES: 'true',
-          TS_NODE_TRANSPILE_ONLY: 'true',
-        };
+        tsNodeFast = tsNodeFastEnv;
       }
 
       let execArgv = [];
       let MIDWAY_DEV_IS_DEBUG;
+      let useIncrementalBuild = false;
 
       if (options.ts) {
         let fastRegister;
@@ -207,7 +206,18 @@ export class DevPlugin extends BasePlugin {
           }
         }
         if (!fastRegister) {
-          execArgv = ['-r', this.getTsNodeRegister()];
+          let tsRegister = this.getTsNodeRegister();
+          if (this.tsconfigJson?.compilerOptions?.incremental) {
+            useIncrementalBuild = true;
+            tsNodeFast = tsNodeFastEnv;
+            process.env.MW_CLI_TS_NODE = findNpmModuleByResolve(
+              this.core.cwd,
+              'ts-node'
+            );
+            process.env.MW_CLI_SOURCE_DIR = this.getSourceDir();
+            tsRegister = join(__dirname, '../js/register');
+          }
+          execArgv = ['-r', tsRegister];
           if (this.tsconfigJson?.compilerOptions?.baseUrl) {
             execArgv.push('-r', 'tsconfig-paths/register');
           }
@@ -240,7 +250,10 @@ export class DevPlugin extends BasePlugin {
         execArgv,
       });
 
-      if (this.options.ts && this.options.fast === 'swc') {
+      if (
+        useIncrementalBuild ||
+        (this.options.ts && this.options.fast === 'swc')
+      ) {
         this.checkTsType();
       }
 
@@ -267,6 +280,7 @@ export class DevPlugin extends BasePlugin {
           if (msg.startSuccess) {
             if (!this.started) {
               this.started = true;
+              this.core.debug('start time', Date.now() - this.startTime);
               this.displayStartTips(options);
             }
           }
@@ -350,6 +364,7 @@ export class DevPlugin extends BasePlugin {
   }
 
   private async restart() {
+    this.startTime = Date.now();
     await this.handleClose('restart');
     await this.start();
   }
@@ -453,6 +468,7 @@ export class DevPlugin extends BasePlugin {
       }
       this.restarting = true;
       this.restart().then(() => {
+        this.core.debug('restart time', Date.now() - this.startTime);
         this.log(
           `Auto reload. ${chalk.hex('#666666')(
             `[${event}] ${relative(sourceDir, path)}`
