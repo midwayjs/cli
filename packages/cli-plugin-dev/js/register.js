@@ -12,7 +12,7 @@ function register() {
   m._extensions['.ts'] = function (m, filename) {
     const _compile = m._compile;
     m._compile = function (code, fileName) {
-      const relativePath = relative(process.env.SOURCE_DIR, fileName);
+      const relativePath = relative(process.env.MW_CLI_SOURCE_DIR, fileName);
       const cachePath = join(cacheDir, relativePath);
       const cacheHashPath = join(cacheDir, relativePath + '_mw_ts_hash');
       let compiledCode = code;
