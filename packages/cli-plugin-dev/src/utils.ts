@@ -165,3 +165,8 @@ function debugWs(addr: string) {
     });
   });
 }
+
+export const tsNodeFastEnv = {
+  TS_NODE_FILES: 'true',
+  TS_NODE_TRANSPILE_ONLY: 'true',
+};

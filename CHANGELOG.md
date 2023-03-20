@@ -3,6 +3,39 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.15-beta.3](https://github.com/midwayjs/bin/compare/v2.0.15-beta.2...v2.0.15-beta.3) (2023-03-20)
+
+
+### Bug Fixes
+
+* support cnpm@9 ([633246a](https://github.com/midwayjs/bin/commit/633246ad2952b6d2d3a2eb7365ebb4b8073f0b09))
+
+
+
+
+
+## [2.0.15-beta.2](https://github.com/midwayjs/bin/compare/v2.0.15-beta.1...v2.0.15-beta.2) (2023-03-19)
+
+
+### Bug Fixes
+
+* dev js register ([8c2f9fa](https://github.com/midwayjs/bin/commit/8c2f9fa9ce2f7d4d39280de41e6083eead9ef972))
+
+
+
+
+
+## [2.0.15-beta.1](https://github.com/midwayjs/bin/compare/v2.0.14...v2.0.15-beta.1) (2023-03-19)
+
+
+### Features
+
+* incremental dev ([f8f5608](https://github.com/midwayjs/bin/commit/f8f560816040068826ba25bfa969eec1726a27a0))
+
+
+
+
+
 ## [2.0.14](https://github.com/midwayjs/bin/compare/v2.0.13...v2.0.14) (2023-03-03)
 
 

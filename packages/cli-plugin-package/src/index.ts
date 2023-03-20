@@ -961,6 +961,9 @@ export class PackagePlugin extends BasePlugin {
     const npmClient = this.getNPMClient();
     if (npmClient?.startsWith('pnpm')) {
       globbyMatched.push('**/.pnpm/**');
+    } else if (npmClient?.startsWith('cnpm')) {
+      // for cnpm@9
+      globbyMatched.push('**/node_modules/.store/**');
     }
 
     // include file
