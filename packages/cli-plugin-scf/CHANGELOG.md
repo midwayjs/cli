@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.15](https://github.com/midwayjs/cli/compare/v2.0.14...v2.0.15) (2023-03-20)
+
+
+### Features
+
+* incremental dev ([#327](https://github.com/midwayjs/cli/issues/327)) ([78d5e9b](https://github.com/midwayjs/cli/commit/78d5e9bef78d15f169e3bfe9f364af4b668d96ba))
+
+
+
+
+
 ## [2.0.15-beta.3](https://github.com/midwayjs/cli/compare/v2.0.15-beta.2...v2.0.15-beta.3) (2023-03-20)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-scf

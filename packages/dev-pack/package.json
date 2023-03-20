@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/serverless-dev-pack",
-  "version": "2.0.15-beta.3",
+  "version": "2.0.15",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/cli-plugin-dev": "^2.0.15-beta.3",
+    "@midwayjs/cli-plugin-dev": "^2.0.15",
     "@midwayjs/command-core": "^2.0.14",
     "@midwayjs/gateway-common-core": "^2.0.6",
     "@midwayjs/gateway-common-http": "^2.0.14",
