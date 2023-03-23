@@ -906,6 +906,14 @@ export class PackagePlugin extends BasePlugin {
         delete this.core.service.functions[functionName];
       }
     });
+    const notFoundFnuction = functions.filter(functoinName => {
+      return !this.core.service.functions[functoinName];
+    });
+    if (notFoundFnuction.length) {
+      throw new Error(
+        `The specified functions ${notFoundFnuction.join(', ')} do not exist.`
+      );
+    }
   }
 
   async package() {
