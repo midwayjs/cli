@@ -83,7 +83,7 @@ export const formatTsError = (
   baseDir: string,
   error: DiagnosticRelatedInformation
 ): { message: string; path: string } => {
-  if (!error || !error.messageText) {
+  if (!error.messageText) {
     return { message: '', path: '' };
   }
   const message = pickMessageTextFromDiagnosticMessageChain(error.messageText);
