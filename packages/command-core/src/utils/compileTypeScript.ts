@@ -1,5 +1,11 @@
 import { readFile } from 'fs-extra';
 import { join, relative } from 'path';
+import {
+  DiagnosticRelatedInformation,
+  DiagnosticMessageChain,
+  // eslint-disable-next-line node/no-unpublished-import
+} from 'typescript';
+
 import { findNpmModule } from '../npm';
 import { exists } from './copy';
 
@@ -50,7 +56,7 @@ export const compileTypeScript = async (options: {
   const emitResult = program.emit();
   const allDiagnostics = ts
     .getPreEmitDiagnostics(program)
-    .concat(emitResult.diagnostics);
+    .concat(emitResult.diagnostics) as DiagnosticRelatedInformation[];
   const errors = [];
   const necessaryErrors = [];
   for (const error of allDiagnostics) {
@@ -59,6 +65,7 @@ export const compileTypeScript = async (options: {
     }
     const errorItem = formatTsError(baseDir, error);
 
+    // @ts-expect-error reportsUnnecessary is not in type
     if (!error.reportsUnnecessary) {
       necessaryErrors.push(errorItem);
     }
@@ -72,14 +79,14 @@ export const compileTypeScript = async (options: {
   };
 };
 
-const formatTsError = (baseDir, error) => {
+const formatTsError = (
+  baseDir: string,
+  error: DiagnosticRelatedInformation
+): { message: string; path: string } => {
   if (!error || !error.messageText) {
     return { message: '', path: '' };
   }
-  if (typeof error.messageText === 'object') {
-    return formatTsError(baseDir, error.messageText);
-  }
-
+  const message = pickMessageTextFromDiagnosticMessageChain(error.messageText);
   let errorPath = '';
   // tsconfig error, file is undefined
   if (error?.file?.text) {
@@ -89,10 +96,29 @@ const formatTsError = (baseDir, error) => {
     }`;
   }
   return {
-    message: error?.messageText || '',
+    message,
     path: errorPath,
   };
 };
+
+function pickMessageTextFromDiagnosticMessageChain(
+  input: string | DiagnosticMessageChain
+): string {
+  if (typeof input === 'string') {
+    return input;
+  }
+
+  const arr: string[] = [];
+
+  if (input.messageText) {
+    arr.push(input.messageText);
+  } // void else
+  if (Array.isArray(input.next)) {
+    arr.push(...input.next.map(pickMessageTextFromDiagnosticMessageChain));
+  } // void else
+
+  return arr.join('\n  ');
+}
 
 export const readJson = async (path: string) => {
   if (await exists(path)) {
