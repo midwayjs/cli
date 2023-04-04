@@ -1,8 +1,8 @@
 import { readFile } from 'fs-extra';
 import { join, relative } from 'path';
 import {
-  DiagnosticRelatedInformation,
   DiagnosticMessageChain,
+  DiagnosticRelatedInformation,
   // eslint-disable-next-line node/no-unpublished-import
 } from 'typescript';
 
@@ -79,7 +79,7 @@ export const compileTypeScript = async (options: {
   };
 };
 
-const formatTsError = (
+export const formatTsError = (
   baseDir: string,
   error: DiagnosticRelatedInformation
 ): { message: string; path: string } => {
