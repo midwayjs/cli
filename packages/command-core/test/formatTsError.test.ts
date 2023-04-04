@@ -41,6 +41,27 @@ void relative;`;
     assert(ret.path === expectPath);
   });
 
+  it('messageText is empty', async () => {
+    const messageText = '';
+
+    const info = {
+      category: 1,
+      code: 2345,
+      file: {
+        text: fileText,
+        fileName: `./${name}`,
+      },
+      start: 1000,
+      length: 1000,
+      messageText,
+    } as DiagnosticRelatedInformation;
+
+    const ret = formatTsError(baseDir, info);
+    assert(ret);
+    assert(ret.message === messageText);
+    assert(ret.path === '');
+  });
+
   it('messageText is DiagnosticMessageChain', async () => {
     const text1 = 'messageText is DiagnosticMessageChain';
     const messageText: DiagnosticMessageChain = {
