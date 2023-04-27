@@ -103,7 +103,7 @@ describe('/test/index.test.ts', () => {
       .get('/redirect')
       .expect(302, e => {
         devPack.close();
-        if (!e && req.response.headers.location.startsWith('http://')) {
+        if (!e && (req as any).response.headers.location.startsWith('http://')) {
           done(new Error('not auto add redirect http://'));
         } else {
           done(e);

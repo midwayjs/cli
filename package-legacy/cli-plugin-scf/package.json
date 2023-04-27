@@ -1,6 +1,7 @@
 {
   "name": "@midwayjs/fcli-plugin-scf",
   "version": "2.0.15",
+  "private": "true",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {

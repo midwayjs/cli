@@ -1,6 +1,7 @@
 {
   "name": "@midwayjs/cli-plugin-vercel",
   "version": "2.0.14",
+  "private": "true",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
