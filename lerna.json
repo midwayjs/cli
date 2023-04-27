@@ -1,7 +1,4 @@
 {
-  "packages": [
-    "packages/*"
-  ],
   "command": {
     "bootstrap": {
       "hoist": true,
@@ -23,5 +20,6 @@
     }
   },
   "npmClient": "npm",
-  "version": "2.0.15"
+  "version": "2.0.15",
+  "useWorkspaces": true
 }
