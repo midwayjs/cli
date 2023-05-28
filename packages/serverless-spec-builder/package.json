@@ -11,8 +11,7 @@
   "devDependencies": {
     "@types/lodash.get": "^4.4.6",
     "fs-extra": "^8.1.0",
-    "mm": "3",
-    "@midwayjs/serverless-fc-starter": "2"
+    "mm": "3"
   },
   "engines": {
     "node": ">= 10"
