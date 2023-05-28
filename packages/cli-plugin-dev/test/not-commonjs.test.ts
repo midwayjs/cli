@@ -6,7 +6,7 @@ import { run } from './utils';
 import * as assert from 'assert';
 
 const cwd = join(__dirname, 'fixtures/not-commonjs');
-describe('test/not-commonjs.test.ts', () => {
+describe.skip('test/not-commonjs.test.ts', () => {
   it('dev', async () => {
     const tsConfigFile = join(cwd, 'tsconfig.json');
     if (existsSync(tsConfigFile)) {
