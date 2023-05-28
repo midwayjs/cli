@@ -10,6 +10,7 @@
   },
   "devDependencies": {
     "@types/lodash.get": "^4.4.6",
+    "@midwayjs/serverless-fc-starter": "^2.14.11",
     "fs-extra": "^8.1.0",
     "mm": "3"
   },
