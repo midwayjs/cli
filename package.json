@@ -33,6 +33,7 @@
     "next": "sh scripts/publish.sh --npm-tag next",
     "release": "rm -f ./packages/.DS* && sh scripts/publish.sh",
     "clean": "lerna clean --yes && rm -rf ./packages/**/package-lock.json",
+    "bootstrap": "rm -f ./packages/.DS* && lerna bootstrap",
     "build": "sh scripts/build.sh",
     "gen-rollback": "node scripts/rollback.js",
     "prettier": "prettier --write 'packages/**/*.ts'",
