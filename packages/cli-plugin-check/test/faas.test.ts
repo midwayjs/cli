@@ -116,6 +116,6 @@ describe('test/faas.test.ts', () => {
     }
     const logs = await runCheck(cwd);
     const logStr = logs.join('\n');
-    assert(logStr.includes('is not compatible with your project'));
+    assert(logStr.includes('are incompatible'));
   });
 });
