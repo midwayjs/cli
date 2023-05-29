@@ -150,6 +150,17 @@ export class DevPlugin extends BasePlugin {
       }
     }
 
+    if (process.env.MIDWAY_DEV_IS_SERVERLESS !== 'true') {
+      // v3 函数继续复用这个接口
+      try {
+        // eslint-disable-next-line
+        framework = require.resolve('@midwayjs/faas');
+        process.env.MIDWAY_DEV_IS_SERVERLESS = 'true';
+      } catch {
+        //
+      }
+    }
+
     return {
       framework,
       baseDir: this.getSourceDir(),
