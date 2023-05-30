@@ -3,6 +3,958 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/midwayjs/bin/compare/serverless-v1.2.39...serverless-v2.1.0) (2023-05-30)
+
+
+### Bug Fixes
+
+* **command-core:** fix path process within formatTsError() and add types ([#329](https://github.com/midwayjs/bin/issues/329)) ([685e9b7](https://github.com/midwayjs/bin/commit/685e9b7dc316e0c852a99a9771a6044b2133b695))
+
+
+### Features
+
+* support new v3 serverless entry ([#331](https://github.com/midwayjs/bin/issues/331)) ([756edfd](https://github.com/midwayjs/bin/commit/756edfd21d7afd4e5f740ea2b69dbfb42ebaeb4b))
+
+
+
+## 2.0.15 (2023-03-20)
+
+
+### Features
+
+* incremental dev ([#327](https://github.com/midwayjs/bin/issues/327)) ([78d5e9b](https://github.com/midwayjs/bin/commit/78d5e9bef78d15f169e3bfe9f364af4b668d96ba))
+
+
+
+## 2.0.14 (2023-03-03)
+
+
+### Bug Fixes
+
+* concurrency ([#324](https://github.com/midwayjs/bin/issues/324)) ([47e3986](https://github.com/midwayjs/bin/commit/47e39865bdf6a426bd5bf163f7ebdb3ec188a67c))
+
+
+### Features
+
+* output level ([#320](https://github.com/midwayjs/bin/issues/320)) ([f83750a](https://github.com/midwayjs/bin/commit/f83750a0a217cf38d86626e130070caa4fac5c79))
+* support lock ([#326](https://github.com/midwayjs/bin/issues/326)) ([49dedc6](https://github.com/midwayjs/bin/commit/49dedc64f37cf997ad1212beb2bdfcd16f002ff3))
+
+
+
+## 2.0.13 (2023-02-06)
+
+
+### Bug Fixes
+
+* hcc module name ([#323](https://github.com/midwayjs/bin/issues/323)) ([0412335](https://github.com/midwayjs/bin/commit/0412335e29c012f1d4b9c2243b5ac294c357630f))
+
+
+
+## 2.0.12 (2023-02-06)
+
+
+### Bug Fixes
+
+* hcc position ([#322](https://github.com/midwayjs/bin/issues/322)) ([4d2ba01](https://github.com/midwayjs/bin/commit/4d2ba01ee24b6bf003d505c2d4f4d6dfb38fbcb7))
+
+
+
+## 2.0.11 (2023-02-02)
+
+
+
+## 2.0.11-beta.1 (2023-02-01)
+
+
+### Bug Fixes
+
+* `module: 'commonjs'` in tsconfig is case insensitive ([#316](https://github.com/midwayjs/bin/issues/316)) ([67e0808](https://github.com/midwayjs/bin/commit/67e080889f80eb3d309cbe29371b6ba5ad660b84))
+* tsconfig 引用路径解析问题 ([#319](https://github.com/midwayjs/bin/issues/319)) ([cedab2d](https://github.com/midwayjs/bin/commit/cedab2d51585c56fcd52ab360ec64f073b341b47))
+
+
+
+## 2.0.10 (2023-01-09)
+
+
+
+## 2.0.9 (2022-12-30)
+
+
+### Bug Fixes
+
+* suppoert fc layers ([#312](https://github.com/midwayjs/bin/issues/312)) ([382ac30](https://github.com/midwayjs/bin/commit/382ac308d253ef0d52b23d7a5ece75fca627b28c))
+
+
+
+## 2.0.8 (2022-12-27)
+
+
+### Bug Fixes
+
+* dev random port ([#311](https://github.com/midwayjs/bin/issues/311)) ([f61c9ef](https://github.com/midwayjs/bin/commit/f61c9efede8055e110dce7a458da1d6c5dd304f8))
+
+
+
+## 2.0.7 (2022-12-16)
+
+
+### Bug Fixes
+
+* more debug output ([141141c](https://github.com/midwayjs/bin/commit/141141ca64e44cd80fe76062d53af86ce8539f55))
+
+
+
+## 2.0.7-beta.6 (2022-12-16)
+
+
+### Bug Fixes
+
+* function ts compile using commonjs ([61527bb](https://github.com/midwayjs/bin/commit/61527bb81fa5a7fd90d12f1dbc1ec0980b49a719))
+
+
+
+## 2.0.7-beta.5 (2022-12-14)
+
+
+### Bug Fixes
+
+* child listen sigint ([3015f5b](https://github.com/midwayjs/bin/commit/3015f5be1b0a60fd7b76389ff4f893f709c661a9))
+
+
+
+## 2.0.7-beta.4 (2022-12-14)
+
+
+### Bug Fixes
+
+* fix child process listen SIGINT make process exit slow ([61d22d6](https://github.com/midwayjs/bin/commit/61d22d6fc23b1a2d3d7039fce4af1d732a41d914))
+
+
+
+## 2.0.7-beta.3 (2022-12-14)
+
+
+### Bug Fixes
+
+* resume MIDWAY_DEV_IS_SERVERLESS ([0814b1e](https://github.com/midwayjs/bin/commit/0814b1ea318db6cbf8b3ecbf888bfd3ba454d89a))
+
+
+
+## 2.0.7-beta.2 (2022-12-14)
+
+
+### Bug Fixes
+
+* more stable close process ([2d0f1e7](https://github.com/midwayjs/bin/commit/2d0f1e72d912ce13afd1fb38ceb8a962a01f113d))
+
+
+
+## 2.0.7-beta.1 (2022-12-14)
+
+
+### Bug Fixes
+
+* dev close process ([4aaaac8](https://github.com/midwayjs/bin/commit/4aaaac89d93aac8df51a76d5bb99944a8be71151))
+
+
+### Features
+
+* cherry pick master ([3584763](https://github.com/midwayjs/bin/commit/3584763c91aaa0256f96a7ff7a310f70c059a478))
+
+
+
+## 2.0.6 (2022-12-09)
+
+
+
+## 2.0.6-beta.3 (2022-12-06)
+
+
+### Bug Fixes
+
+* package paths alias execute tsc-alias ([72b71a6](https://github.com/midwayjs/bin/commit/72b71a62e28d1aa45f9be2baac4ac813463fa8bc))
+
+
+
+## 2.0.6-beta.2 (2022-12-06)
+
+
+### Bug Fixes
+
+* faas build support ts paths alias ([ccda8c9](https://github.com/midwayjs/bin/commit/ccda8c939fa89849601bb5b3aac8708205844849))
+
+
+### Performance Improvements
+
+* more debug info for fc deploy ([0f93c35](https://github.com/midwayjs/bin/commit/0f93c3511066f7ea75f9a95e89632f155631deed))
+
+
+
+## 2.0.6-beta.1 (2022-12-05)
+
+
+### Bug Fixes
+
+* v3 serverless app ([51b298c](https://github.com/midwayjs/bin/commit/51b298cd6df3dbc6764edaa92d3c0c0a8345a7ac))
+* zip support include and exclude ([256e565](https://github.com/midwayjs/bin/commit/256e565fcfc9ebd100dfcbdc4aa6585788624f11))
+
+
+
+## 2.0.5 (2022-12-01)
+
+
+### Features
+
+* support add option templateModule ([7701ec2](https://github.com/midwayjs/bin/commit/7701ec253a9f61cd35909776fabb21c1dc8c26b0))
+
+
+
+## 2.0.5-beta.1 (2022-12-01)
+
+
+### Features
+
+* merga master ([c585444](https://github.com/midwayjs/bin/commit/c585444fb827702e2e3fd320891f340e969070b6))
+* support watching files by glob patten in dev mode ([#305](https://github.com/midwayjs/bin/issues/305)) ([e4b97b6](https://github.com/midwayjs/bin/commit/e4b97b69b762252c5414aaad1ae06131d699df1b))
+
+
+
+## 2.0.4 (2022-11-23)
+
+
+### Bug Fixes
+
+* find ts-node ([87944ea](https://github.com/midwayjs/bin/commit/87944eaa7dbe077b10ed907775000a982d2220e3))
+
+
+
+## 2.0.3 (2022-11-21)
+
+
+### Bug Fixes
+
+* npm argv is undefined ([520ddeb](https://github.com/midwayjs/bin/commit/520ddeb5000db3a3255891412935c84f63f02837))
+
+
+
+## 2.0.2 (2022-11-17)
+
+
+### Bug Fixes
+
+* dev pack 302 redirect ([#302](https://github.com/midwayjs/bin/issues/302)) ([3fc3160](https://github.com/midwayjs/bin/commit/3fc3160dc65fcc8208611ecdd123e8a9db167f0c)), closes [midwayjs/midway#2473](https://github.com/midwayjs/midway/issues/2473) [midwayjs/midway#2010](https://github.com/midwayjs/midway/issues/2010)
+* package f.yml ([71f6bd8](https://github.com/midwayjs/bin/commit/71f6bd81064bca0a12d44143d2680b69c44fee2e))
+
+
+### Features
+
+* check midway version ([#303](https://github.com/midwayjs/bin/issues/303)) ([cb6934a](https://github.com/midwayjs/bin/commit/cb6934ae27eac9d346d9e0bf251c2d168e27ed0c))
+* support plugin loading normally in monorepo project ([#304](https://github.com/midwayjs/bin/issues/304)) ([6f23e9c](https://github.com/midwayjs/bin/commit/6f23e9c8090d9826c68b874786925daf89f7adc1))
+
+
+
+## 2.0.1 (2022-10-28)
+
+
+### Bug Fixes
+
+* vw no faas handle ([#301](https://github.com/midwayjs/bin/issues/301)) ([fbadfdc](https://github.com/midwayjs/bin/commit/fbadfdc36147cff2a07f9185972835bf31c36ac0))
+
+
+
+## 2.0.1-beta.1 (2022-10-26)
+
+
+### Features
+
+* upgrade jest to 29 ([#300](https://github.com/midwayjs/bin/issues/300)) ([e2b211a](https://github.com/midwayjs/bin/commit/e2b211a43345131ec6c89a9a4263f57403c26474))
+
+
+
+# 2.0.0 (2022-10-13)
+
+
+
+## 1.3.15 (2022-10-13)
+
+
+### Bug Fixes
+
+* hooks old ([#299](https://github.com/midwayjs/bin/issues/299)) ([5b13c36](https://github.com/midwayjs/bin/commit/5b13c36ace3e2bfbfa582c5915455c34ecbfb104))
+
+
+
+# 2.0.0-beta.1 (2022-10-10)
+
+
+### Bug Fixes
+
+* remove unexists plugin ([225a601](https://github.com/midwayjs/bin/commit/225a601948cadd66e8afa17916e9fe47d440400c))
+
+
+### Features
+
+* build command remove mwcc ([1a254ed](https://github.com/midwayjs/bin/commit/1a254eded97edaa16f77e78cdeb98b4fb5100ec2))
+* fix package remove mwcc ([546038f](https://github.com/midwayjs/bin/commit/546038ff3b2aa6a2580acf431638ab93362de251))
+* package remove mwcc ([bd333af](https://github.com/midwayjs/bin/commit/bd333afee3fc2a64c7c4b3f62214bf59dc1b18e5))
+* remove mwcc ([5e78f46](https://github.com/midwayjs/bin/commit/5e78f46c0b2a3aee8d13db680568e0a8907aaee2))
+
+
+
+## 1.3.14 (2022-10-10)
+
+
+
+## 1.3.13 (2022-09-07)
+
+
+### Bug Fixes
+
+* package resume to  webRouterCollector ([#296](https://github.com/midwayjs/bin/issues/296)) ([8588bbd](https://github.com/midwayjs/bin/commit/8588bbd87968a1497b0076dedbde5ed18e82b0be))
+
+
+
+## 1.3.13-beta.3 (2022-09-07)
+
+
+### Bug Fixes
+
+* 重复处理信号可能导致的异常 ([#293](https://github.com/midwayjs/bin/issues/293)) ([e693374](https://github.com/midwayjs/bin/commit/e6933745784a6e68c1eefb7f06ace73c8ec9172c))
+* package intergration name ([#295](https://github.com/midwayjs/bin/issues/295)) ([8af416a](https://github.com/midwayjs/bin/commit/8af416abd0c46541e19b9bc420ca52d19d03cdfe))
+
+
+
+## 1.3.11 (2022-08-04)
+
+
+### Features
+
+* check configuration export class ([#289](https://github.com/midwayjs/bin/issues/289)) ([cab92b4](https://github.com/midwayjs/bin/commit/cab92b4f9e6e7b2bb6967ea155f68a826388c19b))
+
+
+
+## 1.3.9 (2022-07-27)
+
+
+### Bug Fixes
+
+* wrapper initialize in handler ([#288](https://github.com/midwayjs/bin/issues/288)) ([ba8cda2](https://github.com/midwayjs/bin/commit/ba8cda26c6283215289e2117087c47f82cb6d382))
+
+
+
+## 1.3.8 (2022-07-21)
+
+
+### Features
+
+* new faas & check ([#287](https://github.com/midwayjs/bin/issues/287)) ([2d62fdc](https://github.com/midwayjs/bin/commit/2d62fdc4d91d87ff60c92a0fd9060301e10a3fa5))
+
+
+
+## 1.3.7 (2022-07-06)
+
+
+### Bug Fixes
+
+* cannot trigger "onStop" in dev mode ([#285](https://github.com/midwayjs/bin/issues/285)) ([5a04e20](https://github.com/midwayjs/bin/commit/5a04e2030be29a9fe08a509d339f56606e1e1d46))
+* common http daya type ([#286](https://github.com/midwayjs/bin/issues/286)) ([9afe43c](https://github.com/midwayjs/bin/commit/9afe43c09a1c73edf9d7112aed0ea5271d7ab3f7))
+* **test:** avoid passing ignoreTypeCheck to jest ([#276](https://github.com/midwayjs/bin/issues/276)) ([7e76397](https://github.com/midwayjs/bin/commit/7e763979c80d0e4f2cfdf36bd7e7a074f5cd10a7))
+* deployType ignore aggregation ([#284](https://github.com/midwayjs/bin/issues/284)) ([ea920de](https://github.com/midwayjs/bin/commit/ea920deb3a5e7d5f43efa45796cfe7f1ec1fdc0a))
+
+
+
+## 1.3.6 (2022-06-02)
+
+
+### Bug Fixes
+
+* aggregationBeforeExecScript ([#283](https://github.com/midwayjs/bin/issues/283)) ([83528f4](https://github.com/midwayjs/bin/commit/83528f4d3b13500879e4b1ad68efa31654fbcb63))
+
+
+
+## 1.3.5 (2022-05-25)
+
+
+
+## 1.3.5-beta.3 (2022-05-25)
+
+
+### Features
+
+* support event trigger aggregation ([#281](https://github.com/midwayjs/bin/issues/281)) ([84b4789](https://github.com/midwayjs/bin/commit/84b478901ed1b49d6fb558be2f1ca0267027d2da))
+* upgrade ts-node to 10 ([#282](https://github.com/midwayjs/bin/issues/282)) ([7a1bbb1](https://github.com/midwayjs/bin/commit/7a1bbb11c89e74f5c31dad3e9b7fba2f22cd03da))
+
+
+
+## 1.3.4 (2022-05-11)
+
+
+### Bug Fixes
+
+* cli time tick ([#278](https://github.com/midwayjs/bin/issues/278)) ([b80a15b](https://github.com/midwayjs/bin/commit/b80a15b62d826359ae4b36dc3b6cfc21f2e4ba18))
+* midwayjs/hooks[#322](https://github.com/midwayjs/bin/issues/322) ([#280](https://github.com/midwayjs/bin/issues/280)) ([1966928](https://github.com/midwayjs/bin/commit/196692895f68fa95000f16d49ec8bba9eb68f5e9))
+
+
+
+## 1.3.3 (2022-04-20)
+
+
+
+## 1.3.2 (2022-04-14)
+
+
+### Features
+
+* config  inejcted but not define ([#275](https://github.com/midwayjs/bin/issues/275)) ([d131465](https://github.com/midwayjs/bin/commit/d1314655b808d1992952ccbb90d9ee8c3f4f3973))
+* support pnpm ([#271](https://github.com/midwayjs/bin/issues/271)) ([81c3f49](https://github.com/midwayjs/bin/commit/81c3f49c6176bfcdc55825eec2856607bdd3213d))
+
+
+
+## 1.3.1 (2022-03-10)
+
+
+
+## 1.3.1-beta.1 (2022-03-10)
+
+
+### Bug Fixes
+
+* emitDecoratorMetadata ([#269](https://github.com/midwayjs/bin/issues/269)) ([b08e6c6](https://github.com/midwayjs/bin/commit/b08e6c6ec581e5dfb1231962384afc035db516d6))
+
+
+
+# 1.3.0 (2022-02-23)
+
+
+### Features
+
+* add aliyun FC layers configuration ([#267](https://github.com/midwayjs/bin/issues/267)) ([4caacd2](https://github.com/midwayjs/bin/commit/4caacd255297f2b2b08a5bc30b94c278d3588cf8))
+* zip compression ([#265](https://github.com/midwayjs/bin/issues/265)) ([0f83ac5](https://github.com/midwayjs/bin/commit/0f83ac5fba0a2764dd0454f666d285d2b2c6b084))
+
+
+
+## 1.2.99 (2022-02-16)
+
+
+### Bug Fixes
+
+* fast dev ([#263](https://github.com/midwayjs/bin/issues/263)) ([89c5009](https://github.com/midwayjs/bin/commit/89c5009e1e6356ae9a4c58b39564211882594274))
+
+
+
+## 1.2.98 (2022-02-10)
+
+
+
+## 1.2.97 (2022-01-24)
+
+
+### Bug Fixes
+
+* auto select npm ([#258](https://github.com/midwayjs/bin/issues/258)) ([f6e497c](https://github.com/midwayjs/bin/commit/f6e497c331af2f51855f98fa880bccc8acbbdb4e))
+
+
+
+## 1.2.96 (2022-01-21)
+
+
+### Bug Fixes
+
+* fix findNpmModule with pnp ([#256](https://github.com/midwayjs/bin/issues/256)) ([6a0f423](https://github.com/midwayjs/bin/commit/6a0f423af4646250bd7073bdb105699fe296a72b))
+* install exec ([#257](https://github.com/midwayjs/bin/issues/257)) ([1d59d23](https://github.com/midwayjs/bin/commit/1d59d23a8f6dfcd544c8b9e195b7edcbbe25df8b))
+
+
+
+## 1.2.95 (2022-01-20)
+
+
+### Bug Fixes
+
+* serverless devs cnpm ([#253](https://github.com/midwayjs/bin/issues/253)) ([93641a8](https://github.com/midwayjs/bin/commit/93641a8d76066ffe0016f297814070974b0f728a))
+
+
+### Features
+
+* support hooks 3.0 ([#254](https://github.com/midwayjs/bin/issues/254)) ([eb50b72](https://github.com/midwayjs/bin/commit/eb50b7287734cf965e744466ea725dde78525e3d))
+
+
+
+## 1.2.94 (2022-01-11)
+
+
+### Bug Fixes
+
+* ignore optional ([#252](https://github.com/midwayjs/bin/issues/252)) ([841fbbc](https://github.com/midwayjs/bin/commit/841fbbcbca85b5b0a14089395477bf10da57fa1d))
+
+
+
+## 1.2.93 (2021-12-29)
+
+
+### Bug Fixes
+
+* **dev-pack:** fix illegal header error ([#242](https://github.com/midwayjs/bin/issues/242)) ([58a0a2a](https://github.com/midwayjs/bin/commit/58a0a2af58a7dbedbca9bd9ed8a887256812dbd7))
+
+
+### Features
+
+* auto hooks import ([#239](https://github.com/midwayjs/bin/issues/239)) ([a4557f9](https://github.com/midwayjs/bin/commit/a4557f9e1b9f54e42af08ba503a47f7d11a3d59d))
+* check ios class ([#251](https://github.com/midwayjs/bin/issues/251)) ([5970eab](https://github.com/midwayjs/bin/commit/5970eab2c8251206291bb333e025e1712ef63580))
+
+
+
+## 1.2.92 (2021-12-03)
+
+
+### Bug Fixes
+
+* using https://registry.npmmirror.com instead https://registry.np… ([#237](https://github.com/midwayjs/bin/issues/237)) ([56ce275](https://github.com/midwayjs/bin/commit/56ce275d98db601944892229e0645fcbf2bdb602))
+
+
+
+## 1.2.91 (2021-11-26)
+
+
+### Features
+
+* fast install nm ([#231](https://github.com/midwayjs/bin/issues/231)) ([9974ed5](https://github.com/midwayjs/bin/commit/9974ed5d26dd4eca9627a709c72c2b677c0b49c1))
+
+
+
+## 1.2.90 (2021-11-16)
+
+
+### Bug Fixes
+
+* remvoe hooks core ([#228](https://github.com/midwayjs/bin/issues/228)) ([d0c3fcc](https://github.com/midwayjs/bin/commit/d0c3fccbab299b15284f69f7574e84aec5cb7c5e))
+
+
+
+## 1.2.89 (2021-11-16)
+
+
+### Bug Fixes
+
+* package check error ignore tsconfig error ([#226](https://github.com/midwayjs/bin/issues/226)) ([5d5468c](https://github.com/midwayjs/bin/commit/5d5468c7ac4fb45c73037fcd2ccc45a3494301b1))
+
+
+
+## 1.2.87 (2021-11-05)
+
+
+### Bug Fixes
+
+* watch more file ([#223](https://github.com/midwayjs/bin/issues/223)) ([24180a1](https://github.com/midwayjs/bin/commit/24180a12989473a54c0af18ecfbce469b92599a1))
+
+
+
+## 1.2.86 (2021-11-04)
+
+
+
+## 1.2.85 (2021-10-21)
+
+
+### Features
+
+* dev support entry file port check ([#204](https://github.com/midwayjs/bin/issues/204)) ([7b174e3](https://github.com/midwayjs/bin/commit/7b174e35f6b2d084ac72e8c9b9d2bbbfa6303a95))
+* f.yml add AsyncConfiguration ([#213](https://github.com/midwayjs/bin/issues/213)) ([30ae12b](https://github.com/midwayjs/bin/commit/30ae12b754fc384d7a9118a154f045da3f6a09e8))
+* more fc config ([#211](https://github.com/midwayjs/bin/issues/211)) ([1f7913d](https://github.com/midwayjs/bin/commit/1f7913df1ba306134fb59e3dcca492f43861ad41))
+* support command alias ([#218](https://github.com/midwayjs/bin/issues/218)) ([380338c](https://github.com/midwayjs/bin/commit/380338c1b0a92d85874cba16ff37a1711e137027))
+
+
+
+## 1.2.84 (2021-09-27)
+
+
+### Bug Fixes
+
+* opti check ([#201](https://github.com/midwayjs/bin/issues/201)) ([bfffdc6](https://github.com/midwayjs/bin/commit/bfffdc60d22d3732591b868bb863918ec086b7fb))
+
+
+
+## 1.2.83 (2021-09-13)
+
+
+
+## 1.2.82 (2021-08-31)
+
+
+### Bug Fixes
+
+* more check ([#183](https://github.com/midwayjs/bin/issues/183)) ([77ae0ee](https://github.com/midwayjs/bin/commit/77ae0eecc9984cb881756552131c0ca28dcc2f08))
+
+
+### Features
+
+* use file dector ([#168](https://github.com/midwayjs/bin/issues/168)) ([4b1cfdb](https://github.com/midwayjs/bin/commit/4b1cfdb1418a3883570035fea815c69c2e331a3d))
+
+
+
+## 1.2.81 (2021-08-19)
+
+
+### Features
+
+* support midway 3 ([#179](https://github.com/midwayjs/bin/issues/179)) ([8da3096](https://github.com/midwayjs/bin/commit/8da30962948efd88a8fbd104c61a7ac364910bc2))
+
+
+
+## 1.2.80 (2021-08-16)
+
+
+### Features
+
+* support fc authType、 timeout、 initTimeout ([#178](https://github.com/midwayjs/bin/issues/178)) ([baca74c](https://github.com/midwayjs/bin/commit/baca74c971bd916803594c7900769a291dc5cb6f))
+
+
+
+## 1.2.79 (2021-08-11)
+
+
+### Bug Fixes
+
+* usage support child commands ([#174](https://github.com/midwayjs/bin/issues/174)) ([b50a49d](https://github.com/midwayjs/bin/commit/b50a49d1ffac39dd72cd439bcc8b01aa728836d7))
+* vercel entry baseDir ([#173](https://github.com/midwayjs/bin/issues/173)) ([fc11e1b](https://github.com/midwayjs/bin/commit/fc11e1bec2bc0d3c252c58d16e1a4d3e8d25ae6b))
+
+
+
+## 1.2.78 (2021-08-09)
+
+
+### Bug Fixes
+
+* vercel bin error ([#172](https://github.com/midwayjs/bin/issues/172)) ([23aee2e](https://github.com/midwayjs/bin/commit/23aee2e6dc4e5e9fa66e6344d2f6e8baf0a7df4c))
+
+
+### Features
+
+* support vercel ([#165](https://github.com/midwayjs/bin/issues/165)) ([2a82748](https://github.com/midwayjs/bin/commit/2a82748a0b289e823a9ee6708078f9c66b4d769d))
+* support wechat cloud function ([#153](https://github.com/midwayjs/bin/issues/153)) ([f64744c](https://github.com/midwayjs/bin/commit/f64744c537f4050611705691bbffc240d283ae3c))
+
+
+
+## 1.2.77 (2021-07-30)
+
+
+### Features
+
+* package locate lifecycle ([#162](https://github.com/midwayjs/bin/issues/162)) ([c29d102](https://github.com/midwayjs/bin/commit/c29d102bfdcdad4f34da2f3dddb253086409d8df))
+
+
+
+## 1.2.76 (2021-07-22)
+
+
+### Bug Fixes
+
+* dev restart not change([#156](https://github.com/midwayjs/bin/issues/156)) ([505813e](https://github.com/midwayjs/bin/commit/505813eb1434292d1fcc799d582344ff5fde7fc9))
+
+
+### Features
+
+* mocha test support ([#155](https://github.com/midwayjs/bin/issues/155)) ([d363607](https://github.com/midwayjs/bin/commit/d3636076ee0391a5ddd45c3864a13010b8f01e78))
+
+
+
+## 1.2.75 (2021-07-14)
+
+
+### Bug Fixes
+
+* analysis decorator should ignore undefined ([#146](https://github.com/midwayjs/bin/issues/146)) ([a792b12](https://github.com/midwayjs/bin/commit/a792b12b10edc2b38d6e72b52185d08a7e178d75))
+
+
+
+## 1.2.74 (2021-07-06)
+
+
+
+## 1.2.73 (2021-06-25)
+
+
+
+## 1.2.73-beta.1 (2021-06-25)
+
+
+### Bug Fixes
+
+* midwayjs/midway[#1101](https://github.com/midwayjs/bin/issues/1101) ([#131](https://github.com/midwayjs/bin/issues/131)) ([56c9332](https://github.com/midwayjs/bin/commit/56c9332395d99faf14022a6d6340e883ec3ff26c))
+
+
+### Features
+
+* single function deploy ([#137](https://github.com/midwayjs/bin/issues/137)) ([907e312](https://github.com/midwayjs/bin/commit/907e3125c4b23be39fbf24a7d7d98bd702a7a8f5))
+
+
+
+## 1.2.72 (2021-06-18)
+
+
+### Bug Fixes
+
+* copy js file when execute build command ([#120](https://github.com/midwayjs/bin/issues/120)) ([404aa40](https://github.com/midwayjs/bin/commit/404aa4074e3866a0914d918e96a922bbb267bad9))
+* deploy with env ([#128](https://github.com/midwayjs/bin/issues/128)) ([bcfbff8](https://github.com/midwayjs/bin/commit/bcfbff8e70f9707695f2a837f4c6f7c55cb56d38))
+
+
+
+## 1.2.71 (2021-06-07)
+
+
+### Bug Fixes
+
+* midwayjs/midway[#1084](https://github.com/midwayjs/bin/issues/1084) ([#122](https://github.com/midwayjs/bin/issues/122)) ([460ac4a](https://github.com/midwayjs/bin/commit/460ac4ab74f0fd843695edacb91fc1e397ed382f))
+
+
+
+## 1.2.70 (2021-06-02)
+
+
+### Bug Fixes
+
+* some bugs ([#119](https://github.com/midwayjs/bin/issues/119)) ([9cc24d2](https://github.com/midwayjs/bin/commit/9cc24d28b50676efca987466962e8caf13ef2d14))
+
+
+### Features
+
+* this.core 增加 applicationContext ([#112](https://github.com/midwayjs/bin/issues/112)) ([68a0eec](https://github.com/midwayjs/bin/commit/68a0eec724829a9a62f31f1994209cae860894fc))
+
+
+
+## 1.2.69 (2021-06-01)
+
+
+### Bug Fixes
+
+* tsconfig path ([#103](https://github.com/midwayjs/bin/issues/103)) ([45e03ca](https://github.com/midwayjs/bin/commit/45e03caec022b9c8e4fe51e0f88014ef7c30b3f6))
+
+
+### Features
+
+* support serverlessFunction decorator ([#116](https://github.com/midwayjs/bin/issues/116)) ([006b671](https://github.com/midwayjs/bin/commit/006b671d96f51b627b401808907c5331b8f71d3d))
+
+
+
+## 1.2.68 (2021-05-13)
+
+
+### Features
+
+* upgrade mwcc 0.7.0 ([3cd2902](https://github.com/midwayjs/bin/commit/3cd2902821167905d789df5a153bed2224920613))
+
+
+
+## 1.2.67 (2021-05-07)
+
+
+### Bug Fixes
+
+* deploy filter method ([#101](https://github.com/midwayjs/bin/issues/101)) ([c660a53](https://github.com/midwayjs/bin/commit/c660a535d044105e04e38fa0c134542e826f1560))
+
+
+
+## 1.2.66 (2021-04-27)
+
+
+### Bug Fixes
+
+* child process proxy ([#98](https://github.com/midwayjs/bin/issues/98)) ([e6e176c](https://github.com/midwayjs/bin/commit/e6e176cbdad3610fb5745160c337ac3f12fd99d9))
+
+
+
+## 1.2.65 (2021-04-23)
+
+
+### Bug Fixes
+
+* more serverless dev options ([#95](https://github.com/midwayjs/bin/issues/95)) ([c3b9a4f](https://github.com/midwayjs/bin/commit/c3b9a4fa7f9f0bf6d19420ff38bf1abb23e74e32))
+
+
+
+## 1.2.63 (2021-04-16)
+
+
+
+## 1.2.62 (2021-04-14)
+
+
+### Bug Fixes
+
+* dev not close ([#93](https://github.com/midwayjs/bin/issues/93)) ([f6f330c](https://github.com/midwayjs/bin/commit/f6f330c2e568dfbe112c03740218a55f715c4fb9))
+
+
+
+## 1.2.61 (2021-04-12)
+
+
+
+## 1.2.60 (2021-04-08)
+
+
+### Bug Fixes
+
+* support serverless dev ([#80](https://github.com/midwayjs/bin/issues/80)) ([62268ed](https://github.com/midwayjs/bin/commit/62268edda31881babedb5762fe55ca8d48fd0bab))
+
+
+
+## 1.2.59 (2021-04-07)
+
+
+### Bug Fixes
+
+* pcakage method ([#90](https://github.com/midwayjs/bin/issues/90)) ([242e694](https://github.com/midwayjs/bin/commit/242e6940a730ce60b57c8e2c09b48fdda1516f4d))
+
+
+
+## 1.2.58 (2021-04-07)
+
+
+### Bug Fixes
+
+* dev layers ([#89](https://github.com/midwayjs/bin/issues/89)) ([a5528fd](https://github.com/midwayjs/bin/commit/a5528fdf1d706e44882fe8fbcb611ad7cb8a0b70))
+
+
+
+## 1.2.57 (2021-04-02)
+
+
+### Bug Fixes
+
+* use serverless trigger collector ([#87](https://github.com/midwayjs/bin/issues/87)) ([f956152](https://github.com/midwayjs/bin/commit/f956152879cd603d3cfc5b7475b92fd012ed06d6))
+
+
+
+## 1.2.56 (2021-03-26)
+
+
+### Bug Fixes
+
+* fix readme ([#79](https://github.com/midwayjs/bin/issues/79)) ([786a903](https://github.com/midwayjs/bin/commit/786a903255df0402da3ebd8878a2af10f0ef4620))
+* test node env ([#81](https://github.com/midwayjs/bin/issues/81)) ([99e780d](https://github.com/midwayjs/bin/commit/99e780ddbfa97ed67aeafb417f1cd049d640d597))
+* v2 template ([#83](https://github.com/midwayjs/bin/issues/83)) ([b63e2b5](https://github.com/midwayjs/bin/commit/b63e2b596291870ef0b9a86f86d22985c55a6eac))
+
+
+
+## 1.2.55 (2021-03-23)
+
+
+
+## 1.2.54 (2021-03-22)
+
+
+### Bug Fixes
+
+* http url match support params ([#74](https://github.com/midwayjs/bin/issues/74)) ([0d366e0](https://github.com/midwayjs/bin/commit/0d366e047de64ad578e48d717bc488333c0f044f))
+
+
+### Performance Improvements
+
+* remove esbuild ([#75](https://github.com/midwayjs/bin/issues/75)) ([c7cbb5b](https://github.com/midwayjs/bin/commit/c7cbb5b467bc9b06a798e2a4decca2bbbb0ca0f8))
+
+
+
+## 1.2.53 (2021-03-18)
+
+
+### Bug Fixes
+
+* this.core.cwd is undefined ([#73](https://github.com/midwayjs/bin/issues/73)) ([91ee55b](https://github.com/midwayjs/bin/commit/91ee55bc17f52122f24fb983341169fd54ef83e2))
+
+
+
+## 1.2.52 (2021-03-17)
+
+
+### Bug Fixes
+
+* wrapper template path ([#71](https://github.com/midwayjs/bin/issues/71)) ([827f0a3](https://github.com/midwayjs/bin/commit/827f0a33407db592479d07b2f769e124cbe00ae4))
+
+
+
+## 1.2.51 (2021-03-12)
+
+
+### Bug Fixes
+
+* dev pack transform & layers support ([#59](https://github.com/midwayjs/bin/issues/59)) ([6fc1ffc](https://github.com/midwayjs/bin/commit/6fc1ffc2effa76604c65a5d4f57f0efa60e29133))
+
+
+
+## 1.2.50 (2021-03-09)
+
+
+### Bug Fixes
+
+* check update view ([#57](https://github.com/midwayjs/bin/issues/57)) ([415ed17](https://github.com/midwayjs/bin/commit/415ed17451475a59ffbce1a19ffb807c9812efd8))
+* support path param ([#58](https://github.com/midwayjs/bin/issues/58)) ([eb5e680](https://github.com/midwayjs/bin/commit/eb5e680240a9cd47760d0e1640755e5d8e189033))
+
+
+
+## 1.2.48 (2021-03-06)
+
+
+### Bug Fixes
+
+* new list ([#56](https://github.com/midwayjs/bin/issues/56)) ([22019c0](https://github.com/midwayjs/bin/commit/22019c047dc716ad263fb74085523c65a35500b2))
+
+
+
+## 1.2.46 (2021-03-05)
+
+
+### Bug Fixes
+
+* cli find nm ([#55](https://github.com/midwayjs/bin/issues/55)) ([2c2873c](https://github.com/midwayjs/bin/commit/2c2873c2c0684c69e8b02cda14faeaae4437d534))
+
+
+
+## 1.2.45 (2021-03-04)
+
+
+### Bug Fixes
+
+* resume npm ([b0fe4e0](https://github.com/midwayjs/bin/commit/b0fe4e0bf9687b6f9bbb67ee31a37cf2329130d5))
+
+
+
+## 1.2.44 (2021-03-04)
+
+
+
+## 1.2.42 (2021-02-24)
+
+
+### Bug Fixes
+
+* dev framework check ([#52](https://github.com/midwayjs/bin/issues/52)) ([2a9e1a3](https://github.com/midwayjs/bin/commit/2a9e1a328c334f62d2b62a037a4db1ab9291c7ab))
+
+
+
+## 1.2.41 (2021-02-17)
+
+
+
+## 1.2.40 (2021-02-03)
+
+
+
+## 1.2.39-beta.5 (2021-02-03)
+
+
+### Bug Fixes
+
+* dot file ([#48](https://github.com/midwayjs/bin/issues/48)) ([d603284](https://github.com/midwayjs/bin/commit/d60328443e179eca09fb9c410d33affd68950fd9))
+* http trigger ([#47](https://github.com/midwayjs/bin/issues/47)) ([b1287c2](https://github.com/midwayjs/bin/commit/b1287c2910dd51fe3470c611e448716ee4e3110d))
+
+
+### Features
+
+* support dev entry ([#46](https://github.com/midwayjs/bin/issues/46)) ([35d3608](https://github.com/midwayjs/bin/commit/35d360866760a524ab7b99224ccdf835b4cf8c6b))
+
+
+
+
+
 ## [2.0.15](https://github.com/midwayjs/bin/compare/v2.0.14...v2.0.15) (2023-03-20)
 
 

@@ -3,6 +3,372 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/midwayjs/cli/compare/serverless-v1.2.39...serverless-v2.1.0) (2023-05-30)
+
+
+### Bug Fixes
+
+* **command-core:** fix path process within formatTsError() and add types ([#329](https://github.com/midwayjs/cli/issues/329)) ([685e9b7](https://github.com/midwayjs/cli/commit/685e9b7dc316e0c852a99a9771a6044b2133b695))
+
+
+
+## 2.0.14 (2023-03-03)
+
+
+### Features
+
+* output level ([#320](https://github.com/midwayjs/cli/issues/320)) ([f83750a](https://github.com/midwayjs/cli/commit/f83750a0a217cf38d86626e130070caa4fac5c79))
+* support lock ([#326](https://github.com/midwayjs/cli/issues/326)) ([49dedc6](https://github.com/midwayjs/cli/commit/49dedc64f37cf997ad1212beb2bdfcd16f002ff3))
+
+
+
+## 2.0.6 (2022-12-09)
+
+
+
+## 2.0.5 (2022-12-01)
+
+
+
+## 2.0.4 (2022-11-23)
+
+
+### Bug Fixes
+
+* find ts-node ([87944ea](https://github.com/midwayjs/cli/commit/87944eaa7dbe077b10ed907775000a982d2220e3))
+
+
+
+## 2.0.3 (2022-11-21)
+
+
+### Bug Fixes
+
+* npm argv is undefined ([520ddeb](https://github.com/midwayjs/cli/commit/520ddeb5000db3a3255891412935c84f63f02837))
+
+
+
+## 2.0.2 (2022-11-17)
+
+
+### Bug Fixes
+
+* dev pack 302 redirect ([#302](https://github.com/midwayjs/cli/issues/302)) ([3fc3160](https://github.com/midwayjs/cli/commit/3fc3160dc65fcc8208611ecdd123e8a9db167f0c)), closes [midwayjs/midway#2473](https://github.com/midwayjs/midway/issues/2473) [midwayjs/midway#2010](https://github.com/midwayjs/midway/issues/2010)
+
+
+### Features
+
+* support plugin loading normally in monorepo project ([#304](https://github.com/midwayjs/cli/issues/304)) ([6f23e9c](https://github.com/midwayjs/cli/commit/6f23e9c8090d9826c68b874786925daf89f7adc1))
+
+
+
+## 2.0.1 (2022-10-28)
+
+
+
+## 2.0.1-beta.1 (2022-10-26)
+
+
+### Features
+
+* upgrade jest to 29 ([#300](https://github.com/midwayjs/cli/issues/300)) ([e2b211a](https://github.com/midwayjs/cli/commit/e2b211a43345131ec6c89a9a4263f57403c26474))
+
+
+
+# 2.0.0 (2022-10-13)
+
+
+
+# 2.0.0-beta.1 (2022-10-10)
+
+
+### Bug Fixes
+
+* remove unexists plugin ([225a601](https://github.com/midwayjs/cli/commit/225a601948cadd66e8afa17916e9fe47d440400c))
+
+
+### Features
+
+* build command remove mwcc ([1a254ed](https://github.com/midwayjs/cli/commit/1a254eded97edaa16f77e78cdeb98b4fb5100ec2))
+* fix package remove mwcc ([546038f](https://github.com/midwayjs/cli/commit/546038ff3b2aa6a2580acf431638ab93362de251))
+* remove mwcc ([5e78f46](https://github.com/midwayjs/cli/commit/5e78f46c0b2a3aee8d13db680568e0a8907aaee2))
+
+
+
+## 1.3.14 (2022-10-10)
+
+
+
+## 1.3.13 (2022-09-07)
+
+
+### Bug Fixes
+
+* package resume to  webRouterCollector ([#296](https://github.com/midwayjs/cli/issues/296)) ([8588bbd](https://github.com/midwayjs/cli/commit/8588bbd87968a1497b0076dedbde5ed18e82b0be))
+
+
+
+## 1.3.13-beta.3 (2022-09-07)
+
+
+
+## 1.3.5 (2022-05-25)
+
+
+
+## 1.3.5-beta.3 (2022-05-25)
+
+
+### Features
+
+* support event trigger aggregation ([#281](https://github.com/midwayjs/cli/issues/281)) ([84b4789](https://github.com/midwayjs/cli/commit/84b478901ed1b49d6fb558be2f1ca0267027d2da))
+
+
+
+## 1.3.4 (2022-05-11)
+
+
+### Bug Fixes
+
+* cli time tick ([#278](https://github.com/midwayjs/cli/issues/278)) ([b80a15b](https://github.com/midwayjs/cli/commit/b80a15b62d826359ae4b36dc3b6cfc21f2e4ba18))
+* midwayjs/hooks[#322](https://github.com/midwayjs/cli/issues/322) ([#280](https://github.com/midwayjs/cli/issues/280)) ([1966928](https://github.com/midwayjs/cli/commit/196692895f68fa95000f16d49ec8bba9eb68f5e9))
+
+
+
+## 1.3.3 (2022-04-20)
+
+
+
+## 1.3.1 (2022-03-10)
+
+
+
+## 1.3.1-beta.1 (2022-03-10)
+
+
+
+## 1.2.97 (2022-01-24)
+
+
+### Bug Fixes
+
+* auto select npm ([#258](https://github.com/midwayjs/cli/issues/258)) ([f6e497c](https://github.com/midwayjs/cli/commit/f6e497c331af2f51855f98fa880bccc8acbbdb4e))
+
+
+
+## 1.2.96 (2022-01-21)
+
+
+### Bug Fixes
+
+* fix findNpmModule with pnp ([#256](https://github.com/midwayjs/cli/issues/256)) ([6a0f423](https://github.com/midwayjs/cli/commit/6a0f423af4646250bd7073bdb105699fe296a72b))
+* install exec ([#257](https://github.com/midwayjs/cli/issues/257)) ([1d59d23](https://github.com/midwayjs/cli/commit/1d59d23a8f6dfcd544c8b9e195b7edcbbe25df8b))
+
+
+
+## 1.2.95 (2022-01-20)
+
+
+### Bug Fixes
+
+* serverless devs cnpm ([#253](https://github.com/midwayjs/cli/issues/253)) ([93641a8](https://github.com/midwayjs/cli/commit/93641a8d76066ffe0016f297814070974b0f728a))
+
+
+
+## 1.2.94 (2022-01-11)
+
+
+### Bug Fixes
+
+* ignore optional ([#252](https://github.com/midwayjs/cli/issues/252)) ([841fbbc](https://github.com/midwayjs/cli/commit/841fbbcbca85b5b0a14089395477bf10da57fa1d))
+
+
+
+## 1.2.93 (2021-12-29)
+
+
+### Features
+
+* auto hooks import ([#239](https://github.com/midwayjs/cli/issues/239)) ([a4557f9](https://github.com/midwayjs/cli/commit/a4557f9e1b9f54e42af08ba503a47f7d11a3d59d))
+
+
+
+## 1.2.92 (2021-12-03)
+
+
+### Bug Fixes
+
+* using https://registry.npmmirror.com instead https://registry.np… ([#237](https://github.com/midwayjs/cli/issues/237)) ([56ce275](https://github.com/midwayjs/cli/commit/56ce275d98db601944892229e0645fcbf2bdb602))
+
+
+
+## 1.2.91 (2021-11-26)
+
+
+### Features
+
+* fast install nm ([#231](https://github.com/midwayjs/cli/issues/231)) ([9974ed5](https://github.com/midwayjs/cli/commit/9974ed5d26dd4eca9627a709c72c2b677c0b49c1))
+
+
+
+## 1.2.86 (2021-11-04)
+
+
+
+## 1.2.85 (2021-10-21)
+
+
+### Features
+
+* support command alias ([#218](https://github.com/midwayjs/cli/issues/218)) ([380338c](https://github.com/midwayjs/cli/commit/380338c1b0a92d85874cba16ff37a1711e137027))
+
+
+
+## 1.2.84 (2021-09-27)
+
+
+### Bug Fixes
+
+* opti check ([#201](https://github.com/midwayjs/cli/issues/201)) ([bfffdc6](https://github.com/midwayjs/cli/commit/bfffdc60d22d3732591b868bb863918ec086b7fb))
+
+
+
+## 1.2.82 (2021-08-31)
+
+
+### Features
+
+* use file dector ([#168](https://github.com/midwayjs/cli/issues/168)) ([4b1cfdb](https://github.com/midwayjs/cli/commit/4b1cfdb1418a3883570035fea815c69c2e331a3d))
+
+
+
+## 1.2.79 (2021-08-11)
+
+
+### Bug Fixes
+
+* usage support child commands ([#174](https://github.com/midwayjs/cli/issues/174)) ([b50a49d](https://github.com/midwayjs/cli/commit/b50a49d1ffac39dd72cd439bcc8b01aa728836d7))
+
+
+
+## 1.2.76 (2021-07-22)
+
+
+### Bug Fixes
+
+* dev restart not change([#156](https://github.com/midwayjs/cli/issues/156)) ([505813e](https://github.com/midwayjs/cli/commit/505813eb1434292d1fcc799d582344ff5fde7fc9))
+
+
+### Features
+
+* mocha test support ([#155](https://github.com/midwayjs/cli/issues/155)) ([d363607](https://github.com/midwayjs/cli/commit/d3636076ee0391a5ddd45c3864a13010b8f01e78))
+
+
+
+## 1.2.73 (2021-06-25)
+
+
+
+## 1.2.72 (2021-06-18)
+
+
+### Bug Fixes
+
+* deploy with env ([#128](https://github.com/midwayjs/cli/issues/128)) ([bcfbff8](https://github.com/midwayjs/cli/commit/bcfbff8e70f9707695f2a837f4c6f7c55cb56d38))
+
+
+
+## 1.2.69 (2021-06-01)
+
+
+### Features
+
+* support serverlessFunction decorator ([#116](https://github.com/midwayjs/cli/issues/116)) ([006b671](https://github.com/midwayjs/cli/commit/006b671d96f51b627b401808907c5331b8f71d3d))
+
+
+
+## 1.2.68 (2021-05-13)
+
+
+### Features
+
+* upgrade mwcc 0.7.0 ([3cd2902](https://github.com/midwayjs/cli/commit/3cd2902821167905d789df5a153bed2224920613))
+
+
+
+## 1.2.65 (2021-04-23)
+
+
+### Bug Fixes
+
+* more serverless dev options ([#95](https://github.com/midwayjs/cli/issues/95)) ([c3b9a4f](https://github.com/midwayjs/cli/commit/c3b9a4fa7f9f0bf6d19420ff38bf1abb23e74e32))
+
+
+
+## 1.2.54 (2021-03-22)
+
+
+### Bug Fixes
+
+* http url match support params ([#74](https://github.com/midwayjs/cli/issues/74)) ([0d366e0](https://github.com/midwayjs/cli/commit/0d366e047de64ad578e48d717bc488333c0f044f))
+
+
+
+## 1.2.51 (2021-03-12)
+
+
+### Bug Fixes
+
+* dev pack transform & layers support ([#59](https://github.com/midwayjs/cli/issues/59)) ([6fc1ffc](https://github.com/midwayjs/cli/commit/6fc1ffc2effa76604c65a5d4f57f0efa60e29133))
+
+
+
+## 1.2.50 (2021-03-09)
+
+
+### Bug Fixes
+
+* check update view ([#57](https://github.com/midwayjs/cli/issues/57)) ([415ed17](https://github.com/midwayjs/cli/commit/415ed17451475a59ffbce1a19ffb807c9812efd8))
+* support path param ([#58](https://github.com/midwayjs/cli/issues/58)) ([eb5e680](https://github.com/midwayjs/cli/commit/eb5e680240a9cd47760d0e1640755e5d8e189033))
+
+
+
+## 1.2.48 (2021-03-06)
+
+
+### Bug Fixes
+
+* new list ([#56](https://github.com/midwayjs/cli/issues/56)) ([22019c0](https://github.com/midwayjs/cli/commit/22019c047dc716ad263fb74085523c65a35500b2))
+
+
+
+## 1.2.46 (2021-03-05)
+
+
+### Bug Fixes
+
+* cli find nm ([#55](https://github.com/midwayjs/cli/issues/55)) ([2c2873c](https://github.com/midwayjs/cli/commit/2c2873c2c0684c69e8b02cda14faeaae4437d534))
+
+
+
+## 1.2.45 (2021-03-04)
+
+
+
+## 1.2.41 (2021-02-17)
+
+
+
+## 1.2.40 (2021-02-03)
+
+
+
+## 1.2.39-beta.5 (2021-02-03)
+
+
+
+
+
 ## [2.0.14](https://github.com/midwayjs/cli/compare/v2.0.13...v2.0.14) (2023-03-03)
 
 

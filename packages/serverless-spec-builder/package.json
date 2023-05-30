@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/serverless-spec-builder",
-  "version": "2.0.14",
+  "version": "2.1.0",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -9,8 +9,8 @@
     "mkdirp": "^0.5.1"
   },
   "devDependencies": {
-    "@types/lodash.get": "^4.4.6",
     "@midwayjs/serverless-fc-starter": "^2.14.11",
+    "@types/lodash.get": "^4.4.6",
     "fs-extra": "^8.1.0",
     "mm": "3"
   },
