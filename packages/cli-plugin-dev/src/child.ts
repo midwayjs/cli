@@ -50,7 +50,7 @@ process.on('uncaughtException', e => {
   let startSuccess = false;
   try {
     if (options.entryFile) {
-      bootstrapStarter = await createBootstrap(options.entryFile);
+      bootstrapStarter = await createBootstrap(options.entryFile, options);
     } else if (process.env.MIDWAY_DEV_IS_SERVERLESS === 'true') {
       app = await createFunctionApp(process.cwd(), options);
     } else {
