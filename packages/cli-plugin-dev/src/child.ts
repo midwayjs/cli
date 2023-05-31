@@ -2,7 +2,6 @@ import { findNpmModuleByResolve } from '@midwayjs/command-core';
 import { analysisDecorator, waitDebug } from './utils';
 const options: any = JSON.parse(process.argv[2]);
 let app;
-let bootstrapStarter;
 const exit = process.exit;
 
 let isCloseApp = false;
@@ -12,11 +11,7 @@ const closeApp = async () => {
     return;
   }
   isCloseApp = true;
-  if (bootstrapStarter) {
-    await bootstrapStarter.close();
-  } else {
-    await closeFun(app);
-  }
+  await closeFun(app);
   exit();
 };
 (process as any).exit = closeApp;
@@ -50,7 +45,7 @@ process.on('uncaughtException', e => {
   let startSuccess = false;
   try {
     if (options.entryFile) {
-      bootstrapStarter = await createBootstrap(options.entryFile, options);
+      app = await createBootstrap(options.entryFile, options);
     } else if (process.env.MIDWAY_DEV_IS_SERVERLESS === 'true') {
       app = await createFunctionApp(process.cwd(), options);
     } else {
