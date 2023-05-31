@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.1](https://github.com/midwayjs/bin/compare/serverless-v2.1.0...serverless-v2.1.1) (2023-05-31)
+
+
+### Bug Fixes
+
+* function bootstrap entry will display port tip ([#332](https://github.com/midwayjs/bin/issues/332)) ([b7cc693](https://github.com/midwayjs/bin/commit/b7cc693784865d7a158db5505db624359753f3b0))
+
+
+
+
+
 # [2.1.0](https://github.com/midwayjs/bin/compare/serverless-v1.2.39...serverless-v2.1.0) (2023-05-30)
 
 

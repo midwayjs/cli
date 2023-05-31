@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.1](https://github.com/midwayjs/midway/compare/serverless-v2.1.0...serverless-v2.1.1) (2023-05-31)
+
+**Note:** Version bump only for package @midwayjs/cli
+
+
+
+
+
 # [2.1.0](https://github.com/midwayjs/midway/compare/serverless-v1.2.39...serverless-v2.1.0) (2023-05-30)
 
 
