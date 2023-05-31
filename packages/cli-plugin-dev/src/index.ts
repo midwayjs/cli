@@ -483,7 +483,11 @@ export class DevPlugin extends BasePlugin {
     process.env.MIDWAY_LOCAL_DEV_PORT = String(this.port);
 
     this.setStore('dev:port', this.port, true);
-    if (options.silent || options.entryFile || options.notStartLog) {
+    if (options.silent || options.notStartLog) {
+      return;
+    }
+
+    if (!process.env.MIDWAY_LOCAL_DEV_PORT) {
       return;
     }
 
