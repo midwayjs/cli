@@ -112,7 +112,7 @@ export class AddPlugin extends BasePlugin {
     if (existsSync(projectDirPath)) {
       const isOverwritten = await new (enquirer as any).Confirm({
         name: 'question',
-        message: `The name '${projectPath}' already exists, is it overwritten?`,
+        message: `The name '${projectPath}' already exists, can it be overwritten?`,
         initial: true,
       }).run();
       if (!isOverwritten) {
