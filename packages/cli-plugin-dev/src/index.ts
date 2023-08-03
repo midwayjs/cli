@@ -180,7 +180,7 @@ export class DevPlugin extends BasePlugin {
         tsNodeFast = tsNodeFastEnv;
       }
 
-      let execArgv = [];
+      let execArgv = [].concat(process.execArgv);
       let MIDWAY_DEV_IS_DEBUG;
       let useIncrementalBuild = false;
 
