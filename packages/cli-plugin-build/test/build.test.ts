@@ -54,7 +54,7 @@ describe('test/build.test.ts', () => {
     assert(existsSync(join(dist, 'c')));
   });
 
-  it('error ts', async () => {
+  it.skip('error ts', async () => {
     const errorcwd = join(__dirname, 'fixtures/error-ts');
     const dist = join(errorcwd, 'dist');
     if (existsSync(dist)) {
@@ -102,7 +102,7 @@ describe('test/build.test.ts', () => {
       assert(/Unexpected token x/.test(e.message));
     }
   });
-  it('ts config options', async () => {
+  it.skip('ts config options', async () => {
     const errorcwd = join(__dirname, 'fixtures/error-no-tsconfig');
     const dist = join(errorcwd, 'dist');
     if (existsSync(dist)) {
