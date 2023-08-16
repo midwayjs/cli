@@ -154,7 +154,7 @@ export const analysisDecorator = async (cwd: string, spec?, core?) => {
         listModule,
         Types,
       } = require(midwayDecoratorMod);
-      const applicationContext = prepareGlobalApplicationContext({
+      const applicationContext = await prepareGlobalApplicationContext({
         baseDir: cwd,
         appDir: cwd,
       });
