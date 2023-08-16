@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.2](https://github.com/midwayjs/cli/compare/serverless-v2.1.1...serverless-v2.1.2) (2023-08-16)
+
+
+### Bug Fixes
+
+* prepare with async function ([5182851](https://github.com/midwayjs/cli/commit/518285130dc513afdffb127a89b4212f691cb1b3))
+
+
+
+
+
 # [2.1.0](https://github.com/midwayjs/cli/compare/serverless-v1.2.39...serverless-v2.1.0) (2023-05-30)
 
 

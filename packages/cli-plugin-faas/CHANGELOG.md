@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.2](https://github.com/midwayjs/cli/compare/serverless-v2.1.1...serverless-v2.1.2) (2023-08-16)
+
+**Note:** Version bump only for package @midwayjs/cli-plugin-faas
+
+
+
+
+
 # [2.1.0](https://github.com/midwayjs/cli/compare/serverless-v1.2.39...serverless-v2.1.0) (2023-05-30)
 
 
