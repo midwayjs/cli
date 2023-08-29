@@ -45,10 +45,10 @@
     "midway",
     "bin"
   ],
-  "homepage": "http://github.com/midwayjs/bin",
+  "homepage": "https://github.com/midwayjs/cli",
   "repository": {
     "type": "git",
-    "url": "http://github.com/midwayjs/bin.git"
+    "url": "https://github.com/midwayjs/cli.git"
   },
   "engines": {
     "node": ">= 10"
