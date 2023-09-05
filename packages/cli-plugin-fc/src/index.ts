@@ -208,6 +208,16 @@ export class AliyunFCPlugin extends BasePlugin {
       this.getStore('artifactFile', 'global') ||
       join(this.servicePath, 'serverless.zip');
 
+    if (!syaml[access].AccountID) {
+      console.error(
+        'Parse servrelessDevs config error, there is a high probability that ak error'
+      );
+      this.core.debug('syaml', syaml);
+      throw new Error(
+        `ServerlessDevs AccountId corresponding to ${access} does not exist`
+      );
+    }
+
     const akId = Crypto.AES.decrypt(
       syaml[access].AccountID,
       'SecretKey123'
