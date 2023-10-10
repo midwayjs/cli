@@ -15,6 +15,7 @@ import {
 } from 'fs-extra';
 import * as globby from 'globby';
 import { tmpdir } from 'os';
+import * as JSON5 from 'json5';
 export class BuildPlugin extends BasePlugin {
   isMidwayHooks = false;
   private midwayBinBuild: { include?: string[] } = {};
@@ -218,7 +219,7 @@ export class BuildPlugin extends BasePlugin {
         tsConfig = readFileSync(tsConfig).toString();
       }
       try {
-        tsConfigResult = JSON.parse(tsConfig);
+        tsConfigResult = JSON5.parse(tsConfig);
       } catch (e) {
         this.core.cli.error(
           '[midway-bin] tsConfig should be JSON string or Object'
@@ -233,7 +234,7 @@ export class BuildPlugin extends BasePlugin {
         throw new Error('tsconfig.json not found');
       }
       try {
-        tsConfigResult = JSON.parse(
+        tsConfigResult = JSON5.parse(
           readFileSync(projectFile, 'utf-8').toString()
         );
       } catch (e) {
